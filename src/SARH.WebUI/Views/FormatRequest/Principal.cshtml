@@ -1,0 +1,728 @@
+﻿@using SARH.WebUI.Models.FormatRequest;
+@model FormatRequestModel;
+@{
+    ViewData["Title"] = "Captura de solicitudes";
+    Layout = "~/Views/Shared/_LayoutSimple.cshtml";
+}
+
+
+<div class="row">
+
+    <div class="card mb-g rounded-top">
+        <div class="row no-gutters row-grid">
+            <div class="col-12">
+                <div class="d-flex flex-column align-items-center justify-content-center p-4">
+                    <img class="rounded-circle shadow-2 img-thumbnail" alt="" src="@Model.Picture">
+                    <h5 class="mb-0 fw-700 text-center mt-3">
+                        <small> @Model.FulName</small>
+                        @Model.Area
+                        <br />
+                        @Model.JobCenter
+                        <br />
+                        @Model.JobTitle
+                    </h5>
+                </div>
+            </div>
+
+            <div class="col-lg-12">
+                <div id="panel-4" class="panel">
+                    <div class="panel-hdr">
+                        <h2>
+                            Solicitudes <span class="fw-300"><i>Registradas</i></span>
+                        </h2>
+                        <div class="panel-toolbar">
+                            <div class="demo-h-spacing">
+
+                                <a href="javascript:void(0);" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target=".default-example-modal-right" class="btn btn-primary btn-icon waves-effect waves-themed">
+                                    <i class="fal fa-calendar-plus"></i>
+                                </a>
+                                <a id="viewrow" href="javascript:void(0)" class="btn btn-info btn-icon waves-effect waves-themed">
+                                    <i class="fal fa-eye"></i>
+                                </a>
+                                <a id="approbedrow" href="javascript:void(0)" class="btn btn-success btn-icon waves-effect waves-themed">
+                                    <i class="fal fa-calendar-check"></i>
+                                </a>
+                                <a id="deletedrow" href="javascript:void(0)" class="btn btn-danger btn-icon waves-effect waves-themed">
+                                    <i class="fal fa-trash-alt"></i>
+                                </a>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="panel-container show">
+                        <div class="panel-content">
+                            <form>
+                                <div class="form-group">
+                                    <table id="dt-basic-example" class="table table-bordered table-hover table-striped w-100">
+                                        <thead class="bg-warning-200">
+                                            <tr>
+                                                <th>Fecha</th>
+                                                <th>Tipo</th>
+                                                <th>Comentarios</th>
+                                                <th>Vigencia</th>
+                                                <th>Aprobado</th>
+                                                <th>Sustituto</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="allrequest">
+                                            @foreach (var item in Model.EmployeeFormats)
+                                            {
+                                            <tr id="@item.Id">
+                                                <td>
+                                                    @item.CreateDate
+                                                </td>
+                                                <td>
+                                                    @item.PermissionType
+                                                </td>
+                                                <td>
+                                                    @item.Comments
+                                                </td>
+                                                <td>
+                                                    @item.StartDate
+                                                </td>
+                                                <td>
+                                                    @item.Approved
+                                                </td>
+                                                <td>
+                                                    @item.EmployeeSubstitute
+                                                </td>
+                                            </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+
+</div>
+
+
+
+<div class="row col-lg-12">
+
+
+
+
+    </ Modal Nuevo Formato -->
+
+    <div class="panel-container show">
+        <div class="panel-content">
+
+            <div class="modal fade default-example-modal-right" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-right">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title h4">Crear nuevo formato</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true"><i class="fal fa-times"></i></span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="card mb-5">
+
+                                <div class="card-body p-3">
+                                    <h5>
+                                        Tipo de formato
+                                        <span class="badge badge-primary fw-n position-absolute pos-top pos-right mt-3 mr-3">A</span>
+                                    </h5>
+
+                                    <div class="form-row">
+                                        <div class="col-md-12">
+                                            <label class="form-label" for="selectharware">Seleccione el tipo de formato a crear</label>
+                                            @Html.DropDownList("permissionType", (IEnumerable<SelectListItem>)ViewBag.permissionType, new { id = "permissionType", @class = "form-control" })
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="card mb-g">
+
+                                <div class="card-body p-3">
+                                    <h5>
+                                        Detalle del formato
+                                        <span class="badge badge-dark fw-n position-absolute pos-top pos-right mt-3 mr-3">B</span>
+                                    </h5>
+
+                                    <div class="form-row">
+                                        <div class="col-md-12">
+                                            <label class="form-label" for="descripcion">Comentarios</label>
+                                            <input class="form-control reseterror" id="descripcion" required="" type="text">
+                                        </div>
+
+                                        <div class="col-md-12">
+                                            <label class="form-label" for="datepicker-4-4">Vigencia inicial</label>
+                                            <div class="input-group">
+                                                <input type="text" class="form-control reseterror" id="datepicker-4-4">
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text fs-xl">
+                                                        <i class="fal fa-calendar-plus"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <label class="form-label" for="datepicker-4-5">Vigencia final</label>
+                                            <div class="input-group">
+                                                <input type="text" class="form-control reseterror" id="datepicker-4-5">
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text fs-xl">
+                                                        <i class="fal fa-calendar-plus"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-12">
+
+                                            <label class="form-label" for="searchText-4-5">Asignar sustituto</label>
+                                            <div class="form-group">
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text text-success">
+                                                            <i class="ni ni-user fs-xl"></i>
+                                                        </span>
+                                                    </div>
+                                                    <input type="text" aria-label="searchtext" class="form-control reseterror" placeholder="Empleado" id="searchText" maxlength="5">
+                                                    <div class="input-group-append">
+                                                        <button id="searchbutton" type="button" class="btn btn-success shadow-0 waves-effect waves-themed">
+
+                                                            <span id="imgsearch" class="fal fa-search mr-1"></span>
+
+                                                            <span id="spin" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="display:none"></span>
+
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div id="searchresult" class="col-md-12 panel-tag">
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+
+
+
+
+
+
+                                </div>
+
+                            </div>
+
+                            <div id="errorsave" class="alert border-danger bg-transparent text-secondary fade show" role="alert" style="display:none">
+                                <div class="d-flex align-items-center">
+                                    <div class="alert-icon">
+                                        <span class="icon-stack icon-stack-md">
+                                            <i class="base-7 icon-stack-3x color-danger-900"></i>
+                                            <i class="fal fa-times icon-stack-1x text-white"></i>
+                                        </span>
+                                    </div>
+                                    <div class="flex-1">
+                                        <span class="h5 color-danger-900">No se puede guardar, verifique que se han ingresando todos los datos (Comentarios,Fechas y Sustituto)</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <center>
+                                <div id="spinwait" class="spinner-border" style="width: 3rem; height: 3rem;display:none;" role="status">
+
+                                </div>
+                            </center>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                            <button id="saveformat" type="button" class="btn btn-primary">Guardar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+        </div>
+    </div>
+
+
+
+    </ Modal Nuevo Formato -->
+
+    <div class="panel-container show">
+        <div class="panel-content">
+
+            <div class="modal fade default-example-modal-right-view" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-right">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title h4">Información del formato</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true"><i class="fal fa-times"></i></span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="card mb-5">
+
+                                <div class="card-body p-3">
+                                    <h5>
+                                        Tipo de formato
+                                        <span class="badge badge-primary fw-n position-absolute pos-top pos-right mt-3 mr-3">A</span>
+                                    </h5>
+
+                                    <div class="form-row">
+                                        <div class="col-md-12">
+                                            <label class="form-label" for="selectharware">Seleccione el tipo de formato a crear</label>
+                                            @Html.DropDownList("permissionTypeview", (IEnumerable<SelectListItem>)ViewBag.permissionType, new { id = "permissionTypeview", @class = "form-control" })
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="card mb-g">
+
+                                <div class="card-body p-3">
+                                    <h5>
+                                        Detalle del formato
+                                        <span class="badge badge-dark fw-n position-absolute pos-top pos-right mt-3 mr-3">B</span>
+                                    </h5>
+
+                                    <div class="form-row">
+                                        <div class="col-md-12">
+                                            <label class="form-label" for="descripcion">Comentarios</label>
+                                            <input class="form-control reseterror" id="descripcionview" required="" type="text">
+                                        </div>
+
+                                        <div class="col-md-12">
+                                            <label class="form-label" for="datepicker-4-4">Vigencia inicial</label>
+                                            <div class="input-group">
+                                                <input type="text" class="form-control reseterror" id="datepicker-4-4-view">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <label class="form-label" for="datepicker-4-5">Vigencia final</label>
+                                            <div class="input-group">
+                                                <input type="text" class="form-control reseterror" id="datepicker-4-5-view">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-12">
+
+                                            <label class="form-label" for="searchText-4-5">Asignar sustituto</label>
+
+                                            <div id="searchresult-view" class="col-md-12 panel-tag">
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+
+
+
+
+
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+        </div>
+    </div>
+
+
+</div>
+
+<input id='QA' type="hidden" />
+<input id='QB' type="hidden" />
+
+@section Scripts {
+
+    <link rel="stylesheet" media="screen, print" href="~/css/fa-solid.css">
+    <link rel="stylesheet" media="screen, print" href="~/css/fa-brands.css">
+    <link rel="stylesheet" media="screen, print" href="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/css/datagrid/datatables/datatables.bundle.css">
+    <link rel="stylesheet" media="screen, print" href="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/css/formplugins/bootstrap-datepicker/bootstrap-datepicker.css">
+    <link rel="stylesheet" media="screen, print" href="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/css/notifications/sweetalert2/sweetalert2.bundle.css">
+    <script src="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/js/datagrid/datatables/datatables.bundle.js"></script>
+    <script src="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/js/formplugins/bootstrap-datepicker/bootstrap-datepicker.js"></script>
+    <script src="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/js/notifications/sweetalert2/sweetalert2.bundle.js"></script>
+
+    <script>
+
+        var controls = {
+            leftArrow: '<i class="fal fa-angle-left" style="font-size: 1.25rem"></i>',
+            rightArrow: '<i class="fal fa-angle-right" style="font-size: 1.25rem"></i>'
+        }
+
+        var runDatePicker = function () {
+
+
+            $('#datepicker-4-4').datepicker(
+                {
+                    orientation: "top left",
+                    todayHighlight: true,
+                    templates: controls,
+                    format: 'dd/mm/yyyy'
+                }).on('changeDate', function (e) {
+
+                    $('#QA').val(convert(e.date));
+                });
+
+            $('#datepicker-4-5').datepicker(
+                {
+                    orientation: "top left",
+                    todayHighlight: true,
+                    templates: controls,
+                    format: 'dd/mm/yyyy'
+                }).on('changeDate', function (e) {
+
+                    $('#QB').val(convert(e.date));
+                });
+        }
+
+        function convert(str) {
+            var date = new Date(str),
+                mnth = ("0" + (date.getMonth() + 1)).slice(-2),
+                day = ("0" + date.getDate()).slice(-2);
+            hours = ("0" + date.getHours()).slice(-2);
+            minutes = ("0" + date.getMinutes()).slice(-2);
+            return [day, mnth, date.getFullYear()].join("/");
+        }
+
+        $('#dt-basic-example tr').click(function () {
+
+            $(this).addClass('selected').siblings().removeClass('selected');
+
+        });
+
+        $(document).ready(function () {
+            /* init datatables */
+
+            runDatePicker();
+
+            $('#dt-basic-example').dataTable(
+                {
+                    responsive: true
+                });
+
+
+                        //Formatos Empleado
+            $('#searchbutton').click(function () {
+
+                $('#searchresult').empty();
+                $('#imgsearch').hide();
+                $('#spin').show();
+
+                $.ajax({
+                    url: '/FormatRequest/SearchBy',
+                    type: "POST",
+                    data: { inputtext: $('#searchText').val(), typesearch: 4 },
+                    success: function (data, textStatus, jqXHR) {
+
+
+                        if (data.rows > 0) {
+                            $('#searchresult').append('<span id="' + data.id + '" class="elementadded">' + data.value + '</span>');
+                        }
+                        else {
+
+                            $('#searchresult').append('<span id="' + data.id + '" class="elementadded">' + "No se encontro resultado" + '</span>');
+                        }
+
+                        $('#imgsearch').show();
+                        $('#spin').hide();
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+
+                    }
+                });
+            });
+
+
+            $(".reseterror").change(function () {
+                $('#errorsave').hide();
+            });
+
+
+            $('#saveformat').click(function () {
+
+                var dtpinicial = $('#datepicker-4-4').val();
+                var dtpfinal = $('#datepicker-4-5').val();
+
+
+                if (dtpinicial === "" || dtpfinal === "") {
+
+                    $('#errorsave').show();
+                    return;
+                }
+
+                var sustituto = $('.elementadded').text();
+                var idsustituto = 0;
+
+                if (sustituto !== "No se encontro resultado") {
+
+                    idsustituto = $('#searchText').val();
+                }
+                else {
+
+                    $('#errorsave').show();
+                }
+
+
+                $('.btn').prop('disabled', true);
+                $('#spinwait').show();
+
+                var formData = {
+                    EmployeeId: "17",
+                    StartDate: dtpinicial,
+                    EndDate: dtpfinal,
+                    PermissionType: $('#permissionType').val(),
+                    Comments: $('#descripcion').val(),
+                    EmployeeSubId: idsustituto
+                };
+
+                $.ajax({
+                    url: '/FormatRequest/SaveFormat',
+                    type: "POST",
+                    data: formData,
+                    success: function (data, textStatus, jqXHR) {
+
+
+                        location.reload(true);
+ 
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+
+                    }
+                });
+
+
+
+            });
+
+            $('#approbedrow').click(function () {
+
+
+                var row = $('#allrequest tr.selected');
+                var idemployee = row.attr("id");
+
+
+                if (idemployee === undefined) {
+
+                    Swal.fire(
+                        {
+                            type: "warning",
+                            title: "Validación",
+                            text: "Seleccione un registro"
+                        });
+
+                    return;
+
+                }
+
+
+                var swalWithBootstrapButtons = Swal.mixin(
+                    {
+                        customClass:
+                        {
+                            confirmButton: "btn btn-primary",
+                            cancelButton: "btn btn-danger mr-2"
+                        },
+                        buttonsStyling: false
+                    });
+                swalWithBootstrapButtons
+                    .fire(
+                        {
+                            title: "Confirmación",
+                            text: "Esta solicitud seria enviada para aprobación",
+                            type: "info",
+                            showCancelButton: true,
+                            confirmButtonText: "Si",
+                            cancelButtonText: "Cancelar",
+                            reverseButtons: true
+                        })
+                    .then(function (result) {
+
+                        if (result.value) {
+
+                            location.reload(true);
+
+                        }
+                        else if (
+                            // Read more about handling dismissals
+                            result.dismiss === Swal.DismissReason.cancel
+                        ) {
+                            swalWithBootstrapButtons.fire(
+                                "Cancelación",
+                                "Se ha cancelado la acción",
+                                "error"
+                            );
+                        }
+                    });
+
+
+            });
+
+
+            $('#viewrow').click(function () {
+
+
+                
+                var row = $('#allrequest tr.selected');
+                var id = row.attr("id");
+
+
+                if (id === undefined) {
+
+                    Swal.fire(
+                        {
+                            type: "warning",
+                            title: "Validación",
+                            text: "Seleccione un registro"
+                        });
+
+                    return;
+
+                }
+
+
+
+
+                $.ajax({
+                    url: '/FormatRequest/GetFormatData',
+                    type: "POST",
+                    data: { id: id },
+                    success: function (data, textStatus, jqXHR) {
+
+                        $('#descripcionview').val(data.comment);
+                        $('#datepicker-4-4-view').val(data.dateini);
+                        $('#datepicker-4-5-view').val(data.datefin);
+                        $('#searchresult-view').text(data.sustitute);
+                        
+                        $('.default-example-modal-right-view').modal('show');
+
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+
+                    }
+                });
+
+
+
+
+            });
+
+
+            $('#deletedrow').click(function () {
+
+
+                var row = $('#allrequest tr.selected');
+                var id = row.attr("id");
+
+
+                if (id === undefined) {
+
+                    Swal.fire(
+                        {
+                            type: "warning",
+                            title: "Validación",
+                            text: "Seleccione un registro"
+                        });
+
+                    return;
+
+                }
+
+
+                var swalWithBootstrapButtons = Swal.mixin(
+                    {
+                        customClass:
+                        {
+                            confirmButton: "btn btn-primary",
+                            cancelButton: "btn btn-danger mr-2"
+                        },
+                        buttonsStyling: false
+                    });
+                swalWithBootstrapButtons
+                    .fire(
+                        {
+                            title: "Confirmación",
+                            text: "Eliminar la solicitud",
+                            type: "info",
+                            showCancelButton: true,
+                            confirmButtonText: "Si",
+                            cancelButtonText: "Cancelar",
+                            reverseButtons: true
+                        })
+                    .then(function (result) {
+
+                        if (result.value) {
+
+
+                            $.ajax({
+                                url: '/FormatRequest/DeleteFormatData',
+                                type: "POST",
+                                data: { id: id },
+                                success: function (data, textStatus, jqXHR) {
+
+                                    location.reload(true);
+
+                                },
+                                error: function (jqXHR, textStatus, errorThrown) {
+
+                                }
+                            });
+
+
+
+
+
+                        }
+                        else if (
+                            // Read more about handling dismissals
+                            result.dismiss === Swal.DismissReason.cancel
+                        ) {
+                            swalWithBootstrapButtons.fire(
+                                "Cancelación",
+                                "Se ha cancelado la acción",
+                                "error"
+                            );
+                        }
+                    });
+
+
+            });
+
+
+        });
+    </script>
+}

@@ -1,0 +1,233 @@
+﻿
+@{
+    ViewData["Title"] = "Configuración de flujo de aprobación";
+    ViewData["PageName"] = "Flujo de aprobación";
+    ViewData["Heading"] = "<i class='subheader-icon fal fa-code-branch'></i> Configuración de flujo de aprobación";
+    ViewData["PageDescription"] = "Configuración de flujo de aprobación";
+}
+@section HeadBlock {
+    <link rel="stylesheet" media="screen, print" href="~/css/fa-solid.css">
+    <link rel="stylesheet" media="screen, print" href="~/css/fa-brands.css">
+    <link rel="stylesheet" media="screen, print" href="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/css/datagrid/datatables/datatables.bundle.css">
+    <link rel="stylesheet" media="screen, print" href="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/css/notifications/sweetalert2/sweetalert2.bundle.css">
+}
+
+<div class="subheader">
+    <ol class="breadcrumb breadcrumb-lg breadcrumb-arrow mb-0">
+        <li>
+            <a href='@Url.Action("Index","Home")'>
+                <i class="fal fa-home"></i>
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                <i class="fal fa-tags"></i>
+                <span class="hidden-lg-down">Configuraciones</span>
+            </a>
+        </li>
+    </ol>
+</div>
+
+
+
+<div class="row">
+
+    <form class="col-sm-12">
+
+        <div class="form-group">
+            <div class="btn-group">
+                <button class="btn btn-outline-secondary dropdown-toggle waves-effect waves-themed" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fal fa-bolt"></i>
+                    Acciones
+                </button>
+                <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; will-change: top, left; top: 37px; left: 0px;">
+                    <a class="dropdown-item" href="#" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target=".default-example-modal-right">Crear</a>
+                    <a class="dropdown-item" href="#">Editar</a>
+                    <a class="dropdown-item" href="#">Elimnar</a>
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="form-group">
+            <table id="dt-basic-example" class="table table-bordered table-hover table-striped w-100">
+                <thead class="bg-warning-200">
+                    <tr>
+                        <th>Área</th>
+                        <th>Centro trabajo</th>
+                        <th>Departamento</th>
+                        <th>Fecha</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </form>
+
+</div>
+
+        </ Modal Schedule New Permanente-->
+
+<div class="panel-container show">
+    <div class="panel-content">
+
+        <div class="modal fade default-example-modal-right" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-right">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title h4">Asignar horario</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true"><i class="fal fa-times"></i></span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="card mb-5">
+
+                            <div class="card-body p-3">
+                                <h5>
+                                    Asignación de horario
+                                    <span class="badge badge-primary fw-n position-absolute pos-top pos-right mt-3 mr-3">A</span>
+                                </h5>
+
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text text-success">
+                                                <i class="ni ni-user fs-xl"></i>
+                                            </span>
+                                        </div>
+                                        <input type="text" aria-label="searchtext" class="form-control reseterror" placeholder="Ingrese el valor" id="searchText">
+                                        <div class="input-group-append input-group-prepend">
+                                            <span class="input-group-text">
+                                                <i class="fal fa-exchange fs-xl"></i>
+                                            </span>
+                                        </div>
+                                        <select class="custom-select" id="typesearch" aria-label="typesearch">
+                                            <option value="4">No. Empleado</option>
+                                        </select>
+                                        <div class="input-group-append">
+                                            <button id="searchbutton" type="button" class="btn btn-success shadow-0 waves-effect waves-themed">
+
+                                                <span id="imgsearch" class="fal fa-search mr-1"></span>
+
+                                                <span id="spin" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="display:none"></span>
+
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12">
+                                    <ul id="elementsfinded">
+                                    </ul>
+                                </div>
+
+
+                                <div id="searchresult">
+
+                                </div>
+                                <div id="searcherror" style="display:none;">
+                                    <span id="msgerror" class="h5 color-danger-900"></span>
+                                </div>
+                                <hr />
+                                <center>
+                                    <button id="addelement" type="button" class="btn btn-info waves-effect waves-themed" style="display:none;"><span class="fal fa-plus mr-1"></span>Agregar</button>
+                                </center>
+
+                            </div>
+
+                        </div>
+                        <div class="card mb-g">
+
+                            <div class="card-body p-3">
+                                <h5>
+                                    Horarios disponibles
+                                    <span class="badge badge-dark fw-n position-absolute pos-top pos-right mt-3 mr-3">B</span>
+                                </h5>
+                                <div class="form-row">
+                                    <div class="col-md-6">
+                                        <label class="form-label" for="descripcion">Seleccione el horario de entrada</label>
+                                        @Html.DropDownList("dropdownSchedule", (IEnumerable<SelectListItem>)ViewBag.dropdownSchedule, new { id = "dropdownSchedule", @class = "form-control reseterror" })
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label" for="inputtolerancewd">Tolerancia en minutos</label>
+                                        <input class="form-control reseterror" id="inputtolerancewd" type="number" name="number" value="0">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label" for="descripcion">Seleccione el horario de comida</label>
+                                        @Html.DropDownList("dropdownScheduleMeal", (IEnumerable<SelectListItem>)ViewBag.dropdownScheduleMeal, new { id = "dropdownScheduleMeal", @class = "form-control reseterror" })
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label" for="inputtoleranceml">Tolerancia en minutos</label>
+                                        <input class="form-control reseterror" id="inputtoleranceml" type="number" name="number" value="0">
+                                    </div>
+
+                                    <div class="col-md-12">
+                                        <div class="d-flex flex-wrap align-items-center pl-3 pr-1 py-2 px-sm-4 px-lg-5 border-faded border-top-0 border-left-0 border-right-0">
+                                            <div class="flex-1 d-flex align-items-center">
+                                                <a href="javascript:void(0);" id="js-delete-selected" class="btn btn-icon rounded-circle mr-1 waves-effect waves-themed">
+                                                    <i class="fas fa-trash fs-md"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <br />
+                                        <div class="col-md-12">
+                                            <ul id="elementsadded">
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div id="errorsave" class="alert border-danger bg-transparent text-secondary fade show" role="alert" style="display:none">
+                            <div class="d-flex align-items-center">
+                                <div class="alert-icon">
+                                    <span class="icon-stack icon-stack-md">
+                                        <i class="base-7 icon-stack-3x color-danger-900"></i>
+                                        <i class="fal fa-times icon-stack-1x text-white"></i>
+                                    </span>
+                                </div>
+                                <div class="flex-1">
+                                    <span id="msgerror" class="h5 color-danger-900">No se puede guardar. Validé que existan horarios y se asignarón a empleados, la tolerancia debe ser mayor o igual 0.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <center>
+                        <div id="spinwait" class="spinner-border" style="width: 3rem; height: 3rem; display:none;" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                    </center>
+
+                    <div class="modal-footer">
+                        <button id="closemodal" type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                        <button id="savenewschedule" type="button" class="btn btn-primary">Guardar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section ScriptsBlock {
+
+    <script src="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/js/datagrid/datatables/datatables.bundle.js"></script>
+    <script src="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/js/notifications/sweetalert2/sweetalert2.bundle.js"></script>
+    <script>
+        $(document).ready(function () {
+
+            $('#dt-basic-example').dataTable(
+                {
+                    responsive: true
+                });
+
+
+        });
+    </script>
+}

@@ -1,0 +1,123 @@
+@model List<ListItem>
+
+    <ul id="js-nav-menu" class="nav-menu">
+
+
+        <li>
+            <a href="#" title="Dashboard" data-filter-tags="dashboard">
+                <i class="fal fa-chart-area"></i>
+                <span class="nav-link-text" data-i18n="nav.dashboard">Dashboards</span>
+            </a>
+            <ul>
+                <li>
+                    <a href='@Url.Action("Index","Home")' title="Hoy" data-filter-tags="hoy">
+                        <i class="fal fa-calendar-check"></i>
+                        <span class="nav-link-text" data-i18n="nav.dashboard.hoy">Hoy</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href='@Url.Action("Index","DashboardHistory")' title="Historico" data-filter-tags="historico">
+                        <i class="fal fa-calendar-alt"></i>
+                        <span class="nav-link-text" data-i18n="nav.dashboard.historico">Histórico</span>
+                    </a>
+                </li>
+
+
+            </ul>
+        </li>
+
+        <li>
+            <a href="#" title="Organigrama" data-filter-tags="organigrama">
+                <i class="fal fa-sitemap"></i>
+                <span class="nav-link-text" data-i18n="nav.organigrama">Organigrama</span>
+            </a>
+
+            <ul>
+                <li>
+                    <a href='@Url.Action("Index","Hierarchy")' title="Jerarquía" data-filter-tags="jerarquia">
+                        <span class="nav-link-text" data-i18n="nav.organigrama.jerarquia">Jerarquía</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href='@Url.Action("HierarchyPartial","Hierarchy", new {rowid = "a9abae18-c608-45f2-9061-6dc035803fd7" })' title="Puestos" data-filter-tags="puestos">
+                        <span class="nav-link-text" data-i18n="nav.organigrama.puestos">Puestos</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href='@Url.Action("Organigrama","Organigrama")' title="Catálogos" data-filter-tags="catalogos">
+                        <span class="nav-link-text" data-i18n="nav.organigrama.puestos">Catálogos</span>
+                    </a>
+                </li>
+
+            </ul>
+        </li>
+
+        <li>
+            <a href="#" title="Configuración" data-filter-tags="configuracion">
+                <i class="fal fa-cogs"></i>
+                <span class="nav-link-text" data-i18n="nav.configuracion">Configuración</span>
+            </a>
+            <ul>
+                <li>
+                    <a href='@Url.Action("Index","Catalog")' title="Catálogos" data-filter-tags="catalogos">
+                        <i class="fal fa-tags"></i>
+                        <span class="nav-link-text" data-i18n="nav.configuracion.catalogos">Catálogos</span>
+                    </a>
+                </li>
+                <li>
+                    <a href='@Url.Action("Index","Schedule")' title="Horarios" data-filter-tags="horarios">
+                        <i class="fal fa-chess-clock-alt"></i>
+                        <span class="nav-link-text" data-i18n="nav.configuracion.catalogos">Horarios</span>
+                    </a>
+                </li>
+                <li>
+                    <a href='@Url.Action("Index","NonWorkingDays")' title="Dias no laborables" data-filter-tags="dias no laborables">
+                        <i class="fal fa-birthday-cake"></i>
+                        <span class="nav-link-text" data-i18n="nav.configuracion.catalogos">Dias no laborables</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href='@Url.Action("Descuentos","Configuration")' title="Descuentos" data-filter-tags="descuentos">
+                        <i class="fal fa-random"></i>
+                        <span class="nav-link-text" data-i18n="nav.configuracion.aprobaciones">Descuentos</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+        <li>
+            <a href="#" title="Seguridad" data-filter-tags="seguridad">
+                <i class="fal fa-lock-alt"></i>
+                <span class="nav-link-text" data-i18n="nav.seguridad">Seguridad</span>
+            </a>
+            <ul>
+                <li>
+                    <a href="#" title="Usuarios" data-filter-tags="usuarios">
+                        <i class="fal fa-user-alt"></i>
+                        <span class="nav-link-text" data-i18n="nav.seguridad.usuarios">Usuarios</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+
+        <li>
+            <a href="#" title="Reportes" data-filter-tags="reportes">
+                <i class="fa-2x fal fa-print"></i>
+                <span class="nav-link-text" data-i18n="nav.reportes">Reportes</span>
+            </a>
+            <ul>
+                <li>
+                    <a href="#" title="Retardos" data-filter-tags="retardos">
+                        <i class="fal fa-clock"></i>
+                        <span class="nav-link-text" data-i18n="nav.reportes.retardos">Retardos</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+    </ul>

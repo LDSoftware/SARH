@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Catalog\DocumentType.cs~RF7582f35.TMP" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Dashboard\" />
+  </ItemGroup>
+
+</Project>

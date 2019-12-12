@@ -1,0 +1,606 @@
+﻿@{
+    ViewData["Title"] = "Información del empleado";
+}
+
+
+    <div class="subheader">
+        <ol class="breadcrumb breadcrumb-lg breadcrumb-arrow mb-0">
+            <li>
+                <a href='@Url.Action("Index","Home")'>
+                    <i class="fal fa-home"></i>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="fal fa-users"></i>
+                    <span class="hidden-lg-down">Almacén planta</span>
+                </a>
+            </li>
+            <li>
+                <a href='@Url.Action("Index","Employee")'>
+                    <i class="fal fa-arrow-alt-down"></i>
+                    <span class="hidden-lg-down">Almacén</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="fal fa-user"></i>
+                    <span class="hidden-lg-down">Empleado 1</span>
+                </a>
+            </li>
+        </ol>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-6 col-xl-3 order-lg-1 order-xl-1">
+            <!-- profile summary -->
+            <div class="card mb-g rounded-top">
+                <div class="row no-gutters row-grid">
+                    <div class="col-12">
+                        <div class="d-flex flex-column align-items-center justify-content-center p-4">
+                            <img class="rounded-circle shadow-2 img-thumbnail" alt="" src="img/demo/avatars/icons8-user-96.png">
+                            <h5 class="mb-0 fw-700 text-center mt-3">
+                                Employee 1
+                                <small class="text-muted mb-0">ALMACENISTA ALM HERRAM. REFACCIONES  1</small>
+                            </h5>
+                        </div>
+                        <div class="height-8 d-flex flex-row align-items-center flex-wrap flex-shrink-0">
+                            <a class="btn btn-icon fs-xl width-1 mr-1" href="javascript:void(0);" data-original-title="More options" data-toggle="tooltip" data-placement="top">
+                                <i class="fal fa-ellipsis-v-alt color-fusion-300"></i>
+                            </a>
+                            <a class="btn btn-icon fs-xl mr-1" href="javascript:void(0);" data-original-title="Attach files" data-toggle="tooltip" data-placement="top">
+                                <i class="fal fa-paperclip color-fusion-300"></i>
+                            </a>
+                            <a class="btn btn-icon fs-xl mr-1" href="javascript:void(0);" data-original-title="Insert photo" data-toggle="tooltip" data-placement="top">
+                                <i class="fal fa-camera color-fusion-300"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- add : -->
+            <div class="card mb-2">
+                <div class="card-body">
+                    <a class="d-flex flex-row align-items-center" href="javascript:void(0);">
+                        <div class="icon-stack display-3 flex-shrink-0">
+                            <i class="fal fa-circle icon-stack-3x opacity-100 color-primary-400"></i>
+                            <i class="fal fa-id-card icon-stack-1x opacity-100 color-primary-500"></i>
+                        </div>
+                        <div class="ml-3">
+                            <strong>
+                                Perfil del puesto
+                            </strong>
+                            <br>
+                            Detalles del perfil
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="card mb-g">
+                <div class="card-body">
+                    <a class="d-flex flex-row align-items-center" href='@Url.Action("Index","ProfileEmployee")'>
+                        <div class="icon-stack display-3 flex-shrink-0">
+                            <i class="fal fa-circle icon-stack-3x opacity-100 color-warning-400"></i>
+                            <i class="fal fa-database icon-stack-1x opacity-100 color-warning-500"></i>
+                        </div>
+                        <div class="ml-3">
+                            <strong>
+                                Históricos
+                            </strong>
+                            <br>
+                            Historial del empleado
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        </ Detalles de la informacion del empleado -->
+
+        <div class="col-lg-12 col-xl-9 order-lg-2 order-xl-2">
+
+            <div class="border bg-light rounded-top">
+                <div class="accordion accordion-hover accordion-clean js-list-filter" id="js_list_accordion">
+
+
+
+                    </ Datos generales empleado -->
+
+
+                    <div class="card border-top-left-radius-0 border-top-right-radius-0">
+                        <div class="card-header">
+                            <a class="card-title" aria-expanded="true" href="javascript:void(0);" data-toggle="collapse" data-target="#js_list_accordion-a" data-filter-tags="settings">
+                                <i class="fal fa-id-badge width-2 fs-xl"></i>
+                                Información General
+                                <span class="ml-auto">
+                                    <span class="collapsed-reveal">
+                                        <i class="fal fa-chevron-up fs-xl"></i>
+                                    </span>
+                                    <span class="collapsed-hidden">
+                                        <i class="fal fa-chevron-down fs-xl"></i>
+                                    </span>
+                                </span>
+                            </a>
+                        </div>
+                        <div class="collapse show" id="js_list_accordion-a" data-parent="#js_list_accordion">
+                            <div class="card-body">
+
+
+                                <div role="group" aria-label="Vertical button group">
+                                    <a class="btn btn-secondary" href="#"><i class="fal fa-print"></i> Imprimir</a>
+                                    <a class="btn btn-secondary" href="#"><i class="fal fa-save"></i> Guardar</a>
+                                    <div class="btn-group" role="group">
+                                        <button class="btn btn-secondary dropdown-toggle" id="btnGroupVerticalDrop1" aria-expanded="false" aria-haspopup="true" type="button" data-toggle="dropdown">
+                                            <i class="fal fa-bolt"></i>
+                                            Acciones
+                                        </button>
+                                        <div class="dropdown-menu" aria-labelledby="btnGroupVerticalDrop1">
+                                            <a class="dropdown-item" href="#">Mover de puesto</a>
+                                            <a class="dropdown-item" href="#">Mover de área</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr />
+
+
+
+                                <div class="panel-content">
+                                    <div class="form-row">
+                                        <div class="col-md-4 mb-3">
+                                            <label class="form-label" for="validationCustom01">Nombre</label>
+                                            <input class="form-control" id="validationCustom01" required="" type="text" placeholder="First name" value="Employee 1">
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <label class="form-label" for="validationCustom02">Apellidos</label>
+                                            <input class="form-control" id="validationCustom02" required="" type="text" placeholder="Last name" value="Lantern">
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <label class="form-label" for="validationCustomUsername">Correo Electrónico</label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text" id="inputGroupPrepend"><i class="fal fa-envelope"></i></span>
+                                                </div>
+                                                <input class="form-control" id="validationCustomUsername" aria-describedby="inputGroupPrepend" required="" type="text" placeholder="Username" value="employee1@@isosa.com">
+                                                <div class="invalid-feedback">
+                                                    Please choose a username.
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label" for="validationCustom03">Puesto <span class="text-danger">*</span></label>
+                                            <input class="form-control" id="validationCustom03" required="" type="text" placeholder="Puesto" value="ALMACENISTA ALM HERRAM. REFACCIONES  1">
+                                        </div>
+                                        <div class="col-md-3 mb-3">
+                                            <label class="form-label" for="validationCustom03">Horario Laboral <span class="text-danger">*</span></label>
+                                            <select class="custom-select" required="">
+                                                <option value="">Horario Default</option>
+                                                <option value="1">Horario Especial 1</option>
+                                                <option value="2">Horario Especial 2</option>
+                                                <option value="3">Horario Temporal Capacitaciones</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3 mb-3">
+                                            <label class="form-label" for="validationCustom03">Horario Comida<span class="text-danger">*</span></label>
+                                            <select class="custom-select" required="">
+                                                <option value="">Horario Default</option>
+                                                <option value="1">Horario Especial 1</option>
+                                                <option value="2">Horario Especial 2</option>
+                                                <option value="3">Horario Temporal Capacitaciones</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-row">
+                                        <div class="col-md-4 mb-3">
+                                            <label class="form-label" for="validationCustom01">NSS</label>
+                                            <input class="form-control" id="validationCustom01" required="" type="text" placeholder="NSS" value="">
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <label class="form-label" for="validationCustom02">CURP</label>
+                                            <input class="form-control" id="validationCustom02" required="" type="text" placeholder="CURP" value="">
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <label class="form-label" for="validationCustom02">Fecha de alta</label>
+                                            <input class="form-control" id="validationCustom02" required="" type="date" placeholder="Fecha de alta" value="">
+                                        </div>
+
+                                    </div>
+
+                                    <div class="form-row">
+                                        <div class="col-12 mb-3">
+                                            <label class="form-label" for="validationTextarea2">Observaciones</label>
+                                            <textarea class="form-control" id="validationTextarea2" required="" placeholder="Observaciones"></textarea>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                    </ Datos personales empleado -->
+
+                    <div class="card">
+                        <div class="card-header">
+                            <a class="card-title collapsed" aria-expanded="false" href="javascript:void(0);" data-toggle="collapse" data-target="#js_list_accordion-z" data-filter-tags="merge">
+                                <i class="fal fa-address-card width-2 fs-xl"></i>
+                                Información personal
+                                <span class="ml-auto">
+                                    <span class="collapsed-reveal">
+                                        <i class="fal fa-chevron-up fs-xl"></i>
+                                    </span>
+                                    <span class="collapsed-hidden">
+                                        <i class="fal fa-chevron-down fs-xl"></i>
+                                    </span>
+                                </span>
+                            </a>
+                        </div>
+                        <div class="collapse" id="js_list_accordion-z" data-parent="#js_list_accordion">
+                            <div class="card-body">
+
+                                <div role="group" aria-label="Vertical button group">
+                                    <a class="btn btn-secondary" href="#"><i class="fal fa-print"></i> Imprimir</a>
+                                    <a class="btn btn-secondary" href="#"><i class="fal fa-save"></i> Guardar</a>
+                                </div>
+                                <hr />
+
+                                <div class="form-row">
+                                    <div class="col-md-4 mb-3">
+                                        <label class="form-label" for="validationCustom01">Telefono</label>
+                                        <input class="form-control" id="validationCustom01" required="" type="text" placeholder="Telefono" value="">
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label class="form-label" for="validationCustom02">Celular</label>
+                                        <input class="form-control" id="validationCustom02" required="" type="text" placeholder="Celular" value="">
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label class="form-label" for="validationCustom02">Correo electronico personal</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text" id="inputGroupPrepend"><i class="fal fa-envelope"></i></span>
+                                            </div>
+                                            <input class="form-control" id="validationCustomUsername" aria-describedby="inputGroupPrepend" required="" type="text" placeholder="Correo electronico" value="">
+                                            <div class="invalid-feedback">
+                                                Please choose a username.
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+
+                                <div class="form-row">
+                                    <div class="col-md-4 mb-3">
+                                        <label class="form-label" for="validationCustom01">Ciudad</label>
+                                        <input class="form-control" id="validationCustom01" required="" type="text" placeholder="Ciudad" value="">
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label class="form-label" for="validationCustom02">Estado</label>
+                                        <input class="form-control" id="validationCustom02" required="" type="text" placeholder="Estado" value="">
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label class="form-label" for="validationCustom02">Codigo Postal</label>
+                                        <input class="form-control" id="validationCustom02" required="" type="text" placeholder="Codigo Postal" value="">
+                                    </div>
+
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="col-md-4 mb-3">
+                                        <div class="col-12 mb-3">
+                                            <label class="form-label" for="validationTextarea2">Enfermedades Cronicas</label>
+                                            <textarea class="form-control" id="validationTextarea2" required="" placeholder="Enfermedades Cronicas"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <div class="col-12 mb-3">
+                                            <label class="form-label" for="validationTextarea2">Tipo de sangre</label>
+                                            <textarea class="form-control" id="validationTextarea2" required="" placeholder="Tipo de sangre"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                    </ Datos emergencia empleado -->
+
+
+                    <div class="card">
+                        <div class="card-header">
+                            <a class="card-title collapsed" aria-expanded="false" href="javascript:void(0);" data-toggle="collapse" data-target="#js_list_accordion-y" data-filter-tags="merge">
+                                <i class="fal fa-ambulance width-2 fs-xl"></i>
+                                Datos de emergencia
+                                <span class="ml-auto">
+                                    <span class="collapsed-reveal">
+                                        <i class="fal fa-chevron-up fs-xl"></i>
+                                    </span>
+                                    <span class="collapsed-hidden">
+                                        <i class="fal fa-chevron-down fs-xl"></i>
+                                    </span>
+                                </span>
+                            </a>
+                        </div>
+                        <div class="collapse" id="js_list_accordion-y" data-parent="#js_list_accordion">
+                            <div class="card-body">
+
+                                <div role="group" aria-label="Vertical button group">
+                                    <a class="btn btn-secondary" href="#"><i class="fal fa-print"></i> Imprimir</a>
+                                    <a class="btn btn-secondary" href="#"><i class="fal fa-save"></i> Guardar</a>
+                                </div>
+                                <hr />
+
+                                <div class="form-row">
+                                    <div class="col-md-4 mb-3">
+                                        <label class="form-label" for="validationCustom01">Nombre</label>
+                                        <input class="form-control" id="validationCustom01" required="" type="text" placeholder="Nombre" value="">
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label class="form-label" for="validationCustom02">Relación</label>
+                                        <input class="form-control" id="validationCustom02" required="" type="text" placeholder="Relación" value="">
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label class="form-label" for="validationCustom02">Telefono</label>
+                                        <input class="form-control" id="validationCustom02" required="" type="text" placeholder="Telefono" value="">
+                                    </div>
+
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                    </ Documentacion empleado -->
+
+
+                    <div class="card">
+                        <div class="card-header">
+                            <a class="card-title collapsed" aria-expanded="false" href="javascript:void(0);" data-toggle="collapse" data-target="#js_list_accordion-b" data-filter-tags="merge">
+                                <i class="fal fa-file-pdf width-2 fs-xl"></i>
+                                Documentación
+                                <span class="ml-auto">
+                                    <span class="collapsed-reveal">
+                                        <i class="fal fa-chevron-up fs-xl"></i>
+                                    </span>
+                                    <span class="collapsed-hidden">
+                                        <i class="fal fa-chevron-down fs-xl"></i>
+                                    </span>
+                                </span>
+                            </a>
+                        </div>
+                        <div class="collapse" id="js_list_accordion-b" data-parent="#js_list_accordion">
+                            <div class="card-body">
+
+                                <div role="group" aria-label="Vertical button group">
+                                    <a class="btn btn-secondary" href="#"><i class="fal fa-print"></i> Imprimir</a>
+                                    <div class="btn-group" role="group">
+                                        <button class="btn btn-secondary dropdown-toggle" id="btnGroupVerticalDrop1" aria-expanded="false" aria-haspopup="true" type="button" data-toggle="dropdown">
+                                            <i class="fal fa-bolt"></i>
+                                            Acciones
+                                        </button>
+                                        <div class="dropdown-menu" aria-labelledby="btnGroupVerticalDrop1">
+                                            <a class="dropdown-item" href="#">Cargar</a>
+                                            <a class="dropdown-item" href="#">Validar</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr />
+
+                                <table class="table table-bordered table-hover m-0">
+                                    <thead class="thead-themed">
+                                        <tr>
+                                            <th>Documento</th>
+                                            <th>Ruta</th>
+                                            <th>Vigente</th>
+                                            <th>Validado</th>
+                                            <th>Visualizar</th>
+                                            <th>Actualizar</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <th scope="row">INE</th>
+                                            <td>\\documentos\Empleado001\INE.pdf</td>
+                                            <td>Si</td>
+                                            <td>Si</td>
+                                            <td><a class="btn btn-secondary" href="#"><i class="fal fa-eye"></i></a></td>
+                                            <td><a class="btn btn-secondary" href="#"><i class="fal fa-upload"></i></a></td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Licencia</th>
+                                            <td>\\documentos\Empleado001\Licencia.pdf</td>
+                                            <td>Si</td>
+                                            <td>Si</td>
+                                            <td><a class="btn btn-secondary" href="#"><i class="fal fa-eye"></i></a></td>
+                                            <td><a class="btn btn-secondary" href="#"><i class="fal fa-upload"></i></a></td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Pasaporte</th>
+                                            <td>\\documentos\Empleado001\Pasaporte.pdf</td>
+                                            <td>Si</td>
+                                            <td>Si</td>
+                                            <td><a class="btn btn-secondary" href="#"><i class="fal fa-eye"></i></a></td>
+                                            <td><a class="btn btn-secondary" href="#"><i class="fal fa-upload"></i></a></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                    </ Documentacion Equipo computo asignado -->
+
+
+                    <div class="card">
+                        <div class="card-header">
+                            <a class="card-title collapsed" aria-expanded="false" href="javascript:void(0);" data-toggle="collapse" data-target="#js_list_accordion-c" data-filter-tags="backup">
+                                <i class="fal fa-laptop width-2 fs-xl"></i>
+                                Equipo computo asignado
+                                <span class="ml-auto">
+                                    <span class="collapsed-reveal">
+                                        <i class="fal fa-chevron-up fs-xl"></i>
+                                    </span>
+                                    <span class="collapsed-hidden">
+                                        <i class="fal fa-chevron-down fs-xl"></i>
+                                    </span>
+                                </span>
+                            </a>
+                        </div>
+
+                        <div class="collapse" id="js_list_accordion-c" data-parent="#js_list_accordion">
+                            <div class="card-body">
+
+                                <div role="group" aria-label="Vertical button group">
+                                    <a class="btn btn-secondary" href="#"><i class="fal fa-print"></i> Imprimir</a>
+                                    <div class="btn-group" role="group">
+                                        <button class="btn btn-secondary dropdown-toggle" id="btnGroupVerticalDrop1" aria-expanded="false" aria-haspopup="true" type="button" data-toggle="dropdown">
+                                            <i class="fal fa-bolt"></i>
+                                            Acciones
+                                        </button>
+                                        <div class="dropdown-menu" aria-labelledby="btnGroupVerticalDrop1">
+                                            <a class="dropdown-item" href="#"><i class="fal fa-link"></i>Asignar</a>
+                                            <a class="dropdown-item" href="#">Ir al Catalogo</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr />
+
+                                <table class="table table-bordered table-hover m-0">
+                                    <thead class="thead-themed">
+                                        <tr>
+                                            <th>Dipositivo</th>
+                                            <th>Descripcion</th>
+                                            <th>Marca</th>
+                                            <th>Serie</th>
+                                            <th>Fecha</th>
+                                            <th>Desasignar</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <th scope="row">CPU</th>
+                                            <td>Intel Core i5 4 GB RAM 512 GB HD</td>
+                                            <td>Lenovo</td>
+                                            <td>AAAAA-BBBBB-CCCCCC</td>
+                                            <td>01/01/2019</td>
+                                            <td><a class="btn btn-secondary" href="#"><i class="fal fa-unlink"></i></a></td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Teclado</th>
+                                            <td>Teclado en español</td>
+                                            <td>Lenovo</td>
+                                            <td>AAAAA-BBBBB-CCCCCC</td>
+                                            <td>01/01/2019</td>
+                                            <td><a class="btn btn-secondary" href="#"><i class="fal fa-unlink"></i></a></td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Mouse</th>
+                                            <td>Mouse generico</td>
+                                            <td>HP</td>
+                                            <td>AAAAA-BBBBB-CCCCCC</td>
+                                            <td>01/01/2019</td>
+                                            <td><a class="btn btn-secondary" href="#"><i class="fal fa-unlink"></i></a></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+
+
+
+
+
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    </ Documentacion Equipo protección asignado -->
+
+                    <div class="card">
+                        <div class="card-header">
+                            <a class="card-title collapsed" aria-expanded="false" href="javascript:void(0);" data-toggle="collapse" data-target="#js_list_accordion-d" data-filter-tags="proteccion">
+                                <i class="fal fa-forklift width-2 fs-xl"></i>
+                                Equipo protección asignado
+                                <span class="ml-auto">
+                                    <span class="collapsed-reveal">
+                                        <i class="fal fa-chevron-up fs-xl"></i>
+                                    </span>
+                                    <span class="collapsed-hidden">
+                                        <i class="fal fa-chevron-down fs-xl"></i>
+                                    </span>
+                                </span>
+                            </a>
+                        </div>
+
+                        <div class="collapse" id="js_list_accordion-d" data-parent="#js_list_accordion">
+                            <div class="card-body">
+
+                                <div role="group" aria-label="Vertical button group">
+                                    <a class="btn btn-secondary" href="#"><i class="fal fa-print"></i> Imprimir</a>
+                                    <div class="btn-group" role="group">
+                                        <button class="btn btn-secondary dropdown-toggle" id="btnGroupVerticalDrop1" aria-expanded="false" aria-haspopup="true" type="button" data-toggle="dropdown">
+                                            <i class="fal fa-bolt"></i>
+                                            Acciones
+                                        </button>
+                                        <div class="dropdown-menu" aria-labelledby="btnGroupVerticalDrop1">
+                                            <a class="dropdown-item" href="#"><i class="fal fa-link"></i>Asignar</a>
+                                            <a class="dropdown-item" href="#">Ir al Catalogo</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr />
+
+                                <table class="table table-bordered table-hover m-0">
+                                    <thead class="thead-themed">
+                                        <tr>
+                                            <th>Tipo</th>
+                                            <th>Descripcion</th>
+                                            <th>Fecha</th>
+                                            <th>Desasignar</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <th scope="row">Casco</th>
+                                            <td>Casco de protección</td>
+                                            <td>01/01/2019</td>
+                                            <td><a class="btn btn-secondary" href="#"><i class="fal fa-unlink"></i></a></td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Botas</th>
+                                            <td>Botas de protección</td>
+                                            <td>01/01/2019</td>
+                                            <td><a class="btn btn-secondary" href="#"><i class="fal fa-unlink"></i></a></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+                <span class="filter-message js-filter-message"></span>
+            </div>
+
+
+
+        </div>
+
+    </div>

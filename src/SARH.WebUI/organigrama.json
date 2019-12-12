@@ -1,0 +1,788 @@
+{
+	"Organigrama": [{
+			"Area": "COSTOS",
+			"Centrodetrabajo": "COMPRAS",
+			"Puesto": "AUXILIAR DE COMPRAS"
+		}, {
+			"Area": "COSTOS",
+			"Centrodetrabajo": "COMPRAS",
+			"Categoria": "JEFATURA",
+			"Puesto": "JEFE COMPRAS"
+		}, {
+			"Area": "COSTOS",
+			"Centrodetrabajo": "COSTOS",
+			"Categoria": "GERENTE",
+			"Puesto": "GERENTE COSTOS"
+		}, {
+			"Area": "COSTOS",
+			"Centrodetrabajo": "CUENTAS POR COBRAR",
+			"Puesto": "CUENTAS POR COBRAR"
+		}, {
+			"Area": "COSTOS",
+			"Centrodetrabajo": "FLOTILLA",
+			"Categoria": "CHOFER",
+			"Puesto": "CHOFER PRESIDENCIA"
+		}, {
+			"Area": "COSTOS",
+			"Centrodetrabajo": "FLOTILLA",
+			"Categoria": "MENSAJERO",
+			"Puesto": "MENSAJERO"
+		}, {
+			"Area": "COSTOS",
+			"Centrodetrabajo": "FLOTILLA",
+			"Categoria": "MONTACARGUISTA",
+			"Puesto": "MONTACARGUISTA OPERACIONES FINALES"
+		}, {
+			"Area": "COSTOS",
+			"Centrodetrabajo": "FLOTILLA",
+			"Puesto": "MONTACARGUISTA OPERACIONES PREVIAS"
+		}, {
+			"Area": "COSTOS",
+			"Centrodetrabajo": "FLOTILLA",
+			"Puesto": "MONTACARGUISTA TRATAMIENTOS TERMICOS T1"
+		}, {
+			"Area": "COSTOS",
+			"Centrodetrabajo": "FLOTILLA",
+			"Puesto": "MONTACARGUISTA TRATAMIENTOS TERMICOS T2"
+		}, {
+			"Area": "COSTOS",
+			"Centrodetrabajo": "FLOTILLA",
+			"Categoria": "SUPERVISOR",
+			"Puesto": "SUPERVISOR FLOTILLAS"
+		}, {
+			"Area": "COSTOS",
+			"Centrodetrabajo": "ALMACEN PLANTA2",
+			"Categoria": "JEFATURA",
+			"Puesto": "JEFE ALMACEN PLANTA"
+		}, {
+			"Area": "COSTOS",
+			"Centrodetrabajo": "ALMACEN PLANTA2",
+			"Categoria": "(blank)",
+			"Puesto": "ALMACENISTA ALM HERRAM. REFACCIONES T1"
+		}, {
+			"Area": "COSTOS",
+			"Centrodetrabajo": "ALMACEN PLANTA2",
+			"Puesto": "ALMACENISTA ALM HERRAM. REFACCIONES T2"
+		}, {
+			"Area": "COSTOS",
+			"Centrodetrabajo": "ALMACEN PLANTA2",
+			"Puesto": "ALMACENISTA ALM. MATERIA PRIMA T2"
+		}, {
+			"Area": "COSTOS",
+			"Centrodetrabajo": "ALMACEN PLANTA2",
+			"Puesto": "ALMACENISTA ALM. PUNTAS Y COLAS COMPONENTES T1"
+		}, {
+			"Area": "COSTOS",
+			"Centrodetrabajo": "ALMACEN PLANTA2",
+			"Puesto": "OPERADOR 1 GRUA"
+		}, {
+			"Area": "COSTOS",
+			"Centrodetrabajo": "ALMACEN PLANTA2",
+			"Puesto": "SUPERVISOR ALMACENES"
+		}, {
+			"Area": "COSTOS",
+			"Centrodetrabajo": "ALMACEN DISTRIBUIDORA",
+			"Categoria": "CHOFER",
+			"Puesto": "CHOFER DISTRIBUIDORA 1"
+		}, {
+			"Area": "COSTOS",
+			"Centrodetrabajo": "ALMACEN DISTRIBUIDORA",
+			"Puesto": "CHOFER DISTRIBUIDORA 2"
+		}, {
+			"Area": "COSTOS",
+			"Centrodetrabajo": "ALMACEN DISTRIBUIDORA",
+			"Categoria": "JEFATURA",
+			"Puesto": "JEFE ALMACEN DISTRIBUIDORA"
+		}, {
+			"Area": "COSTOS",
+			"Centrodetrabajo": "ALMACEN DISTRIBUIDORA",
+			"Categoria": "(blank)",
+			"Puesto": "AUXILIAR JEFE ALMACEN DISTRIBUIDORA"
+		}, {
+			"Area": "AUDITORIA",
+			"Centrodetrabajo": "AUDITORIA",
+			"Categoria": "AUXILIAR",
+			"Puesto": "AUXILIAR DE PROCESO"
+		}, {
+			"Area": "AUDITORIA",
+			"Centrodetrabajo": "AUDITORIA",
+			"Categoria": "GERENTE",
+			"Puesto": "PROCESOS Y AUDITORIA"
+		}, {
+			"Area": "BARRENOS",
+			"Centrodetrabajo": "BARRENOS EN FRIO",
+			"Categoria": "OPERADOR A",
+			"Puesto": "BARRENADOR 1"
+		}, {
+			"Area": "BARRENOS",
+			"Centrodetrabajo": "BARRENOS EN FRIO",
+			"Puesto": "BARRENADOR 2"
+		}, {
+			"Area": "BARRENOS",
+			"Centrodetrabajo": "ROSETES / CAREO",
+			"Categoria": "OPERADOR A",
+			"Puesto": "CAREADOR ROSETEADOR"
+		}, {
+			"Area": "BARRENOS",
+			"Centrodetrabajo": "BARRENOS",
+			"Categoria": "SUPERVISOR",
+			"Puesto": "SUPERVISOR BARRENOS"
+		}, {
+			"Area": "COMODIN",
+			"Centrodetrabajo": "COMODIN",
+			"Categoria": "AYUDANTE GENERAL",
+			"Puesto": "COMODIN GENERAL"
+		}, {
+			"Area": "CONTABILIDAD",
+			"Centrodetrabajo": "CONTABILIDAD",
+			"Categoria": "EXTERNO",
+			"Puesto": "CONTRALORIA"
+		}, {
+			"Area": "CONTROL DE CALIDAD",
+			"Centrodetrabajo": "CONTROL DE CALIDAD",
+			"Puesto": "AUDITOR PERFILES PARABOLICOS"
+		}, {
+			"Area": "CONTROL DE CALIDAD",
+			"Centrodetrabajo": "CONTROL DE CALIDAD",
+			"Puesto": "AUDITOR TERMICOS 1"
+		}, {
+			"Area": "CONTROL DE CALIDAD",
+			"Centrodetrabajo": "CONTROL DE CALIDAD",
+			"Puesto": "AUDITOR TERMICOS 2"
+		}, {
+			"Area": "CONTROL DE CALIDAD",
+			"Centrodetrabajo": "CONTROL DE CALIDAD",
+			"Puesto": "CONTROL DE DOCUMENTOS"
+		}, {
+			"Area": "CONTROL DE CALIDAD",
+			"Centrodetrabajo": "CONTROL DE CALIDAD",
+			"Puesto": "SUPERVISOR CALIDAD"
+		}, {
+			"Area": "CONTROL DE CALIDAD",
+			"Centrodetrabajo": "CONTROL DE CALIDAD",
+			"Categoria": "GERENTE",
+			"Puesto": "GERENTE CALIDAD"
+		}, {
+			"Area": "CORTE",
+			"Centrodetrabajo": "CELULA DE FRIOS",
+			"Categoria": "AYUDANTE GENERAL",
+			"Puesto": "ABASTECEDOR CELULA"
+		}, {
+			"Area": "CORTE",
+			"Centrodetrabajo": "CELULA DE FRIOS",
+			"Categoria": "OPERADOR A",
+			"Puesto": "BARRENADOR CELULA"
+		}, {
+			"Area": "CORTE",
+			"Centrodetrabajo": "CELULA DE FRIOS",
+			"Puesto": "CORTADOR CELULA"
+		}, {
+			"Area": "CORTE",
+			"Centrodetrabajo": "CORTE CHICO",
+			"Categoria": "AYUDANTE GENERAL",
+			"Puesto": "ABASTECEDOR CHICO"
+		}, {
+			"Area": "CORTE",
+			"Centrodetrabajo": "CORTE CHICO",
+			"Categoria": "OPERADOR A",
+			"Puesto": "CORTADOR CHICO"
+		}, {
+			"Area": "CORTE",
+			"Centrodetrabajo": "CORTE GRUESO",
+			"Categoria": "AYUDANTE GENERAL",
+			"Puesto": "ABASTECEDOR GRUESO"
+		}, {
+			"Area": "CORTE",
+			"Centrodetrabajo": "CORTE GRUESO",
+			"Categoria": "OPERADOR A",
+			"Puesto": "CORTADOR GRUESO"
+		}, {
+			"Area": "CORTE",
+			"Centrodetrabajo": "DESPUNTE EN FRIO",
+			"Categoria": "OPERADOR B",
+			"Puesto": "DESPUNTADOR"
+		}, {
+			"Area": "CORTE",
+			"Centrodetrabajo": "CORTE",
+			"Categoria": "SUPERVISOR",
+			"Puesto": "SUPERVISOR CORTE"
+		}, {
+			"Area": "DESPALMES",
+			"Centrodetrabajo": "CELULA DE DESPALME MECANICO CHICO",
+			"Categoria": "OPERADOR A",
+			"Puesto": "DESPALMADOR MECANICA CHICA"
+		}, {
+			"Area": "DESPALMES",
+			"Centrodetrabajo": "CELULA DE DESPALME MECANICO CHICO",
+			"Categoria": "OPERADOR B",
+			"Puesto": "CARGADOR DE HORNO MECANICA CHICA"
+		}, {
+			"Area": "DESPALMES",
+			"Centrodetrabajo": "CELULA DE DESPALME MECANICO GRANDE",
+			"Categoria": "COMODIN",
+			"Puesto": "DESPALMADOR MECANICA GRANDE"
+		}, {
+			"Area": "DESPALMES",
+			"Centrodetrabajo": "CELULA DE DESPALME MECANICO GRANDE",
+			"Categoria": "OPERADOR B",
+			"Puesto": "CARGADOR HORNO MECANICA GRANDE"
+		}, {
+			"Area": "DESPALMES",
+			"Centrodetrabajo": "CELULA DE DESPALME PARABOLICAS 1",
+			"Categoria": "OPERADOR AA",
+			"Puesto": "DESPALMADOR 1 PARABOLICAS 1"
+		}, {
+			"Area": "DESPALMES",
+			"Centrodetrabajo": "CELULA DE DESPALME PARABOLICAS 1",
+			"Puesto": "DESPALMADOR 2 PARABOLICAS 1"
+		}, {
+			"Area": "DESPALMES",
+			"Centrodetrabajo": "CELULA DE DESPALME PARABOLICAS 1",
+			"Categoria": "OPERADOR B",
+			"Puesto": "DESTORCEDOR PARABOLICAS 1"
+		}, {
+			"Area": "DESPALMES",
+			"Centrodetrabajo": "CELULA DE DESPALME PARABOLICAS 2",
+			"Categoria": "OPERADOR A",
+			"Puesto": "CARGADOR DE HORNO PARABAOLICAS 2"
+		}, {
+			"Area": "DESPALMES",
+			"Centrodetrabajo": "CELULA DE DESPALME PARABOLICAS 2",
+			"Categoria": "OPERADOR AA",
+			"Puesto": "DESPALMADOR PARABOLICAS 2"
+		}, {
+			"Area": "DESPALMES",
+			"Centrodetrabajo": "DESPALMES",
+			"Categoria": "SUPERVISOR",
+			"Puesto": "SUPERVISOR DESPALMES"
+		}, {
+			"Area": "DIRECCION",
+			"Centrodetrabajo": "DIRECCION",
+			"Categoria": "DIRECCION",
+			"Puesto": "DIRECCION"
+		}, {
+			"Area": "ENSAMBLE",
+			"Centrodetrabajo": "COMODIN",
+			"Categoria": "OPERADOR B",
+			"Puesto": "COMODIN ENSAMBLE"
+		}, {
+			"Area": "ENSAMBLE",
+			"Centrodetrabajo": "DESTORCIMIENTO",
+			"Categoria": "OPERADOR A",
+			"Puesto": "DESTORCEDOR"
+		}, {
+			"Area": "ENSAMBLE",
+			"Centrodetrabajo": "ENSAMBLE LINEA 1",
+			"Categoria": "OPERADOR A",
+			"Puesto": "ARMADOR L1"
+		}, {
+			"Area": "ENSAMBLE",
+			"Centrodetrabajo": "ENSAMBLE LINEA 1",
+			"Categoria": "OPERADOR AA",
+			"Puesto": "ASENTADOR 1 L1"
+		}, {
+			"Area": "ENSAMBLE",
+			"Centrodetrabajo": "ENSAMBLE LINEA 1",
+			"Puesto": "ASENTADOR 2 L1"
+		}, {
+			"Area": "ENSAMBLE",
+			"Centrodetrabajo": "ENSAMBLE LINEA 1",
+			"Categoria": "OPERADOR B",
+			"Puesto": "COLOCADOR DE ABRAZADERAS L1"
+		}, {
+			"Area": "ENSAMBLE",
+			"Centrodetrabajo": "ENSAMBLE LINEA 1",
+			"Puesto": "CARGADOR PINTURA 2 L1"
+		}, {
+			"Area": "ENSAMBLE",
+			"Centrodetrabajo": "ENSAMBLE LINEA 1",
+			"Puesto": "CARGADOR PINTURA 1 L1"
+		}, {
+			"Area": "ENSAMBLE",
+			"Centrodetrabajo": "ENSAMBLE LINEA 2",
+			"Categoria": "AYUDANTE GENERAL",
+			"Puesto": "CARGADOR PINTURA 2 L2"
+		}, {
+			"Area": "ENSAMBLE",
+			"Centrodetrabajo": "ENSAMBLE LINEA 2",
+			"Categoria": "OPERADOR A",
+			"Puesto": "ARMADOR L2"
+		}, {
+			"Area": "ENSAMBLE",
+			"Centrodetrabajo": "ENSAMBLE LINEA 2",
+			"Categoria": "OPERADOR AA",
+			"Puesto": "ASENTADOR 1 L2"
+		}, {
+			"Area": "ENSAMBLE",
+			"Centrodetrabajo": "ENSAMBLE LINEA 2",
+			"Puesto": "ASENTADOR 2 L2"
+		}, {
+			"Area": "ENSAMBLE",
+			"Centrodetrabajo": "ENSAMBLE LINEA 2",
+			"Categoria": "OPERADOR B",
+			"Puesto": "CARGADOR PINTURA 1 L2"
+		}, {
+			"Area": "ENSAMBLE",
+			"Centrodetrabajo": "ENSAMBLE LINEA 2",
+			"Puesto": "COLOCADOR DE ABRAZADERAS L2"
+		}, {
+			"Area": "ENSAMBLE",
+			"Centrodetrabajo": "ENSAMBLE",
+			"Categoria": "SUPERVISOR",
+			"Puesto": "SUPERVISOR ENSAMBLE"
+		}, {
+			"Area": "GANCHOS / TAZAS",
+			"Centrodetrabajo": "CELULA DE GANCHOS/TAZAS",
+			"Categoria": "OPERADOR AA",
+			"Puesto": "OPERADOR DE GANCHOS"
+		}, {
+			"Area": "GANCHOS / TAZAS",
+			"Centrodetrabajo": "CELULA DE GANCHOS/TAZAS",
+			"Puesto": "OPERADOR DE TAZAS"
+		}, {
+			"Area": "GANCHOS / TAZAS",
+			"Centrodetrabajo": "CELULA DE GANCHOS/TAZAS",
+			"Categoria": "OPERADOR B",
+			"Puesto": "CARGADOR DE HORNO TAZAS"
+		}, {
+			"Area": "GANCHOS / TAZAS",
+			"Centrodetrabajo": "CELULA DE GANCHOS7TAZAS",
+			"Categoria": "OPERADOR B",
+			"Puesto": "CARGADOR DE HORNO GANCHOS"
+		}, {
+			"Area": "GANCHOS / TAZAS",
+			"Centrodetrabajo": "GANCHOS / TAZAS",
+			"Categoria": "SUPERVISOR",
+			"Puesto": "SUPERVISOR GANCHOS TAZAS"
+		}, {
+			"Area": "GESTORIA AMBIENTALY SEGURIDAD",
+			"Centrodetrabajo": "GESTORIA AMBIENTALY SEGURIDAD",
+			"Puesto": "ENCARGADO DE GESTORIA AMBIENTAL Y SEGURIDAD"
+		}, {
+			"Area": "GRANALLADO",
+			"Centrodetrabajo": "COLOCACION Y RECTIFICACION DE BUJE",
+			"Categoria": "OPERADOR A",
+			"Puesto": "COLOCADOR DE BUJES 1"
+		}, {
+			"Area": "GRANALLADO",
+			"Centrodetrabajo": "COLOCACION Y RECTIFICACION DE BUJE",
+			"Puesto": "COLOCADOR DE BUJES 2"
+		}, {
+			"Area": "GRANALLADO",
+			"Centrodetrabajo": "SHOT PEENING",
+			"Categoria": "OPERADOR B",
+			"Puesto": "CARGA SHOT PEENING"
+		}, {
+			"Area": "GRANALLADO",
+			"Centrodetrabajo": "SHOT PEENING",
+			"Puesto": "DESCARGA SHOT PEENING"
+		}, {
+			"Area": "GRANALLADO",
+			"Centrodetrabajo": "STRESS SHOT PEENING",
+			"Categoria": "OPERADOR A",
+			"Puesto": "CARGA STRESS SHOT PEENING"
+		}, {
+			"Area": "GRANALLADO",
+			"Puesto": "DESCARGA STRESS SHOT PEENING"
+		}, {
+			"Area": "GRANALLADO",
+			"Centrodetrabajo": "GRANALLADO",
+			"Categoria": "SUPERVISOR",
+			"Puesto": "SUPERVISOR GRANALLADO"
+		}, {
+			"Area": "INGENIERIA",
+			"Centrodetrabajo": "CNC",
+			"Puesto": "ENCARGADO DE CNC"
+		}, {
+			"Area": "INGENIERIA",
+			"Puesto": "OPERADOR DE CNC T1"
+		}, {
+			"Area": "INGENIERIA",
+			"Puesto": "OPERADOR DE CNC T2"
+		}, {
+			"Area": "INGENIERIA",
+			"Categoria": "JEFATURA",
+			"Puesto": "JEFATURA CNC"
+		}, {
+			"Area": "INGENIERIA",
+			"Centrodetrabajo": "HERRAMENTALES",
+			"Puesto": "ALMACENISTA DE MOLDES"
+		}, {
+			"Area": "INGENIERIA",
+			"Centrodetrabajo": "INGENIERIA",
+			"Categoria": "GERENTE",
+			"Puesto": "GERENTE INGENIERIA"
+		}, {
+			"Area": "INGENIERIA",
+			"Centrodetrabajo": "INGENIERIA DE DISEÑO",
+			"Puesto": "INGENIERO DE DISEÑO"
+		}, {
+			"Area": "INGENIERIA",
+			"Categoria": "JEFATURA",
+			"Puesto": "JEFATURA DE DISEÑO"
+		}, {
+			"Area": "INGENIERIA",
+			"Centrodetrabajo": "INGENIERIA DE PROCESOS",
+			"Puesto": "INGENIERO DE PROCESOS"
+		}, {
+			"Area": "INGENIERIA",
+			"Centrodetrabajo": "INGENIERIA DE PRODUCTO",
+			"Puesto": "INGENIERO DE PRODUCTO"
+		}, {
+			"Area": "MANTENIMIENTO",
+			"Centrodetrabajo": "MANTENIMIENTO",
+			"Puesto": "C.E.M. MANTENIMIENTO"
+		}, {
+			"Area": "MANTENIMIENTO",
+			"Puesto": "AYUDANTE DE MANTENIMIENTO T1"
+		}, {
+			"Area": "MANTENIMIENTO",
+			"Puesto": "MECANICO INDUSTRIAL B T2"
+		}, {
+			"Area": "MANTENIMIENTO",
+			"Puesto": "AYUDANTE DE MANTENIMIENTO T2"
+		}, {
+			"Area": "MANTENIMIENTO",
+			"Puesto": "MECANICO INDUSTRIAL B T1"
+		}, {
+			"Area": "MANTENIMIENTO",
+			"Puesto": "AYUDANTE DE MECANICO T2 Y T3"
+		}, {
+			"Area": "MANTENIMIENTO",
+			"Puesto": "MECANICO INDUSTRIAL A T2"
+		}, {
+			"Area": "MANTENIMIENTO",
+			"Puesto": "AYUDANTE DE MECANICO T1 Y T3"
+		}, {
+			"Area": "MANTENIMIENTO",
+			"Categoria": "GERENTE",
+			"Puesto": "GERENTE MANTENIMIENTO"
+		}, {
+			"Area": "MANTENIMIENTO",
+			"Categoria": "SUB-GERENTE",
+			"Puesto": "SUB-GERENTE MANTENIMIENTO"
+		}, {
+			"Area": "MANTENIMIENTO",
+			"Categoria": "(blank)",
+			"Puesto": "DIBUJANTE MANTENIMIENTO"
+		}, {
+			"Area": "MANTENIMIENTO",
+			"Puesto": "ELECTRICISTA B T1"
+		}, {
+			"Area": "MANTENIMIENTO",
+			"Puesto": "ENCARGADO ELECTRICISTA A T2"
+		}, {
+			"Area": "MANTENIMIENTO",
+			"Puesto": "ENCARGADO ELECTRICISTA A T1"
+		}, {
+			"Area": "MANTENIMIENTO",
+			"Puesto": "SOLDADOR A T1"
+		}, {
+			"Area": "MANTENIMIENTO",
+			"Puesto": "SOLDADOR B+ T2"
+		}, {
+			"Area": "MAQUINADOS",
+			"Centrodetrabajo": "ABRAZADERA PARA SUSPENSION",
+			"Categoria": "OPERADOR B",
+			"Puesto": "AVELLANADOR"
+		}, {
+			"Area": "MAQUINADOS",
+			"Puesto": "CORTE"
+		}, {
+			"Area": "MAQUINADOS",
+			"Puesto": "DOBLADOR"
+		}, {
+			"Area": "MAQUINADOS",
+			"Puesto": "EMPACADOR ABRAZADERAS SUSPENSION"
+		}, {
+			"Area": "MAQUINADOS",
+			"Puesto": "ROSCADOR"
+		}, {
+			"Area": "MAQUINADOS",
+			"Puesto": "PAVONEADOR NIVELADOR"
+		}, {
+			"Area": "MAQUINADOS",
+			"Centrodetrabajo": "ABRAZADERAS PARA MUELLES",
+			"Categoria": "OPERADOR A",
+			"Puesto": "OPERADOR DE PANTOGRAFO"
+		}, {
+			"Area": "MAQUINADOS",
+			"Puesto": "OPERADOR IRALAG"
+		}, {
+			"Area": "MAQUINADOS",
+			"Categoria": "OPERADOR B",
+			"Puesto": "OPERADOR DE FABRICACION ABRAZ. MUELLE"
+		}, {
+			"Area": "MAQUINADOS",
+			"Puesto": "AYUDANTE DE FABRICACION ABRAZ.MUELLES"
+		}, {
+			"Area": "MAQUINADOS",
+			"Categoria": "Soldador",
+			"Puesto": "SOLDADOR DE PRODUCCION"
+		}, {
+			"Area": "MAQUINADOS",
+			"Centrodetrabajo": "MAQ./TORNOS",
+			"Categoria": "Tornero",
+			"Puesto": "TORNERO 1"
+		}, {
+			"Area": "MAQUINADOS",
+			"Puesto": "TORNERO 2"
+		}, {
+			"Area": "MAQUINADOS",
+			"Centrodetrabajo": "MAQUINADOS",
+			"Categoria": "COMODIN",
+			"Puesto": "COMODIN AREA MAQUINADOS"
+		}, {
+			"Area": "MAQUINADOS",
+			"Categoria": "SUPERVISOR",
+			"Puesto": "SUPERVISOR MAQUINADOS"
+		}, {
+			"Area": "MERCADOTECNIA",
+			"Centrodetrabajo": "MERCADOTECNIA",
+			"Categoria": "GERENTE",
+			"Puesto": "GERENCIA MERCADOTECNIA"
+		}, {
+			"Area": "PINTURA",
+			"Centrodetrabajo": "PINTURA",
+			"Categoria": "OPERADOR A",
+			"Puesto": "ETIQUETADOR"
+		}, {
+			"Area": "PINTURA",
+			"Categoria": "OPERADOR B",
+			"Puesto": "CARGADOR PINTURA"
+		}, {
+			"Area": "PINTURA",
+			"Puesto": "COMODIN PINTURA"
+		}, {
+			"Area": "PINTURA",
+			"Puesto": "DESCARGADOR PINTURA"
+		}, {
+			"Area": "PINTURA",
+			"Categoria": "PINTOR",
+			"Puesto": "PINTOR 1"
+		}, {
+			"Area": "PINTURA",
+			"Puesto": "PINTOR 2"
+		}, {
+			"Area": "PINTURA",
+			"Categoria": "SUPERVISOR",
+			"Puesto": "SUPERVISOR PINTURA"
+		}, {
+			"Area": "PRESIDENCIA",
+			"Centrodetrabajo": "PRESIDENCIA",
+			"Puesto": "ASISTENTE PRESIDENCIA"
+		}, {
+			"Area": "PRESIDENCIA",
+			"Puesto": "PRESIDENCIA"
+		}, {
+			"Area": "PRODUCCION",
+			"Centrodetrabajo": "PCP",
+			"Categoria": "CAPTURISTA",
+			"Puesto": "PROGRAMADOR"
+		}, {
+			"Area": "PRODUCCION",
+			"Categoria": "JEFE PLANEACION",
+			"Puesto": "JEFE PROGRAMACION"
+		}, {
+			"Area": "PRODUCCION",
+			"Categoria": "SEGUIDOR DE MATERIALES",
+			"Puesto": "SEGUIDOR DE MATERIALES"
+		}, {
+			"Area": "PRODUCCION",
+			"Centrodetrabajo": "PRODUCCION",
+			"Categoria": "GERENTE",
+			"Puesto": "GERENTE PRODUCCION"
+		}, {
+			"Area": "PROYECTOS",
+			"Centrodetrabajo": "PROYECTOS",
+			"Categoria": "GERENTE",
+			"Puesto": "GERENTE PROYECTOS"
+		}, {
+			"Area": "RECURSOS HUMANOS",
+			"Centrodetrabajo": "COCINA",
+			"Puesto": "AYUDANTE DE COCINERA"
+		}, {
+			"Area": "RECURSOS HUMANOS",
+			"Puesto": "COCINERA"
+		}, {
+			"Area": "RECURSOS HUMANOS",
+			"Centrodetrabajo": "RECURSOS HUMANOS",
+			"Categoria": "ADMINISTRADOR R.H.",
+			"Puesto": "ADMINISTRADOR R.H."
+		}, {
+			"Area": "RECURSOS HUMANOS",
+			"Categoria": "AUXILIAR R.H.",
+			"Puesto": "AUXILIAR R.H."
+		}, {
+			"Area": "RECURSOS HUMANOS",
+			"Categoria": "GERENTE",
+			"Puesto": "GERENTE RECURSOS HUMANOS"
+		}, {
+			"Area": "RECURSOS HUMANOS",
+			"Centrodetrabajo": "SERVICIOS GENERALES",
+			"Categoria": "SERVICIOS GENERALES",
+			"Puesto": "SERVICIOS GENERALES PLANTA/DISA"
+		}, {
+			"Area": "RECURSOS HUMANOS",
+			"Puesto": "SERVICIOS GENERALES PRODUCCION"
+		}, {
+			"Area": "RECURSOS HUMANOS",
+			"Puesto": "SERVICIOS GENERALES ADMINISTRACION"
+		}, {
+			"Area": "ROLEOS",
+			"Centrodetrabajo": "CELULA DE ROLEO MORITA",
+			"Categoria": "OPERADOR AA",
+			"Puesto": "ROLEADOR MORITA"
+		}, {
+			"Area": "ROLEOS",
+			"Categoria": "OPERADOR B",
+			"Puesto": "AYUDANTE ROLEADOR MORITA"
+		}, {
+			"Area": "ROLEOS",
+			"Centrodetrabajo": "CELULA DE ROLEO SEMIAUTOMATICO 1",
+			"Categoria": "OPERADOR B",
+			"Puesto": "AYUDANTE ROLEADOR SEMI"
+		}, {
+			"Area": "ROLEOS",
+			"Categoria": "OPERADOR C",
+			"Puesto": "ROLEADOR SEMI"
+		}, {
+			"Area": "ROLEOS",
+			"Centrodetrabajo": "CELULA DE ROLEO WEISS",
+			"Categoria": "OPERADOR AA",
+			"Puesto": "ROLEADOR WEISS"
+		}, {
+			"Area": "ROLEOS",
+			"Categoria": "OPERADOR B",
+			"Puesto": "AYUDANTE ROLEADOR WEISS"
+		}, {
+			"Area": "ROLEOS",
+			"Centrodetrabajo": "ROLEOS",
+			"Categoria": "SUPERVISOR",
+			"Puesto": "SUPERVISOR ROLEOS"
+		}, {
+			"Area": "TECNOLOGIA DE LA INFORMACION",
+			"Centrodetrabajo": "TECNOLOGIA DE LA INFORMACION",
+			"Categoria": "EXTERNO",
+			"Puesto": "TECNOLOGIA DE LA INFORMACION"
+		}, {
+			"Area": "TECNOLOGIA DE LA INFORMACION",
+			"Categoria": "SOPORTE DE SISTEMAS",
+			"Puesto": "SOPORTE TI 2"
+		}, {
+			"Area": "TECNOLOGIA DE LA INFORMACION",
+			"Categoria": "SOPORTE DE SISTEMAS",
+			"Puesto": "SOPORTE TI 1"
+		}, {
+			"Area": "TESORERIA",
+			"Centrodetrabajo": "TESORERIA",
+			"Categoria": "GERENTE",
+			"Puesto": "TESORERIA"
+		}, {
+			"Area": "TRATAMIENTOS TERMICOS",
+			"Centrodetrabajo": "TRATAMIENTOS TERMICOS T1",
+			"Categoria": "Ayudante Honero",
+			"Puesto": "COMODIN TRAT. TERMICOS T1"
+		}, {
+			"Area": "TRATAMIENTOS TERMICOS",
+			"Puesto": "CARGADOR DE REVENIDO T1"
+		}, {
+			"Area": "TRATAMIENTOS TERMICOS",
+			"Puesto": "DESCARGADOR DE REVENIDO T1"
+		}, {
+			"Area": "TRATAMIENTOS TERMICOS",
+			"Puesto": "CARGADOR DE AUSTENIZADO T1"
+		}, {
+			"Area": "TRATAMIENTOS TERMICOS",
+			"Categoria": "HoRNERO",
+			"Puesto": "HORNERO 1-T1"
+		}, {
+			"Area": "TRATAMIENTOS TERMICOS",
+			"Puesto": "HORNERO 2-T1"
+		}, {
+			"Area": "TRATAMIENTOS TERMICOS",
+			"Puesto": "HORNERO 3-T1"
+		}, {
+			"Area": "TRATAMIENTOS TERMICOS",
+			"Categoria": "SUPERVISOR",
+			"Puesto": "SUPERVISOR TRATAMIENTOS TERMICOS T1"
+		}, {
+			"Area": "TRATAMIENTOS TERMICOS",
+			"Centrodetrabajo": "TRATAMIENTOS TERMICOS T2",
+			"Categoria": "Ayudante Honero",
+			"Puesto": "DESCARGADOR DE REVENIDO T2"
+		}, {
+			"Area": "TRATAMIENTOS TERMICOS",
+			"Puesto": "CARGADOR DE AUSTENIZADO T2"
+		}, {
+			"Area": "TRATAMIENTOS TERMICOS",
+			"Puesto": "COMODIN TRAT. TERMICOS T2"
+		}, {
+			"Area": "TRATAMIENTOS TERMICOS",
+			"Puesto": "CARGADOR DE REVENIDO T2"
+		}, {
+			"Area": "TRATAMIENTOS TERMICOS",
+			"Categoria": "HoRNERO",
+			"Puesto": "HORNERO 1-T2"
+		}, {
+			"Area": "TRATAMIENTOS TERMICOS",
+			"Puesto": "HORNERO 2-T2"
+		}, {
+			"Area": "TRATAMIENTOS TERMICOS",
+			"Puesto": "HORNERO 3-T2"
+		}, {
+			"Area": "TRATAMIENTOS TERMICOS",
+			"Categoria": "SUPERVISOR",
+			"Puesto": "SUPERVISOR TRATAMIENTOS TERMICOS T2"
+		}, {
+			"Area": "VENTAS NACIONALES E INTERNACIONALES",
+			"Centrodetrabajo": "DISTRIBUIDORA",
+			"Puesto": "AUXILIAR SURTIMIENTO 2"
+		}, {
+			"Area": "VENTAS NACIONALES E INTERNACIONALES",
+			"Puesto": "AUXILIAR SURTIMIENTO 3"
+		}, {
+			"Area": "VENTAS NACIONALES E INTERNACIONALES",
+			"Puesto": "ENCARGADO VENTAS NACIONALES"
+		}, {
+			"Area": "VENTAS NACIONALES E INTERNACIONALES",
+			"Puesto": "FACTURISTA VENTAS NACIONALES"
+		}, {
+			"Area": "VENTAS NACIONALES E INTERNACIONALES",
+			"Categoria": "JEFATURA",
+			"Puesto": "JEFE SURTIMIENTO 1"
+		}, {
+			"Area": "VENTAS NACIONALES E INTERNACIONALES",
+			"Puesto": "JEFE SURTIMIENTO 2"
+		}, {
+			"Area": "VENTAS NACIONALES E INTERNACIONALES",
+			"Categoria": "(blank)",
+			"Puesto": "AUXILIAR SURTIMIENTO 1"
+		}, {
+			"Area": "VENTAS NACIONALES E INTERNACIONALES",
+			"Centrodetrabajo": "LOGISTICA",
+			"Categoria": "JEFATURA",
+			"Puesto": "JEFE DE LOGISTICA"
+		}, {
+			"Area": "VENTAS NACIONALES E INTERNACIONALES",
+			"Centrodetrabajo": "SUCURSAL LEON",
+			"Puesto": "FACTURISTA LEON"
+		}, {
+			"Area": "VENTAS NACIONALES E INTERNACIONALES",
+			"Puesto": "VENTAS MOSTRADOR LEON"
+		}, {
+			"Area": "VENTAS NACIONALES E INTERNACIONALES",
+			"Categoria": "CHOFER",
+			"Puesto": "CHOFER VENDEDOR"
+		}, {
+			"Area": "VENTAS NACIONALES E INTERNACIONALES",
+			"Categoria": "JEFATURA",
+			"Puesto": "JEFATURA SUC. LEON"
+		}, {
+			"Area": "VENTAS NACIONALES E INTERNACIONALES",
+			"Centrodetrabajo": "VENTAS NACIONALES E INTERNACIONALES",
+			"Categoria": "GERENTE",
+			"Puesto": "GERENTE VENTAS NACIONALES E INTERNACIONALES"
+		}
+	]
+}

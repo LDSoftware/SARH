@@ -1,0 +1,364 @@
+﻿@{
+    ViewData["Title"] = "Catálogos - Permisos e Incidencias";
+    ViewData["PageName"] = "Permisos e Incidencias";
+}
+@using SARH.WebUI.Models.Catalog
+@model List<CatalogItemModel>
+@section HeadBlock {
+    <link rel="stylesheet" media="screen, print" href="~/css/fa-solid.css">
+    <link rel="stylesheet" media="screen, print" href="~/css/fa-brands.css">
+    <link rel="stylesheet" media="screen, print" href="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/css/datagrid/datatables/datatables.bundle.css">
+    <link rel="stylesheet" media="screen, print" href="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/css/notifications/sweetalert2/sweetalert2.bundle.css">
+}
+
+<div class="subheader">
+    <ol class="breadcrumb breadcrumb-lg breadcrumb-arrow mb-0">
+        <li>
+            <a href='@Url.Action("Index","Home")'>
+                <i class="fal fa-home"></i>
+            </a>
+        </li>
+        <li>
+            <a href='@Url.Action("Index","Catalog")'>
+                <i class="fal fa-tags"></i>
+                <span class="hidden-lg-down">Catálogos</span>
+            </a>
+        </li>
+        <li>
+            <a href='#'>
+                <i class="fal fa-calendar-alt"></i>
+                <span class="hidden-lg-down">Permisos e Incidencias</span>
+            </a>
+        </li>
+
+    </ol>
+</div>
+
+
+<div role="group" aria-label="Vertical button group">
+    <div class="btn-group" role="group">
+        <button class="btn btn-secondary dropdown-toggle waves-effect waves-themed" id="btnGroupVerticalDrop1" aria-expanded="false" aria-haspopup="true" type="button" data-toggle="dropdown">
+            <i class="fal fa-bolt"></i>
+            Acciones
+        </button>
+        <div class="dropdown-menu" aria-labelledby="btnGroupVerticalDrop1" x-placement="bottom-start" style="position: absolute; will-change: top, left; top: 37px; left: 0px;">
+            <a class="newrow dropdown-item" href="#">Agregar</a>
+        </div>
+    </div>
+</div>
+
+<br />
+
+<div class="row">
+    <div class="col-lg-8">
+        <div id="panel-4" class="panel">
+            <div class="panel-hdr">
+                <h2>
+                    Catálodo de Permisos, Incidencias
+                </h2>
+            </div>
+            <div class="panel-container show">
+                <div class="panel-content">
+
+                    <table id="dt-basic-example" class="table table-bordered table-hover table-striped w-100">
+                        <thead class="bg-warning-200">
+                            <tr>
+                                <th>ID</th>
+                                <th>Descripción</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr id="@item.Id" data-value="@item.Descripcion">
+                                    <td>
+                                        @item.Id
+                                    </td>
+                                    <td>
+                                        @item.Descripcion
+                                    </td>
+                                    <td>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+    <div class="col-lg-4" id="editdata" style="display:none">
+        <div id="panel-4" class="panel">
+            <div class="panel-hdr">
+                <h2>
+                    Edición
+                </h2>
+            </div>
+
+
+
+            <div class="panel-container">
+
+                <div class="panel-content">
+
+                    <form>
+                        <div class="form-group">
+                            <label class="form-label" for="editinput">Descripción</label>
+                            <input type="text" id="editinput" class="form-control">
+                        </div>
+                    </form>
+
+                </div>
+                <div class="panel-content border-faded border-left-0 border-right-0 border-bottom-0 d-flex flex-row align-items-center">
+                    <button id="canceledit" class="btn btn-danger ml-auto waves-effect waves-themed" type="button">Cancelar</button>
+                    <button id="saveedit" class="btn btn-primary ml-auto waves-effect waves-themed" type="button">Guardar</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-lg-4" id="newdata" style="display:none">
+        <div id="panel-4" class="panel">
+            <div class="panel-hdr">
+                <h2>
+                    Nuevo Registro
+                </h2>
+            </div>
+
+            <div class="panel-container">
+
+                <div class="panel-content">
+
+                    <form>
+                        <div class="form-group">
+                            <label class="form-label" for="newinput">Descripción</label>
+                            <input type="text" id="newinput" class="form-control">
+                        </div>
+                    </form>
+
+                </div>
+                <div class="panel-content border-faded border-left-0 border-right-0 border-bottom-0 d-flex flex-row align-items-center">
+                    <button id="cancelnew" class="btn btn-danger ml-auto waves-effect waves-themed" type="button">Cancelar</button>
+                    <button id="savenew" class="btn btn-primary ml-auto waves-effect waves-themed" type="button">Guardar</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+</div>
+
+
+@section ScriptsBlock {
+
+    <script src="~/js/statistics/peity/peity.bundle.js"></script>
+    <script src="~/js/statistics/flot/flot.bundle.js"></script>
+    <script src="~/js/statistics/easypiechart/easypiechart.bundle.js"></script>
+    <script src="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/js/datagrid/datatables/datatables.bundle.js"></script>
+    <script src="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/js/notifications/sweetalert2/sweetalert2.bundle.js"></script>
+    <script>
+
+        
+
+        $(document).ready(function () {
+            /* init datatables */
+
+            $('#dt-basic-example').dataTable(
+                {
+                    responsive: true,
+                    columnDefs: [
+                        {
+                            targets: -1,
+                            title: '',
+                            orderable: false,
+                            render: function (data, type, full, meta) {
+                                /*
+                                -- ES6
+                                -- convert using https://babeljs.io online transpiler
+                                return `
+                                <a href='javascript:void(0);' class='btn btn-sm btn-icon btn-outline-danger rounded-circle mr-1' title='Delete Record'>
+                                    <i class="fal fa-times"></i>
+                                </a>
+                                <div class='dropdown d-inline-block dropleft '>
+                                    <a href='#'' class='btn btn-sm btn-icon btn-outline-primary rounded-circle shadow-0' data-toggle='dropdown' aria-expanded='true' title='More options'>
+                                        <i class="fal fa-ellipsis-v"></i>
+                                    </a>
+                                    <div class='dropdown-menu'>
+                                        <a class='dropdown-item' href='javascript:void(0);'>Change Status</a>
+                                        <a class='dropdown-item' href='javascript:void(0);'>Generate Report</a>
+                                    </div>
+                                </div>`;
+                                ES5 example below:
+                                */
+                                return "\n\t\t\t\t\t\t<a href='javascript:void(0);' class='editrow btn btn-sm btn-icon btn-outline-primary rounded-circle mr-1' title='Ver información'>\n\t\t\t\t\t\t\t<i class=\"fal fa-edit\"></i>\n\t\t\t\t\t\t<a href='javascript:void(0);' class='deleterow btn btn-sm btn-icon btn-outline-primary rounded-circle mr-1' title='Deshabilitar registro'>\n\t\t\t\t\t\t\t<i class=\"fal fa-window-close\"></i>";
+                            },
+                        },
+                    ]
+                });
+
+
+            var idEdit;
+
+            $('.editrow').click(function () {
+
+                idEdit = $(this).closest('tr').attr('id');
+                var value = $(this).closest('tr').data('value');
+
+                $('#editdata').show();
+                $('#editinput').val(value);
+            });
+
+            $('.deleterow').click(function () {
+
+
+                var swalWithBootstrapButtons = Swal.mixin(
+                    {
+                        customClass:
+                        {
+                            confirmButton: "btn btn-primary",
+                            cancelButton: "btn btn-danger mr-2"
+                        },
+                        buttonsStyling: false
+                    });
+                swalWithBootstrapButtons
+                    .fire(
+                        {
+                            title: "Confirmación",
+                            text: "Deseas deshabilitar el elemento?",
+                            type: "warning",
+                            showCancelButton: true,
+                            confirmButtonText: "Si",
+                            cancelButtonText: "Cancelar",
+                            reverseButtons: true
+                        })
+                    .then(function (result) {
+                        if (result.value) {
+                            swalWithBootstrapButtons.fire(
+                                "Confirmación",
+                                "El registro ha sido deshabilitado",
+                                "success"
+                            );
+                        }
+                        else if (
+                            // Read more about handling dismissals
+                            result.dismiss === Swal.DismissReason.cancel
+                        ) {
+                            swalWithBootstrapButtons.fire(
+                                "Cancelación",
+                                "Se ha cancelado la acción",
+                                "error"
+                            );
+                        }
+                    });
+
+
+
+
+            });
+
+
+            $('#canceledit').click(function () {
+
+                $('#editdata').hide();
+
+            });
+
+            $('#saveedit').click(function () {
+
+
+                var formData = { id: idEdit, Description: $('#editinput').val() };
+
+                $.ajax({
+                    url: '/Catalog/SaveEditPermissionType',
+                    type: "POST",
+                    data: formData,
+                    success: function (data, textStatus, jqXHR) {
+
+                        Swal.fire(
+                            {
+                                position: "top-end",
+                                type: "success",
+                                title: "Actualización exitosa",
+                                showConfirmButton: false,
+                                timer: 1500
+                            }).then((result) => {
+
+                                window.location.href = '/Catalog/PermisosIncidencias';
+
+                            });
+
+
+
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+
+                    }
+                });
+
+
+            });
+
+
+            $('.newrow').click(function () {
+
+                $('#newdata').show();
+            });
+
+
+            $('#cancelnew').click(function () {
+
+                $('#newdata').hide();
+
+            });
+
+            $('#savenew').click(function () {
+
+
+                var formData = { Description: $('#newinput').val() };
+
+                $.ajax({
+                    url: '/Catalog/SaveNewSafePermissionType',
+                    type: "POST",
+                    data: formData,
+                    success: function (data, textStatus, jqXHR) {
+
+                        Swal.fire(
+                            {
+                                position: "top-end",
+                                type: "success",
+                                title: "Actualización exitosa",
+                                showConfirmButton: false,
+                                timer: 1500
+                            }).then((result) => {
+
+                                window.location.href = '/Catalog/PermisosIncidencias';
+
+                            });
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+
+                    }
+                });
+
+
+            });
+
+
+        });
+
+
+
+
+    </script>
+
+}

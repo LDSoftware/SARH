@@ -1,0 +1,88 @@
+﻿@using SARH.WebUI.Factories;
+@inject IElementUpdateModelFactory elementUpdate;
+@{
+    ViewData["Title"] = "Horarios";
+    ViewData["PageName"] = "Horarios";
+    ViewData["Heading"] = "<i class='subheader-icon fal fa-chess-clock-alt'></i> Horarios";
+    ViewData["PageDescription"] = "Configuración de los horarios";
+}
+@section HeadBlock {
+    <link rel="stylesheet" media="screen, print" href="~/css/fa-solid.css">
+    <link rel="stylesheet" media="screen, print" href="~/css/fa-brands.css">
+    <link rel="stylesheet" media="screen, print" href="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/css/datagrid/datatables/datatables.bundle.css">
+}
+
+<div class="subheader">
+    <ol class="breadcrumb breadcrumb-lg breadcrumb-arrow mb-0">
+        <li>
+            <a href='@Url.Action("Index","Home")'>
+                <i class="fal fa-home"></i>
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                <i class="fal fa-chess-clock-alt"></i>
+                <span class="hidden-lg-down">Horarios</span>
+            </a>
+        </li>
+    </ol>
+</div>
+
+<div class="row">
+    <div class="col-xl-12">
+        <div class="panel-container show">
+            <div class="panel-content">
+                <div class="card-deck">
+                    <div class="card">
+                        <div class="w-100 bg-fusion-50 rounded-top" style="padding:30px 0 30px;">
+                            <center><i class="fal fa-4x fa-clock"></i> </center>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">Horarios</h5>
+                            <p class="card-text">En esta sección se configurán las opciones de horarios</p>
+                            <div class="row">
+                                <a href='@Url.Action("AdminSchedule","Schedule")' class="h4">
+                                    <i class="fal fa-chevron-right mr-2"></i> Ver Opción
+                                </a>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <small class="text-muted">@elementUpdate.GetCatalogUpdateSync(201).ElementLastUpdate</small>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="w-100 bg-fusion-50 rounded-top" style="padding:30px 0 30px;">
+                            <center><i class="fal fa-4x fal fa-users"></i> </center>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">Asignar horarios</h5>
+                            <p class="card-text">En esta sección se realiza la asignación de horarios fijos y/o temporales.</p>
+                            <div class="row">
+                                <a href='@Url.Action("AssignedSchedules","Schedule")' class="h4">
+                                    <i class="fal fa-chevron-right mr-2"></i> Ver Opción
+                                </a>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <small class="text-muted">@elementUpdate.GetCatalogUpdateSync(202).ElementLastUpdate</small>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section ScriptsBlock {
+
+    <script src="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/js/datagrid/datatables/datatables.bundle.js"></script>
+    <script>
+        $(document).ready(function () {
+
+
+        });
+    </script>
+}

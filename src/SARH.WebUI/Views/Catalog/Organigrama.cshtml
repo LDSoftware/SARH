@@ -1,0 +1,568 @@
+﻿@model List<ListItem>
+@{
+    ViewData["Title"] = "Catálogos - Organigrama";
+    ViewData["PageName"] = "Organigrama";
+}
+@section HeadBlock {
+    <link rel="stylesheet" media="screen, print" href="~/css/fa-solid.css">
+    <link rel="stylesheet" media="screen, print" href="~/css/fa-brands.css">
+    <link rel="stylesheet" href="~/css/orgchart.css" />
+    <link rel="stylesheet" media="screen, print" href="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/css/notifications/sweetalert2/sweetalert2.bundle.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.7.1/jquery.contextMenu.min.css">
+}
+
+<div class="subheader">
+    <ol class="breadcrumb breadcrumb-lg breadcrumb-arrow mb-0">
+        <li>
+            <a href='@Url.Action("Index","Home")'>
+                <i class="fal fa-home"></i>
+            </a>
+        </li>
+        <li>
+            <a href='@Url.Action("Index","Catalog")'>
+                <i class="fal fa-tags"></i>
+                <span class="hidden-lg-down">Catálogos</span>
+            </a>
+        </li>
+        <li>
+            <a href='#'>
+                <i class="fal fa-sitemap"></i>
+                <span class="hidden-lg-down">Organigrama</span>
+            </a>
+        </li>
+
+    </ol>
+</div>
+
+<div class="row">
+
+    <ul id="tree-data" style="display:none">
+
+        @foreach (var item in Model)
+        {
+            <li id="@item.I18n">
+                <small>
+                    @item.Text
+                    <span class="badge badge-info">@item.Items.Count</span>
+                    <br />
+                    @item.Route
+                </small>
+                <ul>
+                    @foreach (var ite in item.Items)
+                    {
+                        <li id="@ite.I18n">
+                            <small>
+                                @ite.Text
+                                <span class="badge badge-info">@ite.Items.Count</span>
+                                <br />
+                                @ite.Route
+                            </small>
+                            <ul>
+                                @foreach (var it in ite.Items)
+                                {
+                                    <li id="@it.I18n">
+                                        <small>
+                                            @it.Text
+                                            <span class="badge badge-info">@it.Items.Count</span>
+                                            <br />
+                                            @it.Route
+                                        </small>
+                                        <ul>
+                                            @foreach (var i in it.Items)
+                                            {
+                                                <li id="@i.I18n">
+                                                    <small>
+                                                        @i.Text
+                                                        <span class="badge badge-info">@i.Items.Count</span>
+                                                        <br />
+                                                        @i.Route
+                                                    </small>
+                                                    <ul type="vertical">
+                                                        @foreach (var a in i.Items)
+                                                        {
+                                                            <li id="@a.I18n">
+                                                                <small>
+                                                                    @a.Text
+                                                                    <br />
+                                                                    @a.Route
+                                                                </small>
+                                                            </li>
+                                                        }
+                                                    </ul>
+                                                </li>
+                                            }
+                                        </ul>
+                                    </li>
+                                }
+                            </ul>
+                        </li>
+                    }
+                </ul>
+            </li>
+        }
+
+    </ul>
+
+    <div id="tree-view"></div>
+
+</div>
+
+
+<div class="modal fade" data-backdrop="static" data-keyboard="false" id="default-example-modal-center" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header  bg-warning-500">
+                <h4 class="modal-title">
+                    Editar elemento del organigrama
+                </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"><i class="fal fa-times"></i></span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <div class="form-group">
+                    <label class="form-label" for="inputAreaedit">Area</label>
+                    <input type="text" id="inputAreaedit" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="inputCentroedit">Centro</label>
+                    <input type="text" id="inputCentroedit" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="inputDeptoedit">Departamento</label>
+                    <input type="text" id="inputDeptoedit" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="inputPuestoedit">Puesto</label>
+                    <input type="text" id="inputPuestoedit" class="form-control">
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                <button id="btnEditOrganigrama" type="button" class="btn btn-primary">Actualizar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" data-backdrop="static" data-keyboard="false" id="default-example-modal-center-new" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header  bg-warning-500">
+                <h4 class="modal-title">
+                    Agregar al organigrama
+                </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"><i class="fal fa-times"></i></span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <div class="form-group">
+                    <label class="form-label" for="inputArea">Area</label>
+                    <input type="text" id="inputArea" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="inputCentro">Centro</label>
+                    <input type="text" id="inputCentro" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="inputDepto">Departamento</label>
+                    <input type="text" id="inputDepto" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="inputPuesto">Puesto</label>
+                    <input type="text" id="inputPuesto" class="form-control">
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                <button id="btnAddOrganigrama" type="button" class="btn btn-primary">Agregar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section ScriptsBlock {
+
+    <script src="~/js/orgchart.js"></script>
+    <script src="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/js/notifications/sweetalert2/sweetalert2.bundle.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.7.1/jquery.contextMenu.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.7.1/jquery.ui.position.js"></script>
+    <script>
+
+        var move = false;
+        var moveitem = "";
+
+        $(function () {
+            $.contextMenu({
+                selector: '.context-menu-one',
+                callback: function (key, options) {
+
+                    if (key === "add") {
+
+                        addelement();
+                    }
+                    if (key === "edit") {
+
+                        editelement();
+                    }
+                    if (key === "navigate") {
+
+                        viewelement();
+                    }
+                    if (key === "move") {
+
+                        move = true;
+                        moveelement();
+                    }
+
+                },
+                items: {
+                    "add": { name: "Agregar", icon: "fal fa-plus-hexagon", },
+                    "edit": { name: "Editar", icon: "fal fa-edit" },
+                    "navigate": { name: "Navegar", icon: "fal fa-arrow-square-right" },
+                    "move": { name: "Mover", icon: "fal fa-arrows" },
+                    "sep1": "---------",
+                    "quit": {
+                        name: "Cerrar menu", icon: function () {
+                            return 'context-menu-icon context-menu-icon-quit';
+                        }
+                    }
+                }
+            });
+
+            $('.context-menu-one').on('click', function (e) {
+
+            })
+        });
+
+        $(function () {
+            $.contextMenu({
+                selector: '.context-menu-two',
+                callback: function (key, options) {
+
+                    if (key === "accept") {
+
+                        acceptmove();
+                    }
+                    if (key === "cancel") {
+
+                        moveitem = "";
+                        move = false;
+                        cancelmove();
+                    }
+                },
+                items: {
+                    "accept": { name: "Aceptar", icon: "fal fa-hand-point-down", },
+                    "cancel": { name: "Cancelar", icon: "fal fa-times-circle" },
+                    "sep1": "---------",
+                    "quit": {
+                        name: "Cerrar menu", icon: function () {
+                            return 'context-menu-icon context-menu-icon-quit';
+                        }
+                    }
+                }
+            });
+
+            $('.context-menu-one').on('click', function (e) {
+
+            })
+        });
+
+        function viewelement() {
+
+            var select = $('.bg-warning');
+
+            if (select.length === 0) {
+
+                Swal.fire(
+                    {
+                        type: "warning",
+                        title: "Validación",
+                        text: "Debe seleccionar un elemento"
+                    });
+
+                return;
+            }
+
+            var element = select[0];
+            window.location.href = '/Catalog/OrganigramaElemento?rowGuid=' + element.id;
+
+        };
+
+        function editelement() {
+
+            var select = $('.bg-warning');
+
+            if (select.length === 0) {
+
+                Swal.fire(
+                    {
+                        type: "warning",
+                        title: "Validación",
+                        text: "Debe seleccionar un elemento"
+                    });
+
+                return;
+            }
+
+            var element = select[0];
+
+            $.ajax({
+                url: '/Catalog/GetElementDetail',
+                type: "POST",
+                data: { rowGuid: element.id },
+                success: function (data, textStatus, jqXHR) {
+
+                    $('#inputAreaedit').val(data.area);
+                    $('#inputCentroedit').val(data.centro);
+                    $('#inputDeptoedit').val(data.depto);
+                    $('#inputPuestoedit').val(data.puesto);
+
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+
+                }
+            });
+
+
+
+            $('#default-example-modal-center').modal();
+
+
+        };
+
+        function addelement() {
+
+            var select = $('.bg-warning');
+
+            var element = select[0];
+
+            $('#default-example-modal-center-new').modal();
+
+        };
+
+        function moveelement() {
+
+            var select = $('.bg-warning');
+            var element = select[0];
+
+            if (move) {
+
+                moveitem = element.id;
+            }
+
+            $(element).removeClass('bg-warning');
+            $(element).addClass('bg-info');
+
+        };
+
+        function cancelmove() {
+
+            var select = $('.bg-info');
+            var element = select[0];
+            $(element).removeClass('bg-info context-menu-one');
+            var element2 = $('.bg-success');
+            $(element2).removeClass('bg-success context-menu-two');
+
+            Swal.fire(
+                {
+                    type: "warning",
+                    title: "Validación",
+                    text: "Se cancelo el movimiento"
+                });
+
+        };
+
+        function acceptmove() {
+
+
+
+                            var swalWithBootstrapButtons = Swal.mixin(
+                    {
+                        customClass:
+                        {
+                            confirmButton: "btn btn-primary",
+                            cancelButton: "btn btn-danger mr-2"
+                        },
+                        buttonsStyling: false
+                    });
+            swalWithBootstrapButtons
+                .fire(
+                    {
+                        title: "Confirmación",
+                        text: "Deseas realizar el cambio en el organigrama?",
+                        type: "warning",
+                        showCancelButton: true,
+                        confirmButtonText: "Si",
+                        cancelButtonText: "Cancelar",
+                        reverseButtons: true
+                    })
+                .then(function (result) {
+
+                    if (result.value) {
+
+
+                        var select = $('.bg-success');
+                        var element = select[0];
+
+                        $.ajax({
+                            url: '/Catalog/AcceptMove',
+                            type: "POST",
+                            data: { source: moveitem, destiny: element.id },
+                            success: function (data, textStatus, jqXHR) {
+
+                                window.location.href = '/Catalog/Organigrama';
+                            },
+                            error: function (jqXHR, textStatus, errorThrown) {
+
+                            }
+                        });
+                    }
+                    else if (
+                        // Read more about handling dismissals
+                        result.dismiss === Swal.DismissReason.cancel
+                    ) {
+                        swalWithBootstrapButtons.fire(
+                            "Cancelación",
+                            "Se ha cancelado la acción",
+                            "error"
+                        );
+                    }
+                });
+        };
+
+
+
+        $(document).ready(function () {
+            // create a tree
+            $("#tree-data").jOrgChart({
+                chartElement: $("#tree-view"),
+                nodeClicked: nodeClicked
+            });
+
+            // lighting a node in the selection
+            function nodeClicked(node, type) {
+
+                if (move === false) {
+                    node = node || $(this);
+                    $('.jOrgChart .bg-warning').removeClass('bg-warning context-menu-one');
+                    node.addClass('bg-warning context-menu-one');
+                }
+                else {
+                    node = node || $(this);
+                    $('.jOrgChart .bg-warning').removeClass('bg-warning context-menu-one');
+                    $('.jOrgChart .bg-success').removeClass('bg-success context-menu-two');
+                    node.addClass('bg-success context-menu-two');
+                }
+
+            }
+
+
+            $('#btnAddOrganigrama').click(function () {
+
+                var select = $('.bg-warning');
+
+                if (select.length === 0) {
+
+                    Swal.fire(
+                        {
+                            type: "warning",
+                            title: "Validación",
+                            text: "Debe seleccionar un elemento"
+                        });
+
+                    return;
+                }
+
+                var element = select[0];
+
+                var formData = {
+                    IdentPuesto: element.id,
+                    Area: $('#inputArea').val(),
+                    Centro: $('#inputCentro').val(),
+                    Departamento: $('#inputDepto').val(),
+                    Puesto: $('#inputPuesto').val()
+                };
+
+                $.ajax({
+                    url: '/Catalog/AddOrganigramaElement',
+                    type: "POST",
+                    data: formData,
+                    success: function (data, textStatus, jqXHR) {
+
+                        window.location.href = '/Catalog/Organigrama';
+
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+
+                    }
+                });
+
+
+
+            });
+
+
+
+            $('#btnEditOrganigrama').click(function () {
+
+                var select = $('.bg-warning');
+
+                if (select.length === 0) {
+
+                    Swal.fire(
+                        {
+                            type: "warning",
+                            title: "Validación",
+                            text: "Debe seleccionar un elemento"
+                        });
+
+                    return;
+                }
+
+                var element = select[0];
+
+                var formData = {
+                    IdentPuesto: element.id,
+                    Area: $('#inputAreaedit').val(),
+                    Centro: $('#inputCentroedit').val(),
+                    Departamento: $('#inputDeptoedit').val(),
+                    Puesto: $('#inputPuestoedit').val()
+                };
+
+                $.ajax({
+                    url: '/Catalog/EditOrganigramaElement',
+                    type: "POST",
+                    data: formData,
+                    success: function (data, textStatus, jqXHR) {
+
+                        window.location.href = '/Catalog/Organigrama';
+
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+
+                    }
+                });
+
+
+
+
+
+            });
+
+        });
+
+    </script>
+}
+
+
+
+

@@ -1,0 +1,1360 @@
+﻿[
+	{
+		"Area": "PRESIDENCIA",
+		"Puesto": "PRESIDENCIA",
+		"Departamento": "PRESIDENCIA",
+		"RowGuid": "a9abae18-c608-45f2-9061-6dc035803fd7",
+		"IdentPuesto": "NULL"
+	},
+	{
+		"Area": "DIRECCION",
+		"Puesto": "DIRECCION GENERAL",
+		"Departamento": "DIRECCION",
+		"RowGuid": "1f9e2675-c339-4221-af99-68814c8240e2",
+		"IdentPuesto": "a9abae18-c608-45f2-9061-6dc035803fd7"
+	},
+	{
+		"Area": "PRESIDENCIA",
+		"Puesto": "ASISTENTE PRESIDENCIA",
+		"Departamento": "PRESIDENCIA",
+		"RowGuid": "ad5a7705-cdc2-42f3-97f1-538c2fc0304d",
+		"IdentPuesto": "a9abae18-c608-45f2-9061-6dc035803fd7"
+	},
+	{
+		"Area": "CONTABILIDAD",
+		"Puesto": "CONTRALORIA ",
+		"Departamento": "CONTRALORIA ",
+		"RowGuid": "0fa1ff60-8eb4-4f05-b35f-62ff1938e28b",
+		"IdentPuesto": "1f9e2675-c339-4221-af99-68814c8240e2"
+	},
+	{
+		"Area": "COSTOS",
+		"Puesto": "GERENTE COSTOS",
+		"Departamento": "COSTOS",
+		"RowGuid": "b2077cff-a688-4cb0-91d9-acdcf6f7b1cc",
+		"IdentPuesto": "0fa1ff60-8eb4-4f05-b35f-62ff1938e28b"
+	},
+	{
+		"Area": "AUDITORIA",
+		"Puesto": " PROCESOS AUDITORIA",
+		"Departamento": "AUDITORIA",
+		"RowGuid": "aaa553a7-2167-4b27-a086-464da8406f4f",
+		"IdentPuesto": "0fa1ff60-8eb4-4f05-b35f-62ff1938e28b"
+	},
+	{
+		"Area": "GESTORIA AMBIENTAL/SEGURIDAD",
+		"Puesto": "ENCARGADO GESTORIA AMBIENTAL/SEGURIDAD",
+		"Departamento": "GESTORIA AMBIENTAL/SEGURIDAD",
+		"RowGuid": "7858869c-c1c2-45eb-8adc-c25363ab23cd",
+		"IdentPuesto": "0fa1ff60-8eb4-4f05-b35f-62ff1938e28b"
+	},
+	{
+		"Area": "TESORERIA",
+		"Puesto": "TESORERIA",
+		"Departamento": "TESORERIA",
+		"RowGuid": "aa77c7f1-bea1-4505-8d08-f0db995679fb",
+		"IdentPuesto": "0fa1ff60-8eb4-4f05-b35f-62ff1938e28b"
+	},
+	{
+		"Area": "MERCADOTECNIA",
+		"Puesto": "MERCADOTECNIA",
+		"Departamento": "MERCADOTECNIA",
+		"RowGuid": "a0d52f53-2a1b-498e-abfc-9b066ca4495f",
+		"IdentPuesto": "0fa1ff60-8eb4-4f05-b35f-62ff1938e28b"
+	},
+	{
+		"Area": "VENTAS",
+		"Puesto": "GERENTE VENTAS NACIONALES E INTERNACIONALES",
+		"Departamento": "VENTAS",
+		"RowGuid": "f49e85be-298d-48fe-9a78-6fe5b9bd9882",
+		"IdentPuesto": "0fa1ff60-8eb4-4f05-b35f-62ff1938e28b"
+	},
+	{
+		"Area": "PROYECTOS",
+		"Puesto": "GERENTE PROYECTOS",
+		"Departamento": "PROYECTOS",
+		"RowGuid": "2414b442-2e28-4c95-b759-4758ddbe3db1",
+		"IdentPuesto": "0fa1ff60-8eb4-4f05-b35f-62ff1938e28b"
+	},
+	{
+		"Area": "MANTENIMIENTO",
+		"Puesto": "GERENTE MANTENIMIENTO",
+		"Departamento": "MANTENIMIENTO",
+		"RowGuid": "8a63210e-a46e-440c-a906-4e0d80e08020",
+		"IdentPuesto": "0fa1ff60-8eb4-4f05-b35f-62ff1938e28b"
+	},
+	{
+		"Area": "INGENIERIA",
+		"Puesto": "GERENTE INGENIERIA",
+		"Departamento": "INGENIERIA",
+		"RowGuid": "560230ea-98c9-472f-9555-432500605982",
+		"IdentPuesto": "0fa1ff60-8eb4-4f05-b35f-62ff1938e28b"
+	},
+	{
+		"Area": "CALIDAD",
+		"Puesto": "GERENTE CALIDAD",
+		"Departamento": "CONTROL DE CALIDAD",
+		"RowGuid": "9be00b48-fd35-4ed1-9c9b-7e38360f2167",
+		"IdentPuesto": "0fa1ff60-8eb4-4f05-b35f-62ff1938e28b"
+	},
+	{
+		"Area": "R. HUMANOS",
+		"Puesto": "GERENTE R. HUMANOS",
+		"Departamento": "R. HUMANOS",
+		"RowGuid": "d645fa89-2fdf-40c6-afa4-845b42242b33",
+		"IdentPuesto": "0fa1ff60-8eb4-4f05-b35f-62ff1938e28b"
+	},
+	{
+		"Area": "PRODUCCION",
+		"Puesto": "GERENTE PRODUCCION",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "e0196785-ce2e-49be-a138-102046c94fa9",
+		"IdentPuesto": "0fa1ff60-8eb4-4f05-b35f-62ff1938e28b"
+	},
+	{
+		"Area": "SISTEMAS",
+		"Puesto": "TECNOLOGIA DE LA INFORMACION ",
+		"Departamento": "SISTEMAS",
+		"RowGuid": "9ed91d1d-6aa3-4d7f-8ef6-5c56de8ea9d5",
+		"IdentPuesto": "0fa1ff60-8eb4-4f05-b35f-62ff1938e28b"
+	},
+	{
+		"Area": "SISTEMAS",
+		"Puesto": "SOPORTE TI 1",
+		"Departamento": "SISTEMAS",
+		"RowGuid": "19c21847-b8aa-45c1-baae-773e0cbc1b56",
+		"IdentPuesto": "9ed91d1d-6aa3-4d7f-8ef6-5c56de8ea9d5"
+	},
+	{
+		"Area": "SISTEMAS",
+		"Puesto": "SOPORTE TI 2",
+		"Departamento": "SISTEMAS",
+		"RowGuid": "791617f9-dc9d-42c5-bd1f-9dc4df1efb2b",
+		"IdentPuesto": "9ed91d1d-6aa3-4d7f-8ef6-5c56de8ea9d5"
+	},
+	{
+		"Area": "GRANALLADO",
+		"Puesto": "SUPERVISOR GRANALLADO",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "399d081c-ea17-413c-b389-d453d6acdf30",
+		"IdentPuesto": "e0196785-ce2e-49be-a138-102046c94fa9"
+	},
+	{
+		"Area": "GANCHOS / TAZAS",
+		"Puesto": "SUPERVISOR GANCHOS TAZAS",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "1ab4c870-247e-40ea-87f2-9d6404988f65",
+		"IdentPuesto": "e0196785-ce2e-49be-a138-102046c94fa9"
+	},
+	{
+		"Area": "PCP",
+		"Puesto": "PROGRAMADOR",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "b57ca19e-e8fe-46d7-8a61-56db641e14e7",
+		"IdentPuesto": "e0196785-ce2e-49be-a138-102046c94fa9"
+	},
+	{
+		"Area": "PCP",
+		"Puesto": "JEFE PROGRAMACION",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "897315d4-e908-4dbd-a15d-f4472adb48b8",
+		"IdentPuesto": "e0196785-ce2e-49be-a138-102046c94fa9"
+	},
+	{
+		"Area": "PCP",
+		"Puesto": "SEGUIDOR DE MATERIALES",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "eebbaf35-b4e9-4473-bf8b-485771fe1917",
+		"IdentPuesto": "e0196785-ce2e-49be-a138-102046c94fa9"
+	},
+	{
+		"Area": "CORTE",
+		"Puesto": "SUPERVISOR CORTE",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "8ea9ca8d-90f6-4414-968f-f5ec9dd4d227",
+		"IdentPuesto": "e0196785-ce2e-49be-a138-102046c94fa9"
+	},
+	{
+		"Area": "BARRENOS",
+		"Puesto": "SUPERVISOR BARRENOS",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "27c915d0-b60f-4927-85e1-38359a237338",
+		"IdentPuesto": "e0196785-ce2e-49be-a138-102046c94fa9"
+	},
+	{
+		"Area": "ROLEOS",
+		"Puesto": "SUPERVISOR ROLEOS",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "054fc832-2c29-4e7f-8022-dcc85637d2da",
+		"IdentPuesto": "e0196785-ce2e-49be-a138-102046c94fa9"
+	},
+	{
+		"Area": "DESPALMES",
+		"Puesto": "SUPERVISOR DESPALMES",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "0336f750-5e1f-48a3-aa21-d05a22f393f1",
+		"IdentPuesto": "e0196785-ce2e-49be-a138-102046c94fa9"
+	},
+	{
+		"Area": "TRATAMIENTOS TERMICOS ",
+		"Puesto": "SUPERVISOR TRATAMIENTOS TERMICOS T1",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "d8696b4e-9159-4991-96ed-fa011c7f3d91",
+		"IdentPuesto": "e0196785-ce2e-49be-a138-102046c94fa9"
+	},
+	{
+		"Area": "TRATAMIENTOS TERMICOS ",
+		"Puesto": "SUPERVISOR TRATAMIENTOS TERMICOS T2",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "f510eccc-0fc9-4dcb-afae-83ec1a8b0ba0",
+		"IdentPuesto": "e0196785-ce2e-49be-a138-102046c94fa9"
+	},
+	{
+		"Area": "ENSAMBLE",
+		"Puesto": "SUPERVISOR ENSAMBLE",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "24ea82c0-ca21-41e4-8f2f-02952f98de40",
+		"IdentPuesto": "e0196785-ce2e-49be-a138-102046c94fa9"
+	},
+	{
+		"Area": "PINTURA",
+		"Puesto": "SUPERVISOR PINTURA",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "cb5f8e65-7f31-44f0-bab6-90a1176384a2",
+		"IdentPuesto": "e0196785-ce2e-49be-a138-102046c94fa9"
+	},
+	{
+		"Area": "MAQUINADOS",
+		"Puesto": "SUPERVISOR MAQUINADOS",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "ba22b0c4-8ea3-46e3-ac19-0806e764111c",
+		"IdentPuesto": "e0196785-ce2e-49be-a138-102046c94fa9"
+	},
+	{
+		"Area": "COMODIN",
+		"Puesto": "COMODIN",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "ed93bd42-4fec-4521-86d6-9e4e843bd3e0",
+		"IdentPuesto": "e0196785-ce2e-49be-a138-102046c94fa9"
+	},
+	{
+		"Area": "MAQUINADOS",
+		"Puesto": "OPERADOR FABRIC.ABRAZ MUELLE",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "65511660-8a57-4643-926c-a4de5bd6fa1c",
+		"IdentPuesto": "ba22b0c4-8ea3-46e3-ac19-0806e764111c"
+	},
+	{
+		"Area": "MAQUINADOS",
+		"Puesto": "ROSCADOR",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "2e5f18d5-83b0-4939-9d1a-ea8ec55af600",
+		"IdentPuesto": "ba22b0c4-8ea3-46e3-ac19-0806e764111c"
+	},
+	{
+		"Area": "MAQUINADOS",
+		"Puesto": "DOBLADOR",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "5bebc839-5822-4eeb-b299-e41780b933cd",
+		"IdentPuesto": "ba22b0c4-8ea3-46e3-ac19-0806e764111c"
+	},
+	{
+		"Area": "MAQUINADOS",
+		"Puesto": "OPERADOR IRALAG",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "a2f03ecf-3982-43bc-b508-b7664996cf5b",
+		"IdentPuesto": "ba22b0c4-8ea3-46e3-ac19-0806e764111c"
+	},
+	{
+		"Area": "MAQUINADOS",
+		"Puesto": "CORTADOR MUELLE PARA SUSPENSION",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "5d202df0-b838-4dec-bb5e-50cf2bd4e780",
+		"IdentPuesto": "ba22b0c4-8ea3-46e3-ac19-0806e764111c"
+	},
+	{
+		"Area": "MAQUINADOS",
+		"Puesto": "AVELLANADOR",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "24ebfdac-cde5-4677-beca-738165ba6782",
+		"IdentPuesto": "ba22b0c4-8ea3-46e3-ac19-0806e764111c"
+	},
+	{
+		"Area": "MAQUINADOS",
+		"Puesto": "OPERADOR DE PANTOGRAFO",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "debb1911-5e8e-43ee-ad7b-2b10f1eda9d4",
+		"IdentPuesto": "ba22b0c4-8ea3-46e3-ac19-0806e764111c"
+	},
+	{
+		"Area": "MAQUINADOS",
+		"Puesto": "PAVONEADOR NIVELADOR",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "d4e5f735-96e9-4e5b-8941-6aa1ade7d81d",
+		"IdentPuesto": "ba22b0c4-8ea3-46e3-ac19-0806e764111c"
+	},
+	{
+		"Area": "MAQUINADOS",
+		"Puesto": "EMPACADOR ABRZ.SUSPENSION",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "93e2f7ad-75c8-46ff-84ae-072e724b77b9",
+		"IdentPuesto": "ba22b0c4-8ea3-46e3-ac19-0806e764111c"
+	},
+	{
+		"Area": "MAQUINADOS",
+		"Puesto": "TORNERO TURNO 1",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "81eb7b10-5825-4a01-a0e6-17219bc6d811",
+		"IdentPuesto": "ba22b0c4-8ea3-46e3-ac19-0806e764111c"
+	},
+	{
+		"Area": "MAQUINADOS",
+		"Puesto": "TORNERO TURNO 2",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "4086ce6a-1377-48c4-9237-9ce7b87d3de3",
+		"IdentPuesto": "ba22b0c4-8ea3-46e3-ac19-0806e764111c"
+	},
+	{
+		"Area": "MAQUINADOS",
+		"Puesto": "COMODIN DEL AREA DE MAQUINADOS",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "cfcb99e6-d913-40e9-ac86-f7afb402e512",
+		"IdentPuesto": "ba22b0c4-8ea3-46e3-ac19-0806e764111c"
+	},
+	{
+		"Area": "MAQUINADOS",
+		"Puesto": "SOLDADOR",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "20698b06-3adc-4006-a526-bbe947a17c10",
+		"IdentPuesto": "ba22b0c4-8ea3-46e3-ac19-0806e764111c"
+	},
+	{
+		"Area": "MAQUINADOS",
+		"Puesto": "AYUDANTE FABRICACION ABRAZ.MUELLES",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "f10b21e5-fd16-4bdb-ad37-8805c378f102",
+		"IdentPuesto": "5d202df0-b838-4dec-bb5e-50cf2bd4e780"
+	},
+	{
+		"Area": "PINTURA",
+		"Puesto": "PINTOR 2",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "31f2d957-fa68-49e7-8b7d-9f9af8a9f88d",
+		"IdentPuesto": "cb5f8e65-7f31-44f0-bab6-90a1176384a2"
+	},
+	{
+		"Area": "PINTURA",
+		"Puesto": "ETIQUETADOR",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "0b108875-962a-40c5-b7b4-1c3a2f49b57e",
+		"IdentPuesto": "cb5f8e65-7f31-44f0-bab6-90a1176384a2"
+	},
+	{
+		"Area": "PINTURA",
+		"Puesto": "CARGADOR PINTURA",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "e565ff2c-f7f6-40c9-9bf7-4016fca0c50d",
+		"IdentPuesto": "cb5f8e65-7f31-44f0-bab6-90a1176384a2"
+	},
+	{
+		"Area": "PINTURA",
+		"Puesto": "COMODIN PINTURA",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "449ae860-95ae-4c85-a176-e94c81c1fad6",
+		"IdentPuesto": "cb5f8e65-7f31-44f0-bab6-90a1176384a2"
+	},
+	{
+		"Area": "PINTURA",
+		"Puesto": "PINTOR 1",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "f87c2aea-72b8-4db4-b8ca-365b84674630",
+		"IdentPuesto": "cb5f8e65-7f31-44f0-bab6-90a1176384a2"
+	},
+	{
+		"Area": "PINTURA",
+		"Puesto": "DESCARGADOR PINTURA",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "464a3918-b228-4bf7-90ea-9e812f4a4eb8",
+		"IdentPuesto": "cb5f8e65-7f31-44f0-bab6-90a1176384a2"
+	},
+	{
+		"Area": "ENSAMBLE",
+		"Puesto": "CARGADOR PINTURA 2 L2",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "e18e044e-0107-4ef2-b37a-176ad4af0c2f",
+		"IdentPuesto": "24ea82c0-ca21-41e4-8f2f-02952f98de40"
+	},
+	{
+		"Area": "ENSAMBLE",
+		"Puesto": "ASENTADOR 1 L1",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "02db7fa3-bf74-4879-ae42-d3359f016914",
+		"IdentPuesto": "24ea82c0-ca21-41e4-8f2f-02952f98de40"
+	},
+	{
+		"Area": "ENSAMBLE",
+		"Puesto": "ASENTADOR 2 L1",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "66c9ce33-0196-402b-981f-fc59a24dcf83",
+		"IdentPuesto": "24ea82c0-ca21-41e4-8f2f-02952f98de40"
+	},
+	{
+		"Area": "ENSAMBLE",
+		"Puesto": "ARMADOR L1",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "af01a2cf-0251-44bb-a735-4b2f59df39ff",
+		"IdentPuesto": "24ea82c0-ca21-41e4-8f2f-02952f98de40"
+	},
+	{
+		"Area": "ENSAMBLE",
+		"Puesto": "COLOCADOR DE ABRAZADERAS L1",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "c905f26e-bcb4-43e3-8e6f-259bbd464e6a",
+		"IdentPuesto": "24ea82c0-ca21-41e4-8f2f-02952f98de40"
+	},
+	{
+		"Area": "ENSAMBLE",
+		"Puesto": "CARGADOR PINTURA 2 L1",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "4c4288bf-fd81-48ec-896a-fa7bba523e14",
+		"IdentPuesto": "24ea82c0-ca21-41e4-8f2f-02952f98de40"
+	},
+	{
+		"Area": "ENSAMBLE",
+		"Puesto": "COMODIN ENSAMBLE",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "1cb483d0-9a94-4ea5-bd0e-38b17616b847",
+		"IdentPuesto": "24ea82c0-ca21-41e4-8f2f-02952f98de40"
+	},
+	{
+		"Area": "ENSAMBLE",
+		"Puesto": "CARGADOR PINTURA 1 L1",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "b028729d-90bb-4a5a-99ea-2ecb92f05d5f",
+		"IdentPuesto": "24ea82c0-ca21-41e4-8f2f-02952f98de40"
+	},
+	{
+		"Area": "ENSAMBLE",
+		"Puesto": "ASENTADOR 1 L2",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "81c1fb04-8412-47ec-9e54-7f35bde26033",
+		"IdentPuesto": "24ea82c0-ca21-41e4-8f2f-02952f98de40"
+	},
+	{
+		"Area": "ENSAMBLE",
+		"Puesto": "ASENTADOR 2 L2",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "d8665273-0fda-43e5-bbff-f2349a460c8e",
+		"IdentPuesto": "24ea82c0-ca21-41e4-8f2f-02952f98de40"
+	},
+	{
+		"Area": "ENSAMBLE",
+		"Puesto": "ARMADOR L2",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "786c043b-4380-436b-883c-c4491396833a",
+		"IdentPuesto": "24ea82c0-ca21-41e4-8f2f-02952f98de40"
+	},
+	{
+		"Area": "ENSAMBLE",
+		"Puesto": "COLOCADOR DE ABRAZADERAS L2",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "86ffd0f4-449c-4845-bbc9-cfa2a5949513",
+		"IdentPuesto": "24ea82c0-ca21-41e4-8f2f-02952f98de40"
+	},
+	{
+		"Area": "ENSAMBLE",
+		"Puesto": "CARGADOR PINTURA 1 L2",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "2d2b899d-499d-47cc-82a0-4c81797e7748",
+		"IdentPuesto": "24ea82c0-ca21-41e4-8f2f-02952f98de40"
+	},
+	{
+		"Area": "ENSAMBLE",
+		"Puesto": "DESTORCEDOR",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "5e6d4b01-0379-43cd-b78e-64e33cf5de11",
+		"IdentPuesto": "24ea82c0-ca21-41e4-8f2f-02952f98de40"
+	},
+	{
+		"Area": "TRATAMIENTOS TERMICOS ",
+		"Puesto": "CARGADOR DE REVENIDO T2",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "1fb1afef-99da-4652-a10c-6ea4eb72fca6",
+		"IdentPuesto": "f510eccc-0fc9-4dcb-afae-83ec1a8b0ba0"
+	},
+	{
+		"Area": "TRATAMIENTOS TERMICOS ",
+		"Puesto": "CARGADOR DE AUSTENIZADO T2",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "a776609c-acc1-42c9-9368-8c4697572698",
+		"IdentPuesto": "f510eccc-0fc9-4dcb-afae-83ec1a8b0ba0"
+	},
+	{
+		"Area": "TRATAMIENTOS TERMICOS ",
+		"Puesto": "HORNERO 1-T2",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "58fe50d3-3f15-471b-8477-35b05dad67e0",
+		"IdentPuesto": "f510eccc-0fc9-4dcb-afae-83ec1a8b0ba0"
+	},
+	{
+		"Area": "TRATAMIENTOS TERMICOS ",
+		"Puesto": "HORNERO 3-T2",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "5fd6ef5b-b15f-483c-8e16-a4355ba06cbe",
+		"IdentPuesto": "f510eccc-0fc9-4dcb-afae-83ec1a8b0ba0"
+	},
+	{
+		"Area": "TRATAMIENTOS TERMICOS ",
+		"Puesto": "HORNERO 2-T2",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "7b0a9cf7-31d5-4d25-8d0a-732539afca2b",
+		"IdentPuesto": "f510eccc-0fc9-4dcb-afae-83ec1a8b0ba0"
+	},
+	{
+		"Area": "TRATAMIENTOS TERMICOS ",
+		"Puesto": "COMODIN TRATAMIENTOS T2",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "799fbce4-3792-4b19-b8ec-136b8ae0fd36",
+		"IdentPuesto": "f510eccc-0fc9-4dcb-afae-83ec1a8b0ba0"
+	},
+	{
+		"Area": "TRATAMIENTOS TERMICOS ",
+		"Puesto": "DESCARGADOR DE REVENIDO T2",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "d843bb6b-03ca-4da3-be88-4df138df7557",
+		"IdentPuesto": "f510eccc-0fc9-4dcb-afae-83ec1a8b0ba0"
+	},
+	{
+		"Area": "TRATAMIENTOS TERMICOS ",
+		"Puesto": "CARGADOR DE REVENIDO T1",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "751fbe4d-049c-420f-8b02-5941d7dc8fb8",
+		"IdentPuesto": "d8696b4e-9159-4991-96ed-fa011c7f3d91"
+	},
+	{
+		"Area": "TRATAMIENTOS TERMICOS ",
+		"Puesto": "CARGADOR DE AUSTENIZADO T1",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "a880bed3-eb01-4770-a0cc-7d6d796fbff4",
+		"IdentPuesto": "d8696b4e-9159-4991-96ed-fa011c7f3d91"
+	},
+	{
+		"Area": "TRATAMIENTOS TERMICOS ",
+		"Puesto": "HORNERO 1-T1",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "dbcaf185-2b53-473f-8710-44c1a44b5f19",
+		"IdentPuesto": "d8696b4e-9159-4991-96ed-fa011c7f3d91"
+	},
+	{
+		"Area": "TRATAMIENTOS TERMICOS ",
+		"Puesto": "HORNERO 2-T1",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "d1d30ba2-9583-4764-b097-7a256383f4a2",
+		"IdentPuesto": "d8696b4e-9159-4991-96ed-fa011c7f3d91"
+	},
+	{
+		"Area": "TRATAMIENTOS TERMICOS ",
+		"Puesto": "HORNERO 3-T1",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "123fd925-fcb9-4833-98fd-3d85d78f88d6",
+		"IdentPuesto": "d8696b4e-9159-4991-96ed-fa011c7f3d91"
+	},
+	{
+		"Area": "TRATAMIENTOS TERMICOS ",
+		"Puesto": "COMODIN TRATAMIENTOS T1",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "6319b47e-ae4c-44b4-ad6f-22bf4fc3c3f7",
+		"IdentPuesto": "d8696b4e-9159-4991-96ed-fa011c7f3d91"
+	},
+	{
+		"Area": "TRATAMIENTOS TERMICOS ",
+		"Puesto": "DESCARGADOR DE REVENIDO T1",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "b4ecbc98-b060-4b42-8b19-52153c4928f3",
+		"IdentPuesto": "d8696b4e-9159-4991-96ed-fa011c7f3d91"
+	},
+	{
+		"Area": "DESPALMES",
+		"Puesto": "DESPALMADOR 2 PARABOLICAS 1",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "fccf7c5a-430d-42c3-8b8d-3a05d401c8f2",
+		"IdentPuesto": "0336f750-5e1f-48a3-aa21-d05a22f393f1"
+	},
+	{
+		"Area": "DESPALMES",
+		"Puesto": "SUPLENTE DESPALMADOR 2 PARABOLICAS 1",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "31472933-b73b-4c5d-8921-099b7ea04c57",
+		"IdentPuesto": "0336f750-5e1f-48a3-aa21-d05a22f393f1"
+	},
+	{
+		"Area": "DESPALMES",
+		"Puesto": "CARGADOR DE HORNO PARABAOLICAS 2",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "d250419b-777e-44d2-add8-0ef91b71d4ed",
+		"IdentPuesto": "0336f750-5e1f-48a3-aa21-d05a22f393f1"
+	},
+	{
+		"Area": "DESPALMES",
+		"Puesto": "DESPALMADOR PARABOLICAS 2",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "d43a4d78-85e8-41eb-bcd0-6609be38a810",
+		"IdentPuesto": "0336f750-5e1f-48a3-aa21-d05a22f393f1"
+	},
+	{
+		"Area": "DESPALMES",
+		"Puesto": "DESTORCEDOR PARABOLICAS 1",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "118629aa-fa1f-4236-9304-4a9dd8237aaa",
+		"IdentPuesto": "0336f750-5e1f-48a3-aa21-d05a22f393f1"
+	},
+	{
+		"Area": "DESPALMES",
+		"Puesto": "DESPALMADOR MECANICA GRANDE",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "11c0fd6b-4b5a-4a39-a4ae-da78f6f3f5eb",
+		"IdentPuesto": "0336f750-5e1f-48a3-aa21-d05a22f393f1"
+	},
+	{
+		"Area": "DESPALMES",
+		"Puesto": "DESPALMADOR MECANICA CHICA",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "c2d4d308-0cd4-428d-8d7e-52e8cff31e69",
+		"IdentPuesto": "0336f750-5e1f-48a3-aa21-d05a22f393f1"
+	},
+	{
+		"Area": "DESPALMES",
+		"Puesto": "CARGADOR DE HORNO MECANICA CHICA",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "8dcacc91-481e-4c7a-be8d-27b9fde5377e",
+		"IdentPuesto": "0336f750-5e1f-48a3-aa21-d05a22f393f1"
+	},
+	{
+		"Area": "DESPALMES",
+		"Puesto": "DESPALMADOR 1 PARABOLICAS 1",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "d25571cc-2334-429e-8c15-822440acd98a",
+		"IdentPuesto": "0336f750-5e1f-48a3-aa21-d05a22f393f1"
+	},
+	{
+		"Area": "DESPALMES",
+		"Puesto": "CARGADOR HORNO MECANICA GRANDE",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "a595751a-c262-4ff1-a773-3c6f4501e058",
+		"IdentPuesto": "0336f750-5e1f-48a3-aa21-d05a22f393f1"
+	},
+	{
+		"Area": "ROLEOS",
+		"Puesto": "ROLEADOR WEISS",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "df421a72-6087-410a-bb2a-1f6866904357",
+		"IdentPuesto": "054fc832-2c29-4e7f-8022-dcc85637d2da"
+	},
+	{
+		"Area": "ROLEOS",
+		"Puesto": "AYUDANTE ROLEADOR WEISS",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "21a4b568-6697-45ad-861b-6f0abfec2201",
+		"IdentPuesto": "054fc832-2c29-4e7f-8022-dcc85637d2da"
+	},
+	{
+		"Area": "ROLEOS",
+		"Puesto": "AYUDANTE ROLEADOR SEMI",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "38898699-9453-447d-ba38-ae012b8d6cbe",
+		"IdentPuesto": "054fc832-2c29-4e7f-8022-dcc85637d2da"
+	},
+	{
+		"Area": "ROLEOS",
+		"Puesto": "ROLEADOR SEMI",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "0df7a232-ba5b-48b7-9be8-24be743d6a37",
+		"IdentPuesto": "054fc832-2c29-4e7f-8022-dcc85637d2da"
+	},
+	{
+		"Area": "ROLEOS",
+		"Puesto": "AYUDANTE ROLEADOR MORITA",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "77cd42bb-5b5c-4714-8ac5-ebdc9a3a5c78",
+		"IdentPuesto": "054fc832-2c29-4e7f-8022-dcc85637d2da"
+	},
+	{
+		"Area": "ROLEOS",
+		"Puesto": "ROLEADOR MORITA",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "85167f46-7330-4c5e-ba07-8056eddcb81f",
+		"IdentPuesto": "054fc832-2c29-4e7f-8022-dcc85637d2da"
+	},
+	{
+		"Area": "BARRENOS",
+		"Puesto": "BARRENADOR 2",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "a2de8a7a-8a1e-47ee-865a-937549786eda",
+		"IdentPuesto": "27c915d0-b60f-4927-85e1-38359a237338"
+	},
+	{
+		"Area": "BARRENOS",
+		"Puesto": "BARRENADOR 1",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "4d4785a8-ff61-4dad-b893-fe65b0f75903",
+		"IdentPuesto": "27c915d0-b60f-4927-85e1-38359a237338"
+	},
+	{
+		"Area": "BARRENOS",
+		"Puesto": "CAREADOR",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "8d37af2c-8458-4077-a881-b28345d39530",
+		"IdentPuesto": "27c915d0-b60f-4927-85e1-38359a237338"
+	},
+	{
+		"Area": "CORTE",
+		"Puesto": "BARRENADOR CELULA",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "898bb5e0-375c-4755-9772-fb9e44bb23db",
+		"IdentPuesto": "8ea9ca8d-90f6-4414-968f-f5ec9dd4d227"
+	},
+	{
+		"Area": "CORTE",
+		"Puesto": "ABASTECEDOR GRUESO",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "aea4653d-854a-4fbd-9334-d38cc1c6d9bb",
+		"IdentPuesto": "8ea9ca8d-90f6-4414-968f-f5ec9dd4d227"
+	},
+	{
+		"Area": "CORTE",
+		"Puesto": "ABASTECEDOR CHICO",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "b9d4d70f-3369-444e-8ce7-20f6bdc9d441",
+		"IdentPuesto": "8ea9ca8d-90f6-4414-968f-f5ec9dd4d227"
+	},
+	{
+		"Area": "CORTE",
+		"Puesto": "CORTADOR CELULA",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "340d96db-467b-49fa-b541-69158c3c8340",
+		"IdentPuesto": "8ea9ca8d-90f6-4414-968f-f5ec9dd4d227"
+	},
+	{
+		"Area": "CORTE",
+		"Puesto": "ABASTECEDOR CELULA",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "1eb10b20-b576-4bff-aac5-528e55c6b52d",
+		"IdentPuesto": "8ea9ca8d-90f6-4414-968f-f5ec9dd4d227"
+	},
+	{
+		"Area": "CORTE",
+		"Puesto": "CORTADOR CHICO",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "a09b40bf-4fdc-4939-8330-a4df80bfd263",
+		"IdentPuesto": "8ea9ca8d-90f6-4414-968f-f5ec9dd4d227"
+	},
+	{
+		"Area": "CORTE",
+		"Puesto": "CORTADOR GRUESO",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "1d773cc5-57bd-4760-990e-4beb4ec98841",
+		"IdentPuesto": "8ea9ca8d-90f6-4414-968f-f5ec9dd4d227"
+	},
+	{
+		"Area": "CORTE",
+		"Puesto": "DESPUNTADOR",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "bf234bef-6b9e-4094-b241-2b749a550be9",
+		"IdentPuesto": "8ea9ca8d-90f6-4414-968f-f5ec9dd4d227"
+	},
+	{
+		"Area": "GANCHOS / TAZAS",
+		"Puesto": "CARGADOR HORNO GANCHOS",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "81078087-986c-459a-b2a2-fbc90143901f",
+		"IdentPuesto": "1ab4c870-247e-40ea-87f2-9d6404988f65"
+	},
+	{
+		"Area": "GANCHOS / TAZAS",
+		"Puesto": "CARGADOR DE HORNO TAZAS",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "90ebd4bd-b5eb-4a28-b84a-e251a127ff9b",
+		"IdentPuesto": "1ab4c870-247e-40ea-87f2-9d6404988f65"
+	},
+	{
+		"Area": "GANCHOS / TAZAS",
+		"Puesto": "OPERADOR DE GANCHOS",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "c69dd8cf-687c-4c3b-b80b-3ee25bcd9114",
+		"IdentPuesto": "1ab4c870-247e-40ea-87f2-9d6404988f65"
+	},
+	{
+		"Area": "GANCHOS / TAZAS",
+		"Puesto": "OPERADOR DE TAZAS",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "dfb57e8d-5d0e-4fe3-a321-c0a5e55b6a4b",
+		"IdentPuesto": "1ab4c870-247e-40ea-87f2-9d6404988f65"
+	},
+	{
+		"Area": "GRANALLADO",
+		"Puesto": "COLOCADOR DE BUJES 2",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "b6fbf0e7-2c08-4b82-aa1c-8a954ad73b9d",
+		"IdentPuesto": "399d081c-ea17-413c-b389-d453d6acdf30"
+	},
+	{
+		"Area": "GRANALLADO",
+		"Puesto": "CARGA SHOT PEENING",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "5626bc19-7370-4fd8-a5e5-c5aeb0759ef0",
+		"IdentPuesto": "399d081c-ea17-413c-b389-d453d6acdf30"
+	},
+	{
+		"Area": "GRANALLADO",
+		"Puesto": "COLOCADOR DE BUJES 1",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "78c7a6c2-3c4f-4496-9b8c-4b37f91938c6",
+		"IdentPuesto": "399d081c-ea17-413c-b389-d453d6acdf30"
+	},
+	{
+		"Area": "GRANALLADO",
+		"Puesto": "DESCARGA SHOT PEENING",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "4931143e-38d3-495e-844a-6eaa7875727b",
+		"IdentPuesto": "399d081c-ea17-413c-b389-d453d6acdf30"
+	},
+	{
+		"Area": "GRANALLADO",
+		"Puesto": "DESCARGA STRESS SHOT PEENING",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "aa912886-0ffc-41df-abec-3ab36bc2bc7c",
+		"IdentPuesto": "399d081c-ea17-413c-b389-d453d6acdf30"
+	},
+	{
+		"Area": "GRANALLADO",
+		"Puesto": "CARGA STRESS SHOT PEENING",
+		"Departamento": "PRODUCCION",
+		"RowGuid": "1565b618-af9a-498f-92f8-f8405922ee7f",
+		"IdentPuesto": "399d081c-ea17-413c-b389-d453d6acdf30"
+	},
+	{
+		"Area": "COCINA",
+		"Puesto": "COCINERA",
+		"Departamento": "R. HUMANOS",
+		"RowGuid": "693752ce-eb6b-4f7e-a4f7-131c9f46bb95",
+		"IdentPuesto": "d645fa89-2fdf-40c6-afa4-845b42242b33"
+	},
+	{
+		"Area": "SERVICIOS GENERALES",
+		"Puesto": "SUPLENTE SERVICIOS GENERALES PROD.",
+		"Departamento": "R. HUMANOS",
+		"RowGuid": "fef89c09-ffe4-4ff9-89f5-d294a53bf270",
+		"IdentPuesto": "d645fa89-2fdf-40c6-afa4-845b42242b33"
+	},
+	{
+		"Area": "R. HUMANOS",
+		"Puesto": "ADMINISTRADOR R.H.",
+		"Departamento": "R. HUMANOS",
+		"RowGuid": "f0c0d245-d638-40a1-a4fc-05f15e06e029",
+		"IdentPuesto": "d645fa89-2fdf-40c6-afa4-845b42242b33"
+	},
+	{
+		"Area": "SERVICIOS GENERALES",
+		"Puesto": "SERVICIOS GENERALES PRODUCCION",
+		"Departamento": "R. HUMANOS",
+		"RowGuid": "b822d577-5553-4026-a7ea-3c5193cd64b7",
+		"IdentPuesto": "d645fa89-2fdf-40c6-afa4-845b42242b33"
+	},
+	{
+		"Area": "R. HUMANOS",
+		"Puesto": "AUXILIAR RH",
+		"Departamento": "R. HUMANOS",
+		"RowGuid": "47443cd2-2f8b-4864-9f45-65ee88ce0a10",
+		"IdentPuesto": "d645fa89-2fdf-40c6-afa4-845b42242b33"
+	},
+	{
+		"Area": "SERVICIOS GENERALES",
+		"Puesto": "SERVICIOS GENERALES PLANTA/DISA",
+		"Departamento": "R. HUMANOS",
+		"RowGuid": "e41f5fac-be65-4b6e-a3ab-c91b00f945ae",
+		"IdentPuesto": "d645fa89-2fdf-40c6-afa4-845b42242b33"
+	},
+	{
+		"Area": "SERVICIOS GENERALES",
+		"Puesto": "SERVICIOS GENERALES ADMON",
+		"Departamento": "R. HUMANOS",
+		"RowGuid": "7576b5dc-8899-48aa-aade-00b3e12fbb25",
+		"IdentPuesto": "d645fa89-2fdf-40c6-afa4-845b42242b33"
+	},
+	{
+		"Area": "COCINA",
+		"Puesto": "AYUDANTE COCINERA",
+		"Departamento": "R. HUMANOS",
+		"RowGuid": "2e27cf79-6e33-4c28-bc4d-10645bbe6825",
+		"IdentPuesto": "693752ce-eb6b-4f7e-a4f7-131c9f46bb95"
+	},
+	{
+		"Area": "CALIDAD",
+		"Puesto": "SUPERVISOR CALIDAD",
+		"Departamento": "CONTROL DE CALIDAD",
+		"RowGuid": "f9caad5f-cf31-4fd9-adaa-b4b1d4f8fd95",
+		"IdentPuesto": "9be00b48-fd35-4ed1-9c9b-7e38360f2167"
+	},
+	{
+		"Area": "CALIDAD",
+		"Puesto": "AUDITOR PERFILES PARABOLICOS",
+		"Departamento": "CONTROL DE CALIDAD",
+		"RowGuid": "6d4aa955-8284-46a1-ba43-f5c15845e4f6",
+		"IdentPuesto": "f9caad5f-cf31-4fd9-adaa-b4b1d4f8fd95"
+	},
+	{
+		"Area": "CALIDAD",
+		"Puesto": "AUDITOR TERMICOS T1",
+		"Departamento": "CONTROL DE CALIDAD",
+		"RowGuid": "b1496f2d-694f-4abb-b2cb-24606115182d",
+		"IdentPuesto": "f9caad5f-cf31-4fd9-adaa-b4b1d4f8fd95"
+	},
+	{
+		"Area": "CALIDAD",
+		"Puesto": "AUDITOR TERMICOS T2",
+		"Departamento": "CONTROL DE CALIDAD",
+		"RowGuid": "753f8e31-f500-4dd6-abe1-6905ce51a5fc",
+		"IdentPuesto": "f9caad5f-cf31-4fd9-adaa-b4b1d4f8fd95"
+	},
+	{
+		"Area": "CALIDAD",
+		"Puesto": "CTRL. DE DOCUMENTOS",
+		"Departamento": "CONTROL DE CALIDAD",
+		"RowGuid": "721cd6a1-fb4f-4f55-a5e9-03733cdad1ab",
+		"IdentPuesto": "f9caad5f-cf31-4fd9-adaa-b4b1d4f8fd95"
+	},
+	{
+		"Area": "INGENIERIA DE PRODUCTO",
+		"Puesto": "INGENIERIA DE PRODUCTO",
+		"Departamento": "INGENIERIA",
+		"RowGuid": "d07400fc-1c6d-4d14-ac16-6bef648b8ebf",
+		"IdentPuesto": "560230ea-98c9-472f-9555-432500605982"
+	},
+	{
+		"Area": "INGENIERIA DE DISEÑO",
+		"Puesto": "JEFATURA DE DISEÑO",
+		"Departamento": "INGENIERIA",
+		"RowGuid": "03e09c50-4d85-419e-9415-bc04016675b2",
+		"IdentPuesto": "560230ea-98c9-472f-9555-432500605982"
+	},
+	{
+		"Area": "INGENIERIA DE PROCESOS",
+		"Puesto": "INGENIERIA DE PROCESOS",
+		"Departamento": "INGENIERIA",
+		"RowGuid": "ca9756d7-4369-4182-a3aa-38bb85489190",
+		"IdentPuesto": "560230ea-98c9-472f-9555-432500605982"
+	},
+	{
+		"Area": "INGENIERIA DE DISEÑO",
+		"Puesto": "INGENIERO DE DISEÑO",
+		"Departamento": "INGENIERIA",
+		"RowGuid": "6e0f1184-dcf5-4bb0-883a-e26467f13b34",
+		"IdentPuesto": "03e09c50-4d85-419e-9415-bc04016675b2"
+	},
+	{
+		"Area": "CNC",
+		"Puesto": "JEFATURA CNC",
+		"Departamento": "INGENIERIA",
+		"RowGuid": "e89af663-f866-44ba-bca7-9fa5277537d8",
+		"IdentPuesto": "d07400fc-1c6d-4d14-ac16-6bef648b8ebf"
+	},
+	{
+		"Area": "CNC",
+		"Puesto": "ENCARGADO CNC",
+		"Departamento": "INGENIERIA",
+		"RowGuid": "35e32af0-00e1-4f42-86fe-9b35745586a0",
+		"IdentPuesto": "e89af663-f866-44ba-bca7-9fa5277537d8"
+	},
+	{
+		"Area": "CNC",
+		"Puesto": "ALMACENISTA DE MOLDES",
+		"Departamento": "INGENIERIA",
+		"RowGuid": "8e9feaa0-acd3-4a33-817d-520a42d3a446",
+		"IdentPuesto": "e89af663-f866-44ba-bca7-9fa5277537d8"
+	},
+	{
+		"Area": "CNC",
+		"Puesto": "OPERADOR CNC T1",
+		"Departamento": "INGENIERIA",
+		"RowGuid": "4eb87cd1-f700-4172-b20e-b026ee7dcbfb",
+		"IdentPuesto": "35e32af0-00e1-4f42-86fe-9b35745586a0"
+	},
+	{
+		"Area": "CNC",
+		"Puesto": "OPERADOR CNC T2",
+		"Departamento": "INGENIERIA",
+		"RowGuid": "b19c770b-0a43-4c62-ba09-f1d46da88cad",
+		"IdentPuesto": "35e32af0-00e1-4f42-86fe-9b35745586a0"
+	},
+	{
+		"Area": "MANTENIMIENTO",
+		"Puesto": "SUB-GERENTE MANTENIMIENTO",
+		"Departamento": "MANTENIMIENTO",
+		"RowGuid": "667a87ba-00d8-4de0-8251-7335c9549d8f",
+		"IdentPuesto": "8a63210e-a46e-440c-a906-4e0d80e08020"
+	},
+	{
+		"Area": "MANTENIMIENTO",
+		"Puesto": "CEM MANTENIMIENTO",
+		"Departamento": "MANTENIMIENTO",
+		"RowGuid": "bad06f07-4147-4edf-bb76-78e5d284b4b5",
+		"IdentPuesto": "667a87ba-00d8-4de0-8251-7335c9549d8f"
+	},
+	{
+		"Area": "MANTENIMIENTO",
+		"Puesto": "ENCARGADO T1 ELECTRICISTA A",
+		"Departamento": "MANTENIMIENTO",
+		"RowGuid": "14a10445-df01-4e41-b025-52b65c19b0cf",
+		"IdentPuesto": "667a87ba-00d8-4de0-8251-7335c9549d8f"
+	},
+	{
+		"Area": "MANTENIMIENTO",
+		"Puesto": "ENCARGADO T2 ELECTRICISTA A",
+		"Departamento": "MANTENIMIENTO",
+		"RowGuid": "ca451a5e-401a-45b3-a942-6a927b312a03",
+		"IdentPuesto": "667a87ba-00d8-4de0-8251-7335c9549d8f"
+	},
+	{
+		"Area": "MANTENIMIENTO",
+		"Puesto": "DIBUJANTE MANTENIMIENTO",
+		"Departamento": "MANTENIMIENTO",
+		"RowGuid": "c0da6119-0a65-4711-b670-856aff06391d",
+		"IdentPuesto": "667a87ba-00d8-4de0-8251-7335c9549d8f"
+	},
+	{
+		"Area": "MANTENIMIENTO",
+		"Puesto": "SOLDADOR ",
+		"Departamento": "MANTENIMIENTO",
+		"RowGuid": "9a29d582-80fe-4076-b3f5-188df20a7261",
+		"IdentPuesto": "ca451a5e-401a-45b3-a942-6a927b312a03"
+	},
+	{
+		"Area": "MANTENIMIENTO",
+		"Puesto": "BECARIO T2",
+		"Departamento": "MANTENIMIENTO",
+		"RowGuid": "4cb053a1-5ef7-480e-a79f-ee0f66175cb8",
+		"IdentPuesto": "ca451a5e-401a-45b3-a942-6a927b312a03"
+	},
+	{
+		"Area": "MANTENIMIENTO",
+		"Puesto": "MECANICO INDUSTRIAL ",
+		"Departamento": "MANTENIMIENTO",
+		"RowGuid": "0348c105-af6f-48cc-919c-8b32dfb2bc1d",
+		"IdentPuesto": "ca451a5e-401a-45b3-a942-6a927b312a03"
+	},
+	{
+		"Area": "MANTENIMIENTO",
+		"Puesto": "MECANICO INDUSTRIAL ",
+		"Departamento": "MANTENIMIENTO",
+		"RowGuid": "3c48ace5-0dcd-4304-8a63-abfc0a714424",
+		"IdentPuesto": "ca451a5e-401a-45b3-a942-6a927b312a03"
+	},
+	{
+		"Area": "MANTENIMIENTO",
+		"Puesto": "AYUDANTE DE MECANICO T2 T3",
+		"Departamento": "MANTENIMIENTO",
+		"RowGuid": "06782021-6751-4429-8d7a-f51c94f88c9b",
+		"IdentPuesto": "0348c105-af6f-48cc-919c-8b32dfb2bc1d"
+	},
+	{
+		"Area": "MANTENIMIENTO",
+		"Puesto": "AYUDANTE DE MANTENIMIENTO T2",
+		"Departamento": "MANTENIMIENTO",
+		"RowGuid": "4231d0c9-580e-4634-b43f-c8d2d5883d0e",
+		"IdentPuesto": "06782021-6751-4429-8d7a-f51c94f88c9b"
+	},
+	{
+		"Area": "MANTENIMIENTO",
+		"Puesto": "SOLDADOR ",
+		"Departamento": "MANTENIMIENTO",
+		"RowGuid": "305e375a-f658-4e2c-b738-6e98561ec0b6",
+		"IdentPuesto": "14a10445-df01-4e41-b025-52b65c19b0cf"
+	},
+	{
+		"Area": "MANTENIMIENTO",
+		"Puesto": "BECARIO T1",
+		"Departamento": "MANTENIMIENTO",
+		"RowGuid": "ef61db5b-99d4-4200-a0a8-f928ddb5d4f3",
+		"IdentPuesto": "14a10445-df01-4e41-b025-52b65c19b0cf"
+	},
+	{
+		"Area": "MANTENIMIENTO",
+		"Puesto": "ELECTRICISTA ",
+		"Departamento": "MANTENIMIENTO",
+		"RowGuid": "4e363818-6d23-4d5d-84c0-3250915d71da",
+		"IdentPuesto": "14a10445-df01-4e41-b025-52b65c19b0cf"
+	},
+	{
+		"Area": "MANTENIMIENTO",
+		"Puesto": "MECANICO INDUSTRILA ",
+		"Departamento": "MANTENIMIENTO",
+		"RowGuid": "0d3b32da-d782-4e38-aee5-db0ed281c994",
+		"IdentPuesto": "14a10445-df01-4e41-b025-52b65c19b0cf"
+	},
+	{
+		"Area": "MANTENIMIENTO",
+		"Puesto": "AYUDANTE DE MECANICO T1 Y T3",
+		"Departamento": "MANTENIMIENTO",
+		"RowGuid": "ab65fcc7-e8fb-4f27-a559-ac15cb70f74c",
+		"IdentPuesto": "0d3b32da-d782-4e38-aee5-db0ed281c994"
+	},
+	{
+		"Area": "MANTENIMIENTO",
+		"Puesto": "AYUDANTE DE MANTENIMIENTO T1",
+		"Departamento": "MANTENIMIENTO",
+		"RowGuid": "dd5f5520-5fa2-4d45-bae7-e078acb7759c",
+		"IdentPuesto": "ab65fcc7-e8fb-4f27-a559-ac15cb70f74c"
+	},
+	{
+		"Area": "SUCURSAL LEON",
+		"Puesto": "JEFATURA SUCURSAL LEON",
+		"Departamento": "VENTAS",
+		"RowGuid": "77b9767a-4886-4a08-95aa-35e08d79f113",
+		"IdentPuesto": "f49e85be-298d-48fe-9a78-6fe5b9bd9882"
+	},
+	{
+		"Area": "LOGISTICA",
+		"Puesto": "JEFE DE LOGISTICA",
+		"Departamento": "VENTAS",
+		"RowGuid": "4938e67c-2895-4d3f-af15-66260ceb3bdd",
+		"IdentPuesto": "f49e85be-298d-48fe-9a78-6fe5b9bd9882"
+	},
+	{
+		"Area": "DISA",
+		"Puesto": "ENCARGADO VENTAS NACIONALES",
+		"Departamento": "VENTAS",
+		"RowGuid": "643172be-d027-4357-ac3e-d7d33e4255aa",
+		"IdentPuesto": "f49e85be-298d-48fe-9a78-6fe5b9bd9882"
+	},
+	{
+		"Area": "DISA",
+		"Puesto": "FACTURISTA VENTAS NACIONALES",
+		"Departamento": "VENTAS",
+		"RowGuid": "68085f47-56e5-41be-91a6-2036da449e85",
+		"IdentPuesto": "643172be-d027-4357-ac3e-d7d33e4255aa"
+	},
+	{
+		"Area": "DISA",
+		"Puesto": "JEFE SURTIMIENTO 1",
+		"Departamento": "VENTAS",
+		"RowGuid": "fc3bfaf2-9c30-4d32-9af5-5d1b13d44846",
+		"IdentPuesto": "643172be-d027-4357-ac3e-d7d33e4255aa"
+	},
+	{
+		"Area": "DISA",
+		"Puesto": "JEFE SURTIMIENTO 2",
+		"Departamento": "VENTAS",
+		"RowGuid": "2548d1e9-3350-4433-a297-a8443c118283",
+		"IdentPuesto": "643172be-d027-4357-ac3e-d7d33e4255aa"
+	},
+	{
+		"Area": "DISA",
+		"Puesto": "AUXILIAR SURTIMIENTO 3",
+		"Departamento": "VENTAS",
+		"RowGuid": "5676aba4-2214-4658-a523-bded77911954",
+		"IdentPuesto": "fc3bfaf2-9c30-4d32-9af5-5d1b13d44846"
+	},
+	{
+		"Area": "DISA",
+		"Puesto": "AUXILIAR SURTIMIENTO 1",
+		"Departamento": "VENTAS",
+		"RowGuid": "15f5b7d9-b9a5-4d15-82b7-24312c40e0fb",
+		"IdentPuesto": "fc3bfaf2-9c30-4d32-9af5-5d1b13d44846"
+	},
+	{
+		"Area": "DISA",
+		"Puesto": "AUXILIAR SURTIMIENTO 2",
+		"Departamento": "VENTAS",
+		"RowGuid": "07e37985-c11c-4d0b-b5e6-e023768390b6",
+		"IdentPuesto": "fc3bfaf2-9c30-4d32-9af5-5d1b13d44846"
+	},
+	{
+		"Area": "LOGISTICA",
+		"Puesto": "BECARIO LOGISTICA",
+		"Departamento": "VENTAS",
+		"RowGuid": "d4210b76-7aff-4d4e-9482-1569363e1ebf",
+		"IdentPuesto": "4938e67c-2895-4d3f-af15-66260ceb3bdd"
+	},
+	{
+		"Area": "SUCURSAL LEON",
+		"Puesto": "VENTAS MOSTRADOR LEON",
+		"Departamento": "VENTAS",
+		"RowGuid": "0615666b-ddc8-43c9-99d2-bccfe2889a80",
+		"IdentPuesto": "77b9767a-4886-4a08-95aa-35e08d79f113"
+	},
+	{
+		"Area": "SUCURSAL LEON",
+		"Puesto": "CHOFER VENDEDOR ",
+		"Departamento": "VENTAS",
+		"RowGuid": "e52bdba7-f61e-4193-9dea-577275e95e59",
+		"IdentPuesto": "0615666b-ddc8-43c9-99d2-bccfe2889a80"
+	},
+	{
+		"Area": "SUCURSAL LEON",
+		"Puesto": "FACTURISTA LEON",
+		"Departamento": "VENTAS",
+		"RowGuid": "334ea586-400a-4851-8d9c-a1f01445bfc5",
+		"IdentPuesto": "0615666b-ddc8-43c9-99d2-bccfe2889a80"
+	},
+	{
+		"Area": "AUDITORIA",
+		"Puesto": "AUXILIAR DE PROCESOS",
+		"Departamento": "AUDITORIA",
+		"RowGuid": "3e92860c-e026-41d0-9cc8-dcdc7df85e10",
+		"IdentPuesto": "aaa553a7-2167-4b27-a086-464da8406f4f"
+	},
+	{
+		"Area": "ALMACEN DISA",
+		"Puesto": "JEFE ALMACEN DISTRIBUIDORA",
+		"Departamento": "COSTOS",
+		"RowGuid": "c2697f86-aebb-40cf-8899-391c0c75acc9",
+		"IdentPuesto": "b2077cff-a688-4cb0-91d9-acdcf6f7b1cc"
+	},
+	{
+		"Area": "CUENTAS POR COBRAR",
+		"Puesto": "CUENTAS POR COBRAR",
+		"Departamento": "COSTOS",
+		"RowGuid": "5da3445d-a5b4-4fc3-9780-aee23117a7c4",
+		"IdentPuesto": "b2077cff-a688-4cb0-91d9-acdcf6f7b1cc"
+	},
+	{
+		"Area": "COMPRAS",
+		"Puesto": "JEFE COMPRAS",
+		"Departamento": "COSTOS",
+		"RowGuid": "909329ad-e52c-4da6-9123-1843eee99f33",
+		"IdentPuesto": "b2077cff-a688-4cb0-91d9-acdcf6f7b1cc"
+	},
+	{
+		"Area": "ALMACEN PLANTA",
+		"Puesto": "JEFE ALMACEN PLANTA",
+		"Departamento": "COSTOS",
+		"RowGuid": "4fe0fd77-eee0-4cc1-97f0-ea2cb8a74b7e",
+		"IdentPuesto": "b2077cff-a688-4cb0-91d9-acdcf6f7b1cc"
+	},
+	{
+		"Area": "ALMACEN PLANTA",
+		"Puesto": "SUPERVISOR ALMACENES",
+		"Departamento": "COSTOS",
+		"RowGuid": "8d140992-61bb-4601-875e-1bd18fd4f2ad",
+		"IdentPuesto": "4fe0fd77-eee0-4cc1-97f0-ea2cb8a74b7e"
+	},
+	{
+		"Area": "ALMACEN PLANTA",
+		"Puesto": "ALMACENISTA HERRAM. REFACCIONES T1",
+		"Departamento": "COSTOS",
+		"RowGuid": "f12d20e9-c1b2-45ee-bffd-4113b83fbb17",
+		"IdentPuesto": "4fe0fd77-eee0-4cc1-97f0-ea2cb8a74b7e"
+	},
+	{
+		"Area": "ALMACEN PLANTA",
+		"Puesto": "ALMACENISTA PUNTAS Y COLAS T1",
+		"Departamento": "COSTOS",
+		"RowGuid": "c5d3eabe-c5be-4e22-8fdd-d1accf308bb4",
+		"IdentPuesto": "4fe0fd77-eee0-4cc1-97f0-ea2cb8a74b7e"
+	},
+	{
+		"Area": "ALMACEN PLANTA",
+		"Puesto": "ALMACENISTA HERRAM. REFACCIONES T2",
+		"Departamento": "COSTOS",
+		"RowGuid": "9c6059df-120e-4283-a459-64ce26d69124",
+		"IdentPuesto": "4fe0fd77-eee0-4cc1-97f0-ea2cb8a74b7e"
+	},
+	{
+		"Area": "ALMACEN PLANTA",
+		"Puesto": "SUPERVISOR DE FLOTILLA",
+		"Departamento": "COSTOS",
+		"RowGuid": "6c57a650-70ae-4512-ac37-13d73fb03861",
+		"IdentPuesto": "4fe0fd77-eee0-4cc1-97f0-ea2cb8a74b7e"
+	},
+	{
+		"Area": "ALMACEN PLANTA",
+		"Puesto": "MENSAJERO",
+		"Departamento": "COSTOS",
+		"RowGuid": "11c19979-0802-4055-a056-c616c32602af",
+		"IdentPuesto": "6c57a650-70ae-4512-ac37-13d73fb03861"
+	},
+	{
+		"Area": "ALMACEN PLANTA",
+		"Puesto": "MENSAJERO",
+		"Departamento": "COSTOS",
+		"RowGuid": "a85177a4-6144-44d6-957a-225359fe065b",
+		"IdentPuesto": "6c57a650-70ae-4512-ac37-13d73fb03861"
+	},
+	{
+		"Area": "ALMACEN PLANTA",
+		"Puesto": "MONTACARGUISTA OP. PREVIAS",
+		"Departamento": "COSTOS",
+		"RowGuid": "a7868c82-8ace-4cf8-ad8f-8c902b4361d6",
+		"IdentPuesto": "6c57a650-70ae-4512-ac37-13d73fb03861"
+	},
+	{
+		"Area": "ALMACEN PLANTA",
+		"Puesto": "MONTACARGUISTA OP. FINALES",
+		"Departamento": "COSTOS",
+		"RowGuid": "9974f8f3-29fb-430b-bf96-ff602e2f314c",
+		"IdentPuesto": "6c57a650-70ae-4512-ac37-13d73fb03861"
+	},
+	{
+		"Area": "ALMACEN PLANTA",
+		"Puesto": "MONTACARGUISTA TERMICOS T1",
+		"Departamento": "COSTOS",
+		"RowGuid": "1227918c-4b94-4178-895f-5259bde24a8e",
+		"IdentPuesto": "6c57a650-70ae-4512-ac37-13d73fb03861"
+	},
+	{
+		"Area": "ALMACEN PLANTA",
+		"Puesto": "MONTACARGUISTA TERMICOS T2",
+		"Departamento": "COSTOS",
+		"RowGuid": "b0bcc83f-b80e-461f-9def-663683ab4f55",
+		"IdentPuesto": "6c57a650-70ae-4512-ac37-13d73fb03861"
+	},
+	{
+		"Area": "ALMACEN PLANTA",
+		"Puesto": "CHOFER PRESIDENCIA",
+		"Departamento": "COSTOS",
+		"RowGuid": "ddc20f93-f359-4360-bfe7-e391fddd4733",
+		"IdentPuesto": "6c57a650-70ae-4512-ac37-13d73fb03861"
+	},
+	{
+		"Area": "ALMACEN PLANTA",
+		"Puesto": "ALMACENISTA MATERIA PRIMA",
+		"Departamento": "COSTOS",
+		"RowGuid": "bd556e66-4b23-40bb-86be-3d52b8642cba",
+		"IdentPuesto": "8d140992-61bb-4601-875e-1bd18fd4f2ad"
+	},
+	{
+		"Area": "ALMACEN PLANTA",
+		"Puesto": "GRUA OPERADOR 1",
+		"Departamento": "COSTOS",
+		"RowGuid": "b4792a71-8dcc-4320-a59b-fddec546740d",
+		"IdentPuesto": "bd556e66-4b23-40bb-86be-3d52b8642cba"
+	},
+	{
+		"Area": "COMPRAS",
+		"Puesto": "AUXILIAR COMPRAS",
+		"Departamento": "COSTOS",
+		"RowGuid": "4a745c6b-e728-44f0-87a4-c249e8b5ddab",
+		"IdentPuesto": "909329ad-e52c-4da6-9123-1843eee99f33"
+	},
+	{
+		"Area": "ALMACEN DISA",
+		"Puesto": "AUXILIAR JEFE ALMACEN DISA",
+		"Departamento": "COSTOS",
+		"RowGuid": "3e01ba5b-78c6-43b2-ba32-71e4b2feb4f3",
+		"IdentPuesto": "c2697f86-aebb-40cf-8899-391c0c75acc9"
+	},
+	{
+		"Area": "ALMACEN DISA",
+		"Puesto": "CHOFER DISTRIBUIDORA 2",
+		"Departamento": "COSTOS",
+		"RowGuid": "57c822b0-986e-4eee-ae17-71a9bc0fb67d",
+		"IdentPuesto": "3e01ba5b-78c6-43b2-ba32-71e4b2feb4f3"
+	},
+	{
+		"Area": "ALMACEN DISA",
+		"Puesto": "CHOFER DISTRIBUIDORA 1",
+		"Departamento": "COSTOS",
+		"RowGuid": "60aa5812-0e51-4520-913c-d109257772cc",
+		"IdentPuesto": "3e01ba5b-78c6-43b2-ba32-71e4b2feb4f3"
+	}
+]

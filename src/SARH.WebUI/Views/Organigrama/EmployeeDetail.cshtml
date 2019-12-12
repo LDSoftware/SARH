@@ -1,0 +1,2197 @@
+﻿@using SARH.WebUI.Models.Organigrama
+@model OrganigramaEmployeeDetailModel
+@{
+    ViewData["Title"] = "Detalle Empleado";
+    ViewData["PageName"] = "Detalle Empleado";
+    ViewData["PageDescription"] = "Detalle Empleado";
+}
+@section HeadBlock {
+    <link rel="stylesheet" media="screen, print" href="~/css/fa-solid.css">
+    <link rel="stylesheet" media="screen, print" href="~/css/fa-brands.css">
+    <link rel="stylesheet" media="screen, print" href="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/css/datagrid/datatables/datatables.bundle.css">
+    <link rel="stylesheet" media="screen, print" href="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/css/notifications/sweetalert2/sweetalert2.bundle.css">
+    <link rel="stylesheet" media="screen, print" href="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/css/formplugins/bootstrap-datepicker/bootstrap-datepicker.css">
+}
+
+<div class="subheader">
+    <ol class="breadcrumb breadcrumb-lg breadcrumb-arrow mb-0">
+        <li>
+            <a href='@Url.Action("Index","Home")'>
+                <i class="fal fa-home"></i>
+            </a>
+        </li>
+        <li>
+            <a href='@Url.Action("Index","Hierarchy")'>
+                <i class="fal fa-sitemap"></i>
+                <span class="hidden-lg-down">Organigrama</span>
+            </a>
+        </li>
+        <li>
+            <a href='@Url.Action("Organigrama","Organigrama", new { organigramaitem = Model.Area + "." + Model.JobCenter })'>
+                <i class="fal fa-users"></i>
+                <span class="hidden-lg-down">@Model.JobCenter</span>
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                <i class="fal fa-user"></i>
+                <span class="hidden-lg-down">@Model.GeneralInfo.FirstName @Model.GeneralInfo.LastName</span>
+            </a>
+        </li>
+        <li>
+            <a href='@Url.Action("HierarchyPartial", "Hierarchy", new { rowid = @Model.RowId  })'>
+                <i class="fal fa-arrow-alt-left"></i>
+                <span class="hidden-lg-down">Regresar</span>
+            </a>
+        </li>
+
+    </ol>
+
+</div>
+
+<input id="rowid" type="hidden" value="@Model.HierarchyGuid"/>
+
+<div class="row">
+    <div class="col-lg-6 col-xl-3 order-lg-1 order-xl-1">
+        <!-- profile summary -->
+        <div class="card mb-g rounded-top">
+            <div class="row no-gutters row-grid">
+                <div class="col-12">
+                    <div class="d-flex flex-column align-items-center justify-content-center p-4">
+                        <img id="photoEmployee" class="rounded-circle shadow-2 img-thumbnail" alt="" src="@Model.GeneralInfo.Picture">
+                        <h5 class="mb-0 fw-700 text-center mt-3">
+                            <small>@Model.GeneralInfo.FirstName @Model.GeneralInfo.LastName</small>
+                            @Model.GeneralInfo.JobTitle
+                        </h5>
+                    </div>
+                    <div class="height-8 d-flex flex-row align-items-center flex-wrap flex-shrink-0">
+                        <a id="select_photo" class="btn btn-icon fs-xl mr-1" href="javascript:void(0);" data-original-title="Cargar foto" data-toggle="tooltip" data-placement="top">
+                            <i class="fal fa-camera color-fusion-300"></i>
+                        </a>
+                        <input type="file" style="display:none;" class="custom-file-input" id="photoemployee">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- add : -->
+        <div class="card mb-2">
+            <div class="card-body">
+                <a class="d-flex flex-row align-items-center" href='@Url.Action("PerfilEmpleado","ProfileEmployee", new {idEmployee=Model.GeneralInfo.Id.TrimStart(new Char[] { '0' }) })'>
+                    <div class="icon-stack display-3 flex-shrink-0">
+                        <i class="fal fa-circle icon-stack-3x opacity-100 color-primary-400"></i>
+                        <i class="fal fa-id-card icon-stack-1x opacity-100 color-primary-500"></i>
+                    </div>
+                    <div class="ml-3">
+                        <strong>
+                            Perfil del puesto
+                        </strong>
+                        <br>
+                        Detalles del perfil
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="card mb-g">
+            <div class="card-body">
+                <a class="d-flex flex-row align-items-center" href='#'>
+                    <div class="icon-stack display-3 flex-shrink-0">
+                        <i class="fal fa-circle icon-stack-3x opacity-100 color-warning-400"></i>
+                        <i class="fal fa-database icon-stack-1x opacity-100 color-warning-500"></i>
+                    </div>
+                    <div class="ml-3">
+                        <strong>
+                            Históricos
+                        </strong>
+                        <br>
+                        Historial del empleado
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    </ Detalles de la informacion del empleado -->
+
+    <div class="col-lg-12 col-xl-9 order-lg-2 order-xl-2">
+
+        <div class="border bg-light rounded-top">
+            <div class="accordion accordion-hover accordion-clean js-list-filter" id="js_list_accordion">
+
+
+
+                </ Datos generales empleado -->
+
+
+                <div class="card border-top-left-radius-0 border-top-right-radius-0">
+                    <div class="card-header">
+                        <a class="card-title" aria-expanded="true" href="javascript:void(0);" data-toggle="collapse" data-target="#js_list_accordion-a" data-filter-tags="settings">
+                            <i class="fal fa-id-badge width-2 fs-xl"></i>
+                            Información General
+                            <span class="ml-auto">
+                                <span class="collapsed-reveal">
+                                    <i class="fal fa-chevron-up fs-xl"></i>
+                                </span>
+                                <span class="collapsed-hidden">
+                                    <i class="fal fa-chevron-down fs-xl"></i>
+                                </span>
+                            </span>
+                        </a>
+                    </div>
+                    <div class="collapse show" id="js_list_accordion-a" data-parent="#js_list_accordion">
+                        <div class="card-body">
+
+
+                            <div role="group" aria-label="Vertical button group">
+                                <a class="btn btn-secondary" href="#"><i class="fal fa-print"></i> Imprimir</a>
+                                <a id="saveGeneralInfo" class="btn btn-secondary" href="#"><i class="fal fa-save"></i> Guardar</a>
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-secondary dropdown-toggle waves-effect waves-themed" data-toggle="dropdown" aria-expanded="false"><i class="fal fa-bolt"></i>&nbsp;Acciones</button>
+                                    <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; will-change: top, left; top: 37px; left: 0px;">
+                                        <a id="saveEmployeeUnsubscribe" class="dropdown-item" href="javascript:void(0)">Baja del Empleado</a>
+                                        <a id="moveEmployee" class="dropdown-item" href="javascript:void(0)">Cambiar Puesto</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr />
+
+
+
+                            <div class="panel-content">
+
+
+                                <div class="form-row">
+                                    <div class="col-md-4 mb-3">
+                                        <label class="form-label" for="idEmpleadoGenerales">ID Empleado</label>
+                                        <input class="form-control" id="idEmpleadoGenerales" disabled="disabled" type="text" placeholder="ID Empleado" value="@Model.GeneralInfo.Id">
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label class="form-label" for="employeeArea">Área</label>
+                                        <input class="form-control" id="employeeArea" disabled="disabled" type="text" placeholder="Area" value="@Model.GeneralInfo.Area">
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label class="form-label" for="employeeJobCenter">Centro de trabajo</label>
+                                        <input class="form-control" id="employeeJobCenter" disabled="disabled" type="text" placeholder="Centro de trabajo" value="@Model.GeneralInfo.JobCenter">
+                                    </div>
+
+                                </div>
+
+
+                                <div class="form-row">
+                                    <div class="col-md-4 mb-3">
+                                        <label class="form-label" for="employeefirstname">Nombre</label>
+                                        <input class="form-control" id="employeefirstname" type="text" placeholder="Nombre" value="@Model.GeneralInfo.FirstName">
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label class="form-label" for="employeelastname">ApellidoPaterno</label>
+                                        <input class="form-control" id="employeelastname" type="text" placeholder="Paterno" value="@Model.GeneralInfo.LastName">
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label class="form-label" for="employeelastname2">ApellidoMaterno</label>
+                                        <input class="form-control" id="employeelastname2" type="text" placeholder="Materno" value="@Model.GeneralInfo.LastName2">
+                                    </div>
+                                </div>
+
+
+                                <div class="form-row">
+
+                                    <div class="col-md-3 mb-3">
+                                        <label class="form-label" for="selectsexo">Seleccione el genero</label>
+                                        <select class="form-control" id="selectsexo">
+                                            <option value="F">Femenino</option>
+                                            <option value="M">Masculino</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-md-3 mb-3">
+                                        <label class="form-label" for="datepicker-4-6">Fecha de nacimiento</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" id="datepicker-4-6" value="@Model.GeneralInfo.FechaNacimiento">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text fs-xl">
+                                                    <i class="fal fa-calendar-plus"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label" for="employeeemail">Correo Electrónico</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text" id="inputGroupPrepend"><i class="fal fa-envelope"></i></span>
+                                            </div>
+                                            <input class="form-control" id="employeeemail" aria-describedby="inputGroupPrepend" required="" type="text" placeholder="Correo electrónico" value="@Model.GeneralInfo.Email">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label" for="validationCustom03">Puesto <span class="text-danger">*</span></label>
+                                        <input class="form-control" id="validationCustom03" disabled="disabled" type="text" placeholder="Puesto" value="@Model.GeneralInfo.JobTitle">
+                                    </div>
+                                    <div class="col-md-3 mb-3">
+                                        <label class="form-label" for="validationCustom03">Horario Laboral <span class="text-danger">*</span></label>
+                                        <select class="custom-select" disabled="disabled">
+                                            <option value="">@Model.GeneralInfo.StartJob-@Model.GeneralInfo.EndJob </option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3 mb-3">
+                                        <label class="form-label" for="validationCustom03">Horario Comida<span class="text-danger">*</span></label>
+                                        <select class="custom-select" disabled="disabled">
+                                            <option value="">@Model.GeneralInfo.StartFood-@Model.GeneralInfo.EndFood</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-row">
+
+                                    <div class="col-md-3 mb-3">
+                                        <label class="form-label" for="datepicker-4-7">Fecha de alta</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" id="datepicker-4-7" value="@Model.GeneralInfo.HireDate">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text fs-xl">
+                                                    <i class="fal fa-calendar-plus"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3 mb-3">
+                                        <label class="form-label" for="employeeNSS">NSS</label>
+                                        <input class="form-control" id="employeeNSS" required="" type="text" placeholder="NSS" value="@Model.GeneralInfo.NSS">
+                                    </div>
+                                    <div class="col-md-3 mb-3">
+                                        <label class="form-label" for="employeeCurp">CURP</label>
+                                        <input class="form-control" id="employeeCurp" required="" type="text" placeholder="CURP" value="@Model.GeneralInfo.CURP">
+                                    </div>
+                                    <div class="col-md-3 mb-3">
+                                        <label class="form-label" for="employeeRFC">RFC</label>
+                                        <input class="form-control" id="employeeRFC" required="" type="text" placeholder="RFC" value="@Model.GeneralInfo.RFC">
+                                    </div>
+
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="col-12 mb-3">
+                                        <label class="form-label" for="employeeObservations">Observaciones</label>
+                                        <textarea class="form-control" id="employeeObservations" placeholder="Observaciones">@Model.GeneralInfo.Observations</textarea>
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+
+
+                </ Datos personales empleado -->
+
+                <div class="card">
+                    <div class="card-header">
+                        <a class="card-title collapsed" aria-expanded="false" href="javascript:void(0);" data-toggle="collapse" data-target="#js_list_accordion-z" data-filter-tags="merge">
+                            <i class="fal fa-address-card width-2 fs-xl"></i>
+                            Información personal
+                            <span class="ml-auto">
+                                <span class="collapsed-reveal">
+                                    <i class="fal fa-chevron-up fs-xl"></i>
+                                </span>
+                                <span class="collapsed-hidden">
+                                    <i class="fal fa-chevron-down fs-xl"></i>
+                                </span>
+                            </span>
+                        </a>
+                    </div>
+                    <div class="collapse" id="js_list_accordion-z" data-parent="#js_list_accordion">
+                        <div class="card-body">
+
+                            <div role="group" aria-label="Vertical button group">
+                                <a class="btn btn-secondary" href="#"><i class="fal fa-print"></i> Imprimir</a>
+                                <a id="savePersonalInfo" class="btn btn-secondary" href="#"><i class="fal fa-save"></i> Guardar</a>
+                            </div>
+                            <hr />
+
+                            <div class="form-row">
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label" for="personalphone">Telefono</label>
+                                    <input class="form-control" id="personalphone" required="" type="text" placeholder="Telefono" value="@Model.PersonalInfo.Phone">
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label" for="personalcellphone">Celular</label>
+                                    <input class="form-control" id="personalcellphone" required="" type="text" placeholder="Celular" value="@Model.PersonalInfo.CellPhone">
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label" for="personalemail">Correo electronico personal</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" id="inputGroupPrepend"><i class="fal fa-envelope"></i></span>
+                                        </div>
+                                        <input class="form-control" id="personalemail" aria-describedby="inputGroupPrepend" required="" type="text" placeholder="Correo electronico" value="@Model.PersonalInfo.Email">
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                            <div class="form-row">
+                                <div class="col-12 mb-3">
+                                    <label class="form-label" for="personaladdress">Calle</label>
+                                    <input class="form-control" id="personaladdress" required="" type="text" placeholder="Dirección" value="@Model.PersonalInfo.Address">
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label" for="personalcity">Ciudad</label>
+                                    <input class="form-control" id="personalcity" required="" type="text" placeholder="Ciudad" value="@Model.PersonalInfo.City">
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label" for="personalstate">Estado</label>
+                                    <input class="form-control" id="personalstate" required="" type="text" placeholder="Estado" value="@Model.PersonalInfo.State">
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label" for="personalzip">Codigo Postal</label>
+                                    <input class="form-control" id="personalzip" required="" type="text" placeholder="Codigo Postal" value="@Model.PersonalInfo.Zip">
+                                </div>
+
+                            </div>
+
+                            <div class="form-row">
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label" for="personalsick">Enfermedades Cronicas</label>
+                                    <textarea class="form-control" id="personalsick" required="" placeholder="Enfermedades Cronicas">@Model.PersonalInfo.Sick</textarea>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label" for="personalbloodtype">Tipo de sangre</label>
+                                    <textarea class="form-control" id="personalbloodtype" required="" placeholder="Tipo de sangre">@Model.PersonalInfo.BloodType</textarea>
+                                </div>
+                            </div>
+
+
+
+                        </div>
+                    </div>
+                </div>
+
+
+                </ Datos emergencia empleado -->
+
+
+                <div class="card">
+                    <div class="card-header">
+                        <a class="card-title collapsed" aria-expanded="false" href="javascript:void(0);" data-toggle="collapse" data-target="#js_list_accordion-y" data-filter-tags="merge">
+                            <i class="fal fa-ambulance width-2 fs-xl"></i>
+                            Datos de emergencia
+                            <span class="ml-auto">
+                                <span class="collapsed-reveal">
+                                    <i class="fal fa-chevron-up fs-xl"></i>
+                                </span>
+                                <span class="collapsed-hidden">
+                                    <i class="fal fa-chevron-down fs-xl"></i>
+                                </span>
+                            </span>
+                        </a>
+                    </div>
+                    <div class="collapse" id="js_list_accordion-y" data-parent="#js_list_accordion">
+                        <div class="card-body">
+
+                            <div role="group" aria-label="Vertical button group">
+                                <a class="btn btn-secondary" href="#"><i class="fal fa-print"></i> Imprimir</a>
+                                <a id="saveContactInfo" class="btn btn-secondary" href="#"><i class="fal fa-save"></i> Guardar</a>
+                            </div>
+                            <hr />
+
+                            <div class="form-row">
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label" for="contactname">Nombre</label>
+                                    <input class="form-control" id="contactname" required="" type="text" placeholder="Nombre" value="@Model.EmergencyData.Name">
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label" for="contactrelation">Relación</label>
+                                    <input class="form-control" id="contactrelation" required="" type="text" placeholder="Relación" value="@Model.EmergencyData.Relacion">
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label" for="contactphone">Telefono</label>
+                                    <input class="form-control" id="contactphone" required="" type="text" placeholder="Telefono" value="@Model.EmergencyData.Phone">
+                                </div>
+
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+
+
+                </ Documentacion empleado -->
+
+
+                <div class="card">
+                    <div class="card-header">
+                        <a class="card-title collapsed" aria-expanded="false" href="javascript:void(0);" data-toggle="collapse" data-target="#js_list_accordion-b" data-filter-tags="merge">
+                            <i class="fal fa-file-pdf width-2 fs-xl"></i>
+                            Documentación
+                            <span class="ml-auto">
+                                <span class="collapsed-reveal">
+                                    <i class="fal fa-chevron-up fs-xl"></i>
+                                </span>
+                                <span class="collapsed-hidden">
+                                    <i class="fal fa-chevron-down fs-xl"></i>
+                                </span>
+                            </span>
+                        </a>
+                    </div>
+                    <div class="collapse" id="js_list_accordion-b" data-parent="#js_list_accordion">
+                        <div class="card-body">
+
+                            <div role="group" aria-label="Vertical button group">
+                                <a id="printdocumentselected" class="btn btn-secondary" href="javascript:void(0);"><i class="fal fa-print"></i> Imprimir</a>
+                                <div class="btn-group" role="group">
+                                    <button class="btn btn-secondary dropdown-toggle" id="btnGroupVerticalDrop1" aria-expanded="false" aria-haspopup="true" type="button" data-toggle="dropdown">
+                                        <i class="fal fa-bolt"></i>
+                                        Acciones
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="btnGroupVerticalDrop1">
+                                        <a class="dropdown-item" href="javascript:void(0);" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target=".default-example-modal-right-sm">Cargar</a>
+                                        <a class="dropdown-item" href="javascript:void(0);" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target=".default-example-modal-right-update">Actualizar</a>
+                                        <a id="validateDoc" class="dropdown-item" href="javascript:void(0);" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target=".default-example-modal-right-validatedoc">Validar</a>
+                                        <a class="dropdown-item" href='@Url.Action("Documentos","Catalog")'>Ir al Catalogo</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr />
+
+                            <table class="table table-bordered table-hover m-0">
+                                <thead class="thead-themed">
+                                    <tr>
+                                        <th>Tipo</th>
+                                        <th>Documento</th>
+                                        <th>Validado</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="documentsAssignedTable">
+                                    @foreach (var item in Model.Documents)
+                                    {
+                                        <tr id="@item.Id">
+                                            <td>@item.DocumentType</td>
+                                            <td>@item.DocumentPathInfo</td>
+                                            <td>@item.IsValid</td>
+                                            <td align="center">
+                                                @if (item.IsValid.Equals("No"))
+                                                {
+                                                    <div class="custom-control custom-checkbox custom-control-inline">
+                                                        <input type="checkbox" class="custom-control-input" id=@("DocumentInline-" + item.Id)>
+                                                        <label class="custom-control-label" for=@("DocumentInline-" + item.Id)></label>
+                                                    </div>
+
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+                </div>
+
+
+                </ Documentacion Equipo computo asignado -->
+
+
+                <div class="card">
+                    <div class="card-header">
+                        <a class="card-title collapsed" aria-expanded="false" href="javascript:void(0);" data-toggle="collapse" data-target="#js_list_accordion-c" data-filter-tags="backup">
+                            <i class="fal fa-laptop width-2 fs-xl"></i>
+                            Equipo computo asignado
+                            <span class="ml-auto">
+                                <span class="collapsed-reveal">
+                                    <i class="fal fa-chevron-up fs-xl"></i>
+                                </span>
+                                <span class="collapsed-hidden">
+                                    <i class="fal fa-chevron-down fs-xl"></i>
+                                </span>
+                            </span>
+                        </a>
+                    </div>
+
+                    <div class="collapse" id="js_list_accordion-c" data-parent="#js_list_accordion">
+                        <div class="card-body">
+
+                            <div role="group" aria-label="Vertical button group">
+                                <a id="printhardwareformat" class="btn btn-secondary" href='javascript:void(0);'><i class="fal fa-print"></i> Imprimir</a>
+                                <div class="btn-group" role="group">
+                                    <button class="btn btn-secondary dropdown-toggle" id="btnGroupVerticalDrop1" aria-expanded="false" aria-haspopup="true" type="button" data-toggle="dropdown">
+                                        <i class="fal fa-bolt"></i>
+                                        Acciones
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="btnGroupVerticalDrop1">
+                                        <a class="dropdown-item" href="javascript:void(0);" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target=".default-example-modal-right"><i class="fal fa-link"></i>Asignar</a>
+                                        <a data-toggle="dropdown" class="dropdown-item" href="javascript:void(0);" id="desasignarhardware"><i class="fal fa-unlink"></i>Desasignar</a>
+                                        <a data-toggle="dropdown" class="dropdown-item" href='@Url.Action("EquipoComputoAsignado","Catalog")'>Ir al Catalogo</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr />
+
+                            <table class="table table-bordered table-hover m-0">
+                                <thead class="thead-themed">
+                                    <tr>
+                                        <th>Dipositivo</th>
+                                        <th>Descripcion</th>
+                                        <th>Marca</th>
+                                        <th>Serie</th>
+                                        <th>Fecha</th>
+                                        <th>Desasignar</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="hardwareassignedtable">
+                                    @foreach (var item in Model.HardwareAssined)
+                                    {
+                                        <tr>
+                                            <td>@item.HadwareName</td>
+                                            <td>@item.Description</td>
+                                            <td>@item.Marca</td>
+                                            <td>@item.Serie</td>
+                                            <td>@item.AssignationDate</td>
+                                            <td align="center">
+                                                <div class="custom-control custom-checkbox custom-control-inline">
+                                                    <input type="checkbox" class="custom-control-input" id=@("defaultInline-" + item.Id)>
+                                                    <label class="custom-control-label" for=@("defaultInline-" + item.Id)></label>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+
+
+
+
+
+
+                        </div>
+                    </div>
+
+                </div>
+
+
+                </ Documentacion Equipo protección asignado -->
+
+                <div class="card">
+                    <div class="card-header">
+                        <a class="card-title collapsed" aria-expanded="false" href="javascript:void(0);" data-toggle="collapse" data-target="#js_list_accordion-d" data-filter-tags="proteccion">
+                            <i class="fal fa-forklift width-2 fs-xl"></i>
+                            Equipo protección asignado
+                            <span class="ml-auto">
+                                <span class="collapsed-reveal">
+                                    <i class="fal fa-chevron-up fs-xl"></i>
+                                </span>
+                                <span class="collapsed-hidden">
+                                    <i class="fal fa-chevron-down fs-xl"></i>
+                                </span>
+                            </span>
+                        </a>
+                    </div>
+
+                    <div class="collapse" id="js_list_accordion-d" data-parent="#js_list_accordion">
+                        <div class="card-body">
+
+                            <div role="group" aria-label="Vertical button group">
+                                <a id="printsecurityequipmentformat" class="btn btn-secondary" href="#"><i class="fal fa-print"></i> Imprimir</a>
+                                <div class="btn-group" role="group">
+                                    <button class="btn btn-secondary dropdown-toggle" id="btnGroupVerticalDrop1" aria-expanded="false" aria-haspopup="true" type="button" data-toggle="dropdown">
+                                        <i class="fal fa-bolt"></i>
+                                        Acciones
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="btnGroupVerticalDrop1">
+                                        <a class="dropdown-item" href="#" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target=".default-example-modal-right-lg"><i class="fal fa-link"></i>Asignar</a>
+                                        <a data-toggle="dropdown" class="dropdown-item" href="javascript:void(0);" id="desasignarsecurityequipment"><i class="fal fa-unlink"></i>Desasignar</a>
+                                        <a class="dropdown-item" href='@Url.Action("EquipoSeguridad","Catalog")'>Ir al Catalogo</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr />
+
+                            <table class="table table-bordered table-hover m-0">
+                                <thead class="thead-themed">
+                                    <tr>
+                                        <th>Tipo</th>
+                                        <th>Descripcion</th>
+                                        <th>Fecha</th>
+                                        <th>Desasignar</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="securityEquimentNametable">
+                                    @foreach (var item in Model.SecurityEquipmentAssigned)
+                                    {
+                                        <tr>
+                                            <td>@item.SecurityEquimentName</td>
+                                            <td>@item.Description</td>
+                                            <td>@item.AssignationDate</td>
+                                            <td align="center">
+                                                <div class="custom-control custom-checkbox custom-control-inline">
+                                                    <input type="checkbox" class="custom-control-input" id=@("securityEquimentNameInline-" + item.Id)>
+                                                    <label class="custom-control-label" for=@("securityEquimentNameInline-" + item.Id)></label>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+
+                </ Solicitud de Formatos -->
+
+                <div class="card">
+                    <div class="card-header">
+                        <a class="card-title collapsed" aria-expanded="false" href="javascript:void(0);" data-toggle="collapse" data-target="#js_list_accordion-e" data-filter-tags="formatos">
+                            <i class="fal fa-folder-open width-2 fs-xl"></i>
+                            Formatos
+                            <span class="ml-auto">
+                                <span class="collapsed-reveal">
+                                    <i class="fal fa-chevron-up fs-xl"></i>
+                                </span>
+                                <span class="collapsed-hidden">
+                                    <i class="fal fa-chevron-down fs-xl"></i>
+                                </span>
+                            </span>
+                        </a>
+                    </div>
+
+                    <div class="collapse" id="js_list_accordion-e" data-parent="#js_list_accordion">
+                        <div class="card-body">
+
+                            <div role="group" aria-label="Vertical button group">
+                                <div class="btn-group" role="group">
+                                    <button class="btn btn-secondary dropdown-toggle" id="btnGroupVerticalDrop1" aria-expanded="false" aria-haspopup="true" type="button" data-toggle="dropdown">
+                                        <i class="fal fa-bolt"></i>
+                                        Acciones
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="btnGroupVerticalDrop1">
+                                        <a class="dropdown-item demo" href="javascript:void(0);" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target=".default-example-modal-right-lg-2"><i class="fal fa-file"></i>Nuevo formato</a>
+                                        <a class="dropdown-item" href='@Url.Action("PermisosIncidencias","Catalog")'>Ir al Catalogo</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr />
+
+                            <table class="table table-bordered table-hover m-0">
+                                <thead class="thead-themed">
+                                    <tr>
+                                        <th>Fecha</th>
+                                        <th>Tipo</th>
+                                        <th>Vigencia</th>
+                                        <th>Fecha Aprobación</th>
+                                        <th>Sustituto</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+            <span class="filter-message js-filter-message"></span>
+        </div>
+
+        </ Modal Hardware Asignado -->
+        <div class="panel-container show">
+            <div class="panel-content">
+
+                <div class="modal fade default-example-modal-right" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-right">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title h4">Asignación de equipo de computo</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true"><i class="fal fa-times"></i></span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="card mb-5">
+
+                                    <div class="card-body p-3">
+                                        <h5>
+                                            Agregar equipo
+                                            <small class="mt-0 mb-3 text-muted">
+                                                Incluir los equipos a ser asignados
+                                            </small>
+                                            <span class="badge badge-primary fw-n position-absolute pos-top pos-right mt-3 mr-3">A</span>
+                                        </h5>
+
+                                        <div class="form-row">
+                                            <div class="col-md-12">
+                                                <label class="form-label" for="selectharware">Seleccione un disposito</label>
+                                                @Html.DropDownList("hardwareCatalog", (IEnumerable<SelectListItem>)ViewBag.hardwareCatalog, new { id = "hardwareCatalog", @class = "form-control" })
+                                            </div>
+
+                                        </div>
+
+
+                                    </div>
+
+                                </div>
+                                <div class="card mb-g">
+
+                                    <div class="card-body p-3">
+                                        <h5>
+                                            Agregar equipo
+                                            <small class="mt-0 mb-3 text-muted">
+                                                Descripcion del equipo asignado
+                                            </small>
+                                            <span class="badge badge-dark fw-n position-absolute pos-top pos-right mt-3 mr-3">B</span>
+                                        </h5>
+
+                                        <div class="form-row">
+                                            <div class="col-md-12">
+                                                <label class="form-label" for="hardwaremarca">Marca</label>
+                                                <input class="form-control" id="hardwaremarca" required="" type="text" placeholder="Marca">
+                                            </div>
+                                            <div class="col-md-12">
+                                                <label class="form-label" for="hardwareserie">No. Serie</label>
+                                                <input class="form-control" id="hardwareserie" required="" type="text" placeholder="No. Serie">
+                                            </div>
+                                            <div class="col-md-12">
+                                                <label class="form-label" for="hardwaredescripcion">Descripción</label>
+                                                <input class="form-control" id="hardwaredescripcion" required="" type="text" placeholder="Descripción">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                <button id="hardwareassignedsave" type="button" data-dismiss="modal" class="btn btn-primary">Guardar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+            </div>
+        </div>
+
+
+        </ Modal Documentacion Asignado -->
+        <div class="panel-container show">
+            <div class="panel-content">
+
+                <div class="modal fade default-example-modal-right-sm" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-right">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title h4">Cargar nuevo documento</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true"><i class="fal fa-times"></i></span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="card mb-5">
+
+                                    <div class="card-body p-3">
+                                        <h5>
+                                            Tipo de Documento
+                                            <small class="mt-0 mb-3 text-muted">
+                                                Seleccione el documento a cargar
+                                            </small>
+                                            <span class="badge badge-primary fw-n position-absolute pos-top pos-right mt-3 mr-3">A</span>
+                                        </h5>
+
+                                        <div class="form-row">
+                                            <div class="col-md-12">
+                                                <label class="form-label" for="selectharware">Seleccione un documento</label>
+                                                @Html.DropDownList("documentType", (IEnumerable<SelectListItem>)ViewBag.documentType, new { id = "documentType", @class = "form-control" })
+                                            </div>
+
+                                        </div>
+
+
+                                    </div>
+
+                                </div>
+                                <div class="card mb-g">
+
+                                    <div class="card-body p-3">
+                                        <h5>
+                                            Ruta del documento
+                                            <small class="mt-0 mb-3 text-muted">
+                                                Indique la ruta del documento
+                                            </small>
+                                            <span class="badge badge-dark fw-n position-absolute pos-top pos-right mt-3 mr-3">B</span>
+                                        </h5>
+
+                                        <div class="form-row">
+                                            <div class="col-md-12">
+                                                <label class="form-label">Archico (Buscar...)</label>
+                                                <div class="custom-file">
+                                                    <input type="file" class="custom-file-input" id="customFile">
+                                                    <label class="custom-file-label" for="customFile">Choose file</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div id="errorsavedocs" class="alert border-danger bg-transparent text-secondary fade show" role="alert" style="display:none">
+                                    <div class="d-flex align-items-center">
+                                        <div class="alert-icon">
+                                            <span class="icon-stack icon-stack-md">
+                                                <i class="base-7 icon-stack-3x color-danger-900"></i>
+                                                <i class="fal fa-times icon-stack-1x text-white"></i>
+                                            </span>
+                                        </div>
+                                        <div class="flex-1">
+                                            <span id="msgerrordocs" class="h5 color-danger-900"></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <center>
+                                <div id="spinwaitdocs" class="spinner-border" style="width: 3rem; height: 3rem; display:none;" role="status">
+                                    <span class="sr-only">Loading...</span>
+                                </div>
+                            </center>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                <button id="savepersonaldocument" type="button" class="btn btn-primary">Guardar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+            </div>
+        </div>
+
+
+        </ Modal Equipo de seguridad Asignado -->
+        <div class="panel-container show">
+            <div class="panel-content">
+
+                <div class="modal fade default-example-modal-right-lg" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-right">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title h4">Asignar equipo de seguridad</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true"><i class="fal fa-times"></i></span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="card mb-5">
+
+                                    <div class="card-body p-3">
+                                        <h5>
+                                            Equipo de seguridad
+                                            <small class="mt-0 mb-3 text-muted">
+                                                Seleccione el equipo a asignar
+                                            </small>
+                                            <span class="badge badge-primary fw-n position-absolute pos-top pos-right mt-3 mr-3">A</span>
+                                        </h5>
+
+                                        <div class="form-row">
+                                            <div class="col-md-12">
+                                                <label class="form-label" for="selectharware">Seleccione el equipo</label>
+                                                @Html.DropDownList("safeequipment", (IEnumerable<SelectListItem>)ViewBag.safeequipment, new { id = "safeequipment", @class = "form-control" })
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="card mb-g">
+
+                                    <div class="card-body p-3">
+                                        <h5>
+                                            Descripción del equipo
+                                            <small class="mt-0 mb-3 text-muted">
+                                                Detalle el equipo que se asigna
+                                            </small>
+                                            <span class="badge badge-dark fw-n position-absolute pos-top pos-right mt-3 mr-3">B</span>
+                                        </h5>
+
+                                        <div class="form-row">
+                                            <div class="col-md-12">
+                                                <label class="form-label" for="safeequipmentdescripcion">Descripción</label>
+                                                <input class="form-control" id="securityEquimentdescripcion" required="" type="text" placeholder="Descripción">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                <button id="securityequipmentassignedsave" data-dismiss="modal" type="button" class="btn btn-primary">Guardar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+            </div>
+        </div>
+
+        </ Modal Nuevo Formato -->
+        <div class="panel-container show">
+            <div class="panel-content">
+
+                <div class="modal fade default-example-modal-right-lg-2" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-right">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title h4">Crear nuevo formato</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true"><i class="fal fa-file"></i></span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="card mb-5">
+
+                                    <div class="card-body p-3">
+                                        <h5>
+                                            Tipo de formato
+                                            <span class="badge badge-primary fw-n position-absolute pos-top pos-right mt-3 mr-3">A</span>
+                                        </h5>
+
+                                        <div class="form-row">
+                                            <div class="col-md-12">
+                                                <label class="form-label" for="selectharware">Seleccione el tipo de formato a crear</label>
+                                                @Html.DropDownList("permissionType", (IEnumerable<SelectListItem>)ViewBag.permissionType, new { id = "permissionType", @class = "form-control" })
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="card mb-g">
+
+                                    <div class="card-body p-3">
+                                        <h5>
+                                            Detalle del formato
+                                            <span class="badge badge-dark fw-n position-absolute pos-top pos-right mt-3 mr-3">B</span>
+                                        </h5>
+
+                                        <div class="form-row">
+                                            <div class="col-md-12">
+                                                <label class="form-label" for="descripcion">Comentarios</label>
+                                                <input class="form-control reseterror" id="descripcion" required="" type="text">
+                                            </div>
+
+                                            <div class="col-md-12">
+                                                <label class="form-label" for="datepicker-4-4">Vigencia inicial</label>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control reseterror" id="datepicker-4-4">
+                                                    <div class="input-group-append">
+                                                        <span class="input-group-text fs-xl">
+                                                            <i class="fal fa-calendar-plus"></i>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <label class="form-label" for="datepicker-4-5">Vigencia final</label>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control reseterror" id="datepicker-4-5">
+                                                    <div class="input-group-append">
+                                                        <span class="input-group-text fs-xl">
+                                                            <i class="fal fa-calendar-plus"></i>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-12">
+
+                                                <label class="form-label" for="searchText-4-5">Asignar sustituto</label>
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text text-success">
+                                                                <i class="ni ni-user fs-xl"></i>
+                                                            </span>
+                                                        </div>
+                                                        <input type="text" aria-label="searchtext" class="form-control reseterror" placeholder="Empleado" id="searchText" maxlength="5">
+                                                        <div class="input-group-append">
+                                                            <button id="searchbutton" type="button" class="btn btn-success shadow-0 waves-effect waves-themed">
+
+                                                                <span id="imgsearch" class="fal fa-search mr-1"></span>
+
+                                                                <span id="spin" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="display:none"></span>
+
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div id="searchresult" class="col-md-12">
+
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+
+
+
+
+
+
+                                    </div>
+
+                                </div>
+
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                <button id="saveformat" data-dismiss="modal" type="button" class="btn btn-primary">Guardar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+            </div>
+        </div>
+
+
+        </ Modal Validacion Documentacion Asignado -->
+        <div class="panel-container show">
+            <div class="panel-content">
+
+                <div class="modal fade default-example-modal-right-validatedoc" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-right">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title h4">Validación de documentos</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true"><i class="fal fa-times"></i></span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="card mb-5">
+
+                                    <div class="card-body p-3">
+                                        <h5>
+                                            Documentos a validar
+                                            <span class="badge badge-primary fw-n position-absolute pos-top pos-right mt-3 mr-3">A</span>
+                                        </h5>
+
+
+                                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                            <div class="d-flex align-items-center">
+                                                <div class="alert-icon width-3">
+                                                    <span class="icon-stack icon-stack-sm">
+                                                        <i class="fal fa-file-pdf fa-3x color-success-800 icon-stack-3x"></i>
+                                                    </span>
+                                                </div>
+                                                <div class="flex-1">
+                                                    <span class="h5 m-0 fw-700">Para validar los documentos</span>
+                                                    Visualize el documento dando clic en Ver Documento, si es correcto marquelo para guardar la validación.
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+
+                                        <div class="form-row">
+                                            <div class="col-md-12">
+
+                                                <ul id="documentsadded">
+                                                </ul>
+
+                                            </div>
+
+                                        </div>
+
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                <button id="savevalidationdocuments" type="button" class="btn btn-primary">Guardar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+            </div>
+        </div>
+
+        </ Modal Documentacion Actualizacion Documento -->
+        <div class="panel-container show">
+            <div class="panel-content">
+
+                <div class="modal fade default-example-modal-right-update" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-right">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title h4">Actualizar documento</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true"><i class="fal fa-times"></i></span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="card mb-5">
+
+                                    <div class="card-body p-3">
+                                        <h5>
+                                            Tipo de Documento
+                                            <small class="mt-0 mb-3 text-muted">
+                                                Seleccione el documento a cargar
+                                            </small>
+                                            <span class="badge badge-primary fw-n position-absolute pos-top pos-right mt-3 mr-3">A</span>
+                                        </h5>
+
+                                        <div class="form-row">
+                                            <div class="col-md-12">
+                                                <label class="form-label" for="selectharware">Seleccione un documento</label>
+                                                @Html.DropDownList("documentTypeupdate", (IEnumerable<SelectListItem>)ViewBag.documentType, new { id = "documentTypeupdate", @class = "form-control" })
+                                            </div>
+
+                                        </div>
+
+
+                                    </div>
+
+                                </div>
+                                <div class="card mb-g">
+
+                                    <div class="card-body p-3">
+                                        <h5>
+                                            Ruta del documento
+                                            <small class="mt-0 mb-3 text-muted">
+                                                Indique la ruta del documento
+                                            </small>
+                                            <span class="badge badge-dark fw-n position-absolute pos-top pos-right mt-3 mr-3">B</span>
+                                        </h5>
+
+                                        <div class="form-row">
+                                            <div class="col-md-12">
+                                                <label class="form-label">Archico (Buscar...)</label>
+                                                <div class="custom-file">
+                                                    <input type="file" class="custom-file-input" id="customFileupdate">
+                                                    <label class="custom-file-label" for="customFile">Seleccionar archivo</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div id="errorsavedocsupdate" class="alert border-danger bg-transparent text-secondary fade show" role="alert" style="display:none">
+                                    <div class="d-flex align-items-center">
+                                        <div class="alert-icon">
+                                            <span class="icon-stack icon-stack-md">
+                                                <i class="base-7 icon-stack-3x color-danger-900"></i>
+                                                <i class="fal fa-times icon-stack-1x text-white"></i>
+                                            </span>
+                                        </div>
+                                        <div class="flex-1">
+                                            <span id="msgerrordocsupdate" class="h5 color-danger-900"></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <center>
+                                <div id="spinwaitdocsupdate" class="spinner-border" style="width: 3rem; height: 3rem; display:none;" role="status">
+                                    <span class="sr-only">Loading...</span>
+                                </div>
+                            </center>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                <button id="saveupdatepersonaldocument" type="button" class="btn btn-primary">Guardar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+            </div>
+        </div>
+
+
+    </div>
+
+</div>
+
+<input id='QA' type="hidden" />
+<input id='QB' type="hidden" />
+<input id='QC' type="hidden" />
+<input id='QD' type="hidden" />
+
+@section ScriptsBlock {
+
+    <script src="~/js/statistics/peity/peity.bundle.js"></script>
+    <script src="~/js/statistics/flot/flot.bundle.js"></script>
+    <script src="~/js/statistics/easypiechart/easypiechart.bundle.js"></script>
+    <script src="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/js/datagrid/datatables/datatables.bundle.js"></script>
+    <script src="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/js/notifications/sweetalert2/sweetalert2.bundle.js"></script>
+    <script src="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/js/formplugins/bootstrap-datepicker/bootstrap-datepicker.js"></script>
+    <script>
+
+
+        var controls = {
+            leftArrow: '<i class="fal fa-angle-left" style="font-size: 1.25rem"></i>',
+            rightArrow: '<i class="fal fa-angle-right" style="font-size: 1.25rem"></i>'
+        }
+
+        var runDatePicker = function () {
+
+
+            $('#datepicker-4-4').datepicker(
+                {
+                    orientation: "top left",
+                    todayHighlight: true,
+                    templates: controls,
+                    format: 'dd/mm/yyyy'
+                }).on('changeDate', function (e) {
+
+                    $('#QA').val(convert(e.date));
+                });
+
+            $('#datepicker-4-5').datepicker(
+                {
+                    orientation: "top left",
+                    todayHighlight: true,
+                    templates: controls,
+                    format: 'dd/mm/yyyy'
+                }).on('changeDate', function (e) {
+
+                    $('#QB').val(convert(e.date));
+                });
+
+            $('#datepicker-4-6').datepicker(
+                {
+                    orientation: "top left",
+                    todayHighlight: true,
+                    templates: controls,
+                    format: 'dd/mm/yyyy'
+                }).on('changeDate', function (e) {
+
+                    $('#QC').val(convert(e.date));
+                });
+
+            $('#datepicker-4-7').datepicker(
+                {
+                    orientation: "top left",
+                    todayHighlight: true,
+                    templates: controls,
+                    format: 'dd/mm/yyyy'
+                }).on('changeDate', function (e) {
+
+                    $('#QD').val(convert(e.date));
+                });
+
+        }
+
+        function convert(str) {
+            var date = new Date(str),
+                mnth = ("0" + (date.getMonth() + 1)).slice(-2),
+                day = ("0" + date.getDate()).slice(-2);
+            hours = ("0" + date.getHours()).slice(-2);
+            minutes = ("0" + date.getMinutes()).slice(-2);
+            return [day, mnth, date.getFullYear()].join("/");
+        }
+
+
+        $('#documentsAssignedTable tr').click(function () {
+
+            $(this).addClass('bg-info').siblings().removeClass('bg-info');
+
+        });
+
+
+        $(document).ready(function () {
+
+
+            runDatePicker();
+
+            $("#selectsexo").val('@Model.GeneralInfo.Sexo');
+
+            //Assignacion de Hardware
+
+            $('#hardwareassignedsave').click(function () {
+
+
+                var formData = {
+                    IdHardwareDevice: $('#hardwareCatalog').val(),
+                    HadwareName: $('#hardwareCatalog option:selected').text(),
+                    Marca: $('#hardwaremarca').val(),
+                    Serie: $('#hardwareserie').val(),
+                    Description: $('#hardwaredescripcion').val(),
+                };
+
+                $.ajax({
+                    url: '/Organigrama/SaveHardwareAssigned',
+                    type: "POST",
+                    data: { EmployeeId: $('#idEmpleadoGenerales').val(), model: formData },
+                    success: function (data, textStatus, jqXHR) {
+
+                        $('#hardwaremarca').val('');
+                        $('#hardwareserie').val('');
+                        $('#hardwaredescripcion').val('');
+
+
+                        Swal.fire(
+                            {
+                                position: "top-end",
+                                type: "success",
+                                title: "Actualización exitosa",
+                                showConfirmButton: false,
+                                timer: 1500
+                            }).then((result) => {
+
+                                var output = $("#hardwareassignedtable");
+
+                                output.empty();
+
+                                for (var i = 0; i < data.length; i++) {
+                                    var hardware = data[i];
+                                    output.append("<tr><td>" + hardware.hadwareName + "</td><td>" +
+                                        hardware.description + "</td><td>" + hardware.marca + "</td><td>" + hardware.serie +
+                                        "</td><td>" + hardware.assignationDate + "</td><td align='center'><div class='custom-control custom-checkbox custom-control-inline'><input type='checkbox' class='custom-control-input' id='defaultInline-" + hardware.id + "')><label class='custom-control-label' for='defaultInline-"  + hardware.id + "')></label></div></td></tr>");
+                                }
+
+                            });
+
+
+
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        alert(errorThrown);
+                    }
+                });
+
+
+
+            });
+
+
+            $("#desasignarhardware").click(function () {
+
+                var removeItems = $('#hardwareassignedtable').find('input[type="checkbox"]:checked');
+                var inputs = [];
+                removeItems.each(function () {
+                    var ids = this.id.split('-')
+                    inputs.push(ids[1]);
+                });
+
+                if (inputs.length > 0) {
+
+
+                    var swalWithBootstrapButtons = Swal.mixin(
+                        {
+                            customClass:
+                            {
+                                confirmButton: "btn btn-primary",
+                                cancelButton: "btn btn-danger mr-2"
+                            },
+                            buttonsStyling: false
+                        });
+                    swalWithBootstrapButtons
+                        .fire(
+                            {
+                                title: "Confirmación",
+                                text: "Deseas eliminar el elemento?",
+                                type: "warning",
+                                showCancelButton: true,
+                                confirmButtonText: "Si",
+                                cancelButtonText: "Cancelar",
+                                reverseButtons: true
+                            })
+                        .then(function (result) {
+
+                            if (result.value) {
+
+
+                                $.ajax({
+                                    url: '/Organigrama/UpdateHardwareAssigned',
+                                    type: "POST",
+                                    data: { EmployeeId: $('#idEmpleadoGenerales').val(), assignedId: inputs },
+                                    success: function (data, textStatus, jqXHR) {
+
+                                        Swal.fire(
+                                            {
+                                                position: "top-end",
+                                                type: "success",
+                                                title: "Actualización exitosa",
+                                                showConfirmButton: false,
+                                                timer: 1500
+                                            }).then((result) => {
+
+                                                var output = $("#hardwareassignedtable");
+
+                                                output.empty();
+
+                                                for (var i = 0; i < data.length; i++) {
+                                                    var hardware = data[i];
+                                                    output.append("<tr><td>" + hardware.hadwareName + "</td><td>" +
+                                                        hardware.description + "</td><td>" + hardware.marca + "</td><td>" + hardware.serie +
+                                                        "</td><td>" + hardware.assignationDate + "</td><td align='center'><div class='custom-control custom-checkbox custom-control-inline'><input type='checkbox' class='custom-control-input' id='defaultInline-" + hardware.id + "')><label class='custom-control-label' for='defaultInline-" + hardware.id + "')></label></div></td></tr>");
+                                                }
+
+                                            });
+
+
+
+                                    },
+                                    error: function (jqXHR, textStatus, errorThrown) {
+                                        alert(errorThrown);
+                                    }
+                                });
+
+
+
+
+
+                            }
+                            else if (
+                                // Read more about handling dismissals
+                                result.dismiss === Swal.DismissReason.cancel
+                            ) {
+                                swalWithBootstrapButtons.fire(
+                                    "Cancelación",
+                                    "Se ha cancelado la acción",
+                                    "error"
+                                );
+                            }
+                        });
+
+                }
+
+
+
+
+            });
+
+
+            $('#printhardwareformat').click(function () {
+
+                window.open('@Url.Action("PrintHardwareAssigned", "Organigrama", new { EmployeeId = Model.GeneralInfo.Id })', "_blank");
+
+            });
+
+
+            //Asignacion de Equipo de Seguridad
+
+
+            $('#securityequipmentassignedsave').click(function () {
+
+
+                var formData = {
+                    Description: $('#securityEquimentdescripcion').val(),
+                    SecurityEquimentName: $('#safeequipment option:selected').text(),
+                    IdSecurityEquiment : $('#safeequipment').val()
+                };
+
+                $.ajax({
+                    url: '/Organigrama/SaveSecurityEquipmentAssigned',
+                    type: "POST",
+                    data: { EmployeeId: $('#idEmpleadoGenerales').val(), model: formData },
+                    success: function (data, textStatus, jqXHR) {
+
+                        $('#securityEquimentdescripcion').val('');
+
+                        Swal.fire(
+                            {
+                                position: "top-end",
+                                type: "success",
+                                title: "Actualización exitosa",
+                                showConfirmButton: false,
+                                timer: 1500
+                            }).then((result) => {
+
+                                var output = $("#securityEquimentNametable");
+
+                                output.empty();
+
+                                for (var i = 0; i < data.length; i++) {
+                                    var securityEquiment = data[i];
+                                    output.append("<tr><td>" + securityEquiment.securityEquimentName + "</td><td>" +
+                                        securityEquiment.description + "</td><td>" + securityEquiment.assignationDate + "</td><td align='center'><div class='custom-control custom-checkbox custom-control-inline'><input type='checkbox' class='custom-control-input' id='defaultInline-" + securityEquiment.id + "')><label class='custom-control-label' for='defaultInline-" + securityEquiment.id + "')></label></div></td></tr>");
+                                }
+
+                            });
+
+
+
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        alert(errorThrown);
+                    }
+                });
+
+
+
+            });
+
+
+            $("#desasignarsecurityequipment").click(function () {
+
+                var removeItems = $('#securityEquimentNametable').find('input[type="checkbox"]:checked');
+                var inputs = [];
+                removeItems.each(function () {
+                    var ids = this.id.split('-')
+                    inputs.push(ids[1]);
+                });
+
+                if (inputs.length > 0) {
+
+
+                    var swalWithBootstrapButtons = Swal.mixin(
+                        {
+                            customClass:
+                            {
+                                confirmButton: "btn btn-primary",
+                                cancelButton: "btn btn-danger mr-2"
+                            },
+                            buttonsStyling: false
+                        });
+                    swalWithBootstrapButtons
+                        .fire(
+                            {
+                                title: "Confirmación",
+                                text: "Deseas eliminar el elemento?",
+                                type: "warning",
+                                showCancelButton: true,
+                                confirmButtonText: "Si",
+                                cancelButtonText: "Cancelar",
+                                reverseButtons: true
+                            })
+                        .then(function (result) {
+
+                            if (result.value) {
+
+
+                                $.ajax({
+                                    url: '/Organigrama/UpdateSecurityEquipmentAssigned',
+                                    type: "POST",
+                                    data: { EmployeeId: $('#idEmpleadoGenerales').val(), assignedId: inputs },
+                                    success: function (data, textStatus, jqXHR) {
+
+                                        Swal.fire(
+                                            {
+                                                position: "top-end",
+                                                type: "success",
+                                                title: "Actualización exitosa",
+                                                showConfirmButton: false,
+                                                timer: 1500
+                                            }).then((result) => {
+
+                                                var output = $("#securityEquimentNametable");
+
+                                                output.empty();
+
+                                                for (var i = 0; i < data.length; i++) {
+                                                    var securityEquiment = data[i];
+                                                    output.append("<tr><td>" + securityEquiment.securityEquimentName + "</td><td>" +
+                                                        securityEquiment.description + "</td><td>" + securityEquiment.assignationDate + "</td><td align='center'><div class='custom-control custom-checkbox custom-control-inline'><input type='checkbox' class='custom-control-input' id='defaultInline-" + securityEquiment.id + "')><label class='custom-control-label' for='defaultInline-" + securityEquiment.id + "')></label></div></td></tr>");
+                                                }
+
+                                            });
+
+
+
+                                    },
+                                    error: function (jqXHR, textStatus, errorThrown) {
+                                        alert(errorThrown);
+                                    }
+                                });
+
+
+
+
+
+                            }
+                            else if (
+                                // Read more about handling dismissals
+                                result.dismiss === Swal.DismissReason.cancel
+                            ) {
+                                swalWithBootstrapButtons.fire(
+                                    "Cancelación",
+                                    "Se ha cancelado la acción",
+                                    "error"
+                                );
+                            }
+                        });
+
+                }
+
+
+
+
+            });
+
+
+            $('#printsecurityequipmentformat').click(function () {
+
+                window.open('@Url.Action("PrintSecurityEquipmentAssigned", "Organigrama", new { EmployeeId = Model.GeneralInfo.Id })', "_blank");
+
+            });
+
+            //Formatos Empleado
+            $('#searchbutton').click(function () {
+
+                $('#searchresult').empty();
+                $('#imgsearch').hide();
+                $('#spin').show();
+
+                $.ajax({
+                    url: '/Organigrama/SearchBy',
+                    type: "POST",
+                    data: { inputtext: $('#searchText').val(), typesearch: 4 },
+                    success: function (data, textStatus, jqXHR) {
+
+
+                        if (data.rows > 0) {
+                            $('#searchresult').append('<span id="' + data.id + '" class="elementresult">' + data.value + '</span>');
+                        }
+                        else {
+
+                            $('#searchresult').append('<span id="' + data.id + '" class="elementresult">' + "No se encontro resultado" + '</span>');
+                        }
+
+                        $('#imgsearch').show();
+                        $('#spin').hide();
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+
+                    }
+                });
+
+            });
+
+            //Documents Employee
+            $('#savepersonaldocument').click(function () {
+
+                $('#spinwaitdocs').show();
+
+                var formData = new FormData();
+                formData.append('file', $('#customFile')[0].files[0]);
+
+                $.ajax({
+                    url: '/Organigrama/UploadFile',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (result) {
+
+                        var model = { EmployeeId: $('#idEmpleadoGenerales').val(), DocumentType: $('#documentType').val(), DocumentPath: result.filetemp };
+
+                        $.ajax({
+                            url: '/Organigrama/SaveDocument',
+                            type: "POST",
+                            data: model,
+                            success: function (data, textStatus, jqXHR) {
+
+                                $('#spinwaitdocs').hide();
+
+                                if (data.result === "fail") {
+
+                                    $('#msgerrordocs').text(data.message);
+                                    $('#errorsavedocs').show();
+                                }
+                                else {
+                                    var url = '@Url.Action("EmployeeDetail", "Organigrama", new { employeeid = "IDEmployee" })';
+                                    url = url.replace('IDEmployee', data.employeeid);
+
+                                    window.location.href = url;
+                                }
+
+
+
+                            },
+                            error: function (jqXHR, textStatus, errorThrown) {
+
+                            }
+                        });
+
+                    },
+                    error: function (jqXHR) {
+                    },
+                    complete: function (jqXHR, status) {
+                    }
+                });
+
+            });
+
+            $('#validateDoc').click(function () {
+
+                $('#documentsadded').empty();
+                var removeItems = $('#documentsAssignedTable').find('input[type="checkbox"]:checked');
+                var inputs = [];
+                removeItems.each(function () {
+                    var ids = this.id.split('-')
+                    inputs.push(ids[1]);
+                });
+
+                $.ajax({
+                    url: '/Organigrama/GetDocumentoToValidate',
+                    type: "POST",
+                    data: { inputDocs: inputs },
+                    success: function (data, textStatus, jqXHR) {
+
+                        data.forEach(function (doc, index) {
+                            var link = "<a href='#' onClick='window.open(&apos;/Organigrama/ViewAssignedDocument?filepath=" + doc.id + "&apos;)' target='_blank'>Ver Documento</a>";
+                            $('#documentsadded').append('<li><div class="custom-control custom-checkbox"><input type="checkbox" class="custom-control-input" id="' + doc.id + '"><label class="custom-control-label" for="' + doc.id + '">' + doc.document + '</label></div>' + link + '</li>');
+                        });
+
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+
+                    }
+                });
+
+
+
+            });
+
+            $('#savevalidationdocuments').click(function () {
+
+                var removeItems = $('#documentsadded').find('input[type="checkbox"]:checked');
+                var inputs = [];
+                removeItems.each(function () {
+                    var ids = this.id.split('-')
+                    inputs.push(ids[1]);
+                });
+
+                $.ajax({
+                    url: '/Organigrama/updateDocumentValidation',
+                    type: "POST",
+                    data: { inputDocs: inputs },
+                    success: function (data, textStatus, jqXHR) {
+
+                        var url = '@Url.Action("EmployeeDetail", "Organigrama", new { employeeid = "IDEmployee" })';
+                        url = url.replace('IDEmployee', data.employeeid);
+
+                        window.location.href = url;
+
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+
+                    }
+                });
+
+            });
+
+            $('#saveupdatepersonaldocument').click(function () {
+
+                $('#spinwaitdocsupdate').show();
+
+                var formData = new FormData();
+                formData.append('file', $('#customFileupdate')[0].files[0]);
+
+                $.ajax({
+                    url: '/Organigrama/UploadFile',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (result) {
+
+                        var model = { EmployeeId: $('#idEmpleadoGenerales').val(), DocumentType: $('#documentTypeupdate').val(), DocumentPath: result.filetemp };
+
+                        $.ajax({
+                            url: '/Organigrama/UpdateDocument',
+                            type: "POST",
+                            data: model,
+                            success: function (data, textStatus, jqXHR) {
+
+                                $('#spinwaitdocsupdate').hide();
+
+                                if (data.result === "fail") {
+
+                                    $('#msgerrordocsupdate').text(data.message);
+                                    $('#errorsavedocsupdate').show();
+                                }
+                                else {
+
+                                    var url = '@Url.Action("EmployeeDetail", "Organigrama", new { employeeid = "IDEmployee" })';
+                                    url = url.replace('IDEmployee', data.employeeid);
+
+                                    window.location.href = url;
+                                }
+                            },
+                            error: function (jqXHR, textStatus, errorThrown) {
+
+                            }
+                        });
+
+                    },
+                    error: function (jqXHR) {
+                    },
+                    complete: function (jqXHR, status) {
+                    }
+                });
+
+            });
+
+            $("#printdocumentselected").click(function () {
+
+                var row = $('#documentsAssignedTable tr.bg-info');
+                var id = row.attr("id");
+                window.open('/Organigrama/PrintDocument?idDocument=' + id, '_blank');
+            });
+
+            $('#savePersonalInfo').click(function () {
+
+
+                var Id = $('#idEmpleadoGenerales').val();
+                var City = $('#personalcity').val();
+                var EMP_State = $('#personalstate').val();
+                var EMP_Zip = $('#personalzip').val();
+                var EMP_Phone = $('#personalphone').val();
+                var EMP_Address = $('#personaladdress').val();
+                var EMP_Sick = $('#personalsick').val();
+                var EMP_Email = $('#personalemail').val();
+                var EMP_bloodtype = $('#personalbloodtype').val();
+                var EMP_Cellphone = $('#personalcellphone').val();
+
+                var model = {
+                    EmployeeId: Id,
+                    City: City,
+                    State: EMP_State,
+                    Zip: EMP_Zip,
+                    Phone: EMP_Phone,
+                    Address: EMP_Address,
+                    Sick: EMP_Sick,
+                    Email: EMP_Email,
+                    BloodType: EMP_bloodtype,
+                    CellPhone : EMP_Cellphone
+                };
+
+                $.ajax({
+                    url: '/Organigrama/SavePersonalInfo',
+                    type: "POST",
+                    data: model,
+                    success: function (data, textStatus, jqXHR) {
+
+                        Swal.fire(
+                            {
+                                position: "top-end",
+                                type: "success",
+                                title: "Actualización exitosa",
+                                showConfirmButton: false,
+                                timer: 1500
+                            });
+
+                        $('#idTipo').prop('disabled', true);
+                        $('#idTipoContrato').prop('disabled', true);
+
+
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+
+                    }
+                });
+
+
+
+            });
+
+            $('#saveContactInfo').click(function () {
+
+
+                var Id = $('#idEmpleadoGenerales').val();
+                var EMP_EmergencyContactName = $('#contactname').val();
+                var EMP_EmergencyContactPhone = $('#contactphone').val();
+                var EMP_EmergencyContactRelation = $('#contactrelation').val();
+
+
+                var model = {
+                    EmployeeId: Id,
+                    Name: EMP_EmergencyContactName,
+                    Phone: EMP_EmergencyContactPhone,
+                    Relacion: EMP_EmergencyContactRelation
+                };
+
+                $.ajax({
+                    url: '/Organigrama/SaveContactEmergency',
+                    type: "POST",
+                    data: model,
+                    success: function (data, textStatus, jqXHR) {
+
+                        Swal.fire(
+                            {
+                                position: "top-end",
+                                type: "success",
+                                title: "Actualización exitosa",
+                                showConfirmButton: false,
+                                timer: 1500
+                            });
+
+                        $('#idTipo').prop('disabled', true);
+                        $('#idTipoContrato').prop('disabled', true);
+
+
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+
+                    }
+                });
+
+
+
+            });
+
+            $('#saveGeneralInfo').click(function () {
+
+                var Id = $('#idEmpleadoGenerales').val();
+                var Email = $('#employeeemail').val();
+                var NSS = $('#employeeNSS').val();
+                var HireDate = $('#datepicker-4-7').val();
+                var Observations = $('#employeeObservations').val();
+                var sexo = $('#selectsexo').val();
+                var Picture = "";
+                if (photochange) {
+                    Picture = base64img;
+                }
+                var name = $('#employeefirstname').val();
+                var lastname = $('#employeelastname').val();
+                var lastname1 = $('#employeelastname2').val();
+                var fechanacimiento = $('#datepicker-4-6').val();
+                var curp = $('#employeeCurp').val();
+                var rfc = $('#employeeRFC').val();
+
+                var model = {
+                    Id: Id,
+                    Email: Email,
+                    NSS: NSS,
+                    HireDate: HireDate,
+                    Observations: Observations,
+                    Picture: Picture,
+                    FirstName: name,
+                    LastName: lastname,
+                    LastName2: lastname1,
+                    Sexo: sexo,
+                    FechaNacimiento: fechanacimiento,
+                    CURP: curp,
+                    RFC: rfc
+                };
+
+                $.ajax({
+                    url: '/Organigrama/SaveEditEmployee',
+                    type: "POST",
+                    data: model,
+                    success: function (data, textStatus, jqXHR) {
+
+                        Swal.fire(
+                            {
+                                position: "top-end",
+                                type: "success",
+                                title: "Actualización exitosa",
+                                showConfirmButton: false,
+                                timer: 1500
+                            });
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+
+                    }
+                });
+
+
+
+
+            });
+
+
+            $('#saveEmployeeUnsubscribe').click(function () {
+
+                var Id = $('#idEmpleadoGenerales').val();
+
+                var swalWithBootstrapButtons = Swal.mixin(
+                    {
+                        customClass:
+                        {
+                            confirmButton: "btn btn-primary",
+                            cancelButton: "btn btn-danger mr-2"
+                        },
+                        buttonsStyling: false
+                    });
+                swalWithBootstrapButtons
+                    .fire(
+                        {
+                            title: "Confirmación",
+                            text: "Deseas dar de baja a el empleado?",
+                            type: "warning",
+                            position: "top-end",
+                            allowOutsideClick: false,
+                            showCancelButton: true,
+                            confirmButtonText: "Si",
+                            cancelButtonText: "Cancelar",
+                            reverseButtons: true
+                        })
+                    .then(function (result) {
+
+                        if (result.value) {
+
+
+                            $.ajax({
+                                url: '/Organigrama/EmployeeUnsubscribe',
+                                type: "POST",
+                                data: { Id: Id },
+                                success: function (data, textStatus, jqXHR) {
+
+                                    Swal.fire(
+                                        {
+                                            position: "top-end",
+                                            type: "success",
+                                            title: "Actualización exitosa",
+                                            showConfirmButton: false,
+                                            timer: 1500
+                                        });
+
+                                    window.location.href = '@Url.Action("Index","Hierarchy")';
+
+                                },
+                                error: function (jqXHR, textStatus, errorThrown) {
+
+                                }
+                            });
+
+                        }
+                        else if (
+                            // Read more about handling dismissals
+                            result.dismiss === Swal.DismissReason.cancel
+                        ) {
+                            swalWithBootstrapButtons.fire(
+                                "Cancelación",
+                                "Se ha cancelado la acción",
+                                "error"
+                            );
+                        }
+                    });
+
+
+            });
+
+
+
+            $('#moveEmployee').click(function () {
+
+                var Id = $('#idEmpleadoGenerales').val();
+
+                var swalWithBootstrapButtons = Swal.mixin(
+                    {
+                        customClass:
+                        {
+                            confirmButton: "btn btn-primary",
+                            cancelButton: "btn btn-danger mr-2"
+                        },
+                        buttonsStyling: false
+                    });
+                swalWithBootstrapButtons
+                    .fire(
+                        {
+                            title: "Confirmación",
+                            text: "Deseas iniciar el cambio de puesto?",
+                            type: "warning",
+                            position: "top-end",
+                            allowOutsideClick: false,
+                            showCancelButton: true,
+                            confirmButtonText: "Si",
+                            cancelButtonText: "Cancelar",
+                            reverseButtons: true
+                        })
+                    .then(function (result) {
+
+                        if (result.value) {
+
+                            window.location.href = '/Employee/HierarchyAssigned/?assignedHGuid=' + $('#rowid').val() + "&employeeID=" + $('#idEmpleadoGenerales').val();
+
+                        }
+                        else if (
+                            // Read more about handling dismissals
+                            result.dismiss === Swal.DismissReason.cancel
+                        ) {
+                            swalWithBootstrapButtons.fire(
+                                "Cancelación",
+                                "Se ha cancelado la acción",
+                                "error"
+                            );
+                        }
+                    });
+
+
+            });
+
+
+
+            $('#select_photo').click(function () {
+
+
+                $("#photoemployee").trigger("click");
+
+            });
+
+            var filePhoto;
+            var base64img;
+            var photochange;
+
+            $('#photoemployee').change(function (e) {
+
+                photochange = true;
+
+                for (var i = 0; i < e.originalEvent.srcElement.files.length; i++) {
+
+                    filePhoto = e.originalEvent.srcElement.files[i];
+                }
+
+                if (filePhoto != null) {
+
+                    var reader = new FileReader();
+                    reader.onloadend = function () {
+                        base64img = reader.result;
+                        $('#photoEmployee').attr("src", base64img);
+                    }
+                    reader.readAsDataURL(filePhoto);
+                }
+
+            });
+
+        });
+
+    </script>
+}

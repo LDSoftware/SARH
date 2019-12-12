@@ -1,0 +1,105 @@
+﻿@model List<ListItem>
+
+@{
+    ViewData["Title"] = "Jerarquía";
+}
+
+
+@section HeadBlock {
+    <link rel="stylesheet" media="screen, print" href="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/css/datagrid/datatables/datatables.bundle.css">
+    <link rel="stylesheet" href="~/css/orgchartOpc2.css" />
+}
+
+<div class="subheader">
+
+    <ol class="breadcrumb breadcrumb-lg breadcrumb-arrow mb-0">
+        <li>
+            <a href='@Url.Action("Index","Home")'>
+                <i class="fal fa-home"></i>
+            </a>
+        </li>
+        <li>
+            <a href='@Url.Action("Index","Hierarchy")'>
+                <i class="fal fa-sitemap"></i>
+                <span class="hidden-lg-down"></span>
+            </a>
+        </li>
+        <li>
+            @if (ViewBag.RowId == "NULL")
+            {
+                <a href='#'>
+                    <i class="fal fa-arrow-alt-left"></i>
+                    <span class="hidden-lg-down">Regresar</span>
+                </a>
+            }
+            else
+            {
+                <a href='@Url.Action("HierarchyPartial", "Hierarchy", new { rowid = ViewBag.RowId })'>
+                    <i class="fal fa-arrow-alt-left"></i>
+                    <span class="hidden-lg-down">Regresar</span>
+                </a>
+            }
+        </li>
+    </ol>
+
+</div>
+
+<div class="row">
+
+    <ul id="tree-data" style="display:none">
+
+        @foreach (var item in Model)
+        {
+        <li>
+            <a class="btn btn-xs btn-primary waves-effect waves-themed" href='@Url.Action("HierarchyPartial","Hierarchy", new {rowid = item.I18n })'>@item.Text</a>
+            <br />
+            <a class="btn btn-xs btn-outline-dark waves-effect waves-themed" href='@item.Route'><small>@item.Title</small></a>
+            <ul type="vertical">
+                @if (item.Items.Any())
+                {
+                    @foreach (var ite in item.Items)
+                    {
+                        <li>
+                            <a class="btn btn-xs btn-primary waves-effect waves-themed" href='@Url.Action("HierarchyPartial", "Hierarchy", new { rowid = @ite.I18n })'>@ite.Text</a>
+                            <br />
+                            <a class="btn btn-xs btn-outline-dark waves-effect waves-themed" href='@ite.Route'><small>@ite.Title</small></a>
+                        </li>
+                    }
+                }
+            </ul>
+        </li>
+        }
+
+    </ul>
+
+    <div id="tree-view"></div>
+
+</div>
+
+
+
+
+@section ScriptsBlock {
+
+    <script src="~/js/orgchart.js"></script>
+    <script>
+
+        $(document).ready(function () {
+            // create a tree
+            $("#tree-data").jOrgChart({
+                chartElement: $("#tree-view"),
+                nodeClicked: nodeClicked
+            });
+
+            // lighting a node in the selection
+            function nodeClicked(node, type) {
+                node = node || $(this);
+                $('.jOrgChart .selected').removeClass('selected');
+                node.addClass('selected');
+            }
+        });
+
+    </script>
+
+
+}

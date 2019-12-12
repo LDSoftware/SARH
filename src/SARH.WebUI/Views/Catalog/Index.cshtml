@@ -1,0 +1,156 @@
+﻿@using SARH.WebUI.Factories;
+
+@{
+    ViewData["Title"] = "Catálogos";
+    ViewData["PageName"] = "Catalogos";
+    ViewData["Heading"] = "<i class='subheader-icon fal fa-tags'></i> Catálogos";
+    ViewData["PageDescription"] = "Configuracón de catálogos";
+}
+@section HeadBlock {
+    <link rel="stylesheet" media="screen, print" href="~/css/fa-solid.css">
+    <link rel="stylesheet" media="screen, print" href="~/css/fa-brands.css">
+    <link rel="stylesheet" media="screen, print" href="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/css/datagrid/datatables/datatables.bundle.css">
+}
+
+<div class="subheader">
+    <ol class="breadcrumb breadcrumb-lg breadcrumb-arrow mb-0">
+        <li>
+            <a href='@Url.Action("Index","Home")'>
+                <i class="fal fa-home"></i>
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                <i class="fal fa-tags"></i>
+                <span class="hidden-lg-down">Catálogos</span>
+            </a>
+        </li>
+    </ol>
+</div>
+
+<div class="row">
+    <div class="col-xl-12">
+        <div class="panel-container show">
+            <div class="panel-content">
+                <div class="card-deck">
+                    <div class="card">
+                        <div class="w-100 bg-fusion-50 rounded-top" style="padding:30px 0 30px;">
+                            <center><i class="fal fa-4x fa-sitemap"></i> </center>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">Organigrama</h5>
+                            <p class="card-text">Administración del organigrama (Areas, Centro de trabajo, Categorías y Puestos).</p>
+                            <div class="row">
+                                <a href='@Url.Action("Organigrama","Catalog")' class="h4">
+                                    <i class="fal fa-chevron-right mr-2"></i> Ver Catálogo
+                                </a>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <small class="text-muted">última actualización hace 0 días</small>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="w-100 bg-fusion-50 rounded-top" style="padding:30px 0 30px;">
+                            <center><i class="fal fa-4x fa-file-pdf"></i> </center>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">Documentos</h5>
+                            <p class="card-text">Documentación de los empleados (INE, Licencia, IFE, Etc.)</p>
+                            <div class="row">
+                                <a href='@Url.Action("Documentos","Catalog")' class="h4">
+                                    <i class="fal fa-chevron-right mr-2"></i> Ver Catálogo
+                                </a>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <small class="text-muted"></small>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="w-100 bg-fusion-50 rounded-top" style="padding:30px 0 30px;">
+                            <center><i class="fal fa-4x fal fa-laptop"></i> </center>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">Equipo de computo</h5>
+                            <p class="card-text">Lista de componentes de computo para resguardo</p>
+                            <div class="row">
+                                <a href='@Url.Action("EquipoComputoAsignado","Catalog")' class="h4">
+                                    <i class="fal fa-chevron-right mr-2"></i> Ver Catálogo
+                                </a>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <small class="text-muted"></small>
+                        </div>
+                    </div>
+
+
+                    <div class="card">
+                        <div class="w-100 bg-fusion-50 rounded-top" style="padding:30px 0 30px;">
+                            <center><i class="fal fa-4x fal fa-forklift"></i> </center>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">Equipo de protección</h5>
+                            <p class="card-text">Lista de equipo de protección asignado</p>
+                            <div class="row">
+                                <a href='@Url.Action("EquipoSeguridad","Catalog")' class="h4">
+                                    <i class="fal fa-chevron-right mr-2"></i> Ver Catálogo
+                                </a>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <small class="text-muted"></small>
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <div class="card-deck" style="margin-top:20px;">
+                    <div class="card">
+                        <div class="w-100 bg-fusion-50 rounded-top" style="padding:30px 0 30px;">
+                            <center><i class="fal fa-4x fa-calendar-alt"></i> </center>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">Permisos, Incidencias</h5>
+                            <p class="card-text">Administracion de permisos e incidencias para los Formatos de Vacaciones/Permisos/Incapacidades</p>
+                            <div class="row">
+                                <a href='@Url.Action("PermisosIncidencias","Catalog")' class="h4">
+                                    <i class="fal fa-chevron-right mr-2"></i> Ver Catálogo
+                                </a>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <small class="text-muted"></small>
+                        </div>
+                    </div>
+                    <div class="card">
+
+                    </div>
+                    <div class="card">
+
+                    </div>
+                    <div class="card">
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section ScriptsBlock {
+
+    <script src="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/js/datagrid/datatables/datatables.bundle.js"></script>
+    <script>
+        $(document).ready(function () {
+
+
+        });
+    </script>
+}

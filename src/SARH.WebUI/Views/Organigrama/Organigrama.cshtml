@@ -1,0 +1,168 @@
+﻿@using SARH.WebUI.Models.Organigrama
+@model OrganigramaModel
+@{
+    ViewData["Title"] = "Organigrama";
+    ViewData["PageName"] = "Organigrama";
+    ViewData["PageDescription"] = "Organigrama";
+}
+@section HeadBlock {
+    <link rel="stylesheet" media="screen, print" href="~/css/fa-solid.css">
+    <link rel="stylesheet" media="screen, print" href="~/css/fa-brands.css">
+    <link rel="stylesheet" media="screen, print" href="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/css/datagrid/datatables/datatables.bundle.css">
+    <link rel="stylesheet" media="screen, print" href="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/css/notifications/sweetalert2/sweetalert2.bundle.css">
+}
+
+<div class="subheader">
+    <ol class="breadcrumb breadcrumb-lg breadcrumb-arrow mb-0">
+        <li>
+            <a href='@Url.Action("Index","Home")'>
+                <i class="fal fa-home"></i>
+            </a>
+        </li>
+        <li>
+            <a href='@Url.Action("Index","Hierarchy")'>
+                <i class="fal fa-sitemap"></i>
+                <span class="hidden-lg-down">Organigrama</span>
+            </a>
+        </li>
+        <li>
+            <a href='@Url.Action("HierarchyPartial", "Hierarchy", new { rowid = @Model.RowId  })'>
+                <i class="fal fa-users"></i>
+                <span class="hidden-lg-down">@Model.JobCenter</span>
+            </a>
+        </li>
+    </ol>
+
+</div>
+
+<div role="group" aria-label="Vertical button group">
+    <a class="btn btn-secondary" href="#"><i class="fal fa-clock"></i> Horarios</a>
+    <div class="btn-group" role="group">
+        <button class="btn btn-secondary dropdown-toggle" id="btnGroupVerticalDrop1" aria-expanded="false" aria-haspopup="true" type="button" data-toggle="dropdown">
+            <i class="fal fa-bolt"></i>
+            Acciones
+        </button>
+        <div class="dropdown-menu" aria-labelledby="btnGroupVerticalDrop1">
+            <a class="dropdown-item" href="#">Permisos</a>
+            <a class="dropdown-item" href="#">Vacaciones</a>
+        </div>
+    </div>
+</div>
+
+<hr />
+
+<div class="row">
+    <div class="col-lg-12">
+        <div id="panel-4" class="panel">
+            <div class="panel-hdr">
+                <h2>
+                    Empleados
+                </h2>
+
+                <div class="panel-toolbar">
+
+                    <div class="demo-h-spacing">
+                        <a id="viewEmployee" href="javascript:void(0);" class="btn btn-success btn-icon waves-effect waves-themed">
+                            <i class="fal fa-pen-square"></i>
+                        </a>
+                    </div>
+
+                </div>
+
+
+            </div>
+            <div class="panel-container show">
+                <div class="panel-content">
+                    <table id="dt-basic-example" class="table table-bordered table-hover table-striped w-100">
+                        <thead class="bg-warning-200">
+                            <tr>
+                                <th>ID</th>
+                                <th>Empleado</th>
+                                <th>Area</th>
+                                <th>Centro de trabajo</th>
+                                <th>Puesto</th>
+                            </tr>
+                        </thead>
+                        <tbody id="allemployees">
+                            @foreach (var item in Model.Employess)
+                            {
+                                <tr id="@item.Id">
+                                    <td>
+                                        @item.Id
+                                    </td>
+                                    <td>
+                                        @item.Name
+                                    </td>
+                                    <td>
+                                        @item.Area
+                                    </td>
+                                    <td>
+                                        @item.JobCenter
+                                    </td>
+                                    <td>
+                                        @item.JobTitle
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section ScriptsBlock {
+
+    <script src="~/js/statistics/peity/peity.bundle.js"></script>
+    <script src="~/js/statistics/flot/flot.bundle.js"></script>
+    <script src="~/js/statistics/easypiechart/easypiechart.bundle.js"></script>
+    <script src="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/js/datagrid/datatables/datatables.bundle.js"></script>
+    <script src="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/js/notifications/sweetalert2/sweetalert2.bundle.js"></script>
+
+    <script>
+
+        $(document).ready(function () {
+
+
+            $('#dt-basic-example tr').click(function () {
+
+                $(this).addClass('selected').siblings().removeClass('selected');
+
+            });
+
+
+        /* init datatables */
+
+            $('#dt-basic-example').dataTable(
+                {
+                    responsive: true
+                });
+
+
+            $('#viewEmployee').click(function () {
+
+
+                var row = $('#allemployees tr.selected');
+
+                if (row.length === 0) {
+
+                    Swal.fire(
+                        {
+                            type: "warning",
+                            title: "Validación",
+                            text: "Seleccione un registro"
+                        });
+
+                    return;
+                }
+
+                var id = row[0].id;
+                var str = '@Url.Action("EmployeeDetail","Organigrama", new {employeeid = "replaceid" })';
+                var url = str.replace("replaceid", id);
+                window.location.href = url;
+            });
+
+        });
+    </script>
+}

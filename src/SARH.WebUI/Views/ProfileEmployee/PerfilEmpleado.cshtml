@@ -1,0 +1,351 @@
+﻿@using SARH.WebUI.Models.EmployeeProfile
+@model EmployeeProfileModel
+@{
+    ViewData["Title"] = "Perfil del Puesto";
+    ViewData["PageName"] = "Perfil del Puesto";
+    ViewData["PageDescription"] = "Perfil del Puesto";
+}
+
+@section HeadBlock {
+    <link rel="stylesheet" media="screen, print" href="~/css/fa-solid.css">
+    <link rel="stylesheet" media="screen, print" href="~/css/fa-brands.css">
+    <link rel="stylesheet" media="screen, print" href="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/css/notifications/sweetalert2/sweetalert2.bundle.css">
+}
+
+<div class="subheader">
+    <ol class="breadcrumb breadcrumb-lg breadcrumb-arrow mb-0">
+        <li>
+            <a href='@Url.Action("Index","Home")'>
+                <i class="fal fa-home"></i>
+            </a>
+        </li>
+        <li>
+            <a href='@Url.Action("Index","Hierarchy")'>
+                <i class="fal fa-sitemap"></i>
+                <span class="hidden-lg-down">Organigrama</span>
+            </a>
+        </li>
+        <li>
+            <a href='@Url.Action("Organigrama","Organigrama", new { organigramaitem = Model.Area + "." + Model.JobCenter })'>
+                <i class="fal fa-users"></i>
+                <span class="hidden-lg-down">@Model.JobCenter</span>
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                <i class="fal fa-user"></i>
+                <span class="hidden-lg-down">@Model.FirstName @Model.LastName</span>
+            </a>
+        </li>
+        <li>
+            <a href='@Url.Action("EmployeeDetail", "Organigrama", new { employeeid = @Model.EmployeeId  })'>
+                <i class="fal fa-arrow-alt-left"></i>
+                <span class="hidden-lg-down">Regresar</span>
+            </a>
+        </li>
+
+    </ol>
+
+</div>
+
+<input id="idemployee" value="@Model.EmployeeId.TrimStart(new Char[] { '0' })" type="hidden" />
+
+<div class="row">
+
+    <div id="panel-9" class="panel col-lg-12">
+        <div class="panel-hdr">
+            <h2>
+                Identificación del puesto
+            </h2>
+
+            <div class="panel-toolbar">
+                <div class="demo-h-spacing">
+                    <a id="btnsaveprofile" href="javascript:void(0);" class="btn btn-primary btn-icon waves-effect waves-themed">
+                        <i class="fal fa-save"></i>
+                    </a>
+                    <a href="javascript:void(0);" class="btn btn-success btn-icon waves-effect waves-themed">
+                        <i class="fal fa-print"></i>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+        <div class="panel-container show">
+            <div class="panel-content">
+                <div class="panel-tag">
+
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <label for="inputarea" class="form-label">Área</label>
+                                <input type="text" id="inputarea" class="form-control form-control-md rounded-0 border-top-0 border-left-0 border-right-0 px-0" value="@Model.Area" disabled>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <label for="inputpuesto" class="form-label">Puesto</label>
+                                <input type="text" id="inputpuesto" class="form-control form-control-md rounded-0 border-top-0 border-left-0 border-right-0 px-0" value="@Model.Puesto" disabled>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <label for="inputcategoria" class="form-label">Categoria</label>
+                                <input type="text" id="inputcategoria" class="form-control form-control-md rounded-0 border-top-0 border-left-0 border-right-0 px-0" value="@Model.Categoria">
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <label for="inputpersonascargo" class="form-label">Numero de personas a su cargo</label>
+                                <input type="text" id="inputpersonascargo" class="form-control form-control-md rounded-0 border-top-0 border-left-0 border-right-0 px-0" value="@Model.PersonasCargo">
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr />
+
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label for="inputobjetivogeneral" class="form-label">Objetivo general del puesto</label>
+                                <input type="text" id="inputobjetivogeneral" class="form-control form-control-md rounded-0 border-top-0 border-left-0 border-right-0 px-0" value="@Model.ObjetivoGeneral">
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr />
+
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <label for="selectsexo" class="form-label">Sexo</label>
+                                <select class="form-control" id="selectsexo">
+                                    <option>Indistinto</option>
+                                    <option>Femenino</option>
+                                    <option>Masculino</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <label for="inputedad" class="form-label">Edad</label>
+                                <input type="text" id="inputedad" class="form-control form-control-md rounded-0 border-top-0 border-left-0 border-right-0 px-0" value="@Model.Edad">
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <label for="selectescolaridad" class="form-label">Escolaridad</label>
+                                <select class="form-control" id="selectescolaridad">
+                                    <option>Especialidad</option>
+                                    <option>Licenciatura</option>
+                                    <option>Bachillerato</option>
+                                    <option>Secundaria</option>
+                                    <option>Primaria</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <label for="inputtitulo" class="form-label">Título</label>
+                                <input type="text" id="inputtitulo" class="form-control form-control-md rounded-0 border-top-0 border-left-0 border-right-0 px-0" value="@Model.Titulo">
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr />
+
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <label for="inputidiomas" class="form-label">Idiomas</label>
+                                <input type="text" id="inputidiomas" class="form-control form-control-md rounded-0 border-top-0 border-left-0 border-right-0 px-0" value="@Model.Idiomas">
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <label for="selectnivel" class="form-label">Nivel</label>
+                                <select class="form-control" id="selectnivel">
+                                    <option>Básico</option>
+                                    <option>Medio</option>
+                                    <option>Avanzado</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label for="inputexperienciarequerida" class="form-label">Experiencia laboral requerida</label>
+                                <input type="text" id="inputexperienciarequerida" class="form-control form-control-md rounded-0 border-top-0 border-left-0 border-right-0 px-0" value="@Model.ExperienciaLaboral">
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr />
+
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label for="inputconocimientos" class="form-label">Conocimientos, Habilidades o destrezas</label>
+                                <input type="text" id="inputconocimientos" class="form-control form-control-md rounded-0 border-top-0 border-left-0 border-right-0 px-0" value="@Model.Conocimientos">
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr />
+
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label for="inputrequerimientos" class="form-label">Requerimientos ó Condiciones Especiales</label>
+                                <input type="text" id="inputrequerimientos" class="form-control form-control-md rounded-0 border-top-0 border-left-0 border-right-0 px-0" value="@Model.Requerimientos">
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr />
+
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label for="inputhorarios" class="form-label">Horarios</label>
+                                <input type="text" id="inputhorarios" class="form-control form-control-md rounded-0 border-top-0 border-left-0 border-right-0 px-0" value="@Model.Horario">
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr />
+
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label for="inputequiposoftware" class="form-label">Equipo / Software necesario</label>
+                                <input type="text" id="inputequiposoftware" class="form-control form-control-md rounded-0 border-top-0 border-left-0 border-right-0 px-0" value="@Model.Equipo">
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr />
+
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label for="inputcomunicacioninterna" class="form-label">Comunicación Interna</label>
+                                <input type="text" id="inputcomunicacioninterna" class="form-control form-control-md rounded-0 border-top-0 border-left-0 border-right-0 px-0" value="@Model.ComunicacionInterna">
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label for="inputcomunicacionexterna" class="form-label">Comunicación Externa</label>
+                                <input type="text" id="inputcomunicacionexterna" class="form-control form-control-md rounded-0 border-top-0 border-left-0 border-right-0 px-0" value="@Model.ComunicacionExterna">
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr />
+
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label for="inputresponsabilidad" class="form-label">Responsabilidad del puesto</label>
+                                <input type="text" id="inputresponsabilidad" class="form-control form-control-md rounded-0 border-top-0 border-left-0 border-right-0 px-0" value="@Model.Responsabilidad">
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr />
+
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label for="inputfunciones" class="form-label">Funciones o actividades</label>
+                                <input type="text" id="inputfunciones" class="form-control form-control-md rounded-0 border-top-0 border-left-0 border-right-0 px-0" value="@Model.FuncionesActividades">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <!-- panel footer with utility classes -->
+            <div class="panel-content d-flex py-2 rounded-bottom border-faded border-left-0 border-right-0 border-bottom-0 text-muted">
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+@section ScriptsBlock {
+
+    <script src="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/js/notifications/sweetalert2/sweetalert2.bundle.js"></script>
+    <script>
+
+        $(document).ready(function () {
+
+
+            $('#btnsaveprofile').click(function () {
+
+
+                var formData = {
+
+                    EmployeeId : $("#idemployee").val(),
+                    Categoria : $("#inputcategoria").val(),
+                    PersonasCargo : $("#inputpersonascargo").val(),
+                    ObjetivoGeneral : $("#inputobjetivogeneral").val(),
+                    Sexo : $("#selectsexo").val(),
+                    Edad : $("#inputedad").val(),
+                    Escolaridad : $("#selectescolaridad").val(),
+                    Titulo : $("#inputtitulo").val(),
+                    Idiomas: $("#inputidiomas").val(),
+                    Nivel : $('#selectnivel').val(),
+                    ExperienciaLaboral : $("#inputexperienciarequerida").val(),
+                    Conocimientos : $("#inputconocimientos").val(),
+                    Requerimientos : $("#inputrequerimientos").val(),
+                    Horario : $("#inputhorarios").val(),
+                    Equipo : $("#inputequiposoftware").val(),
+                    ComunicacionInterna : $("#inputcomunicacioninterna").val(),
+                    ComunicacionExterna  : $("#inputcomunicacionexterna").val(),
+                    Responsabilidad : $("#inputresponsabilidad").val(),
+                    FuncionesActividades : $("#inputfunciones").val()
+                };
+
+
+                $.ajax({
+                    url: '/ProfileEmployee/SaveProfileData',
+                    type: "POST",
+                    data: formData,
+                    success: function (data, textStatus, jqXHR) {
+
+
+                        Swal.fire(
+                            {
+                                position: "top-end",
+                                type: "success",
+                                title: "Actualización exitosa",
+                                showConfirmButton: false,
+                                timer: 1500
+                            }).then((result) => {
+
+                                window.location.href = '/ProfileEmployee/PerfilEmpleado?idEmployee=' + $("#idemployee").val();
+
+                            });
+
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+
+                    }
+                });
+
+
+            });
+
+
+
+
+
+        });
+
+    </script>
+}
+
+
+

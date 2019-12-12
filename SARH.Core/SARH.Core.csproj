@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="iTextSharp.LGPLv2.Core" Version="1.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="PdfCreator\Images\" />
+    <Folder Include="PdfCreator\Font\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="PdfCreator\Font\BarcodeFont.ttf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="PdfCreator\Font\TitilliumWeb-Regular.ttf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="PdfCreator\Images\F002.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

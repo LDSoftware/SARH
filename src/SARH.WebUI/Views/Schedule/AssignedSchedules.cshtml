@@ -1,0 +1,1333 @@
+﻿@using SARH.WebUI.Models.Configuration
+@model EmployeeScheduleAssignedModel
+@{
+    ViewData["Title"] = "Horarios";
+    ViewData["PageName"] = "Horarios";
+    ViewData["Heading"] = "<i class='subheader-icon fal fa-chess-clock-alt'></i> Horarios";
+    ViewData["PageDescription"] = "Administración de horarios";
+}
+
+@section HeadBlock {
+
+    <link rel="stylesheet" media="screen, print" href="~/css/fa-solid.css">
+    <link rel="stylesheet" media="screen, print" href="~/css/fa-brands.css">
+    <link rel="stylesheet" media="screen, print" href="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/css/datagrid/datatables/datatables.bundle.css">
+    <link rel="stylesheet" media="screen, print" href="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/css/formplugins/bootstrap-datepicker/bootstrap-datepicker.css">
+    <link rel="stylesheet" media="screen, print" href="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/css/notifications/sweetalert2/sweetalert2.bundle.css">
+}
+
+<div class="subheader">
+    <ol class="breadcrumb breadcrumb-lg breadcrumb-arrow mb-0">
+        <li>
+            <a href='@Url.Action("Index","Home")'>
+                <i class="fal fa-home"></i>
+            </a>
+        </li>
+        <li>
+            <a href='@Url.Action("Index","Schedule")'>
+                <i class="fal fa-chess-clock-alt"></i>
+                <span class="hidden-lg-down">Horarios</span>
+            </a>
+        </li>
+        <li>
+            <a href='#'>
+                <i class="fal fa-users"></i>
+                <span class="hidden-lg-down">Asignar horarios</span>
+            </a>
+        </li>
+    </ol>
+</div>
+
+
+<div class="row">
+    <div class="col-xl-12">
+        <div id="panel-1" class="panel">
+            <div class="panel-hdr">
+                <h2>
+                    Horarios configurados <span class="fw-300"><i></i></span>
+                </h2>
+                <div class="dropdown demo-h-spacing left">
+                    <a href="#" class="btn btn-default btn-icon waves-effect waves-themed" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        <i class="fal fa-bolt"></i>
+                    </a>
+                    <div class="dropdown-menu" x-placement="top-start" style="position: absolute; will-change: top, left; top: -201px; left: 0px;">
+                        <a id="detailschedule" class="dropdown-item" href="javascript:void(0)">Editar horario permanente</a>
+                        <a id="deleteschedule" class="dropdown-item" href="javascript:void(0)">Eliminar horario temporal</a>
+                    </div>
+                </div>
+
+                <div class="panel-toolbar">
+                    <div class="demo-h-spacing">
+                        <a href="javascript:void(0);" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target=".default-example-modal-right" class="btn btn-primary btn-icon waves-effect waves-themed">
+                            <i class="fal fa-calendar-edit"></i>
+                        </a>
+                        <a href="javascript:void(0);" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target=".default-example-modal-right-tmp" class="btn btn-success btn-icon waves-effect waves-themed">
+                            <i class="fal fa-calendar-edit"></i>
+                        </a>
+                        <a href='@Url.Action("SchedulesDownloadCSV","Schedule")' class="btn btn-info btn-icon waves-effect waves-themed">
+                            <i class="fal fa-file-excel"></i>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="panel-container show">
+                <div class="panel-content">
+                    <div class="form-group row">
+
+
+                        <div class="col-lg-12">
+                            <form>
+                                <div class="form-group">
+                                    <table id="dt-basic-example" class="table table-bordered table-hover table-striped w-100">
+                                        <thead class="bg-warning-200">
+                                            <tr>
+                                                <th>Id Empleado</th>
+                                                <th>Nombre</th>
+                                                <th>Horario Laboral</th>
+                                                <th>Tolerancia</th>
+                                                <th>Horario Comida</th>
+                                                <th>Tolerancia</th>
+                                                <th>Es Temporal</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="allschedules">
+                                            @foreach (var item in Model.EmployeeScheduleAssignedList)
+                                            {
+                                                <tr id="@item.Id" data-id="@item.EmployeeId">
+                                                    <td>@item.EmployeeId</td>
+                                                    <td>@item.EmployeeName</td>
+                                                    <td>@item.ScheduleWorkday</td>
+                                                    <td>@item.ToleranceWorkday</td>
+                                                    <td>@item.ScheduleMeal</td>
+                                                    <td>@item.ToleranceMeal</td>
+                                                    <td>@item.EsTemporal</td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+        </ Modal Schedule New Permanente-->
+
+<div class="panel-container show">
+    <div class="panel-content">
+
+        <div class="modal fade default-example-modal-right" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-right">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title h4">Asignar horario</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true"><i class="fal fa-times"></i></span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="card mb-5">
+
+                            <div class="card-body p-3">
+                                <h5>
+                                    Asignación de horario
+                                    <span class="badge badge-primary fw-n position-absolute pos-top pos-right mt-3 mr-3">A</span>
+                                </h5>
+
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text text-success">
+                                                <i class="ni ni-user fs-xl"></i>
+                                            </span>
+                                        </div>
+                                        <input type="text" aria-label="searchtext" class="form-control reseterror" placeholder="Ingrese el valor" id="searchText">
+                                        <div class="input-group-append input-group-prepend">
+                                            <span class="input-group-text">
+                                                <i class="fal fa-exchange fs-xl"></i>
+                                            </span>
+                                        </div>
+                                        <select class="custom-select" id="typesearch" aria-label="typesearch">
+                                            <option value="0" selected="">Busqueda por</option>
+                                            <option value="1">Área</option>
+                                            <option value="2">Centro de trabajo</option>
+                                            <option value="3">Puesto</option>
+                                            <option value="4">No. Empleado</option>
+                                        </select>
+                                        <div class="input-group-append">
+                                            <button id="searchbutton" type="button" class="btn btn-success shadow-0 waves-effect waves-themed">
+
+                                                <span id="imgsearch" class="fal fa-search mr-1"></span>
+
+                                                <span id="spin" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="display:none"></span>
+
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12">
+                                    <ul id="elementsfinded">
+                                    </ul>
+                                </div>
+
+
+                                <div id="searchresult">
+
+                                </div>
+                                <div id="searcherror" style="display:none;">
+                                    <span id="msgerror" class="h5 color-danger-900"></span>
+                                </div>
+                                <hr />
+                                <center>
+                                    <button id="addelement" type="button" class="btn btn-info waves-effect waves-themed" style="display:none;"><span class="fal fa-plus mr-1"></span>Agregar</button>
+                                </center>
+
+                            </div>
+
+                        </div>
+                        <div class="card mb-g">
+
+                            <div class="card-body p-3">
+                                <h5>
+                                    Horarios disponibles
+                                    <span class="badge badge-dark fw-n position-absolute pos-top pos-right mt-3 mr-3">B</span>
+                                </h5>
+                                <div class="form-row">
+                                    <div class="col-md-6">
+                                        <label class="form-label" for="descripcion">Seleccione el horario de entrada</label>
+                                        @Html.DropDownList("dropdownSchedule", (IEnumerable<SelectListItem>)ViewBag.dropdownSchedule, new { id = "dropdownSchedule", @class = "form-control reseterror" })
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label" for="inputtolerancewd">Tolerancia en minutos</label>
+                                        <input class="form-control reseterror" id="inputtolerancewd" type="number" name="number" value="0">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label" for="descripcion">Seleccione el horario de comida</label>
+                                        @Html.DropDownList("dropdownScheduleMeal", (IEnumerable<SelectListItem>)ViewBag.dropdownScheduleMeal, new { id = "dropdownScheduleMeal", @class = "form-control reseterror" })
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label" for="inputtoleranceml">Tolerancia en minutos</label>
+                                        <input class="form-control reseterror" id="inputtoleranceml" type="number" name="number" value="0">
+                                    </div>
+
+                                    <div class="col-md-12">
+                                        <div class="d-flex flex-wrap align-items-center pl-3 pr-1 py-2 px-sm-4 px-lg-5 border-faded border-top-0 border-left-0 border-right-0">
+                                            <div class="flex-1 d-flex align-items-center">
+                                                <a href="javascript:void(0);" id="js-delete-selected" class="btn btn-icon rounded-circle mr-1 waves-effect waves-themed">
+                                                    <i class="fas fa-trash fs-md"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <br />
+                                        <div class="col-md-12">
+                                            <ul id="elementsadded">
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div id="errorsave" class="alert border-danger bg-transparent text-secondary fade show" role="alert" style="display:none">
+                            <div class="d-flex align-items-center">
+                                <div class="alert-icon">
+                                    <span class="icon-stack icon-stack-md">
+                                        <i class="base-7 icon-stack-3x color-danger-900"></i>
+                                        <i class="fal fa-times icon-stack-1x text-white"></i>
+                                    </span>
+                                </div>
+                                <div class="flex-1">
+                                    <span id="msgerror" class="h5 color-danger-900">No se puede guardar. Validé que existan horarios y se asignarón a empleados, la tolerancia debe ser mayor o igual 0.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <center>
+                        <div id="spinwait" class="spinner-border" style="width: 3rem; height: 3rem; display:none;" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                    </center>
+
+                    <div class="modal-footer">
+                        <button id="closemodal" type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                        <button id="savenewschedule" type="button" class="btn btn-primary">Guardar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+        </ Modal Schedule New Temporal-->
+
+<div class="panel-container show">
+    <div class="panel-content">
+
+        <div class="modal fade default-example-modal-right-tmp" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-right">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title h4">Asignar horario temporal</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true"><i class="fal fa-times"></i></span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="card mb-5">
+
+                            <div class="card-body p-3">
+                                <h5>
+                                    Asignación de horario temporal
+                                    <span class="badge badge-primary fw-n position-absolute pos-top pos-right mt-3 mr-3">A</span>
+                                </h5>
+
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text text-success">
+                                                <i class="ni ni-user fs-xl"></i>
+                                            </span>
+                                        </div>
+                                        <input type="text" aria-label="searchtext" class="form-control reseterrortemp" placeholder="Ingrese el valor" id="searchTexttemp">
+                                        <div class="input-group-append input-group-prepend">
+                                            <span class="input-group-text">
+                                                <i class="fal fa-exchange fs-xl"></i>
+                                            </span>
+                                        </div>
+                                        <select class="custom-select" id="typesearchtemp" aria-label="typesearch">
+                                            <option value="0" selected="">Busqueda por</option>
+                                            <option value="1">Área</option>
+                                            <option value="2">Centro de trabajo</option>
+                                            <option value="3">Puesto</option>
+                                            <option value="4">No. Empleado</option>
+                                        </select>
+                                        <div class="input-group-append">
+                                            <button id="searchbuttontemp" type="button" class="btn btn-success shadow-0 waves-effect waves-themed">
+
+                                                <span id="imgsearchtemp" class="fal fa-search mr-1"></span>
+
+                                                <span id="spintemp" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="display:none"></span>
+
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12">
+                                    <ul id="elementsfindedtemp">
+                                    </ul>
+                                </div>
+
+
+                                <div id="searchresulttemp">
+
+                                </div>
+                                <div id="searcherrortemp" style="display:none;">
+                                    <span id="msgerrortemp" class="h5 color-danger-900"></span>
+                                </div>
+                                <hr />
+                                <center>
+                                    <button id="addelementtemp" type="button" class="btn btn-info waves-effect waves-themed" style="display:none;"><span class="fal fa-plus mr-1"></span>Agregar</button>
+                                </center>
+
+                            </div>
+
+                        </div>
+                        <div class="card mb-g">
+
+                            <div class="card-body p-3">
+                                <h5>
+                                    Horarios disponibles
+                                    <span class="badge badge-dark fw-n position-absolute pos-top pos-right mt-3 mr-3">B</span>
+                                </h5>
+                                <div class="form-row">
+                                    <div class="col-md-6">
+                                        <label class="form-label" for="descripcion">Seleccione el horario de entrada</label>
+                                        @Html.DropDownList("dropdownScheduletemp", (IEnumerable<SelectListItem>)ViewBag.dropdownScheduletemp, new { id = "dropdownScheduletemp", @class = "form-control reseterror" })
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label" for="inputtolerancewdtemp">Tolerancia en minutos</label>
+                                        <input class="form-control reseterror" id="inputtolerancewdtemp" type="number" name="number" value="0">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label" for="descripcion">Seleccione el horario de comida</label>
+                                        @Html.DropDownList("dropdownScheduleMealtemp", (IEnumerable<SelectListItem>)ViewBag.dropdownScheduleMealtemp, new { id = "dropdownScheduleMealtemp", @class = "form-control reseterror" })
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label" for="inputtolerancemltemp">Tolerancia en minutos</label>
+                                        <input class="form-control reseterror" id="inputtolerancemltemp" type="number" name="number" value="0">
+                                    </div>
+
+                                    <div class="col-md-12">
+                                        <div class="d-flex flex-wrap align-items-center pl-3 pr-1 py-2 px-sm-4 px-lg-5 border-faded border-top-0 border-left-0 border-right-0">
+                                            <div class="flex-1 d-flex align-items-center">
+                                                <a href="javascript:void(0);" id="js-delete-selectedtemp" class="btn btn-icon rounded-circle mr-1 waves-effect waves-themed">
+                                                    <i class="fas fa-trash fs-md"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <br />
+                                        <div class="col-md-12">
+                                            <ul id="elementsaddedtemp">
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div id="errorsavetemp" class="alert border-danger bg-transparent text-secondary fade show" role="alert" style="display:none">
+                            <div class="d-flex align-items-center">
+                                <div class="alert-icon">
+                                    <span class="icon-stack icon-stack-md">
+                                        <i class="base-7 icon-stack-3x color-danger-900"></i>
+                                        <i class="fal fa-times icon-stack-1x text-white"></i>
+                                    </span>
+                                </div>
+                                <div class="flex-1">
+                                    <span id="msgerrortemp" class="h5 color-danger-900">No se puede guardar. Validé que existan horarios y se asignarón a empleados, la tolerancia debe ser mayor o igual 0.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <center>
+                        <div id="spinwaittemp" class="spinner-border" style="width: 3rem; height: 3rem; display:none;" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                    </center>
+
+                    <div class="modal-footer">
+                        <button id="closemodaltemp" type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                        <button id="savenewscheduletemp" type="button" class="btn btn-primary">Guardar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+        </ Modal Update Schedule-->
+
+<div class="modal fade" data-backdrop="static" data-keyboard="false" id="default-example-modal-center" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-warning-500">
+                <h4 class="modal-title">
+                    Actualización del horario permanente
+                    <span id="detailtitle"></span>
+                </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"><i class="fal fa-times"></i></span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <div class="alert border-secondary bg-transparent text-secondary" role="alert">
+                    <span id="detailschedulemployeename"></span>
+                </div>
+
+                <div class="form-row">
+                    <div class="col-md-6">
+                        <label class="form-label" for="descripcion">Seleccione el horario de entrada</label>
+                        @Html.DropDownList("dropdownScheduleupdate", (IEnumerable<SelectListItem>)ViewBag.dropdownSchedule, new { id = "dropdownScheduleupdate", @class = "form-control reseterror" })
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="inputtolerancewdupdate">Tolerancia en minutos</label>
+                        <input class="form-control reseterror" id="inputtolerancewdupdate" type="number" name="number" value="0">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="descripcion">Seleccione el horario de comida</label>
+                        @Html.DropDownList("dropdownScheduleMealupdate", (IEnumerable<SelectListItem>)ViewBag.dropdownScheduleMeal, new { id = "dropdownScheduleMealupdate", @class = "form-control reseterror" })
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="inputtolerancemlupdate">Tolerancia en minutos</label>
+                        <input class="form-control reseterror" id="inputtolerancemlupdate" type="number" name="number" value="0">
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">                                
+                Cerrar</button>
+                <button id="btnUpdateSchedule" type="button" class="btn btn-primary">
+                    <span id="spinupdateschedule" style="display:none;" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+
+
+                    Actualizar
+                </button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section ScriptsBlock {
+
+    <script src="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/js/datagrid/datatables/datatables.bundle.js"></script>
+    <script src="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/js/formplugins/bootstrap-datepicker/bootstrap-datepicker.js"></script>
+    <script src="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/js/notifications/sweetalert2/sweetalert2.bundle.js"></script>
+
+    <script>
+
+
+        var controls = {
+            leftArrow: '<i class="fal fa-angle-left" style="font-size: 1.25rem"></i>',
+            rightArrow: '<i class="fal fa-angle-right" style="font-size: 1.25rem"></i>'
+        }
+
+
+        function convert(str) {
+            var date = new Date(str),
+                mnth = ("0" + (date.getMonth() + 1)).slice(-2),
+                day = ("0" + date.getDate()).slice(-2);
+            hours = ("0" + date.getHours()).slice(-2);
+            minutes = ("0" + date.getMinutes()).slice(-2);
+            return [day, mnth, date.getFullYear()].join("/");
+        }
+
+
+        $('#dt-basic-example tr').click(function () {
+
+            $(this).addClass('selected').siblings().removeClass('selected');
+
+        });
+
+        $(document).ready(function () {
+
+
+            var selectedelements = new Array();
+            var multipleadded = false;
+            var multipleaddedtemp = false;
+
+
+            $('#dt-basic-example').dataTable(
+                {
+                    responsive: true
+                });
+
+
+            //Horarios Permanentes
+
+            $('#savenewschedule').click(function () {
+
+
+                if ($('#inputtolerancewd').val() < 0 || $('#inputtoleranceml').val() < 0) {
+
+                    $('#errorsave').show();
+                    return;
+                }
+
+
+                if ($('#dropdownSchedule').val() === null || $('#dropdownScheduleMeal').val() === null) {
+
+                    $('#errorsave').show();
+                    return;
+                }
+
+                if (selectedelements.length === 0) {
+
+                    $('#errorsave').show();
+                    return;
+                }
+
+                $('.btn').prop('disabled', true);
+                $('#spinwait').show();
+
+                $.ajax({
+                    url: '/Schedule/AssignedSchedule',
+                    type: "POST",
+                    data: { selectedInputs: selectedelements, scheduleSelected: $('#dropdownSchedule').val(), scheduleMealSelected: $('#dropdownScheduleMeal').val(), toleranceWD: $('#inputtolerancewd').val(), toleranceML: $('#inputtoleranceml').val() },
+                    success: function (data, textStatus, jqXHR) {
+
+                        Swal.fire(
+                            {
+                                position: "top-end",
+                                type: "success",
+                                title: "Actualización exitosa",
+                                showConfirmButton: false,
+                                timer: 1500
+                            }).then((result) => {
+
+                                window.location.href = '/Schedule/AssignedSchedules';
+
+                            });
+
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+
+                    }
+                });
+
+            });
+
+
+            $('.deleterow').click(function () {
+
+
+                var id = $(this).closest('tr').attr('id');
+
+                var swalWithBootstrapButtons = Swal.mixin(
+                    {
+                        customClass:
+                        {
+                            confirmButton: "btn btn-primary",
+                            cancelButton: "btn btn-danger mr-2"
+                        },
+                        buttonsStyling: false
+                    });
+                swalWithBootstrapButtons
+                    .fire(
+                        {
+                            title: "Confirmación",
+                            text: "Deseas eliminar el elemento?",
+                            type: "warning",
+                            showCancelButton: true,
+                            confirmButtonText: "Si",
+                            cancelButtonText: "Cancelar",
+                            reverseButtons: true
+                        })
+                    .then(function (result) {
+
+                        if (result.value) {
+
+
+                            $.ajax({
+                                url: '/Schedule/DeleteSchedule',
+                                type: "POST",
+                                data: { id: id },
+                                success: function (data, textStatus, jqXHR) {
+
+                                    Swal.fire(
+                                        {
+                                            position: "top-end",
+                                            type: "success",
+                                            title: "Actualización exitosa",
+                                            showConfirmButton: false,
+                                            timer: 1500
+                                        }).then((result) => {
+
+
+                                            window.location.href = '/Schedule/AdminSchedule';
+
+                                        });
+
+
+
+                                },
+                                error: function (jqXHR, textStatus, errorThrown) {
+                                    alert(errorThrown);
+                                }
+                            });
+                        }
+                        else if (
+                            // Read more about handling dismissals
+                            result.dismiss === Swal.DismissReason.cancel
+                        ) {
+                            swalWithBootstrapButtons.fire(
+                                "Cancelación",
+                                "Se ha cancelado la acción",
+                                "error"
+                            );
+                        }
+                    });
+
+            });
+
+
+            $(".reseterror").change(function () {
+                $('#errorsave').hide();
+            });
+
+
+            $('#closemodal').click(function () {
+
+                $('#errorsave').hide();
+                $('#searcherror').hide();
+            });
+
+
+            $('#searchbutton').click(function () {
+
+                $('#errorsave').hide();
+                $('#addelement').hide();
+                $('#searchresult').empty();
+                $('#elementsfinded').empty();
+                $('#searcherror').hide();
+                $('#imgsearch').hide();
+                $('#spin').show();
+                var ts = $('#typesearch').val();
+
+                if (ts === "0") {
+
+                    $('#msgerror').text("Seleccione un tipo de busqueda");
+                    $('#imgsearch').show();
+                    $('#spin').hide();
+                    $('#searcherror').show();
+                    return;
+                }
+
+                if ($('#searchText').val() === "") {
+                    $('#msgerror').text("Ingrese el valor de la busqueda");
+                    $('#imgsearch').show();
+                    $('#spin').hide();
+                    $('#searcherror').show();
+                    return;
+                }
+
+
+                $.ajax({
+                    url: '/Schedule/SearchBy',
+                    type: "POST",
+                    data: { inputtext: $('#searchText').val(), typesearch: ts },
+                    success: function (data, textStatus, jqXHR) {
+
+                        if (data.details === "") {
+
+                            if (data.rows > 0) {
+                                $('#searchresult').append('<span id="' + data.id + '" class="elementresult">' + data.value + '<span class="badge badge-icon position-relative ml-2">' + data.rows + '</span></span>');
+                                $('#addelement').show();
+                            }
+                            else {
+                                if (data.rows == 0) {
+                                    $('#msgerror').text("No se encontraron resultados.");
+                                    $('#searcherror').show();
+                                }
+                                else {
+                                    $('#msgerror').text("El empleado ya tiene horario asignado.");
+                                    $('#searcherror').show();
+                                }
+                            }
+
+                            $('#imgsearch').show();
+                            $('#spin').hide();
+                        }
+                        else {
+
+                            var showDetail = 0;
+                            data.details.forEach(function (dataDet, index) {
+
+                                $('#elementsfinded').append('<li><div class="custom-control custom-checkbox"><input type="checkbox" class="custom-control-input" id="' + dataDet.id + '"><label class="custom-control-label" for="' + dataDet.id + '">' + dataDet.value + '</label></div></li>');
+                                showDetail++;
+                            });
+
+                            if (showDetail > 0) {
+                                $('#addelement').show();
+                                multipleadded = true;
+                            }
+                            else {
+                                if (data.rows === -1) {
+                                    $('#msgerror').text("Todos los empleados ya tienen horarios asignados.");
+                                    $('#searcherror').show();
+                                }
+                                else {
+                                    $('#msgerror').text("No se encontrarón resultados.");
+                                    $('#searcherror').show();
+                                }
+                            }
+
+                            $('#imgsearch').show();
+                            $('#spin').hide();
+                        }
+
+                        $('#searchText').val("");
+
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+
+                    }
+                });
+            });
+
+
+            $('#addelement').click(function () {
+
+
+                if (multipleadded) {
+
+                    $("#elementsfinded input[type=checkbox]:checked").each(function () {
+
+                        var idelement = this.id;
+                        var found = selectedelements.find(function (element) {
+                            return element == idelement;
+                        });
+                        if (found === undefined || found.length === 0) {
+
+                            selectedelements.push(idelement);
+                            $('#elementsadded').append('<li><div class="custom-control custom-checkbox"><input type="checkbox" class="custom-control-input" id="' + idelement + '"><label class="custom-control-label" for="' + idelement + '">' + this.parentElement.innerText + '</label></div></li>');
+                        }
+
+                    });
+
+                    $('#elementsfinded').empty();
+                    $('#addelement').hide();
+                    multipleadded = false;
+                }
+                else {
+
+                    var elementspan = $("#searchresult > span");
+                    var idelement = elementspan.attr('id');
+
+                    $('#searchresult').empty();
+                    $('#addelement').hide();
+
+                    var found = selectedelements.find(function (element) {
+                        return element == idelement;
+                    });
+
+                    if (found === undefined || found.length === 0) {
+
+                        selectedelements.push(idelement);
+                        $('#elementsadded').append('<li><div class="custom-control custom-checkbox"><input type="checkbox" class="custom-control-input" id="' + idelement + '"><label class="custom-control-label" for="' + idelement + '">' + elementspan.text().slice(0, -1) + '</label></div></li>');
+                    }
+                }
+
+
+            });
+
+            $('#js-delete-selected').click(function () {
+
+
+                $("#elementsadded input[type=checkbox]:checked").each(function () {
+
+                    var idelement = this.id;
+
+                    var found = selectedelements.find(function (element) {
+                        return element == idelement;
+                    });
+
+                    if (found !== undefined || found.length !== 0) {
+
+                        selectedelements.splice(selectedelements.indexOf(idelement), 1);
+                        $(this).closest('li').remove();
+                    }
+
+
+                });
+
+
+
+
+            });
+
+
+
+            //Horarios Temporales
+
+
+            $('#savenewscheduletemp').click(function () {
+
+
+                if ($('#inputtolerancewdtemp').val() < 0 || $('#inputtolerancemltemp').val() < 0) {
+
+                    $('#errorsavetemp').show();
+                    return;
+                }
+
+
+                if ($('#dropdownScheduletemp').val() === null || $('#dropdownScheduleMealtemp').val() === null) {
+
+                    $('#errorsavetemp').show();
+                    return;
+                }
+
+                if (selectedelements.length === 0) {
+
+                    $('#errorsavetemp').show();
+                    return;
+                }
+
+                $('.btn').prop('disabled', true);
+                $('#spinwaittemp').show();
+
+                $.ajax({
+                    url: '/Schedule/AssignedScheduleTemp',
+                    type: "POST",
+                    data: { selectedInputs: selectedelements, scheduleSelected: $('#dropdownScheduletemp').val(), scheduleMealSelected: $('#dropdownScheduleMealtemp').val(), toleranceWD: $('#inputtolerancewdtemp').val(), toleranceML: $('#inputtolerancemltemp').val() },
+                    success: function (data, textStatus, jqXHR) {
+
+                        Swal.fire(
+                            {
+                                position: "top-end",
+                                type: "success",
+                                title: "Actualización exitosa",
+                                showConfirmButton: false,
+                                timer: 1500
+                            }).then((result) => {
+
+                                window.location.href = '/Schedule/AssignedSchedules';
+
+                            });
+
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+
+                    }
+                });
+
+            });
+
+
+            $('.deleterowtemp').click(function () {
+
+
+                var id = $(this).closest('tr').attr('id');
+
+                var swalWithBootstrapButtons = Swal.mixin(
+                    {
+                        customClass:
+                        {
+                            confirmButton: "btn btn-primary",
+                            cancelButton: "btn btn-danger mr-2"
+                        },
+                        buttonsStyling: false
+                    });
+                swalWithBootstrapButtons
+                    .fire(
+                        {
+                            title: "Confirmación",
+                            text: "Deseas eliminar el elemento?",
+                            type: "warning",
+                            showCancelButton: true,
+                            confirmButtonText: "Si",
+                            cancelButtonText: "Cancelar",
+                            reverseButtons: true
+                        })
+                    .then(function (result) {
+
+                        if (result.value) {
+
+
+                            $.ajax({
+                                url: '/Schedule/DeleteSchedule',
+                                type: "POST",
+                                data: { id: id },
+                                success: function (data, textStatus, jqXHR) {
+
+                                    Swal.fire(
+                                        {
+                                            position: "top-end",
+                                            type: "success",
+                                            title: "Actualización exitosa",
+                                            showConfirmButton: false,
+                                            timer: 1500
+                                        }).then((result) => {
+
+
+                                            window.location.href = '/Schedule/AdminSchedule';
+
+                                        });
+
+
+
+                                },
+                                error: function (jqXHR, textStatus, errorThrown) {
+                                    alert(errorThrown);
+                                }
+                            });
+                        }
+                        else if (
+                            // Read more about handling dismissals
+                            result.dismiss === Swal.DismissReason.cancel
+                        ) {
+                            swalWithBootstrapButtons.fire(
+                                "Cancelación",
+                                "Se ha cancelado la acción",
+                                "error"
+                            );
+                        }
+                    });
+
+            });
+
+
+            $(".reseterrortemp").change(function () {
+                $('#errorsavetemp').hide();
+            });
+
+
+            $('#closemodaltemp').click(function () {
+
+                $('#errorsavetemp').hide();
+                $('#searcherrortemp').hide();
+            });
+
+
+            $('#searchbuttontemp').click(function () {
+
+                $('#errorsavetemp').hide();
+                $('#addelementtemp').hide();
+                $('#searchresulttemp').empty();
+                $('#elementsfindedtemp').empty();
+                $('#searcherrortemp').hide();
+                $('#imgsearchtemp').hide();
+                $('#spintemp').show();
+                var ts = $('#typesearchtemp').val();
+
+                if (ts === "0") {
+
+                    $('#msgerrortemp').text("Seleccione un tipo de busqueda");
+                    $('#imgsearchtemp').show();
+                    $('#spintemp').hide();
+                    $('#searcherrortemp').show();
+                    return;
+                }
+
+                if ($('#searchTexttemp').val() === "") {
+                    $('#msgerrortemp').text("Ingrese el valor de la busqueda");
+                    $('#imgsearchtemp').show();
+                    $('#spintemp').hide();
+                    $('#searcherrortemp').show();
+                    return;
+                }
+
+
+                $.ajax({
+                    url: '/Schedule/SearchByTemp',
+                    type: "POST",
+                    data: { inputtext: $('#searchTexttemp').val(), typesearch: ts },
+                    success: function (data, textStatus, jqXHR) {
+
+                        if (data.details === "") {
+
+                            if (data.rows > 0) {
+                                $('#searchresulttemp').append('<span id="' + data.id + '" class="elementresult">' + data.value + '<span class="badge badge-icon position-relative ml-2">' + data.rows + '</span></span>');
+                                $('#addelementtemp').show();
+                            }
+                            else {
+                                if (data.rows == 0) {
+                                    $('#msgerror').text("No se encontraron resultados.");
+                                    $('#searcherror').show();
+                                }
+                                else {
+                                    $('#msgerror').text("El empleado ya tiene horario asignado.");
+                                    $('#searcherror').show();
+                                }
+                            }
+
+                            $('#imgsearchtemp').show();
+                            $('#spintemp').hide();
+                        }
+                        else {
+
+                            var showDetail = 0;
+                            data.details.forEach(function (dataDet, index) {
+
+                                $('#elementsfindedtemp').append('<li><div class="custom-control custom-checkbox"><input type="checkbox" class="custom-control-input" id="' + dataDet.id + '"><label class="custom-control-label" for="' + dataDet.id + '">' + dataDet.value + '</label></div></li>');
+                                showDetail++;
+                            });
+
+                            if (showDetail > 0) {
+                                $('#addelementtemp').show();
+                                multipleaddedtemp = true;
+                            }
+                            else {
+                                if (data.rows === -1) {
+                                    $('#msgerrortemp').text("Todos los empleados ya tienen horarios asignados.");
+                                    $('#searcherrortemp').show();
+                                }
+                                else {
+                                    $('#msgerrortemp').text("No se encontrarón resultados.");
+                                    $('#searcherrortemp').show();
+                                }
+                            }
+
+                            $('#imgsearchtemp').show();
+                            $('#spintemp').hide();
+                        }
+
+                        $('#searchTexttemp').val("");
+
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+
+                    }
+                });
+            });
+
+
+            $('#addelementtemp').click(function () {
+
+
+                if (multipleaddedtemp) {
+
+                    $("#elementsfindedtemp input[type=checkbox]:checked").each(function () {
+
+                        var idelement = this.id;
+                        var found = selectedelements.find(function (element) {
+                            return element == idelement;
+                        });
+                        if (found === undefined || found.length === 0) {
+
+                            selectedelements.push(idelement);
+                            $('#elementsaddedtemp').append('<li><div class="custom-control custom-checkbox"><input type="checkbox" class="custom-control-input" id="' + idelement + '"><label class="custom-control-label" for="' + idelement + '">' + this.parentElement.innerText + '</label></div></li>');
+                        }
+
+                    });
+
+                    $('#elementsfindedtemp').empty();
+                    $('#addelementtemp').hide();
+                    multipleaddedtemp = false;
+                }
+                else {
+
+                    var elementspan = $("#searchresulttemp > span");
+                    var idelement = elementspan.attr('id');
+
+                    $('#searchresulttemp').empty();
+                    $('#addelementtemp').hide();
+
+                    var found = selectedelements.find(function (element) {
+                        return element == idelement;
+                    });
+
+                    if (found === undefined || found.length === 0) {
+
+                        selectedelements.push(idelement);
+                        $('#elementsaddedtemp').append('<li><div class="custom-control custom-checkbox"><input type="checkbox" class="custom-control-input" id="' + idelement + '"><label class="custom-control-label" for="' + idelement + '">' + elementspan.text().slice(0, -1) + '</label></div></li>');
+                    }
+                }
+
+
+            });
+
+            $('#js-delete-selectedtemp').click(function () {
+
+
+                $("#elementsaddedtemp input[type=checkbox]:checked").each(function () {
+
+                    var idelement = this.id;
+
+                    var found = selectedelements.find(function (element) {
+                        return element == idelement;
+                    });
+
+                    if (found !== undefined || found.length !== 0) {
+
+                        selectedelements.splice(selectedelements.indexOf(idelement), 1);
+                        $(this).closest('li').remove();
+                    }
+
+
+                });
+
+
+
+
+            });
+
+
+            //Detalles Horarios
+
+            var updateselectedemployee = 0;
+
+            $('#detailschedule').click(function () {
+
+                var row = $('#allschedules tr.selected');
+                var idemployee = row.data("id");
+
+                if (idemployee === undefined) {
+
+                    Swal.fire(
+                        {
+                            type: "warning",
+                            title: "Validación",
+                            text: "Seleccione un registro"
+                        });
+
+                    return;
+
+                }
+
+
+                updateselectedemployee = idemployee;
+
+                $.ajax({
+                    url: '/Schedule/GetScheduleInfo',
+                    type: "POST",
+                    data: { employeeId: idemployee },
+                    success: function (data, textStatus, jqXHR) {
+
+                        $("#dropdownScheduleupdate").val(data.idswd).change();
+                        $("#dropdownScheduleMealupdate").val(data.idsmd).change();
+                        $("#inputtolerancewdupdate").val(data.tswd);
+                        $("#inputtolerancemlupdate").val(data.tsmd);
+
+                        $('#detailschedulemployeename').text(data.name);
+
+
+                        $('#default-example-modal-center').modal();
+
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        alert(errorThrown);
+                    }
+                });
+
+            });
+
+
+            $('#btnUpdateSchedule').click(function () {
+
+                $('.btn').prop('disabled', true);
+                $('.close').prop('disabled', true);
+                $('#spinupdateschedule').show();
+
+                $.ajax({
+                    url: '/Schedule/UpdateScheduleInfo',
+                    type: "POST",
+                    data: { employeeId: updateselectedemployee, scheduleSelected: $("#dropdownScheduleupdate").val(), scheduleMealSelected: $("#dropdownScheduleMealupdate").val(), toleranceWD: $("#inputtolerancewdupdate").val(), toleranceML: $("#inputtolerancemlupdate").val() },
+                    success: function (data, textStatus, jqXHR) {
+
+                        window.location.href = '/Schedule/AssignedSchedules';
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        alert(errorThrown);
+                    }
+                });
+
+
+            });
+
+
+
+            $('#deleteschedule').click(function () {
+
+
+                var row = $('#allschedules tr.selected');
+                var idemployee = row.data("id");
+
+
+                if (idemployee === undefined) {
+
+                    Swal.fire(
+                        {
+                            type: "warning",
+                            title: "Validación",
+                            text: "Seleccione un registro"
+                        });
+
+                    return;
+
+                }
+
+                $.ajax({
+                    url: '/Schedule/HaveTempSchedule',
+                    type: "POST",
+                    data: { employeeId: idemployee },
+                    success: function (data, textStatus, jqXHR) {
+
+                        if (data.response === "success") {
+
+                            var swalWithBootstrapButtons = Swal.mixin(
+                                {
+                                    customClass:
+                                    {
+                                        confirmButton: "btn btn-primary",
+                                        cancelButton: "btn btn-danger mr-2"
+                                    },
+                                    buttonsStyling: false
+                                });
+                            swalWithBootstrapButtons
+                                .fire(
+                                    {
+                                        title: "Confirmación",
+                                        text: "Deseas eliminar el horario temporal?",
+                                        type: "warning",
+                                        showCancelButton: true,
+                                        confirmButtonText: "Si",
+                                        cancelButtonText: "Cancelar",
+                                        reverseButtons: true
+                                    })
+                                .then(function (result) {
+
+                                    if (result.value) {
+
+
+                                        $.ajax({
+                                            url: '/Schedule/DeleteTempSchedule',
+                                            type: "POST",
+                                            data: { idSchedule: data.idschedule },
+                                            success: function (data, textStatus, jqXHR) {
+
+                                                Swal.fire(
+                                                    {
+                                                        position: "top-end",
+                                                        type: "success",
+                                                        title: "Actualización exitosa",
+                                                        showConfirmButton: false,
+                                                        timer: 1500
+                                                    }).then((result) => {
+
+
+                                                        window.location.href = '/Schedule/AssignedSchedules';
+
+                                                    });
+
+
+
+                                            },
+                                            error: function (jqXHR, textStatus, errorThrown) {
+                                                alert(errorThrown);
+                                            }
+                                        });
+                                    }
+                                    else if (
+                                        // Read more about handling dismissals
+                                        result.dismiss === Swal.DismissReason.cancel
+                                    ) {
+                                        swalWithBootstrapButtons.fire(
+                                            "Cancelación",
+                                            "Se ha cancelado la acción",
+                                            "error"
+                                        );
+                                    }
+                                });
+
+
+
+
+
+                        }
+                        else {
+
+                            Swal.fire(
+                                {
+                                    type: "warning",
+                                    title: "Validación",
+                                    text: "No hay horario temporal asignado"
+                                });
+
+                            return;
+
+                        }
+
+
+
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        alert(errorThrown);
+                    }
+                });
+
+
+
+            });
+
+
+        });
+
+    </script>
+}

@@ -1,0 +1,38 @@
+﻿@using SARH.WebUI.Models.Dashboard;
+@using System.Linq;
+@model IList<DashboardEmployeeDetailModel>
+
+
+    <table id="dt-basic-example" class="table table-bordered table-hover table-striped w-100">
+        <thead class="bg-warning-200">
+            <tr>
+                <th>ID</th>
+                <th>Empleado</th>
+                <th>Area</th>
+                <th>Puesto</th>
+                <th>Incidencia</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @item.ID
+                    </td>
+                    <td>
+                        @item.Name
+                    </td>
+                    <td>
+                        @item.Area
+                    </td>
+                    <td>
+                        @item.JobTitle
+                    </td>
+                    <td>
+                        @item.DetailType
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
