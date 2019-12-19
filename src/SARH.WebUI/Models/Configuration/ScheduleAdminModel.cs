@@ -31,6 +31,8 @@ namespace SARH.WebUI.Models.Configuration
         public string EffectiveTime { get; set; }
         public string TypeSchedule { get; set; }
         public int StartHourAnticipated { get; set; }
+        public string StartHourWke { get; set; }
+        public string EndHourWke { get; set; }
     }
 
     public class ScheduleCatalogItem

@@ -140,6 +140,65 @@ namespace SARH.WebUI.Controllers
             return View(model);
         }
 
+
+        [ActionName("HierarchyAssignedReactive")]
+        public IActionResult IndexReactive(string assignedHGuid, string employeeID)
+        {
+            List<ListItem> model = new List<ListItem>();
+            model.AddRange(CreateNav("a9abae18-c608-45f2-9061-6dc035803fd7", _hierarchies));
+
+            ViewBag.AssignedHGuid = assignedHGuid;
+            ViewBag.EmployeeID = employeeID.TrimStart(new Char[] { '0' });
+
+            return View(model);
+        }
+
+        [ActionName("HierarchyAssignedSubReactive")]
+        public IActionResult HierarchyPartialReactive(string rowid, string empRowId, string employeeID)
+        {
+            List<ListItem> model = new List<ListItem>();
+            model.AddRange(CreateNav(rowid, _hierarchies));
+
+            var pp = _hierarchies.Where(l => l.RowGuid.Equals(rowid));
+
+            ViewBag.AssignedHGuid = empRowId;
+            ViewBag.EmployeeID = employeeID;
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public JsonResult SetNewJobReactive(string jobGuid, string employeeId, 
+            [FromServices] IRepository<EmployeeOrganigrama> isosaemployeesOrganigramaRepository,
+            [FromServices] IRepository<EmployeeAditionalInfo> employeAdditionalInfoRepository)
+        {
+
+            isosaemployeesOrganigramaRepository.CreateTableBackup("Horarios");
+            var destiny = isosaemployeesOrganigramaRepository.SearhItemsFor(j => j.RowGuid.ToString().Equals(jobGuid));
+            var employee = employeAdditionalInfoRepository.SearhItemsFor(f => f.EMP_EmployeeID.Equals(int.Parse(employeeId).ToString("00000")));
+
+            bool success = true;
+
+            try
+            {
+                if (employee.Any())
+                {
+                    var emp = employee.First();
+                    emp.HrowGuid = Guid.Parse(jobGuid);
+                    employeAdditionalInfoRepository.Update(emp);
+                }
+            }
+            catch
+            {
+                success = false;
+            }
+
+
+            return Json(new { success = success, guidresponse = jobGuid });
+        }
+
+
+
         public List<Breadcrumb> CreateBreadcrum()
         {
             List<Breadcrumb> _breadC = new List<Breadcrumb>();

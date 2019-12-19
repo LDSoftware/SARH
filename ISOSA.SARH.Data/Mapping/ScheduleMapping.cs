@@ -18,6 +18,9 @@ namespace ISOSA.SARH.Data.Mapping
             builder.Property(x => x.StartHour);
             builder.Property(x => x.TypeSchedule);
             builder.Property(x => x.StartHourAnticipated);
+            builder.Property(x => x.Weekend);
+            builder.Property(x => x.StartHourWeekend);
+            builder.Property(x => x.EndHourWeekend);
         }
     }
 }

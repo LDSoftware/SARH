@@ -78,8 +78,8 @@ namespace SARH.WebUI.Controllers
                 Description = x.Description,
                 EffectiveTime = x.EffectiveTimeStart.HasValue ? $"({x.EffectiveTimeStart.Value.ToShortDateString()})-({x.EffectiveTimeEnd.Value.ToShortDateString()})" : "",
                 Enabled = x.Enabled == true ? "Si" : "No",
-                EndHour = x.EndHour,
-                StartHour = x.StartHour,
+                EndHour = CombineScheduleInfo(x.EndHour, x.EndHourWeekend, x.Weekend),
+                StartHour = CombineScheduleInfo(x.StartHour, x.StartHourWeekend, x.Weekend),
                 TypeSchedule = GetScheduleType(x.TypeSchedule),
                 StartHourAnticipated = x.StartHourAnticipated
             }).ToList();
@@ -90,6 +90,20 @@ namespace SARH.WebUI.Controllers
 
             return View(model);
         }
+
+        private string CombineScheduleInfo(string hour1, string hour2, bool weekend) 
+        {
+            string response = $"L-V({hour1}) ";
+
+            if (weekend) 
+            {
+                response += $"S({hour2})";
+            }
+
+
+            return response;
+        }
+
 
         [HttpPost]
         public JsonResult SaveScheduleNew(ScheduleItem sheduleInfo)
@@ -116,7 +130,10 @@ namespace SARH.WebUI.Controllers
                 EndHour = sheduleInfo.EndHour,
                 StartHour = sheduleInfo.StartHour,
                 TypeSchedule = int.Parse(sheduleInfo.TypeSchedule),
-                StartHourAnticipated = sheduleInfo.StartHourAnticipated
+                StartHourAnticipated = sheduleInfo.StartHourAnticipated,
+                StartHourWeekend = string.IsNullOrEmpty(sheduleInfo.StartHourWke) ? "" : sheduleInfo.StartHourWke,
+                EndHourWeekend = string.IsNullOrEmpty(sheduleInfo.EndHourWke) ? "" : sheduleInfo.EndHourWke,
+                Weekend = string.IsNullOrEmpty(sheduleInfo.StartHourWke) ? false : true
             });
 
             return Json("Ok");
@@ -126,11 +143,36 @@ namespace SARH.WebUI.Controllers
         [HttpPost]
         public JsonResult DeleteSchedule(int id)
         {
-            var row = _repository.GetElement(id);
-            row.Enabled = false;
-            _repository.Update(row);
+            bool success = true;
+            bool isvalidty = false;
+            string message = string.Empty;
+            var sch = _repositoryEmployeeSchedule.SearhItemsFor(d => d.IdScheduleWorkday.Equals(id) || d.IdScheduleMeal.Equals(id));
+            var schtemp = _repositoryEmployeeScheduleTemp.SearhItemsFor(d => d.IdScheduleWorkday.Equals(id) || d.IdScheduleMeal.Equals(id));
+            if (schtemp.Any()) 
+            {
+                var row = _repository.GetElement(id);
+                if (row != null) 
+                {
+                    var now = DateTime.Now;
+                    isvalidty = now >= row.EffectiveTimeStart && now <= row.EffectiveTimeEnd;
+                }
+            }
 
-            return Json("Ok");
+            if (!sch.Any() && !isvalidty)
+            {
+                var row = _repository.GetElement(id);
+                row.Enabled = false;
+                _repository.Update(row);
+            }
+            else
+            {
+                success = false;
+                message = "El horario se encuentra asignado, no se puede deshabilitar, reasigne el horario e intente nuevamente";
+            }
+
+
+
+            return Json(new { success = success, message = message });
         }
 
 
@@ -143,7 +185,7 @@ namespace SARH.WebUI.Controllers
         {
 
             var scheduleAssigned = _repositoryEmployeeSchedule.GetAll();
-            var scheduleAssignedTemp = _repositoryEmployeeScheduleTemp.GetAll();
+            var scheduleAssignedTemp = _repositoryEmployeeScheduleTemp.GetAll().Where(i => i.Disabled == false);
             var organigramaModel = _organigramaModelFactory.GetAllData().Employess;
 
 
@@ -155,12 +197,12 @@ namespace SARH.WebUI.Controllers
                     Id = i.Id,
                     EmployeeId = int.Parse(i.EmployeeId).ToString("00000"),
                     ScheduleMeal = !IsValidcheduleAssigedTemp(i.EmployeeId, scheduleAssignedTemp.ToList(), 2) ? $"{GetStartScheduleAssigned(i.IdScheduleMeal, 2)} - {GetEndScheduleAssigned(i.IdScheduleMeal, 2)}" : GetScheduleAssigedTemp(i.EmployeeId, scheduleAssignedTemp.ToList(), 2),
-                    ScheduleWorkday = !IsValidcheduleAssigedTemp(i.EmployeeId, scheduleAssignedTemp.ToList(), 1) ? $"{GetStartScheduleAssigned(i.IdScheduleWorkday, 1)} - {GetEndScheduleAssigned(i.IdScheduleWorkday, 1)}" : GetScheduleAssigedTemp(i.EmployeeId, scheduleAssignedTemp.ToList(), 1),
-                    EmployeeName = $"{organigramaModel.Where(k => k.Id.Equals(i.EmployeeId)).FirstOrDefault().Name }",
-                    ToleranceWorkday = $"{i.ToleranceWorkday} Mins",
-                    ToleranceMeal = $"{i.ToleranceMeal} Mins",
-                    EsTemporal = scheduleAssignedTemp.Where(u => u.EmployeeId.Equals(i.EmployeeId)).Any() ? "Si" : "No"
-                }).ToList();
+                    ScheduleWorkday = !IsValidcheduleAssigedTemp(i.EmployeeId, scheduleAssignedTemp.ToList(), 1) ? $"L-V({GetStartScheduleAssigned(i.IdScheduleWorkday, 1)} - {GetEndScheduleAssigned(i.IdScheduleWorkday, 1)})" : GetScheduleAssigedTemp(i.EmployeeId, scheduleAssignedTemp.ToList(), 1),
+                    EmployeeName = organigramaModel.Where(k => k.Id.Equals(i.EmployeeId)).Any() ? $"{organigramaModel.Where(k => k.Id.Equals(i.EmployeeId)).FirstOrDefault().Name }" : "",
+                    ToleranceWorkday = IsValidcheduleAssigedTemp(i.EmployeeId, scheduleAssignedTemp.ToList(), 1) ? ScheduleTempTolerance(i.EmployeeId, scheduleAssignedTemp.ToList(), 1) : $"{i.ToleranceWorkday} Mins",
+                    ToleranceMeal = IsValidcheduleAssigedTemp(i.EmployeeId, scheduleAssignedTemp.ToList(), 2) ? ScheduleTempTolerance(i.EmployeeId, scheduleAssignedTemp.ToList(), 2) : $"{i.ToleranceMeal} Mins",
+                    EsTemporal = (!IsValidcheduleAssigedTemp(i.EmployeeId, scheduleAssignedTemp.ToList(), 2) && !IsValidcheduleAssigedTemp(i.EmployeeId, scheduleAssignedTemp.ToList(), 1)) ? "No" : "Si"
+                }).ToList().Where(u => !u.EmployeeName.Equals(string.Empty)).ToList();
             }
 
             var dropdownSchedule = _repository.GetAll().Where(u => u.Enabled.Equals(true) && u.TypeSchedule.Equals(1) && !u.EffectiveTimeStart.HasValue).Select(o => new SelectListItem()
@@ -414,9 +456,9 @@ namespace SARH.WebUI.Controllers
                     break;
                 case "4":
                     var employee = _organigramaModelFactory.GetEmployeeData(inputtext.TrimStart(new Char[] { '0' }));
-                    if (employee.Area != null && !_repositoryEmployeeScheduleTemp.SearhItemsFor(e => e.EmployeeId.Equals(employee.GeneralInfo.Id.TrimStart(new Char[] { '0' }))).Any())
+                    if (employee.Area != null && !_repositoryEmployeeScheduleTemp.SearhItemsFor(e => e.EmployeeId.Equals(employee.GeneralInfo.Id.TrimStart(new Char[] { '0' })) && e.Disabled == false).Any())
                     {
-                        if (employee.RowId != null && !_repositoryEmployeeScheduleTemp.GetAll().Where(d => d.EmployeeId.Equals(inputtext.TrimStart(new Char[] { '0' }))).Any())
+                        if (employee.RowId != null && !_repositoryEmployeeScheduleTemp.GetAll().Where(d => d.EmployeeId.Equals(inputtext.TrimStart(new Char[] { '0' })) && d.Disabled == false).Any())
                         {
                             id = $"{typesearch}|{employee.GeneralInfo.Id}";
                             value = $"{inputtext}-{ employee.GeneralInfo.FirstName} {employee.GeneralInfo.LastName}";
@@ -444,7 +486,7 @@ namespace SARH.WebUI.Controllers
             selectedInputs.ToList().ForEach((y) =>
             {
                 var data = y.Split('|');
-                var detail = _repositoryEmployeeScheduleTemp.SearhItemsFor(i => i.EmployeeId.Equals(data[1].TrimStart(new Char[] { '0' })));
+                var detail = _repositoryEmployeeScheduleTemp.SearhItemsFor(i => i.EmployeeId.Equals(data[1].TrimStart(new Char[] { '0' })) && i.Disabled == false);
                 if (!detail.Any())
                 {
                     _repositoryEmployeeScheduleTemp.Create(new EmployeeScheduleAssignedTemp()
@@ -484,7 +526,9 @@ namespace SARH.WebUI.Controllers
 
             if (row != null) 
             {
-                _repositoryEmployeeScheduleTemp.Delete(row);
+                row.Disabled = true;
+                row.DisabledDate = DateTime.Now;
+                _repositoryEmployeeScheduleTemp.Update(row);
                 response = "success";
             }
 
@@ -513,7 +557,6 @@ namespace SARH.WebUI.Controllers
 
             return Json(new { idswd = idswd, idsmd = idsmd, tswd = tswd, tsmd = tsmd, name = name });
         }
-
 
         public JsonResult UpdateScheduleInfo(string employeeId, int scheduleSelected, int scheduleMealSelected, int toleranceWD, int toleranceML)
         {
@@ -586,7 +629,7 @@ namespace SARH.WebUI.Controllers
                 string startDate = GetStartScheduleAssigned(TypeSchedule == 1 ? result.IdScheduleWorkday : result.IdScheduleMeal, TypeSchedule);
                 string endDate = GetEndScheduleAssigned(TypeSchedule == 1 ? result.IdScheduleWorkday : result.IdScheduleMeal, TypeSchedule);
 
-                response = $"{startDate}-{endDate}";
+                response = $"L-V({startDate}-{endDate})";
             }
 
             return response;
@@ -628,7 +671,8 @@ namespace SARH.WebUI.Controllers
 
                 if (startDate.HasValue && endDate.HasValue)
                 {
-                    if (DateTime.Today >= startDate && DateTime.Today <= endDate)
+                    DateTime now = DateTime.Today;
+                    if (now >= startDate.Value && now <= endDate.Value)
                     {
                         response = true;
                     }
@@ -638,7 +682,26 @@ namespace SARH.WebUI.Controllers
             return response;
         }
 
-   
+        private string ScheduleTempTolerance(string Employee, List<EmployeeScheduleAssignedTemp> listScheduleTemp, int TypeSchedule) 
+        {
+            string response = string.Empty;
+            var result = listScheduleTemp.Where(j => j.EmployeeId.Equals(Employee)).FirstOrDefault();
+            if (result != null)
+            {
+                if (TypeSchedule.Equals(1))
+                {
+                    response = $"{result.ToleranceWorkday} Mins";
+                }
+                else
+                {
+                    response = $"{result.ToleranceMeal} Mins";
+                }
+            }
+            return response;
+        }
+
+
+
         #endregion
 
 

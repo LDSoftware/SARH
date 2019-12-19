@@ -51,6 +51,15 @@ namespace SARH.WebUI.Controllers
             return View(model);
         }
 
+        [ActionName("OrganigramaNoActivos")]
+        public IActionResult IndexNonActive(string organigramaitem)
+        {
+
+            var model = this._organigramaModelFactory.GetAllDataNoActive();
+
+            return View(model);
+        }
+
         #endregion
 
         #region Organigrama Employee Detail
@@ -106,6 +115,18 @@ namespace SARH.WebUI.Controllers
 
             return View(model);
         }
+
+
+
+        [ActionName("EmployeeDetailNoActive")]
+        public IActionResult DetailNoActive(string employeeid)
+        {
+            var model = this._organigramaModelFactory.GetEmployeeDataNoActive(employeeid);
+
+            return View(model);
+        }
+
+
 
         #endregion
 
@@ -907,7 +928,7 @@ namespace SARH.WebUI.Controllers
 
         #endregion
 
-        #region Employee Unsuscribe
+        #region Employee suscribe / Unsuscribe
 
         [HttpPost]
         public JsonResult EmployeeUnsubscribe(string Id,
@@ -931,6 +952,31 @@ namespace SARH.WebUI.Controllers
             }
 
             return Json(new { employeeid = Id.TrimStart(new Char[] { '0' }) });
+        }
+
+
+        [HttpPost]
+        public JsonResult EmployeeSubscribe(string Id,
+        [FromServices] IRepository<Nomipaq_nom10001> nomipaqRepo,
+        [FromServices] IRepository<EmployeeAditionalInfo> isosaRepo)
+        {
+            var isosaRow = isosaRepo.SearhItemsFor(d => d.EMP_EmployeeID.Equals(Id));
+            var nomipaqRow = nomipaqRepo.SearhItemsFor(d => d.codigoempleado.Equals(Id));
+
+            if (isosaRow.Any())
+            {
+                var row = isosaRow.FirstOrDefault();
+                row.EMP_StatusCode = "Active";
+                isosaRepo.Update(row);
+            }
+            if (nomipaqRow.Any())
+            {
+                var row = nomipaqRow.FirstOrDefault();
+                row.estadoempleado = "R";
+                nomipaqRepo.Update(row);
+            }
+
+            return Json("Ok");
         }
 
         #endregion

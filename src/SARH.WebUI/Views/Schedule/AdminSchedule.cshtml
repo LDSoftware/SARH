@@ -48,9 +48,15 @@
                 </h2>
 
 
-                <div class="panel-toolbar">
+                <div class="panel-toolbar demo-h-spacing">
                     <a href="javascript:void(0);" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target=".default-example-modal-right" class="btn btn-primary btn-icon waves-effect waves-themed">
                         <i class="fal fa-calendar-plus"></i>
+                    </a>
+                    <a id="editrow" href="javascript:void(0);" class="btn btn-success btn-icon waves-effect waves-themed">
+                        <i class="fal fa-calendar-edit"></i>
+                    </a>
+                    <a id="deleterow" href='javascript:void(0);' class="btn btn-danger btn-icon waves-effect waves-themed">
+                        <i class="fal fa-calendar-times"></i>
                     </a>
                 </div>
             </div>
@@ -73,10 +79,9 @@
                                                 <th>Habilitado</th>
                                                 <th>Vigencia</th>
                                                 <th>Anticipada</th>
-                                                <th></th>
                                             </tr>
                                         </thead>
-                                        <tbody>
+                                        <tbody id="allschedules">
                                             @foreach (var item in Model.ScheduleItems)
                                             {
                                             <tr id="@item.Id">
@@ -87,7 +92,6 @@
                                                 <td>@item.Enabled</td>
                                                 <td>@item.EffectiveTime</td>
                                                 <td>@item.StartHourAnticipated</td>
-                                                <td></td>
                                             </tr>
                                             }
                                         </tbody>
@@ -153,12 +157,15 @@
                                         <label class="form-label" for="descripcion">Descripción</label>
                                         <input class="form-control reseterror" id="descripcion" required="" type="text">
                                     </div>
+                                    <div class="col-md-12">
+                                        <center>Horario aplica de lunes a viernes</center>
+                                    </div>
                                     <div class="col-md-6">
                                         <label class="form-label" for="horainicial">Hora inicial</label>
                                         <input class="form-control reseterror" id="horainicial" type="time" name="time">
                                     </div>
                                     <div class="col-md-6">
-                                        <label class="form-label" for="horainicial">Hora final</label>
+                                        <label class="form-label" for="horafinal">Hora final</label>
                                         <input class="form-control" reseterror id="horafinal" type="time" name="time">
                                     </div>
                                     <div class="col-md-12">
@@ -190,6 +197,18 @@
                                         </div>
                                     </div>
 
+                                    <div class="col-md-12">
+                                        <center>Horario aplica el sábado</center>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label" for="horainicialwke">Hora inicial</label>
+                                        <input class="form-control reseterror" id="horainicialwke" type="time" name="time">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label" for="horafinalwke">Hora final</label>
+                                        <input class="form-control" reseterror id="horafinalwke" type="time" name="time">
+                                    </div>
+
                                 </div>
                             </div>
 
@@ -210,7 +229,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button id="closemodal" type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        <button id="closemodal" type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
                         <button id="savenewschedule" type="button" class="btn btn-primary">Guardar</button>
                     </div>
                 </div>
@@ -275,45 +294,40 @@
             return [day, mnth, date.getFullYear()].join("/");
         }
 
+        $('#dt-basic-example tr').click(function () {
+
+            $(this).addClass('selected').siblings().removeClass('selected');
+
+        });
+
         $(document).ready(function () {
 
             runDatePicker();
 
             $('#dt-basic-example').dataTable(
                 {
-                    responsive: true,
-                    columnDefs: [
-                        {
-                            targets: -1,
-                            title: '',
-                            orderable: false,
-                            render: function (data, type, full, meta) {
-                                /*
-                                -- ES6
-                                -- convert using https://babeljs.io online transpiler
-                                return `
-                                <a href='javascript:void(0);' class='btn btn-sm btn-icon btn-outline-danger rounded-circle mr-1' title='Delete Record'>
-                                    <i class="fal fa-times"></i>
-                                </a>
-                                <div class='dropdown d-inline-block dropleft '>
-                                    <a href='#'' class='btn btn-sm btn-icon btn-outline-primary rounded-circle shadow-0' data-toggle='dropdown' aria-expanded='true' title='More options'>
-                                        <i class="fal fa-ellipsis-v"></i>
-                                    </a>
-                                    <div class='dropdown-menu'>
-                                        <a class='dropdown-item' href='javascript:void(0);'>Change Status</a>
-                                        <a class='dropdown-item' href='javascript:void(0);'>Generate Report</a>
-                                    </div>
-                                </div>`;
-                                ES5 example below:
-                                */
-                                return "\n\t\t\t\t\t\t<a href='javascript:void(0);' class='deleterow btn btn-sm btn-icon btn-outline-primary rounded-circle mr-1' title='Deshabilitar registro'>\n\t\t\t\t\t\t\t<i class=\"fal fa-window-close\"></i>\n\t\t\t\t\t\t<a href='javascript:void(0);' class='activaterow btn btn-sm btn-icon btn-outline-primary rounded-circle mr-1' title='Habilitar registro'>\n\t\t\t\t\t\t\t<i class=\"fal fa-check-square\"></i>";
-                            },
-                        },
-                    ]
+                    responsive: true
                 });
 
 
             $('#savenewschedule').click(function () {
+
+
+                if ($('#horainicialwke').val() !== ""
+                    && $('#horafinalwke').val() === "") {
+
+                    $('#errorsave').show();
+
+                    return;
+                }
+
+                if ($('#horainicialwke').val() === ""
+                    && $('#horafinalwke').val() !== "") {
+
+                    $('#errorsave').show();
+
+                    return;
+                }
 
 
                 if ($('#descripcion').val() === "" || $('#horainicial').val() === ""
@@ -345,7 +359,9 @@
                     EndHour: $('#horafinal').val(),
                     EffectiveTime: d1 + '|' + d2,
                     TypeSchedule: $('#scheduletype').val(),
-                    StartHourAnticipated: $('#horaanticipada').val()
+                    StartHourAnticipated: $('#horaanticipada').val(),
+                    StartHourWke: $('#horainicialwke').val(),
+                    EndHourWke: $('#horafinalwke').val()
                 };
 
                 $.ajax({
@@ -358,6 +374,8 @@
                         $('#horainicial').val('');
                         $('#horafinal').val('');
                         $('#QA').val('');
+                        $('#horainicialwke').val('');
+                        $('#horafinalwke').val('');
 
                         Swal.fire(
                             {
@@ -381,10 +399,29 @@
             });
 
 
-            $('.deleterow').click(function () {
+            $('#deleterow').click(function () {
 
 
-                var id = $(this).closest('tr').attr('id');
+                var row = $('#allschedules tr.selected');
+
+
+                if (row.length === 0) {
+
+                    Swal.fire(
+                        {
+                            type: "warning",
+                            title: "Validación",
+                            text: "Seleccione un registro"
+                        });
+
+                    return;
+
+                }
+
+
+                var id = row[0].id;
+
+
 
                 var swalWithBootstrapButtons = Swal.mixin(
                     {
@@ -399,7 +436,7 @@
                     .fire(
                         {
                             title: "Confirmación",
-                            text: "Deseas eliminar el elemento?",
+                            text: "Deseas deshabilitar el elemento?",
                             type: "warning",
                             showCancelButton: true,
                             confirmButtonText: "Si",
@@ -417,21 +454,37 @@
                                 data: { id: id },
                                 success: function (data, textStatus, jqXHR) {
 
-                                    Swal.fire(
-                                        {
-                                            position: "top-end",
-                                            type: "success",
-                                            title: "Actualización exitosa",
-                                            showConfirmButton: false,
-                                            timer: 1500
-                                        }).then((result) => {
+
+                                    if (data.success) {
+
+                                        Swal.fire(
+                                            {
+                                                position: "top-end",
+                                                type: "success",
+                                                title: "Actualización exitosa",
+                                                showConfirmButton: false,
+                                                timer: 1500
+                                            }).then((result) => {
 
 
-                                            window.location.href = '/Schedule/AdminSchedule';
+                                                window.location.href = '/Schedule/AdminSchedule';
 
-                                        });
+                                            });
+
+                                    }
+                                    else {
+
+                                        Swal.fire(
+                                            {
+                                                type: "error",
+                                                title: "Validación",
+                                                text: data.message
+                                            });
+
+                                        return;
 
 
+                                    }
 
                                 },
                                 error: function (jqXHR, textStatus, errorThrown) {

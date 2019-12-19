@@ -14,5 +14,8 @@ namespace ISOSA.SARH.Data.Domain.Configuration
         public DateTime? EffectiveTimeEnd { get; set; }
         public int TypeSchedule { get; set; }
         public int StartHourAnticipated { get; set; }
+        public bool Weekend { get; set; }
+        public string StartHourWeekend { get; set; }
+        public string EndHourWeekend { get; set; }
     }
 }

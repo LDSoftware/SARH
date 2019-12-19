@@ -11,7 +11,9 @@ namespace SARH.WebUI.Factories
     {
         OrganigramaModel GetData(string organigramaPath);
         OrganigramaModel GetAllData();
+        OrganigramaModel GetAllDataNoActive();
         OrganigramaEmployeeDetailModel GetEmployeeData(string employeeid);
+        OrganigramaEmployeeDetailModel GetEmployeeDataNoActive(string employeeid);
         string GetNextIdEmployeeRepository(string optionSelected);
     }
 }

@@ -96,6 +96,42 @@ namespace SARH.WebUI.Factories
             return model;
         }
 
+        public OrganigramaModel GetAllDataNoActive()
+        {
+            OrganigramaModel model = new OrganigramaModel()
+            {
+                EmployeeNoActives = new List<OrganigramaEmployeeNoActive>()
+            };
+
+            //EmployeeManager manager = new EmployeeManager();
+            //manager.Create();
+
+            var nomiPAQ = _nomipaqRepository.GetAll().ToList();
+            var isosaEmp = _isosaemployeesRepository.SearhItemsFor(o => !o.EMP_StatusCode.Equals("Active"));
+
+
+            var emps = (from emp in isosaEmp
+                        join nomi in nomiPAQ on emp.EMP_EmployeeID equals nomi.codigoempleado
+                        where emp.EMP_StatusCode != "Active"
+                        select new OrganigramaEmployeeNoActive()
+                        {
+                            Id = emp.EMP_EmployeeID.TrimStart(new Char[] { '0' }),
+                            Area = "NA",
+                            JobCenter = "NA",
+                            Category = "NA",
+                            JobTitle = "NA",
+                            Name = $"{emp.EMP_FirstName} {emp.EMP_LastName}",
+                            RowId = emp.HrowGuid.ToString(),
+                            Nomipaq = nomi.codigoempleado != null ? "Si" : "No"
+                        }).ToList();
+
+
+            model.EmployeeNoActives.AddRange(emps);
+
+            return model;
+        }
+
+
 
         private string GetInfoOrg(string result, string hrow, IEnumerable<EmployeeOrganigrama> organigrama)
         {
@@ -195,6 +231,117 @@ namespace SARH.WebUI.Factories
                 model.GeneralInfo.EndJob = "";
                 model.GeneralInfo.JobCenter = rowIdent.FirstOrDefault().Centro;
                 model.GeneralInfo.Area = rowIdent.FirstOrDefault().Area;
+
+                if (!string.IsNullOrEmpty(employee.FirstOrDefault().EMP_UserDef4))
+                {
+                    if (System.IO.File.Exists(employee.FirstOrDefault().EMP_UserDef4))
+                    {
+                        var filePicture = System.IO.File.ReadAllBytes(employee.FirstOrDefault().EMP_UserDef4);
+                        model.GeneralInfo.Picture = "data:image/jpg;base64," + Convert.ToBase64String(filePicture, 0, filePicture.Length);
+                    }
+                    else
+                    {
+                        model.GeneralInfo.Picture = "";
+                    }
+                }
+                else
+                {
+                    model.GeneralInfo.Picture = "";
+                }
+
+                model.PersonalInfo.City = employee.FirstOrDefault().EMP_City;
+                model.PersonalInfo.State = employee.FirstOrDefault().EMP_State;
+                model.PersonalInfo.Zip = employee.FirstOrDefault().EMP_Zip;
+                model.PersonalInfo.Phone = employee.FirstOrDefault().EMP_Phone;
+                model.PersonalInfo.Address = employee.FirstOrDefault().EMP_Address;
+                model.PersonalInfo.BloodType = employee.FirstOrDefault().EMP_BloodType;
+                model.PersonalInfo.Email = employee.FirstOrDefault().EMP_PersonalEmail;
+                model.PersonalInfo.Sick = employee.FirstOrDefault().EMP_Sick;
+                model.PersonalInfo.CellPhone = employee.FirstOrDefault().EMP_CellPhone;
+
+                model.EmergencyData.Name = employee.FirstOrDefault().EMP_EmergencyContactName;
+                model.EmergencyData.Phone = employee.FirstOrDefault().EMP_EmergencyContactPhone;
+                model.EmergencyData.Relacion = employee.FirstOrDefault().EMP_EmergencyContactRelation;
+            }
+
+            return model;
+        }
+
+
+        public OrganigramaEmployeeDetailModel GetEmployeeDataNoActive(string employeeid)
+        {
+            OrganigramaEmployeeDetailModel model = new OrganigramaEmployeeDetailModel();
+
+            //EmployeeManager manager = new EmployeeManager();
+            //manager.Create();
+            //HierarchyManager hierarchy = new HierarchyManager();
+            //hierarchy.Create();
+            //NomiPaqEmployeeManager nomiemployee = new NomiPaqEmployeeManager();
+            //nomiemployee.Create();
+
+            var employee = _isosaemployeesRepository.SearhItemsFor(e => e.EMP_EmployeeID.Equals(int.Parse(employeeid).ToString("00000")));
+
+
+            if (employee.Any())
+            {
+
+
+
+                var rowIdent = _isosaemployeesOrganigramaRepository.SearhItemsFor(h => h.RowGuid.ToString().ToLower().Equals(employee.FirstOrDefault().HrowGuid.ToString().ToLower()));
+                model.HierarchyGuid = employee.FirstOrDefault().HrowGuid.ToString().ToLower();
+                if (rowIdent.Any())
+                {
+                    model.RowId = rowIdent.FirstOrDefault().IdentPuesto.Value.ToString().ToLower();
+                }
+                else
+                {
+                    model.RowId = employee.FirstOrDefault().HrowGuid.ToString().ToLower();
+                }
+
+                model.Area = "NA";
+                model.JobCenter = "NA";
+
+                //var nomiemp = nomiemployee.Employees.Where(e => e.codigoempleado.Equals(employee.FirstOrDefault().EMP_EmployeeID));
+
+                var nomiempNew = _nomipaqRepository.SearhItemsFor(e => e.codigoempleado.Equals(int.Parse(employeeid).ToString("00000")));
+
+
+                if (nomiempNew.Any())
+                {
+                    model.GeneralInfo.Id = int.Parse(nomiempNew.FirstOrDefault().codigoempleado).ToString("00000");
+                    model.GeneralInfo.FirstName = nomiempNew.FirstOrDefault().nombre;
+                    model.GeneralInfo.LastName = nomiempNew.FirstOrDefault().apellidopaterno;
+                    model.GeneralInfo.LastName2 = nomiempNew.FirstOrDefault().apellidomaterno;
+                    model.GeneralInfo.RFC = $"{nomiempNew.FirstOrDefault().rfc}{nomiempNew.FirstOrDefault().fechanacimiento.Value.ToShortDateString().Replace("/", string.Empty)}{nomiempNew.FirstOrDefault().homoclave}";
+                    model.GeneralInfo.NSS = nomiempNew.FirstOrDefault().numerosegurosocial;
+                    model.GeneralInfo.CURP = $"{nomiempNew.FirstOrDefault().curpi}{nomiempNew.FirstOrDefault().fechanacimiento.Value.ToShortDateString().Replace("/", string.Empty)}{nomiempNew.FirstOrDefault().curpf}";
+                    model.GeneralInfo.HireDate = nomiempNew.FirstOrDefault().fechaalta.Value.ToShortDateString();
+                    model.GeneralInfo.FechaNacimiento = nomiempNew.FirstOrDefault().fechanacimiento.Value.ToShortDateString();
+                    model.GeneralInfo.Sexo = nomiempNew.FirstOrDefault().sexo;
+                }
+                else
+                {
+                    model.GeneralInfo.Id = employee.FirstOrDefault().EMP_EmployeeID;
+                    model.GeneralInfo.FirstName = employee.FirstOrDefault().EMP_FirstName;
+                    model.GeneralInfo.LastName = employee.FirstOrDefault().EMP_LastName;
+                    model.GeneralInfo.RFC = employee.FirstOrDefault().EMP_RFC;
+                    model.GeneralInfo.NSS = employee.FirstOrDefault().EMP_SocialSecurNbr;
+                    model.GeneralInfo.CURP = employee.FirstOrDefault().EMP_curpi;
+                    model.GeneralInfo.HireDate = employee.FirstOrDefault().EMP_DateOfHire.Value.ToShortDateString();
+                    model.GeneralInfo.FechaNacimiento = employee.FirstOrDefault().EMP_BirthDate.Value.ToShortDateString();
+                    model.GeneralInfo.Sexo = nomiempNew.FirstOrDefault().sexo;
+                }
+
+                model.GeneralInfo.Email = employee.FirstOrDefault().EMP_EMailAddress;
+                model.GeneralInfo.Observations = employee.FirstOrDefault().EMP_UserDef1;
+
+                model.GeneralInfo.JobTitle = "";
+                model.GeneralInfo.StartFood = "NA";
+                model.GeneralInfo.StartJob = "";
+                model.GeneralInfo.EndFood = "";
+                model.GeneralInfo.EndJob = "";
+                model.GeneralInfo.JobCenter = "NA";
+                model.GeneralInfo.Area = "NA";
 
                 if (!string.IsNullOrEmpty(employee.FirstOrDefault().EMP_UserDef4))
                 {

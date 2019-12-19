@@ -1,0 +1,532 @@
+﻿@using SARH.WebUI.Models.Organigrama
+@model OrganigramaEmployeeDetailModel
+@{
+    ViewData["Title"] = "Detalle Empleado";
+    ViewData["PageName"] = "Detalle Empleado";
+    ViewData["PageDescription"] = "Detalle Empleado";
+}
+@section HeadBlock {
+    <link rel="stylesheet" media="screen, print" href="~/css/fa-solid.css">
+    <link rel="stylesheet" media="screen, print" href="~/css/fa-brands.css">
+    <link rel="stylesheet" media="screen, print" href="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/css/datagrid/datatables/datatables.bundle.css">
+    <link rel="stylesheet" media="screen, print" href="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/css/notifications/sweetalert2/sweetalert2.bundle.css">
+    <link rel="stylesheet" media="screen, print" href="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/css/formplugins/bootstrap-datepicker/bootstrap-datepicker.css">
+}
+
+<div class="subheader">
+    <ol class="breadcrumb breadcrumb-lg breadcrumb-arrow mb-0">
+        <li>
+            <a href='@Url.Action("Index","Home")'>
+                <i class="fal fa-home"></i>
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                <i class="fal fa-user"></i>
+                <span class="hidden-lg-down">@Model.GeneralInfo.FirstName @Model.GeneralInfo.LastName</span>
+            </a>
+        </li>
+        <li>
+            <a href='@Url.Action("OrganigramaNoActivos", "Organigrama")'>
+                <i class="fal fa-arrow-alt-left"></i>
+                <span class="hidden-lg-down">Regresar</span>
+            </a>
+        </li>
+
+    </ol>
+
+</div>
+
+<input id="rowid" type="hidden" value="@Model.HierarchyGuid" />
+
+<div class="row">
+    <div class="col-lg-6 col-xl-3 order-lg-1 order-xl-1">
+        <!-- profile summary -->
+        <div class="card mb-g rounded-top">
+            <div class="row no-gutters row-grid">
+                <div class="col-12">
+                    <div class="d-flex flex-column align-items-center justify-content-center p-4">
+                        <img id="photoEmployee" class="rounded-circle shadow-2 img-thumbnail" alt="" src="@Model.GeneralInfo.Picture">
+                        <h5 class="mb-0 fw-700 text-center mt-3">
+                            <small>@Model.GeneralInfo.FirstName @Model.GeneralInfo.LastName</small>
+                            @Model.GeneralInfo.JobTitle
+                        </h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    </ Detalles de la informacion del empleado -->
+
+    <div class="col-lg-12 col-xl-9 order-lg-2 order-xl-2">
+
+        <div class="border bg-light rounded-top">
+            <div class="accordion accordion-hover accordion-clean js-list-filter" id="js_list_accordion">
+
+
+
+                </ Datos generales empleado -->
+
+
+                <div class="card border-top-left-radius-0 border-top-right-radius-0">
+                    <div class="card-header">
+                        <a class="card-title" aria-expanded="true" href="javascript:void(0);" data-toggle="collapse" data-target="#js_list_accordion-a" data-filter-tags="settings">
+                            <i class="fal fa-id-badge width-2 fs-xl"></i>
+                            Información General
+                            <span class="ml-auto">
+                                <span class="collapsed-reveal">
+                                    <i class="fal fa-chevron-up fs-xl"></i>
+                                </span>
+                                <span class="collapsed-hidden">
+                                    <i class="fal fa-chevron-down fs-xl"></i>
+                                </span>
+                            </span>
+                        </a>
+                    </div>
+                    <div class="collapse show" id="js_list_accordion-a" data-parent="#js_list_accordion">
+                        <div class="card-body">
+
+
+                            <div role="group" aria-label="Vertical button group">
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-secondary dropdown-toggle waves-effect waves-themed" data-toggle="dropdown" aria-expanded="false"><i class="fal fa-bolt"></i>&nbsp;Acciones</button>
+                                    <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; will-change: top, left; top: 37px; left: 0px;">
+                                        <a id="saveEmployeeSubscribe" class="dropdown-item" href="javascript:void(0)">Reactivar Empleado</a>
+                                        <a id="moveEmployee" class="dropdown-item" href="javascript:void(0)">Asignar Puesto</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr />
+
+
+
+                            <div class="panel-content">
+
+
+                                <div class="form-row">
+                                    <div class="col-md-4 mb-3">
+                                        <label class="form-label" for="idEmpleadoGenerales">ID Empleado</label>
+                                        <input class="form-control" id="idEmpleadoGenerales" disabled="disabled" type="text" placeholder="ID Empleado" value="@Model.GeneralInfo.Id">
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label class="form-label" for="employeeArea">Área</label>
+                                        <input class="form-control" id="employeeArea" disabled="disabled" type="text" placeholder="Area" value="@Model.GeneralInfo.Area">
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label class="form-label" for="employeeJobCenter">Centro de trabajo</label>
+                                        <input class="form-control" id="employeeJobCenter" disabled="disabled" type="text" placeholder="Centro de trabajo" value="@Model.GeneralInfo.JobCenter">
+                                    </div>
+
+                                </div>
+
+
+                                <div class="form-row">
+                                    <div class="col-md-4 mb-3">
+                                        <label class="form-label" for="employeefirstname">Nombre</label>
+                                        <input class="form-control" id="employeefirstname" type="text" placeholder="Nombre" value="@Model.GeneralInfo.FirstName">
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label class="form-label" for="employeelastname">ApellidoPaterno</label>
+                                        <input class="form-control" id="employeelastname" type="text" placeholder="Paterno" value="@Model.GeneralInfo.LastName">
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label class="form-label" for="employeelastname2">ApellidoMaterno</label>
+                                        <input class="form-control" id="employeelastname2" type="text" placeholder="Materno" value="@Model.GeneralInfo.LastName2">
+                                    </div>
+                                </div>
+
+
+                                <div class="form-row">
+
+                                    <div class="col-md-3 mb-3">
+                                        <label class="form-label" for="selectsexo">Seleccione el genero</label>
+                                        <select class="form-control" id="selectsexo" disabled="disabled">
+                                            <option value="F">Femenino</option>
+                                            <option value="M">Masculino</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-md-3 mb-3">
+                                        <label class="form-label" for="datepicker-4-6">Fecha de nacimiento</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" id="datepicker-4-6" value="@Model.GeneralInfo.FechaNacimiento">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text fs-xl">
+                                                    <i class="fal fa-calendar-plus"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label" for="employeeemail">Correo Electrónico</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text" id="inputGroupPrepend"><i class="fal fa-envelope"></i></span>
+                                            </div>
+                                            <input class="form-control" id="employeeemail" aria-describedby="inputGroupPrepend" required="" type="text" placeholder="Correo electrónico" value="@Model.GeneralInfo.Email">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label" for="validationCustom03">Puesto <span class="text-danger">*</span></label>
+                                        <input class="form-control" id="validationCustom03" disabled="disabled" type="text" placeholder="Puesto" value="@Model.GeneralInfo.JobTitle">
+                                    </div>
+                                    <div class="col-md-3 mb-3">
+                                        <label class="form-label" for="validationCustom03">Horario Laboral <span class="text-danger">*</span></label>
+                                        <select class="custom-select" disabled="disabled">
+                                            <option value="">@Model.GeneralInfo.StartJob-@Model.GeneralInfo.EndJob </option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3 mb-3">
+                                        <label class="form-label" for="validationCustom03">Horario Comida<span class="text-danger">*</span></label>
+                                        <select class="custom-select" disabled="disabled">
+                                            <option value="">@Model.GeneralInfo.StartFood-@Model.GeneralInfo.EndFood</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-row">
+
+                                    <div class="col-md-3 mb-3">
+                                        <label class="form-label" for="datepicker-4-7">Fecha de alta</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" id="datepicker-4-7" value="@Model.GeneralInfo.HireDate">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text fs-xl">
+                                                    <i class="fal fa-calendar-plus"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3 mb-3">
+                                        <label class="form-label" for="employeeNSS">NSS</label>
+                                        <input class="form-control" id="employeeNSS" required="" type="text" placeholder="NSS" value="@Model.GeneralInfo.NSS">
+                                    </div>
+                                    <div class="col-md-3 mb-3">
+                                        <label class="form-label" for="employeeCurp">CURP</label>
+                                        <input class="form-control" id="employeeCurp" required="" type="text" placeholder="CURP" value="@Model.GeneralInfo.CURP">
+                                    </div>
+                                    <div class="col-md-3 mb-3">
+                                        <label class="form-label" for="employeeRFC">RFC</label>
+                                        <input class="form-control" id="employeeRFC" required="" type="text" placeholder="RFC" value="@Model.GeneralInfo.RFC">
+                                    </div>
+
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="col-12 mb-3">
+                                        <label class="form-label" for="employeeObservations">Observaciones</label>
+                                        <textarea class="form-control" id="employeeObservations" placeholder="Observaciones">@Model.GeneralInfo.Observations</textarea>
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+
+
+                </ Datos personales empleado -->
+
+                <div class="card">
+                    <div class="card-header">
+                        <a class="card-title collapsed" aria-expanded="false" href="javascript:void(0);" data-toggle="collapse" data-target="#js_list_accordion-z" data-filter-tags="merge">
+                            <i class="fal fa-address-card width-2 fs-xl"></i>
+                            Información personal
+                            <span class="ml-auto">
+                                <span class="collapsed-reveal">
+                                    <i class="fal fa-chevron-up fs-xl"></i>
+                                </span>
+                                <span class="collapsed-hidden">
+                                    <i class="fal fa-chevron-down fs-xl"></i>
+                                </span>
+                            </span>
+                        </a>
+                    </div>
+                    <div class="collapse" id="js_list_accordion-z" data-parent="#js_list_accordion">
+                        <div class="card-body">
+
+                            <div class="form-row">
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label" for="personalphone">Telefono</label>
+                                    <input class="form-control" id="personalphone" required="" type="text" placeholder="Telefono" value="@Model.PersonalInfo.Phone">
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label" for="personalcellphone">Celular</label>
+                                    <input class="form-control" id="personalcellphone" required="" type="text" placeholder="Celular" value="@Model.PersonalInfo.CellPhone">
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label" for="personalemail">Correo electronico personal</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" id="inputGroupPrepend"><i class="fal fa-envelope"></i></span>
+                                        </div>
+                                        <input class="form-control" id="personalemail" aria-describedby="inputGroupPrepend" required="" type="text" placeholder="Correo electronico" value="@Model.PersonalInfo.Email">
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                            <div class="form-row">
+                                <div class="col-12 mb-3">
+                                    <label class="form-label" for="personaladdress">Calle</label>
+                                    <input class="form-control" id="personaladdress" required="" type="text" placeholder="Dirección" value="@Model.PersonalInfo.Address">
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label" for="personalcity">Ciudad</label>
+                                    <input class="form-control" id="personalcity" required="" type="text" placeholder="Ciudad" value="@Model.PersonalInfo.City">
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label" for="personalstate">Estado</label>
+                                    <input class="form-control" id="personalstate" required="" type="text" placeholder="Estado" value="@Model.PersonalInfo.State">
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label" for="personalzip">Codigo Postal</label>
+                                    <input class="form-control" id="personalzip" required="" type="text" placeholder="Codigo Postal" value="@Model.PersonalInfo.Zip">
+                                </div>
+
+                            </div>
+
+                            <div class="form-row">
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label" for="personalsick">Enfermedades Cronicas</label>
+                                    <textarea class="form-control" id="personalsick" required="" placeholder="Enfermedades Cronicas">@Model.PersonalInfo.Sick</textarea>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label" for="personalbloodtype">Tipo de sangre</label>
+                                    <textarea class="form-control" id="personalbloodtype" required="" placeholder="Tipo de sangre">@Model.PersonalInfo.BloodType</textarea>
+                                </div>
+                            </div>
+
+
+
+                        </div>
+                    </div>
+                </div>
+
+
+                </ Datos emergencia empleado -->
+
+
+                <div class="card">
+                    <div class="card-header">
+                        <a class="card-title collapsed" aria-expanded="false" href="javascript:void(0);" data-toggle="collapse" data-target="#js_list_accordion-y" data-filter-tags="merge">
+                            <i class="fal fa-ambulance width-2 fs-xl"></i>
+                            Datos de emergencia
+                            <span class="ml-auto">
+                                <span class="collapsed-reveal">
+                                    <i class="fal fa-chevron-up fs-xl"></i>
+                                </span>
+                                <span class="collapsed-hidden">
+                                    <i class="fal fa-chevron-down fs-xl"></i>
+                                </span>
+                            </span>
+                        </a>
+                    </div>
+                    <div class="collapse" id="js_list_accordion-y" data-parent="#js_list_accordion">
+                        <div class="card-body">
+
+                            <div class="form-row">
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label" for="contactname">Nombre</label>
+                                    <input class="form-control" id="contactname" required="" type="text" placeholder="Nombre" value="@Model.EmergencyData.Name">
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label" for="contactrelation">Relación</label>
+                                    <input class="form-control" id="contactrelation" required="" type="text" placeholder="Relación" value="@Model.EmergencyData.Relacion">
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label" for="contactphone">Telefono</label>
+                                    <input class="form-control" id="contactphone" required="" type="text" placeholder="Telefono" value="@Model.EmergencyData.Phone">
+                                </div>
+
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+            <span class="filter-message js-filter-message"></span>
+        </div>
+
+
+    </div>
+
+</div>
+
+
+@section ScriptsBlock {
+
+    <script src="~/js/statistics/peity/peity.bundle.js"></script>
+    <script src="~/js/statistics/flot/flot.bundle.js"></script>
+    <script src="~/js/statistics/easypiechart/easypiechart.bundle.js"></script>
+    <script src="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/js/datagrid/datatables/datatables.bundle.js"></script>
+    <script src="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/js/notifications/sweetalert2/sweetalert2.bundle.js"></script>
+    <script src="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/js/formplugins/bootstrap-datepicker/bootstrap-datepicker.js"></script>
+    <script>
+
+
+        $(document).ready(function () {
+
+
+            $("#selectsexo").val('@Model.GeneralInfo.Sexo');
+
+            var saved = false;
+
+            //Documents Employee
+
+            $('#saveEmployeeSubscribe').click(function () {
+
+                var Id = $('#idEmpleadoGenerales').val();
+
+                var swalWithBootstrapButtons = Swal.mixin(
+                    {
+                        customClass:
+                        {
+                            confirmButton: "btn btn-primary",
+                            cancelButton: "btn btn-danger mr-2"
+                        },
+                        buttonsStyling: false
+                    });
+                swalWithBootstrapButtons
+                    .fire(
+                        {
+                            title: "Confirmación",
+                            text: "Deseas reactivar a el empleado?",
+                            type: "warning",
+                            position: "top-end",
+                            allowOutsideClick: false,
+                            showCancelButton: true,
+                            confirmButtonText: "Si",
+                            cancelButtonText: "Cancelar",
+                            reverseButtons: true
+                        })
+                    .then(function (result) {
+
+                        if (result.value) {
+
+
+                            $.ajax({
+                                url: '/Organigrama/EmployeeSubscribe',
+                                type: "POST",
+                                data: { Id: Id },
+                                success: function (data, textStatus, jqXHR) {
+
+                                    Swal.fire(
+                                        {
+                                            position: "top-end",
+                                            type: "success",
+                                            title: "Actualización exitosa",
+                                            showConfirmButton: false,
+                                            timer: 1500
+                                        });
+
+                                    saved = true;
+                                },
+                                error: function (jqXHR, textStatus, errorThrown) {
+
+                                }
+                            });
+
+                        }
+                        else if (
+                            // Read more about handling dismissals
+                            result.dismiss === Swal.DismissReason.cancel
+                        ) {
+                            swalWithBootstrapButtons.fire(
+                                "Cancelación",
+                                "Se ha cancelado la acción",
+                                "error"
+                            );
+                        }
+                    });
+
+
+            });
+
+
+
+            $('#moveEmployee').click(function () {
+
+
+                if (saved == false) {
+
+                    Swal.fire(
+                        {
+                            type: "warning",
+                            title: "Validación",
+                            text: "Se debe Reactivar el empleado antes de asignarle un puesto"
+                        });
+
+                    return;
+
+                }
+
+
+
+                var Id = $('#idEmpleadoGenerales').val();
+
+                var swalWithBootstrapButtons = Swal.mixin(
+                    {
+                        customClass:
+                        {
+                            confirmButton: "btn btn-primary",
+                            cancelButton: "btn btn-danger mr-2"
+                        },
+                        buttonsStyling: false
+                    });
+                swalWithBootstrapButtons
+                    .fire(
+                        {
+                            title: "Confirmación",
+                            text: "Deseas iniciar la asignación del puesto?",
+                            type: "warning",
+                            position: "top-end",
+                            allowOutsideClick: false,
+                            showCancelButton: true,
+                            confirmButtonText: "Si",
+                            cancelButtonText: "Cancelar",
+                            reverseButtons: true
+                        })
+                    .then(function (result) {
+
+                        if (result.value) {
+
+                            window.location.href = '/Employee/HierarchyAssignedReactive/?assignedHGuid=' + $('#rowid').val() + "&employeeID=" + $('#idEmpleadoGenerales').val();
+
+                        }
+                        else if (
+                            // Read more about handling dismissals
+                            result.dismiss === Swal.DismissReason.cancel
+                        ) {
+                            swalWithBootstrapButtons.fire(
+                                "Cancelación",
+                                "Se ha cancelado la acción",
+                                "error"
+                            );
+                        }
+                    });
+
+
+            });
+
+
+        });
+
+    </script>
+}
