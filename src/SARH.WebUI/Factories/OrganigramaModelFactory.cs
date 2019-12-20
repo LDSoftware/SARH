@@ -387,7 +387,7 @@ namespace SARH.WebUI.Factories
             }
             else
             {
-                value = _nomipaqRepository.GetAll().ToList().Max(d => d.codigoempleado.TrimStart(new Char[] { '0' })).ToString();
+                value = _nomipaqRepository.GetAll().Max(t => t.codigoempleado);
             }
 
             return (int.Parse(value) + 1).ToString("00000");

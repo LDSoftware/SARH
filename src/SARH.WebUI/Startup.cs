@@ -57,6 +57,7 @@ namespace SmartAdmin.WebUI
             services.AddTransient<IRepository<SafeEquipmentAssigned>, SafeEquipmentAssignedRepository>(s => new SafeEquipmentAssignedRepository((Configuration.GetConnectionString("DataConnectionString"))));
             services.AddTransient<IRepository<EmployeeObjectAsignation>, EmployeeObjectAsignationRepository>(s => new EmployeeObjectAsignationRepository((Configuration.GetConnectionString("DataConnectionString"))));
             services.AddTransient<IRepository<NonWorkingDay>, NonWorkingDayRepository>(s => new NonWorkingDayRepository((Configuration.GetConnectionString("DataConnectionString"))));
+            services.AddTransient<IRepository<NonWorkingDayException>, NonWorkingDayExceptionRepository>(s => new NonWorkingDayExceptionRepository((Configuration.GetConnectionString("DataConnectionString"))));
             services.AddTransient<IRepository<Schedule>, ScheduleRepository>(s => new ScheduleRepository((Configuration.GetConnectionString("DataConnectionString"))));
             services.AddTransient<IRepository<EmployeeScheduleAssigned>, EmployeeScheduleAssignedRepository>(s => new EmployeeScheduleAssignedRepository((Configuration.GetConnectionString("DataConnectionString"))));
             services.AddTransient<IRepository<EmployeeScheduleAssignedTemp>, EmployeeScheduleAssignedTempRepository>(s => new EmployeeScheduleAssignedTempRepository((Configuration.GetConnectionString("DataConnectionString"))));

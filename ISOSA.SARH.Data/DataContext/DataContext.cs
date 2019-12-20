@@ -41,6 +41,7 @@ namespace ISOSA.SARH.Data
         public virtual DbSet<EmployeeAditionalInfo> Employees { get; set; }
         public virtual DbSet<EmployeeOrganigrama> EmployeesOrganigrama { get; set; }
         public virtual DbSet<EmployeeDiscount> EmployeeDiscount { get; set; }
+        public virtual DbSet<NonWorkingDayException> NonWorkingDayExceptions { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -63,6 +64,7 @@ namespace ISOSA.SARH.Data
             new EmployeeAditionalInfoMapping(builder.Entity<EmployeeAditionalInfo>());
             new EmployeeOrganigramaMapping(builder.Entity<EmployeeOrganigrama>());
             new EmployeeDiscountMapping(builder.Entity<EmployeeDiscount>());
+            new NonWorkingDayExceptionMapping(builder.Entity<NonWorkingDayException>());
         }
 
 

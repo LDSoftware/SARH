@@ -738,8 +738,42 @@ namespace SARH.WebUI.Controllers
                 {
                     var element = row.First();
 
+                    element.nombre = model.FirstName;
+                    element.apellidopaterno = model.LastName;
+                    element.apellidomaterno = model.LastName2;
+                    element.EntidadFederativa = "";
+                    element.fechaalta = string.IsNullOrEmpty(model.HireDate) == true ? DateTime.Today : DateTime.Parse(model.HireDate);
+                    element.fechanacimiento = string.IsNullOrEmpty(model.FechaNacimiento) == true ? DateTime.Today : DateTime.Parse(model.FechaNacimiento);
+                    element.sexo = model.Sexo;
+                    element.rfc = model.RFC.Substring(0, 4);
+                    element.homoclave = model.RFC.Substring(10, 3);
+                    element.curpi = model.CURP.Substring(0, 4);
+                    element.curpf = model.CURP.Substring(10, 8);
+                    element.numerosegurosocial = model.NSS;
 
                     nomipaqRepo.Update(element);
+
+                    var row2 = isosaRepo.SearhItemsFor(i => i.EMP_EmployeeID.Equals(model.Id));
+                    if (row2.Any()) 
+                    {
+                        var element2 = row2.First();
+
+                        element2.EMP_FirstName = model.FirstName;
+                        element2.EMP_LastName = $"{model.LastName} {model.LastName2}";
+                        element2.EMP_RFC = model.RFC.Substring(0, 4);
+                        element2.EMP_homoclave = model.RFC.Substring(10, 3);
+                        element2.EMP_curpi = model.CURP.Substring(0, 4);
+                        element2.EMP_curpF = model.CURP.Substring(10, 8);
+                        element2.EMP_BirthDate = string.IsNullOrEmpty(model.FechaNacimiento) == true ? DateTime.Today : DateTime.Parse(model.FechaNacimiento);
+                        element2.EMP_DateOfHire = string.IsNullOrEmpty(model.HireDate) == true ? DateTime.Today : DateTime.Parse(model.HireDate);
+                        element2.HrowGuid = Guid.NewGuid();
+                        element2.EMP_UserDef4 = filePath;
+                        element2.EMP_UserDef1 = model.Observations;
+
+                        isosaRepo.Update(element2);
+                    }
+
+
                 }
                 else
                 {
@@ -756,7 +790,9 @@ namespace SARH.WebUI.Controllers
                         rfc = model.RFC.Substring(0, 4),
                         homoclave = model.RFC.Substring(10, 3),
                         curpi = model.CURP.Substring(0, 4),
-                        curpf = model.CURP.Substring(10, 8)
+                        curpf = model.CURP.Substring(10, 8),
+                        numerosegurosocial = model.NSS,
+                        CorreoElectronico = model.Email
                     });
 
                     isosaRepo.Create(new EmployeeAditionalInfo()
@@ -774,7 +810,8 @@ namespace SARH.WebUI.Controllers
                         EMP_UserDef4 = filePath,
                         EMP_EmployeeID_Edit = "-",
                         EMP_StatusCode = "Active",
-                        EMP_UserDef1 = model.Observations
+                        EMP_UserDef1 = model.Observations,
+                        EMP_EMailAddress = model.Email
                     });
 
 
@@ -876,6 +913,10 @@ namespace SARH.WebUI.Controllers
             {
                 var imgb64 = model.Picture.Split(',')[1];
                 filePath = $"{rowIsosa.FirstOrDefault().EMP_UserDef4}";
+                if (string.IsNullOrEmpty(filePath)) 
+                {
+                    filePath = $@"{configManager.EmployeePhotoPath}\{model.Id}.jpg";
+                }
                 System.IO.File.WriteAllBytes(filePath, Convert.FromBase64String(imgb64));
             }
 
@@ -942,6 +983,7 @@ namespace SARH.WebUI.Controllers
             {
                 var row = isosaRow.FirstOrDefault();
                 row.EMP_StatusCode = "Inactive";
+                row.HrowGuid = Guid.Empty;
                 isosaRepo.Update(row);
             }
             if (nomipaqRow.Any())

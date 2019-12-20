@@ -277,7 +277,7 @@
                         <div class="card-body">
 
                             <div role="group" aria-label="Vertical button group">
-                                <a class="btn btn-secondary" href="#"><i class="fal fa-save"></i> Guardar</a>
+                                <a id="savePersonalInfo" class="btn btn-secondary" href="#"><i class="fal fa-save"></i> Guardar</a>
                             </div>
                             <hr />
 
@@ -366,22 +366,22 @@
                         <div class="card-body">
 
                             <div role="group" aria-label="Vertical button group">
-                                <a class="btn btn-secondary" href="#"><i class="fal fa-save"></i> Guardar</a>
+                                <a id="saveContactInfo" class="btn btn-secondary" href="#"><i class="fal fa-save"></i> Guardar</a>
                             </div>
                             <hr />
 
                             <div class="form-row">
                                 <div class="col-md-4 mb-3">
-                                    <label class="form-label" for="validationCustom01">Nombre</label>
-                                    <input class="form-control" id="validationCustom01" required="" type="text" placeholder="Nombre" value="@Model.EmergencyData.Name">
+                                    <label class="form-label" for="contactname">Nombre</label>
+                                    <input class="form-control" id="contactname" required="" type="text" placeholder="Nombre" value="@Model.EmergencyData.Name">
                                 </div>
                                 <div class="col-md-4 mb-3">
-                                    <label class="form-label" for="validationCustom02">Relación</label>
-                                    <input class="form-control" id="validationCustom02" required="" type="text" placeholder="Relación" value="@Model.EmergencyData.Relacion">
+                                    <label class="form-label" for="contactphone">Relación</label>
+                                    <input class="form-control" id="contactphone" required="" type="text" placeholder="Relación" value="@Model.EmergencyData.Relacion">
                                 </div>
                                 <div class="col-md-4 mb-3">
-                                    <label class="form-label" for="validationCustom02">Telefono</label>
-                                    <input class="form-control" id="validationCustom02" required="" type="text" placeholder="Telefono" value="@Model.EmergencyData.Phone">
+                                    <label class="form-label" for="contactrelation">Telefono</label>
+                                    <input class="form-control" id="contactrelation" required="" type="text" placeholder="Telefono" value="@Model.EmergencyData.Phone">
                                 </div>
 
                             </div>
@@ -503,24 +503,63 @@
 
             $('#assignedOrganigrama').click(function () {
 
-                if (saved) {
-
-                    window.location.href = '@Url.Action("Organigrama","Catalog")';
-
-                }
-                else {
-
+                if (saved == false) {
 
                     Swal.fire(
                         {
-                            position: "top-end",
                             type: "warning",
                             title: "Validación",
-                            text: "Se debe guardar el empleado antes de asignar el puesto."
+                            text: "Se debe guardar el empleado antes de asignarle un puesto"
                         });
 
-                        return;
+                    return;
+
                 }
+
+
+
+                var Id = $('#idEmpleadoGenerales').val();
+
+                var swalWithBootstrapButtons = Swal.mixin(
+                    {
+                        customClass:
+                        {
+                            confirmButton: "btn btn-primary",
+                            cancelButton: "btn btn-danger mr-2"
+                        },
+                        buttonsStyling: false
+                    });
+                swalWithBootstrapButtons
+                    .fire(
+                        {
+                            title: "Confirmación",
+                            text: "Deseas iniciar la asignación del puesto?",
+                            type: "warning",
+                            position: "top-end",
+                            allowOutsideClick: false,
+                            showCancelButton: true,
+                            confirmButtonText: "Si",
+                            cancelButtonText: "Cancelar",
+                            reverseButtons: true
+                        })
+                    .then(function (result) {
+
+                        if (result.value) {
+
+                            window.location.href = '/Employee/HierarchyAssignedReactive/?assignedHGuid=' + $('#rowid').val() + "&employeeID=" + $('#idEmpleadoGenerales').val();
+
+                        }
+                        else if (
+                            // Read more about handling dismissals
+                            result.dismiss === Swal.DismissReason.cancel
+                        ) {
+                            swalWithBootstrapButtons.fire(
+                                "Cancelación",
+                                "Se ha cancelado la acción",
+                                "error"
+                            );
+                        }
+                    });
 
             });
 
@@ -626,6 +665,7 @@
 
                             $('#idTipo').prop('disabled', true);
                             $('#idTipoContrato').prop('disabled', true);
+                            saved = true;
 
 
                         },
@@ -643,6 +683,20 @@
 
 
             $('#savePersonalInfo').click(function () {
+
+
+                if (saved == false) {
+
+                    Swal.fire(
+                        {
+                            type: "warning",
+                            title: "Validación",
+                            text: "Se debe guardar los datos generales previo a esta acción"
+                        });
+
+                    return;
+
+                }
 
 
                 var Id = $('#idEmpleadoGenerales').val();
@@ -698,6 +752,63 @@
 
             });
 
+            $('#saveContactInfo').click(function () {
+
+
+                if (saved == false) {
+
+                    Swal.fire(
+                        {
+                            type: "warning",
+                            title: "Validación",
+                            text: "Se debe guardar los datos generales previo a esta acción"
+                        });
+
+                    return;
+
+                }
+
+                var Id = $('#idEmpleadoGenerales').val();
+                var EMP_EmergencyContactName = $('#contactname').val();
+                var EMP_EmergencyContactPhone = $('#contactphone').val();
+                var EMP_EmergencyContactRelation = $('#contactrelation').val();
+
+
+                var model = {
+                    EmployeeId: Id,
+                    Name: EMP_EmergencyContactName,
+                    Phone: EMP_EmergencyContactPhone,
+                    Relacion: EMP_EmergencyContactRelation
+                };
+
+                $.ajax({
+                    url: '/Organigrama/SaveContactEmergency',
+                    type: "POST",
+                    data: model,
+                    success: function (data, textStatus, jqXHR) {
+
+                        Swal.fire(
+                            {
+                                position: "top-end",
+                                type: "success",
+                                title: "Actualización exitosa",
+                                showConfirmButton: false,
+                                timer: 1500
+                            });
+
+                        $('#idTipo').prop('disabled', true);
+                        $('#idTipoContrato').prop('disabled', true);
+
+
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+
+                    }
+                });
+
+
+
+            });
 
         });
 

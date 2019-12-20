@@ -43,14 +43,16 @@ namespace SARH.WebUI.Controllers
             {
                 model.EmployeeScheduleAssignedList = scheduleAssigned.Select(i => new EmployeeScheduleAssignedItem()
                 {
+                    Id = i.Id,
                     EmployeeId = int.Parse(i.EmployeeId).ToString("00000"),
                     ScheduleMeal = !IsValidcheduleAssigedTemp(i.EmployeeId, scheduleAssignedTemp.ToList(), 2) ? $"{GetStartScheduleAssigned(i.IdScheduleMeal, 2)} - {GetEndScheduleAssigned(i.IdScheduleMeal, 2)}" : GetScheduleAssigedTemp(i.EmployeeId, scheduleAssignedTemp.ToList(), 2),
-                    ScheduleWorkday = !IsValidcheduleAssigedTemp(i.EmployeeId, scheduleAssignedTemp.ToList(), 1) ? $"{GetStartScheduleAssigned(i.IdScheduleWorkday, 1)} - {GetEndScheduleAssigned(i.IdScheduleWorkday, 1)}" : GetScheduleAssigedTemp(i.EmployeeId, scheduleAssignedTemp.ToList(), 1),
-                    EmployeeName = $"{organigramaModel.Where(k => k.Id.Equals(i.EmployeeId)).FirstOrDefault().Name }",
-                    ToleranceWorkday = $"{i.ToleranceWorkday} Mins",
-                    ToleranceMeal = $"{i.ToleranceMeal} Mins",
-                    EsTemporal = scheduleAssignedTemp.Where(u => u.EmployeeId.Equals(i.EmployeeId)).Any() ? "Si" : "No"
-                }).ToList();
+                    ScheduleWorkday = !IsValidcheduleAssigedTemp(i.EmployeeId, scheduleAssignedTemp.ToList(), 1) ? $"L-V({GetStartScheduleAssigned(i.IdScheduleWorkday, 1)} - {GetEndScheduleAssigned(i.IdScheduleWorkday, 1)})" : GetScheduleAssigedTemp(i.EmployeeId, scheduleAssignedTemp.ToList(), 1),
+                    EmployeeName = organigramaModel.Where(k => k.Id.Equals(i.EmployeeId)).Any() ? $"{organigramaModel.Where(k => k.Id.Equals(i.EmployeeId)).FirstOrDefault().Name }" : "",
+                    ToleranceWorkday = IsValidcheduleAssigedTemp(i.EmployeeId, scheduleAssignedTemp.ToList(), 1) ? ScheduleTempTolerance(i.EmployeeId, scheduleAssignedTemp.ToList(), 1) : $"{i.ToleranceWorkday} Mins",
+                    ToleranceMeal = IsValidcheduleAssigedTemp(i.EmployeeId, scheduleAssignedTemp.ToList(), 2) ? ScheduleTempTolerance(i.EmployeeId, scheduleAssignedTemp.ToList(), 2) : $"{i.ToleranceMeal} Mins",
+                    EsTemporal = (!IsValidcheduleAssigedTemp(i.EmployeeId, scheduleAssignedTemp.ToList(), 2) && !IsValidcheduleAssigedTemp(i.EmployeeId, scheduleAssignedTemp.ToList(), 1)) ? "No" : "Si"
+                }).ToList().Where(u => !u.EmployeeName.Equals(string.Empty)).ToList();
+
             }
 
             sb.Append("Id Empleado,Nombre, Horario laboral, Tolerancia horario laboral, Horario comida,Tolerancia horario comida,Tiene Horario Temporal");

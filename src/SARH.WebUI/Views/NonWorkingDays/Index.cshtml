@@ -29,199 +29,348 @@
         </li>
     </ol>
 </div>
-
 <div class="row">
+
     <div class="col-xl-12">
-        <div id="panel-1" class="panel">
-            <div class="panel-hdr">
-                <h2>
-                    Configurar días no laborables <span class="fw-300"><i></i></span>
-                </h2>
+        <div role="group" aria-label="Vertical button group">
+            <div class="btn-group" role="group">
+                <button class="btn btn-secondary dropdown-toggle" id="btnGroupVerticalDrop1" aria-expanded="false" aria-haspopup="true" type="button" data-toggle="dropdown">
+                    <i class="fal fa-bolt"></i>
+                    Acciones
+                </button>
+                <div class="dropdown-menu" aria-labelledby="btnGroupVerticalDrop1">
+                    <a id="deleterow" class="dropdown-item" href='#'>Eliminar Día Festivo</a>
+                </div>
             </div>
-            <div class="panel-container show">
-                <div class="panel-content">
-                    <div class="form-group row">
+        </div>
+        <hr />
 
 
-                        <div class="col-lg-6">
-                            <form>
-                                <div class="form-group">
-                                    <label class="form-label">Dias no laborables</label>
-                                    <table id="dt-basic-example" class="table table-bordered table-hover table-striped w-100">
-                                        <thead class="bg-warning-200">
-                                            <tr>
-                                                <th>Fecha</th>
-                                                <th>Descripción</th>
-                                                <th></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach (var item in Model.NonWorkingDays)
-                                            {
-                                                <tr id="@item.Id">
-                                                    <td>@item.Holiday</td>
-                                                    <td>@item.Description</td>
-                                                    <td></td>
-                                                </tr>
-                                            }
-                                        </tbody>
-                                    </table>
+    </div>
+
+
+
+        </div>
+
+        <div class="row">
+            <div class="col-xl-12">
+                <div id="panel-1" class="panel">
+                    <div class="panel-hdr">
+                        <h2>
+                            Configurar días no laborables <span class="fw-300"><i></i></span>
+                        </h2>
+                    </div>
+                    <div class="panel-container show">
+                        <div class="panel-content">
+                            <div class="form-group row">
+
+
+                                <div class="col-lg-4">
+                                    <form>
+                                        <div class="form-group">
+                                            <label class="form-label">Dias no laborables</label>
+                                            <table id="dt-basic-example" class="table table-bordered table-hover table-striped w-100">
+                                                <thead class="bg-warning-200">
+                                                    <tr>
+                                                        <th>Fecha</th>
+                                                        <th>Descripción</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="allschedules">
+                                                    @foreach (var item in Model.NonWorkingDays)
+                                                    {
+                                                        <tr id="@item.Id">
+                                                            <td>@item.Holiday</td>
+                                                            <td>@item.Description</td>
+                                                        </tr>
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </form>
                                 </div>
-                            </form>
-                        </div>
 
-                        <div class="col-lg-3">
+                                <div class="col-lg-3">
 
-                            <div class="form-group">
-                                <label class="form-label">Seleccione la fecha</label>
-                                <div id="datepicker-6"></div>
+                                    <div class="form-group">
+                                        <label class="form-label">Seleccione la fecha</label>
+                                        <div id="datepicker-6"></div>
+                                    </div>
+
+                                </div>
+
+                                <div class="col-lg-5">
+
+                                    <div class="form-group">
+                                        <label class="form-label">Descripción de la fecha</label>
+                                        <input type="text" id="editinput" class="form-control" placeholder="Descripcion de la fecha">
+                                        <hr />
+                                        <center>
+                                            <button id="addHoliday" type="button" class="btn btn-lg btn-info waves-effect waves-themed">
+                                                <span class="fal fa-plus mr-1"></span>
+                                                Agregar fecha
+                                            </button>
+                                        </center>
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text text-success">
+                                                    <i class="ni ni-user fs-xl"></i>
+                                                </span>
+                                            </div>
+                                            <input type="text" aria-label="searchtext" class="form-control reseterror" placeholder="Ingrese el valor" id="searchText">
+                                            <div class="input-group-append input-group-prepend">
+                                                <span class="input-group-text">
+                                                    <i class="fal fa-exchange fs-xl"></i>
+                                                </span>
+                                            </div>
+                                            <select class="custom-select" id="typesearch" aria-label="typesearch">
+                                                <option value="0" selected="">Busqueda por</option>
+                                                <option value="1">Área</option>
+                                                <option value="2">Centro de trabajo</option>
+                                                <option value="3">Puesto</option>
+                                                <option value="4">No. Empleado</option>
+                                            </select>
+                                            <div class="input-group-append">
+                                                <button id="searchbutton" type="button" class="btn btn-success shadow-0 waves-effect waves-themed">
+
+                                                    <span id="imgsearch" class="fal fa-search mr-1"></span>
+
+                                                    <span id="spin" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="display:none"></span>
+
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-12">
+                                        <ul id="elementsfinded">
+                                        </ul>
+                                    </div>
+
+
+                                    <div id="searchresult">
+
+                                    </div>
+                                    <div id="searcherror" style="display:none;">
+                                        <span id="msgerror" class="h5 color-danger-900"></span>
+                                    </div>
+                                    <hr />
+                                    <center>
+                                        <button id="addelement" type="button" class="btn btn-info waves-effect waves-themed" style="display:none;"><span class="fal fa-plus mr-1"></span>Agregar</button>
+                                    </center>
+
+                                    <div class="col-md-12">
+                                        <div class="d-flex flex-wrap align-items-center pl-3 pr-1 py-2 px-sm-4 px-lg-5 border-faded border-top-0 border-left-0 border-right-0">
+                                            <div class="flex-1 d-flex align-items-center">
+                                                <a href="javascript:void(0);" id="js-delete-selected" class="btn btn-icon rounded-circle mr-1 waves-effect waves-themed">
+                                                    <i class="fas fa-trash fs-md"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <br />
+                                        <div class="col-md-12">
+                                            <ul id="elementsadded">
+                                            </ul>
+                                        </div>
+                                    </div>
+
+
+
+
+                                </div>
+
+
+
                             </div>
-
                         </div>
-
-                        <div class="col-lg-3">
-
-                            <div class="form-group">
-                                <label class="form-label">Descripción de la fecha</label>
-                                <input type="text" id="editinput" class="form-control" placeholder="Descripcion de la fecha">
-                                <hr />
-                                <center>
-                                    <button id="addHoliday" type="button" class="btn btn-lg btn-info waves-effect waves-themed">
-                                        <span class="fal fa-plus mr-1"></span>
-                                        Agregar fecha
-                                    </button>
-                                </center>
-                            </div>
-
-                        </div>
-                        
-
-
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
 
-<input id='QA' type="hidden" />
+        <input id='QA' type="hidden" />
 
-@section ScriptsBlock {
+        @section ScriptsBlock {
 
-    <script src="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/js/datagrid/datatables/datatables.bundle.js"></script>
-    <script src="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/js/formplugins/bootstrap-datepicker/bootstrap-datepicker.js"></script>
-    <script src="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/js/notifications/sweetalert2/sweetalert2.bundle.js"></script>
-    <script>
+            <script src="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/js/datagrid/datatables/datatables.bundle.js"></script>
+            <script src="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/js/formplugins/bootstrap-datepicker/bootstrap-datepicker.js"></script>
+            <script src="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/js/notifications/sweetalert2/sweetalert2.bundle.js"></script>
+            <script>
 
 
 
-        // Class definition
+                // Class definition
 
-        var controls = {
-            leftArrow: '<i class="fal fa-angle-left" style="font-size: 1.25rem"></i>',
-            rightArrow: '<i class="fal fa-angle-right" style="font-size: 1.25rem"></i>'
-        }
+                var controls = {
+                    leftArrow: '<i class="fal fa-angle-left" style="font-size: 1.25rem"></i>',
+                    rightArrow: '<i class="fal fa-angle-right" style="font-size: 1.25rem"></i>'
+                }
 
-        var runDatePicker = function () {
+                var runDatePicker = function () {
 
-            $('#datepicker-6').datepicker({
-                clearBtn: false,
-                todayHighlight: false,
-                multidate: false,
-                todayHighlight: true,
-                templates: controls,
-                format: 'DD/MM/YYYY HH:mm:ss'
-            }).on('changeDate', function (e) {
+                    $('#datepicker-6').datepicker({
+                        clearBtn: false,
+                        todayHighlight: false,
+                        multidate: false,
+                        todayHighlight: true,
+                        templates: controls,
+                        format: 'DD/MM/YYYY HH:mm:ss'
+                    }).on('changeDate', function (e) {
 
-                $('#QA').val(convert(e.date));
-            });
+                        $('#QA').val(convert(e.date));
+                    });
 
-        }
-
-
-        function convert(str) {
-            var date = new Date(str),
-                mnth = ("0" + (date.getMonth() + 1)).slice(-2),
-                day = ("0" + date.getDate()).slice(-2);
-            hours = ("0" + date.getHours()).slice(-2);
-            minutes = ("0" + date.getMinutes()).slice(-2);
-            return [day, mnth, date.getFullYear()].join("/");
-        }
+                }
 
 
-        $(document).ready(function () {
+                function convert(str) {
+                    var date = new Date(str),
+                        mnth = ("0" + (date.getMonth() + 1)).slice(-2),
+                        day = ("0" + date.getDate()).slice(-2);
+                    hours = ("0" + date.getHours()).slice(-2);
+                    minutes = ("0" + date.getMinutes()).slice(-2);
+                    return [day, mnth, date.getFullYear()].join("/");
+                }
 
-            runDatePicker();
 
-            $('#dt-basic-example').dataTable(
-                {
-                    responsive: true,
-                    columnDefs: [
-                        {
-                            targets: -1,
-                            title: '',
-                            orderable: false,
-                            render: function (data, type, full, meta) {
-                                /*
-                                -- ES6
-                                -- convert using https://babeljs.io online transpiler
-                                return `
-                                <a href='javascript:void(0);' class='btn btn-sm btn-icon btn-outline-danger rounded-circle mr-1' title='Delete Record'>
-                                    <i class="fal fa-times"></i>
-                                </a>
-                                <div class='dropdown d-inline-block dropleft '>
-                                    <a href='#'' class='btn btn-sm btn-icon btn-outline-primary rounded-circle shadow-0' data-toggle='dropdown' aria-expanded='true' title='More options'>
-                                        <i class="fal fa-ellipsis-v"></i>
-                                    </a>
-                                    <div class='dropdown-menu'>
-                                        <a class='dropdown-item' href='javascript:void(0);'>Change Status</a>
-                                        <a class='dropdown-item' href='javascript:void(0);'>Generate Report</a>
-                                    </div>
-                                </div>`;
-                                ES5 example below:
-                                */
-                                return "\n\t\t\t\t\t\t<a href='javascript:void(0);' class='deleterow btn btn-sm btn-icon btn-outline-primary rounded-circle mr-1' title='Deshabilitar registro'>\n\t\t\t\t\t\t\t<i class=\"fal fa-window-close\"></i>";
-                            },
-                        },
-                    ]
+
+
+                $('#dt-basic-example tr').click(function () {
+
+                    $(this).addClass('selected').siblings().removeClass('selected');
+
                 });
 
-            $('.deleterow').click(function () {
+                $(document).ready(function () {
 
+                    var selectedelements = new Array();
+                    var multipleadded = false;
 
-                var id = $(this).closest('tr').attr('id');
+                    runDatePicker();
 
-                var swalWithBootstrapButtons = Swal.mixin(
-                    {
-                        customClass:
+                    $('#dt-basic-example').dataTable(
                         {
-                            confirmButton: "btn btn-primary",
-                            cancelButton: "btn btn-danger mr-2"
-                        },
-                        buttonsStyling: false
+                            responsive: true
+                        });
+
+                    $('#deleterow').click(function () {
+
+
+                        var row = $('#allschedules tr.selected');
+
+
+                        if (row.length === 0) {
+
+                            Swal.fire(
+                                {
+                                    type: "warning",
+                                    title: "Validación",
+                                    text: "Seleccione un registro"
+                                });
+
+                            return;
+
+                        }
+
+                        var id = row[0].id;
+
+                        var swalWithBootstrapButtons = Swal.mixin(
+                            {
+                                customClass:
+                                {
+                                    confirmButton: "btn btn-primary",
+                                    cancelButton: "btn btn-danger mr-2"
+                                },
+                                buttonsStyling: false
+                            });
+                        swalWithBootstrapButtons
+                            .fire(
+                                {
+                                    title: "Confirmación",
+                                    text: "Deseas eliminar el elemento?",
+                                    type: "warning",
+                                    showCancelButton: true,
+                                    confirmButtonText: "Si",
+                                    cancelButtonText: "Cancelar",
+                                    reverseButtons: true
+                                })
+                            .then(function (result) {
+
+                                if (result.value) {
+
+
+                                    $.ajax({
+                                        url: '/NonWorkingDays/DeleteHoliday',
+                                        type: "POST",
+                                        data: { id: id },
+                                        success: function (data, textStatus, jqXHR) {
+
+                                            Swal.fire(
+                                                {
+                                                    position: "top-end",
+                                                    type: "success",
+                                                    title: "Actualización exitosa",
+                                                    showConfirmButton: false,
+                                                    timer: 1500
+                                                }).then((result) => {
+
+
+                                                    window.location.href = '/NonWorkingDays/Index';
+
+                                                });
+
+
+
+                                        },
+                                        error: function (jqXHR, textStatus, errorThrown) {
+                                            alert(errorThrown);
+                                        }
+                                    });
+                                }
+                                else if (
+                                    // Read more about handling dismissals
+                                    result.dismiss === Swal.DismissReason.cancel
+                                ) {
+                                    swalWithBootstrapButtons.fire(
+                                        "Cancelación",
+                                        "Se ha cancelado la acción",
+                                        "error"
+                                    );
+                                }
+                            });
+
                     });
-                swalWithBootstrapButtons
-                    .fire(
-                        {
-                            title: "Confirmación",
-                            text: "Deseas eliminar el elemento?",
-                            type: "warning",
-                            showCancelButton: true,
-                            confirmButtonText: "Si",
-                            cancelButtonText: "Cancelar",
-                            reverseButtons: true
-                        })
-                    .then(function (result) {
 
-                        if (result.value) {
+                    $('#addHoliday').click(function () {
 
 
-                            $.ajax({
-                                url: '/NonWorkingDays/DeleteHoliday',
-                                type: "POST",
-                                data: { id: id },
-                                success: function (data, textStatus, jqXHR) {
+                        if ($('#QA').val() === "" || $('#editinput').val() === "") {
 
+                            Swal.fire(
+                                {
+                                    type: "warning",
+                                    title: "Validación",
+                                    text: "Debe seleccionar una fecha e ingresar la descripción"
+                                });
+
+                            return;
+                        }
+
+
+                        var formData = { holiday: $('#QA').val(), Description: $('#editinput').val(), selectedInputs: selectedelements };
+
+                        $.ajax({
+                            url: '/NonWorkingDays/SaveHoliday',
+                            type: "POST",
+                            data: formData,
+                            success: function (data, textStatus, jqXHR) {
+
+
+                                if (data.response === "ok") {
                                     Swal.fire(
                                         {
                                             position: "top-end",
@@ -231,91 +380,191 @@
                                             timer: 1500
                                         }).then((result) => {
 
-
                                             window.location.href = '/NonWorkingDays/Index';
 
                                         });
-
-
-
-                                },
-                                error: function (jqXHR, textStatus, errorThrown) {
-                                    alert(errorThrown);
                                 }
-                            });
-                        }
-                        else if (
-                            // Read more about handling dismissals
-                            result.dismiss === Swal.DismissReason.cancel
-                        ) {
-                            swalWithBootstrapButtons.fire(
-                                "Cancelación",
-                                "Se ha cancelado la acción",
-                                "error"
-                            );
-                        }
-                    });
+                                else {
 
-            });
+                                    Swal.fire(
+                                        {
+                                            type: "warning",
+                                            title: "Validación",
+                                            text: data.message
+                                        });
+                                }
 
-            $('#addHoliday').click(function () {
+                            },
+                            error: function (jqXHR, textStatus, errorThrown) {
 
-
-                if ($('#QA').val() === "" || $('#editinput').val() === "") {
-
-                    Swal.fire(
-                        {
-                            type: "warning",
-                            title: "Validación",
-                            text: "Debe seleccionar una fecha e ingresar la descripción"
+                            }
                         });
 
-                    return;
-                }
+                    });
+
+                    $('#searchbutton').click(function () {
+
+                        $('#errorsave').hide();
+                        $('#addelement').hide();
+                        $('#searchresult').empty();
+                        $('#elementsfinded').empty();
+                        $('#searcherror').hide();
+                        $('#imgsearch').hide();
+                        $('#spin').show();
+                        var ts = $('#typesearch').val();
+
+                        if (ts === "0") {
+
+                            $('#msgerror').text("Seleccione un tipo de busqueda");
+                            $('#imgsearch').show();
+                            $('#spin').hide();
+                            $('#searcherror').show();
+                            return;
+                        }
+
+                        if ($('#searchText').val() === "") {
+                            $('#msgerror').text("Ingrese el valor de la busqueda");
+                            $('#imgsearch').show();
+                            $('#spin').hide();
+                            $('#searcherror').show();
+                            return;
+                        }
 
 
-                var formData = { holiday: $('#QA').val(), Description: $('#editinput').val() };
+                        $.ajax({
+                            url: '/NonWorkingDays/SearchBy',
+                            type: "POST",
+                            data: { inputtext: $('#searchText').val(), typesearch: ts },
+                            success: function (data, textStatus, jqXHR) {
 
-                $.ajax({
-                    url: '/NonWorkingDays/SaveHoliday',
-                    type: "POST",
-                    data: formData,
-                    success: function (data, textStatus, jqXHR) {
+                                if (data.details === "") {
+
+                                    if (data.rows > 0) {
+                                        $('#searchresult').append('<span id="' + data.id + '" class="elementresult">' + data.value + '<span class="badge badge-icon position-relative ml-2">' + data.rows + '</span></span>');
+                                        $('#addelement').show();
+                                    }
+                                    else {
+                                        if (data.rows == 0) {
+                                            $('#msgerror').text("No se encontraron resultados.");
+                                            $('#searcherror').show();
+                                        }
+                                        else {
+                                            $('#msgerror').text("El empleado ya tiene horario asignado.");
+                                            $('#searcherror').show();
+                                        }
+                                    }
+
+                                    $('#imgsearch').show();
+                                    $('#spin').hide();
+                                }
+                                else {
+
+                                    var showDetail = 0;
+                                    data.details.forEach(function (dataDet, index) {
+
+                                        $('#elementsfinded').append('<li><div class="custom-control custom-checkbox"><input type="checkbox" class="custom-control-input" id="' + dataDet.id + '"><label class="custom-control-label" for="' + dataDet.id + '">' + dataDet.value + '</label></div></li>');
+                                        showDetail++;
+                                    });
+
+                                    if (showDetail > 0) {
+                                        $('#addelement').show();
+                                        multipleadded = true;
+                                    }
+                                    else {
+                                        if (data.rows === -1) {
+                                            $('#msgerror').text("Todos los empleados ya tienen horarios asignados.");
+                                            $('#searcherror').show();
+                                        }
+                                        else {
+                                            $('#msgerror').text("No se encontrarón resultados.");
+                                            $('#searcherror').show();
+                                        }
+                                    }
+
+                                    $('#imgsearch').show();
+                                    $('#spin').hide();
+                                }
+
+                                $('#searchText').val("");
+
+                            },
+                            error: function (jqXHR, textStatus, errorThrown) {
+
+                            }
+                        });
+                    });
+
+                    $('#addelement').click(function () {
 
 
-                        if (data.response === "ok") {
-                            Swal.fire(
-                                {
-                                    position: "top-end",
-                                    type: "success",
-                                    title: "Actualización exitosa",
-                                    showConfirmButton: false,
-                                    timer: 1500
-                                }).then((result) => {
+                        if (multipleadded) {
 
-                                    window.location.href = '/NonWorkingDays/Index';
+                            $("#elementsfinded input[type=checkbox]:checked").each(function () {
 
+                                var idelement = this.id;
+                                var found = selectedelements.find(function (element) {
+                                    return element == idelement;
                                 });
+                                if (found === undefined || found.length === 0) {
+
+                                    selectedelements.push(idelement);
+                                    $('#elementsadded').append('<li><div class="custom-control custom-checkbox"><input type="checkbox" class="custom-control-input" id="' + idelement + '"><label class="custom-control-label" for="' + idelement + '">' + this.parentElement.innerText + '</label></div></li>');
+                                }
+
+                            });
+
+                            $('#elementsfinded').empty();
+                            $('#addelement').hide();
+                            multipleadded = false;
                         }
                         else {
 
-                            Swal.fire(
-                                {
-                                    type: "warning",
-                                    title: "Validación",
-                                    text: data.message
-                                });
+                            var elementspan = $("#searchresult > span");
+                            var idelement = elementspan.attr('id');
+
+                            $('#searchresult').empty();
+                            $('#addelement').hide();
+
+                            var found = selectedelements.find(function (element) {
+                                return element == idelement;
+                            });
+
+                            if (found === undefined || found.length === 0) {
+
+                                selectedelements.push(idelement);
+                                $('#elementsadded').append('<li><div class="custom-control custom-checkbox"><input type="checkbox" class="custom-control-input" id="' + idelement + '"><label class="custom-control-label" for="' + idelement + '">' + elementspan.text().slice(0, -1) + '</label></div></li>');
+                            }
                         }
 
-                    },
-                    error: function (jqXHR, textStatus, errorThrown) {
 
-                    }
+                    });
+
+                    $('#js-delete-selected').click(function () {
+
+
+                        $("#elementsadded input[type=checkbox]:checked").each(function () {
+
+                            var idelement = this.id;
+
+                            var found = selectedelements.find(function (element) {
+                                return element == idelement;
+                            });
+
+                            if (found !== undefined || found.length !== 0) {
+
+                                selectedelements.splice(selectedelements.indexOf(idelement), 1);
+                                $(this).closest('li').remove();
+                            }
+
+
+                        });
+
+
+
+
+                    });
+
                 });
 
-            });
-
-        });
-
-    </script>
-}
+            </script>
+        }

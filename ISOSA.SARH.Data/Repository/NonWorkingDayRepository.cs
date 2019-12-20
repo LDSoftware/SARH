@@ -20,6 +20,7 @@ namespace ISOSA.SARH.Data.Repository
         {
             this._context.NonWorkingDays.Add(Element);
             this._context.SaveChanges();
+            this._getLastAdded = Element;
         }
 
         public override void Delete(NonWorkingDay Element)

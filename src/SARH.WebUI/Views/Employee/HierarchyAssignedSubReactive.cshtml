@@ -136,7 +136,7 @@
                 .fire(
                     {
                         title: "Confirmación",
-                        text: "Deseas realizar el cambio de puesto?",
+                        text: "Deseas realizar la asignación del puesto?",
                         type: "warning",
                         position: "top-end",
                         allowOutsideClick: false,
@@ -153,9 +153,9 @@
                         var element = select[0].id;
 
                         $.ajax({
-                            url: '/Employee/SetNewJob',
+                            url: '/Employee/SetNewJobReactive',
                             type: "POST",
-                            data: { jobGuid: element, employeeGuid: $('#rowid').val() },
+                            data: { jobGuid: element, employeeId:  $('#employeeId').val() },
                             success: function (data, textStatus, jqXHR) {
 
                                 Swal.fire(
@@ -168,8 +168,7 @@
                                     });
 
 
-                                var url = '@Url.Action("EmployeeDetail", "Organigrama", new { employeeid = "IDEmployee" })';
-                                url = url.replace('IDEmployee', $('#employeeId').val());
+                                var url = '@Url.Action("Organigrama", "Organigrama")';
                                 window.location.href = url;
 
                             },
