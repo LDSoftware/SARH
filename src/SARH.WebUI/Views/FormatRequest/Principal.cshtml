@@ -70,26 +70,26 @@
                                         <tbody id="allrequest">
                                             @foreach (var item in Model.EmployeeFormats)
                                             {
-                                            <tr id="@item.Id">
-                                                <td>
-                                                    @item.CreateDate
-                                                </td>
-                                                <td>
-                                                    @item.PermissionType
-                                                </td>
-                                                <td>
-                                                    @item.Comments
-                                                </td>
-                                                <td>
-                                                    @item.StartDate
-                                                </td>
-                                                <td>
-                                                    @item.Approved
-                                                </td>
-                                                <td>
-                                                    @item.EmployeeSubstitute
-                                                </td>
-                                            </tr>
+                                                <tr id="@item.Id">
+                                                    <td>
+                                                        @item.CreateDate
+                                                    </td>
+                                                    <td>
+                                                        @item.PermissionType
+                                                    </td>
+                                                    <td>
+                                                        @item.Comments
+                                                    </td>
+                                                    <td>
+                                                        @item.StartDate
+                                                    </td>
+                                                    <td>
+                                                        @item.Approved
+                                                    </td>
+                                                    <td>
+                                                        @item.EmployeeSubstitute
+                                                    </td>
+                                                </tr>
                                             }
                                         </tbody>
                                     </table>
@@ -365,6 +365,9 @@
 
 <input id='QA' type="hidden" />
 <input id='QB' type="hidden" />
+<button id="sendbuttonNS" style="display:none;"></button>
+<input id='IdFormatRequest' type="hidden" />
+
 
 @section Scripts {
 
@@ -436,7 +439,7 @@
                 });
 
 
-                        //Formatos Empleado
+            //Formatos Empleado
             $('#searchbutton').click(function () {
 
                 $('#searchresult').empty();
@@ -516,9 +519,12 @@
                     data: formData,
                     success: function (data, textStatus, jqXHR) {
 
+                        $('#IdFormatRequest').val(data.idformat);
+
+                        $('#sendbuttonNS').trigger('click');
 
                         location.reload(true);
- 
+
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
 
@@ -596,7 +602,7 @@
             $('#viewrow').click(function () {
 
 
-                
+
                 var row = $('#allrequest tr.selected');
                 var id = row.attr("id");
 
@@ -627,7 +633,7 @@
                         $('#datepicker-4-4-view').val(data.dateini);
                         $('#datepicker-4-5-view').val(data.datefin);
                         $('#searchresult-view').text(data.sustitute);
-                        
+
                         $('.default-example-modal-right-view').modal('show');
 
                     },
@@ -721,6 +727,11 @@
 
 
             });
+
+
+
+
+
 
 
         });

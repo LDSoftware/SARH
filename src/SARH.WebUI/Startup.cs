@@ -18,8 +18,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Protocols;
 using SARH.WebUI.Data;
 using SARH.WebUI.Factories;
+using SARH.WebUI.Hubs;
 using SARH.WebUI.Models;
 using SARH.WebUI.Models.OrganizationChart;
+using System;
 
 namespace SmartAdmin.WebUI
 {
@@ -41,13 +43,19 @@ namespace SmartAdmin.WebUI
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
+            services.AddDistributedMemoryCache(); //This way ASP.NET Core will use a Memory Cache to store session variables
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromDays(1); // It depends on user requirements.
+            });
 
-
+            services.AddSignalR();
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
             services.AddDefaultIdentity<IdentityUser>()
                 .AddDefaultUI(UIFramework.Bootstrap4)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddTransient<IDashboardModelFactory, DashboardModelFactory>();
             services.AddTransient<OrganizationChartAreaModelFactory>();
             services.AddTransient<IOrganigramaModelFactory, OrganigramaModelFactory>();
@@ -95,9 +103,15 @@ namespace SmartAdmin.WebUI
                 app.UseHsts();
             }
 
+            app.UseSession();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<NotificationHub>("/notificationHub");
+            });
+
             app.UseAuthentication();
 
             app.UseMvc(routes =>

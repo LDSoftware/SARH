@@ -96,8 +96,9 @@ namespace SARH.WebUI.Controllers
         public JsonResult SaveFormat(FormatInputModel format, [FromServices] IRepository<EmployeeFormat> formatRepository)
         {
 
-            formatRepository.Create(new EmployeeFormat()
-            {
+
+            var element = new EmployeeFormat() 
+            {                
                 Comments = format.Comments,
                 EmployeeId = format.EmployeeId,
                 EmployeeSubstitute = string.IsNullOrEmpty(format.EmployeeSubId) ? "0" : format.EmployeeSubId,
@@ -107,9 +108,11 @@ namespace SARH.WebUI.Controllers
                 CreateDate = DateTime.Today,
                 ApprovalDate = null,
                 ApprovalWorkFlow = ""
-            });
+            };
 
-            return Json("Ok");
+            formatRepository.Create(element);
+
+            return Json(new { idformat = element.Id });
         }
 
         [AllowAnonymous]

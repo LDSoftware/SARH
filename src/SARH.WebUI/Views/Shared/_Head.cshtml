@@ -1,11 +1,13 @@
-<meta charset="utf-8">
+﻿<meta charset="utf-8">
 <title>
-@if (ViewBag.Title?.Length > 0)
-{
-	<text>@ViewBag.Title - @ViewBag.Category1 - @ViewBag.App v@(ViewBag.Version)</text>
-} else {
-	@ViewBag.App
-}
+	@if (ViewBag.Title?.Length > 0)
+	{
+		<text>@ViewBag.Title - @ViewBag.Category1 - @ViewBag.App v@(ViewBag.Version)</text>
+	}
+	else
+	{
+		@ViewBag.App
+	}
 </title>
 <meta name="description" content="@ViewBag.Title">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -15,4 +17,5 @@
 <link rel="stylesheet" media="screen, print" href="~/css/vendors.bundle.css">
 <link rel="stylesheet" media="screen, print" href="~/css/app.bundle.css">
 <link rel="stylesheet" media="screen, print" href="~/css/site.css">
-<partial name="_Favicon"/>
+<link rel="stylesheet" media="screen, print" href="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/css/notifications/toastr/toastr.css">
+<partial name="_Favicon" />

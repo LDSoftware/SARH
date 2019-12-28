@@ -27,7 +27,7 @@
 
   <ItemGroup>
     <Folder Include="Document\Temp\" />
-    <Folder Include="Infraestructure\" />
+    <Folder Include="Views\Catalog\Infraestructure\" />
     <Folder Include="Views\Home\" />
     <Folder Include="Views\DashboardHistory\" />
     <Folder Include="Views\Profile\" />
