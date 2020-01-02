@@ -42,6 +42,9 @@ namespace ISOSA.SARH.Data
         public virtual DbSet<EmployeeOrganigrama> EmployeesOrganigrama { get; set; }
         public virtual DbSet<EmployeeDiscount> EmployeeDiscount { get; set; }
         public virtual DbSet<NonWorkingDayException> NonWorkingDayExceptions { get; set; }
+        public virtual DbSet<FormatApprovedEmployee> FormatApprobedEmployees { get; set; }
+        public virtual DbSet<FormatApprovedHubId> FormatApprobedHubIds { get; set; }
+        public virtual DbSet<FormatApprover> FormatApprovers { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -65,6 +68,9 @@ namespace ISOSA.SARH.Data
             new EmployeeOrganigramaMapping(builder.Entity<EmployeeOrganigrama>());
             new EmployeeDiscountMapping(builder.Entity<EmployeeDiscount>());
             new NonWorkingDayExceptionMapping(builder.Entity<NonWorkingDayException>());
+            new FormatApprovedEmployeeMapping(builder.Entity<FormatApprovedEmployee>());
+            new FormatApprovedHubIdMapping(builder.Entity<FormatApprovedHubId>());
+            new FormatApproverMapping(builder.Entity<FormatApprover>());
         }
 
 

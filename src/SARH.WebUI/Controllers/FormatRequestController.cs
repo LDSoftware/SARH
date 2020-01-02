@@ -37,6 +37,8 @@ namespace SARH.WebUI.Controllers
 
             ViewBag.permissionType = _permissionTypeRepository.GetAll().Select(k => new SelectListItem() { Text = k.Description, Value = k.Id.ToString() });
 
+            var employees = organigramaModelFactory.GetAllData().Employess;
+
             var info = organigramaModelFactory.GetEmployeeData("17");
 
             FormatRequestModel model = new FormatRequestModel()
@@ -61,7 +63,7 @@ namespace SARH.WebUI.Controllers
                     EndDate = r.EndDate.ToShortDateString(),
                     PermissionType = _permissionTypeRepository.GetElement(r.PermissionType).Description,
                     StartDate = $"({r.StartDate.ToShortDateString()})-({r.EndDate.ToShortDateString()})",
-                    EmployeeSubstitute = organigramaModelFactory.GetEmployeeData(r.EmployeeSubstitute).GeneralInfo.FirstName + " " + organigramaModelFactory.GetEmployeeData(r.EmployeeSubstitute).GeneralInfo.LastName
+                    EmployeeSubstitute = employees.Where(k=>k.Id.Equals(r.EmployeeSubstitute.TrimStart('0'))).FirstOrDefault().Name
                 }));
             }
 

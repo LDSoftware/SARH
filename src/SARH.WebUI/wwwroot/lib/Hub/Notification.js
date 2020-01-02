@@ -3,6 +3,8 @@
     .configureLogging(signalR.LogLevel.Information)
     .build();
 
+connection.serverTimeoutInMilliseconds = 100000;
+
 connection.on('ReceiveMessage', (user, message) => {
 
     toastr.options = {
@@ -25,11 +27,16 @@ connection.on('ReceiveMessage', (user, message) => {
 
     toastr.success("Ha recibido un formato pendiente para aprobación", "Sistema de notificaciones");
 
+
+
 });
 
 Object.defineProperty(WebSocket, 'OPEN', { value: 1, });
 
 connection.start().catch(err => console.error(err.toString()));
+
+// re-establish the connection if connection dropped
+connection.onclose(() => setTimeout(startSignalRConnection(connection), 5000));
 
 
 document.getElementById("sendbuttonNS").addEventListener("click", event => {

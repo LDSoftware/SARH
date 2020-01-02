@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR;
 using Newtonsoft.Json;
+using SARH.WebUI.Factories;
 using SARH.WebUI.Models.Hub;
 using SmartAdmin.WebUI.Areas.Identity.Pages.Account;
 using System;
@@ -19,6 +20,8 @@ namespace SARH.WebUI.Hubs
     {
 
         private readonly IRepository<EmployeeFormat> _formatRepository;
+        private readonly IRepository<FormatApprover> _formatApproverRepository;
+        private readonly IOrganigramaModelFactory _organigramaModelFactory;
         private static readonly ConcurrentDictionary<string, UserHubModels> Users =
             new ConcurrentDictionary<string, UserHubModels>(StringComparer.InvariantCultureIgnoreCase);
         private readonly IHttpContextAccessor _httpContextAccessor;
@@ -26,23 +29,64 @@ namespace SARH.WebUI.Hubs
 
         public NotificationHub(IRepository<EmployeeFormat> formatRepository,
             IHttpContextAccessor httpContextAccessor,
-            SignInManager<IdentityUser> signInManager)
+            SignInManager<IdentityUser> signInManager,
+            IRepository<FormatApprover> formatApproverRepository,
+            IOrganigramaModelFactory organigramaModelFactory)
         {
             this._formatRepository = formatRepository;
             this._httpContextAccessor = httpContextAccessor;
             this._signInManager = signInManager;
+            this._formatApproverRepository = formatApproverRepository;
+            this._organigramaModelFactory = organigramaModelFactory;
         }
 
 
         public async Task SendMessage(string user, string message, int approbedItem) 
         {
 
-            if (Users.Any()) 
+            string sendHub = string.Empty;
+            var employees = this._organigramaModelFactory.GetAllData();
+            List<string> _hubsId = new List<string>();
+
+            if (!approbedItem.Equals(0)) 
             {
-                await Clients.Client(Users.FirstOrDefault().Value.ConnectionIds.FirstOrDefault()).SendAsync("ReceiveMessage", user, message);
+                var emp = this._formatRepository.GetElement(approbedItem);
+                if (emp != null) 
+                {
+                    var empdet = employees.Employess.Where(u => u.Id.Equals(emp.EmployeeId));
+                    if (empdet.Any()) 
+                    {
+                        var emdet = empdet.FirstOrDefault();
+
+                        var approvers = _formatApproverRepository.SearhItemsFor(y => y.Area.Equals(emdet.Area)
+                            && y.Centro.Equals(emdet.JobCenter)
+                            && y.Departamento.Equals(emdet.Category));
+
+                        if (approvers.Any()) 
+                        {
+                            approvers.ToList().ForEach((e) =>
+                            {
+                                var appr = employees.Employess.Where(b => b.RowId.ToLower().Equals(e.RowGuid.ToString().ToLower()));
+                                if (appr.Any()) 
+                                {
+                                    var att = appr.FirstOrDefault();
+                                    var urt = Users.Where(i => i.Key.Equals(att.UserName));
+                                    if (urt.Any()) 
+                                    {
+                                        var r = urt.FirstOrDefault().Value.ConnectionIds.Last();
+                                        _hubsId.Add(r);
+                                    }
+                                }
+                            });
+                        }
+                    }
+                }
             }
 
-            //await Clients.All.SendAsync("ReceiveMessage", user, message);
+             _hubsId.ForEach(async hubclient => 
+            {
+                await Clients.Client(hubclient).SendAsync("ReceiveMessage", user, message);
+            });
 
         }
 

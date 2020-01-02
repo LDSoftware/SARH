@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.Mvc;
@@ -59,6 +60,7 @@ namespace SmartAdmin.WebUI
             services.AddTransient<IDashboardModelFactory, DashboardModelFactory>();
             services.AddTransient<OrganizationChartAreaModelFactory>();
             services.AddTransient<IOrganigramaModelFactory, OrganigramaModelFactory>();
+            services.AddTransient<INotificationModelFactory, NotificationModelFactory>();
             services.AddTransient<IRepository<DocumentType>, DocumentTypeRepository>(s => new DocumentTypeRepository((Configuration.GetConnectionString("DataConnectionString"))));
             services.AddTransient<IRepository<HardwareAssigned>, HardwareAssignedRepository>(s => new HardwareAssignedRepository((Configuration.GetConnectionString("DataConnectionString"))));
             services.AddTransient<IRepository<PermissionType>, PermissionTypeRepository>(s => new PermissionTypeRepository((Configuration.GetConnectionString("DataConnectionString"))));
@@ -75,6 +77,9 @@ namespace SmartAdmin.WebUI
             services.AddTransient<IRepository<EmployeeDiscount>, EmployeeDiscountRepository>(s => new EmployeeDiscountRepository((Configuration.GetConnectionString("DataConnectionString"))));
             services.AddTransient<IRepository<Nomipaq_nom10001>, NomipaqEmployeesRepository>(s => new NomipaqEmployeesRepository((Configuration.GetConnectionString("DataConnectionStringNomipaq"))));
             services.AddTransient<IRepository<EmployeeAditionalInfo>, EmployeeAditionalInfoRepository>(s => new EmployeeAditionalInfoRepository((Configuration.GetConnectionString("DataConnectionString"))));
+            services.AddTransient<IRepository<FormatApprovedEmployee>, FormatApprobedEmployeeRepository>(s => new FormatApprobedEmployeeRepository((Configuration.GetConnectionString("DataConnectionString"))));
+            services.AddTransient<IRepository<FormatApprovedHubId>, FormatApprobedHubIdRepository>(s => new FormatApprobedHubIdRepository((Configuration.GetConnectionString("DataConnectionString"))));
+            services.AddTransient<IRepository<FormatApprover>, FormatApproverRepository>(s => new FormatApproverRepository((Configuration.GetConnectionString("DataConnectionString"))));
             services.AddTransient<IRepository<EmployeeOrganigrama>, EmployeeOrganigramaRepository>(s => new EmployeeOrganigramaRepository((Configuration.GetConnectionString("DataConnectionStringISOSA"))));
             services.AddTransient<SARH.Core.Configuration.IConfigurationManager, SARH.WebUI.Configuration.ConfigurationManager>(s => new SARH.WebUI.Configuration.ConfigurationManager("appsettings.json", "ApplicationFormatPath"));
             services.AddTransient<IElementUpdateModelFactory, ElementUpdateModelFactory>(s => new ElementUpdateModelFactory(new ElementUpdateRepository(Configuration.GetConnectionString("DataConnectionString"))));
@@ -109,7 +114,12 @@ namespace SmartAdmin.WebUI
             app.UseCookiePolicy();
             app.UseSignalR(routes =>
             {
-                routes.MapHub<NotificationHub>("/notificationHub");
+                routes.MapHub<NotificationHub>("/notificationHub", options =>
+                {
+                    options.Transports =
+                        HttpTransportType.WebSockets |
+                        HttpTransportType.LongPolling;
+                });
             });
 
             app.UseAuthentication();

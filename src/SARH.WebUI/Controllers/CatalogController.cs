@@ -4,13 +4,16 @@ using System.Linq;
 using System.Threading.Tasks;
 using ISOSA.SARH.Data.Domain.Catalog;
 using ISOSA.SARH.Data.Domain.Employee;
+using ISOSA.SARH.Data.Domain.Formats;
 using ISOSA.SARH.Data.Repository;
 using ISOSADataMigrationTools;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 using SARH.WebUI.Factories;
 using SARH.WebUI.Models;
 using SARH.WebUI.Models.Catalog;
+using SARH.WebUI.Models.Formats;
 using SARH.WebUI.Models.OrganizationChart;
 
 namespace SARH.WebUI.Controllers
@@ -408,7 +411,199 @@ namespace SARH.WebUI.Controllers
 
         #endregion
 
+        #region Format Approver
 
+        [ActionName("Aprobadores")]
+        public IActionResult ApproverIndex(
+            [FromServices] IRepository<FormatApprover> formatApproversRepository,
+            [FromServices]IOrganigramaModelFactory organigramaModelFactory)
+        {
+
+            FormatApproverModel model = new FormatApproverModel();
+            var approvers = formatApproversRepository.GetAll();
+            var organigrama = organigramaModelFactory.GetAllData().Employess;
+
+            var emps = (from apv in approvers
+                        join org in organigrama on apv.RowGuid.ToString().ToLower() equals org.RowId.ToLower()
+                        select new FormatApproverItem()
+                        {
+                            Id = apv.Id,
+                            Area = apv.Area,
+                            Centro = apv.Centro,
+                            Puesto = org.JobTitle,
+                            RowGuid = apv.RowGuid.ToString(),
+                            Approver = $"{org.Name}",
+                            Order = apv.Orden
+                        }).ToList();
+
+            model.Approvers = emps;
+
+            List<SelectListItem> areas = new List<SelectListItem>() 
+            {
+                new SelectListItem()
+                {
+                    Text = "Seleccione una opción",
+                    Value = "0"
+                }
+            };
+
+            areas.AddRange(organigramaModelFactory.GetAreas().Select(o => new SelectListItem()
+            {
+                Text = o.Descripcion,
+                Value = o.Id.ToString()
+            }).ToList());
+
+            ViewBag.Areas = areas;
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public JsonResult GetAreas([FromServices]IOrganigramaModelFactory organigramaModelFactory)
+        {
+            var response = organigramaModelFactory.GetAreas();
+            return Json(new { collection = response });        
+        }
+
+        [HttpPost]
+        public JsonResult GetCentros(string area,[FromServices]IOrganigramaModelFactory organigramaModelFactory) 
+        {
+            var response = organigramaModelFactory.GetCentros(area);
+            return Json(new { collection = response });
+        }
+
+        [HttpPost]
+        public JsonResult GetDeptos(string area, string centros, [FromServices]IOrganigramaModelFactory organigramaModelFactory)
+        {
+            var response = organigramaModelFactory.GetDeptos(area, centros);
+            return Json(new { collection = response });
+        }
+
+        [HttpPost]
+        public JsonResult GetEmployeeApprover(string employeeId,
+        [FromServices] IRepository<FormatApprover> formatApproversRepository,
+        [FromServices]IOrganigramaModelFactory organigramaModelFactory)
+        {
+            string name = string.Empty;
+            int row = 0;
+
+            if (!string.IsNullOrEmpty(employeeId))
+            {
+                var employeeInfo = organigramaModelFactory.GetEmployeeData(employeeId);
+                if (employeeInfo != null && employeeInfo.HierarchyGuid != null)
+                {
+                    var empApprover = formatApproversRepository.SearhItemsFor(r => r.RowGuid.ToString().ToLower().Equals(employeeInfo.HierarchyGuid.ToLower()));
+                    if (empApprover != null && empApprover.Any())
+                    {
+                        name = "El empleado ya está asignado para aprobación";
+
+                    }
+                    else
+                    {
+                        name = $"{employeeInfo.GeneralInfo.FirstName} {employeeInfo.GeneralInfo.LastName} {employeeInfo.GeneralInfo.LastName2}";
+                        row = 1;
+                    }
+                }
+                else
+                {
+                    name = "No se encontrarón resultados";
+                }
+            }
+            else
+            {
+                name = "No se encontrarón resultados";
+            }
+
+            return Json(new { id = employeeId, value = name, rows = row });
+        }
+
+        [HttpPost]
+        public JsonResult SaveApprover(string area, string centro, string depto, string approver,
+            [FromServices] IRepository<FormatApprover> formatApproversRepository,
+            [FromServices]IOrganigramaModelFactory organigramaModelFactory) 
+        {
+            int order = 1;
+            var aprovOrder = formatApproversRepository.SearhItemsFor(f => f.Area.Equals(area) && f.Centro.Equals(centro) && f.Departamento.Equals(depto));
+            if (aprovOrder.Any()) 
+            {
+                order++;
+            }
+
+            var emp = organigramaModelFactory.GetEmployeeData(approver);
+
+            var formatapprover = new FormatApprover()
+            {
+                Area = area,
+                Centro = centro,
+                Departamento = depto,
+                Orden = order,
+                Puesto = emp.GeneralInfo.JobTitle,
+                RowGuid = Guid.Parse(emp.HierarchyGuid)
+            };
+
+            formatApproversRepository.Create(formatapprover);
+
+
+
+            return Json("");
+        }
+
+
+        [HttpPost]
+        public JsonResult GetApprovers(int id,
+        [FromServices] IRepository<FormatApprover> formatApproversRepository,
+        [FromServices]IOrganigramaModelFactory organigramaModelFactory) 
+        {
+            var organigrama = organigramaModelFactory.GetAllData().Employess;
+            var row = formatApproversRepository.GetElement(id);
+            var rows = formatApproversRepository.SearhItemsFor(u => u.Area.Equals(row.Area) && u.Centro.Equals(row.Centro) && u.Departamento.Equals(row.Departamento));
+            FormatApproverModel model = new FormatApproverModel();
+
+            if (rows.Any()) 
+            {
+                var emps = (from apv in rows
+                            join org in organigrama on apv.RowGuid.ToString().ToLower() equals org.RowId.ToLower()
+                            select new FormatApproverItem()
+                            {
+                                Id = apv.Id,
+                                Area = apv.Area,
+                                Centro = apv.Centro,
+                                Puesto = org.JobTitle,
+                                RowGuid = apv.RowGuid.ToString(),
+                                Approver = $"{org.Name}",
+                                Order = apv.Orden
+                            }).ToList();
+
+                model.Approvers = emps;
+            }
+
+
+            return Json(new { area = row.Area, centro = row.Centro, depto = row.Departamento, collection = model.Approvers });
+        }
+
+        [HttpPost]
+        public JsonResult DeleteApprovers(string[] items,
+        [FromServices] IRepository<FormatApprover> formatApproversRepository)
+        {
+
+            items.ToList().ForEach(d => 
+            {
+                var code = d.Split("-");
+                int codeint = int.Parse(code[1].ToString());
+                var row = formatApproversRepository.GetElement(codeint);
+                if (row != null)
+                {
+                    formatApproversRepository.Delete(row);
+                }
+
+            });
+
+            return Json("Ok");
+        }
+
+
+
+        #endregion
 
     }
 }

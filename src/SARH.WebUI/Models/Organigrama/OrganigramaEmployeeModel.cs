@@ -14,5 +14,6 @@ namespace SARH.WebUI.Models.Organigrama
         public string Category { get; set; }
         public string JobTitle { get; set; }
         public string RowId { get; set; }
+        public string UserName { get; set; }
     }
 }

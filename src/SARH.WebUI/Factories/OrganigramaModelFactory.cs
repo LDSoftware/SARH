@@ -7,6 +7,7 @@ using ISOSA.SARH.Data.Repository;
 using ISOSADataMigrationTools;
 using Microsoft.AspNetCore.Mvc;
 using SARH.WebUI.Models.Organigrama;
+using SARH.WebUI.Models.OrganizationChart;
 
 namespace SARH.WebUI.Factories
 {
@@ -70,14 +71,15 @@ namespace SARH.WebUI.Factories
                         join org in isosaOrg on emp.HrowGuid.Value equals org.RowGuid
                         where emp.EMP_StatusCode == "Active"
                         select new OrganigramaEmployeeModel()
-                        { 
+                        {
                             Id = emp.EMP_EmployeeID.TrimStart(new Char[] { '0' }),
                             Area = org.Area,
                             JobCenter = org.Centro,
                             Category = org.Departamento,
                             JobTitle = org.Puesto,
                             Name = $"{emp.EMP_FirstName} {emp.EMP_LastName}",
-                            RowId = emp.HrowGuid.ToString()
+                            RowId = emp.HrowGuid.ToString(),
+                            UserName = string.IsNullOrEmpty(emp.EMP_EMailAddress) ? "" : emp.EMP_EMailAddress
                         }).ToList();
 
             //var emps = _isosaemployeesRepository.SearhItemsFor(o => o.EMP_StatusCode.Equals("Active")).Select(j => new OrganigramaEmployeeModel()
@@ -189,6 +191,7 @@ namespace SARH.WebUI.Factories
 
                 model.Area = rowIdent.FirstOrDefault().Area;
                 model.JobCenter = rowIdent.FirstOrDefault().Centro;
+                model.Departamento = rowIdent.FirstOrDefault().Departamento;
 
                 //var nomiemp = nomiemployee.Employees.Where(e => e.codigoempleado.Equals(employee.FirstOrDefault().EMP_EmployeeID));
 
@@ -393,6 +396,90 @@ namespace SARH.WebUI.Factories
             return (int.Parse(value) + 1).ToString("00000");
         }
 
+        public List<OrganizationChartItem> GetAreas(string area = "")
+        {
+            List<OrganizationChartItem> result = new List<OrganizationChartItem>();
+            IEnumerable<IGrouping<string, EmployeeOrganigrama>> areas;
+
+            if (string.IsNullOrEmpty(area)) 
+            {
+                areas = _isosaemployeesOrganigramaRepository.GetAll().GroupBy(a => a.Area.ToUpper());
+            }
+            else
+            {
+                areas = areas = _isosaemployeesOrganigramaRepository.SearhItemsFor(d => d.Area.Equals(area)).GroupBy(a => a.Area.ToUpper());
+            }
+
+
+            if (areas.Any()) 
+            {
+                int id = 1;
+                result.AddRange(areas.Select(h => new OrganizationChartItem()
+                {
+                    Id = id++,
+                    Descripcion = h.Key
+                }));
+            }
+
+            return result;
+        }
+
+        public List<OrganizationChartItem> GetCentros(string area, string centro = "")
+        {
+            List<OrganizationChartItem> result = new List<OrganizationChartItem>();
+            IEnumerable<IGrouping<string, EmployeeOrganigrama>> areas;
+
+            if (string.IsNullOrEmpty(centro))
+            {
+                areas = _isosaemployeesOrganigramaRepository.SearhItemsFor(d => d.Area.Equals(area)).GroupBy(a => a.Centro.ToUpper());
+            }
+            else
+            {
+                areas = areas = _isosaemployeesOrganigramaRepository.SearhItemsFor(d => d.Area.Equals(area) && d.Centro.Equals(centro)).GroupBy(a => a.Centro.ToUpper());
+            }
+
+
+            if (areas.Any())
+            {
+                int id = 1;
+                result.AddRange(areas.Select(h => new OrganizationChartItem()
+                {
+                    Id = id++,
+                    Descripcion = h.Key
+                }));
+            }
+
+            return result;
+        }
+
+        public List<OrganizationChartItem> GetDeptos(string area, string centro, string depto = "")
+        {
+            List<OrganizationChartItem> result = new List<OrganizationChartItem>();
+            IEnumerable<IGrouping<string, EmployeeOrganigrama>> areas;
+
+            if (string.IsNullOrEmpty(depto))
+            {
+                areas = _isosaemployeesOrganigramaRepository.SearhItemsFor(d => d.Area.Equals(area) && d.Centro.Equals(centro)).GroupBy(a => a.Departamento.ToUpper());
+            }
+            else
+            {
+                areas = areas = _isosaemployeesOrganigramaRepository.SearhItemsFor(d => d.Area.Equals(area) && d.Centro.Equals(centro) && d.Departamento.Equals(depto)).GroupBy(a => a.Departamento.ToUpper());
+            }
+
+
+            if (areas.Any())
+            {
+                int id = 1;
+                result.AddRange(areas.Select(h => new OrganizationChartItem()
+                {
+                    Id = id++,
+                    Descripcion = h.Key
+                }));
+            }
+
+            return result;
+
+        }
 
 
 

@@ -22,6 +22,8 @@ namespace SARH.WebUI.Models.Organigrama
 
         public string JobCenter { get; set; }
 
+        public string Departamento { get; set; }
+
         public string RowId { get; set; }
 
         public string HierarchyGuid { get; set; }
