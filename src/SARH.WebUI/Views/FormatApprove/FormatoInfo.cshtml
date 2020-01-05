@@ -1,0 +1,323 @@
+﻿@using SARH.WebUI.Models.Formats
+@model FormatApproverPendingModel
+@{
+    ViewData["Title"] = "Aprobación de formato";
+    ViewData["PageName"] = "Aprobación de formato";
+    ViewData["PageDescription"] = "Aprobación de formato";
+}
+@section HeadBlock {
+    <link rel="stylesheet" media="screen, print" href="~/css/fa-solid.css">
+    <link rel="stylesheet" media="screen, print" href="~/css/fa-brands.css">
+    <link rel="stylesheet" media="screen, print" href="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/css/datagrid/datatables/datatables.bundle.css">
+    <link rel="stylesheet" media="screen, print" href="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/css/notifications/sweetalert2/sweetalert2.bundle.css">
+    <link rel="stylesheet" media="screen, print" href="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/css/formplugins/bootstrap-datepicker/bootstrap-datepicker.css">
+}
+
+<div class="subheader">
+    <ol class="breadcrumb breadcrumb-lg breadcrumb-arrow mb-0">
+        <li>
+            <a href='@Url.Action("Index","Home")'>
+                <i class="fal fa-home"></i>
+            </a>
+        </li>
+    </ol>
+
+</div>
+
+<div class="row">
+
+    <div class="col-lg-6 col-xl-3 order-lg-1 order-xl-1">
+        <div class="card mb-g rounded-top">
+            <div class="row no-gutters row-grid">
+                <div class="col-12">
+                    <div class="d-flex flex-column align-items-center justify-content-center p-4">
+                        <img class="rounded-circle shadow-2 img-thumbnail" alt="" src="@Model.FormatEmployee.PicturePath">
+                        <h5 class="mb-0 fw-700 text-center mt-3">
+                            <small> @Model.FormatEmployee.Name</small>
+                            @Model.FormatEmployee.Area
+                            <br />
+                            @Model.FormatEmployee.JobCenter
+                            <br />
+                            @Model.FormatEmployee.JobTitle
+                        </h5>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-12 col-xl-9 order-lg-2 order-xl-2">
+
+        <div class="card border-top-left-radius-0 border-top-right-radius-0">
+            <div class="card-header">
+                <i class="fal fa-id-badge width-2 fs-xl"></i>
+                Información del formato
+            </div>
+            <div class="collapse show" id="js_list_accordion-a" data-parent="#js_list_accordion">
+                <div class="card-body">
+
+
+                    <div role="group" aria-label="Vertical button group">
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-secondary dropdown-toggle waves-effect waves-themed" data-toggle="dropdown" aria-expanded="false"><i class="fal fa-bolt"></i>&nbsp;Acciones</button>
+                            <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; will-change: top, left; top: 37px; left: 0px;">
+                                <a id="approved" class="dropdown-item" href="javascript:void(0)">Aprobar</a>
+                                <a id="declined" class="dropdown-item" href="javascript:void(0)">Declinar</a>
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+
+                    <div class="panel-content">
+
+                        <div class="form-row">
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label" for="idformato">Id Formato</label>
+                                <input class="form-control" id="idformato" disabled="disabled" type="text" value="@Model.FormatDetail.Id">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label" for="tipoformato">Tipo de Formato</label>
+                                <input class="form-control" id="tipoformato" disabled="disabled" type="text" value="@Model.FormatDetail.Type">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label" for="datecreate">Fecha de creación</label>
+                                <input class="form-control" id="datecreate" disabled="disabled" type="text" value="@Model.FormatDetail.CreateDate">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="col-md-4 mb-6">
+                                <label class="form-label" for="idformato">Periodo</label>
+                                <input class="form-control" id="idformato" disabled="disabled" type="text" value="@Model.FormatDetail.Period">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label" for="tipoformato">Días disponibles</label>
+                                <input class="form-control" id="tipoformato" disabled="disabled" type="text" value="0">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label" for="datecreate">Sustito</label>
+                                <input class="form-control" id="datecreate" disabled="disabled" type="text" value="@Model.FormatDetail.EmployeeSustitution">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="col-md-12 mb-6">
+                                <label class="form-label" for="formatComments">Comentarios</label>
+                                <input class="form-control" id="formatComments" type="text">
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card border-top-left-radius-0 border-top-right-radius-0">
+            <div class="card-header">
+                <i class="fal fa-id-badge width-2 fs-xl"></i>
+                Aprobadores
+            </div>
+            <div class="collapse show" id="js_list_accordion-a" data-parent="#js_list_accordion">
+                <div class="card-body">
+
+                    <div class="panel-content">
+
+                        <div class="col-lg-12">
+                            <form>
+                                <div class="form-group">
+                                    <table id="dt-basic-example" class="table table-bordered table-hover table-striped w-100">
+                                        <thead class="bg-warning-200">
+                                            <tr>
+                                                <th>Nombre</th>
+                                                <th>Fecha</th>
+                                                <th>Comentarios</th>
+                                                <th>Aprobado</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="allschedules">
+                                            @foreach (var item in Model.Approvers)
+                                            {
+                                                <tr id="@item.Id">
+                                                    <td>@item.Name</td>
+                                                    <td>@item.ApproveDate</td>
+                                                    <td>@item.Comments</td>
+                                                    <td>@item.Approved</td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </form>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+    </div>
+
+    <input type="hidden" value="@Model.FormatDetail.Id" id="formatoid" />
+
+
+</div>
+
+@section ScriptsBlock {
+
+    <script src="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/js/datagrid/datatables/datatables.bundle.js"></script>
+    <script src="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/js/formplugins/bootstrap-datepicker/bootstrap-datepicker.js"></script>
+    <script src="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/js/notifications/sweetalert2/sweetalert2.bundle.js"></script>
+
+    <script>
+
+
+        $(document).ready(function () {
+
+
+            $('#approved').click(function () {
+
+
+                var id = $('#formatoid').val();
+                var comments = $('#formatComments').val()
+
+                var swalWithBootstrapButtons = Swal.mixin(
+                    {
+                        customClass:
+                        {
+                            confirmButton: "btn btn-primary",
+                            cancelButton: "btn btn-danger mr-2"
+                        },
+                        buttonsStyling: false
+                    });
+                swalWithBootstrapButtons
+                    .fire(
+                        {
+                            position: "top-end",
+                            title: "Confirmación",
+                            text: "Deseas aprobar el formato?",
+                            type: "warning",
+                            showCancelButton: true,
+                            confirmButtonText: "Si",
+                            cancelButtonText: "Cancelar",
+                            reverseButtons: true
+                        })
+                    .then(function (result) {
+
+                        if (result.value) {
+
+
+                            $.ajax({
+                                url: '/FormatApprove/Approved',
+                                type: "POST",
+                                data: { idFormat: id, comments:comments },
+                                success: function (data, textStatus, jqXHR) {
+
+                                    Swal.fire(
+                                        {
+                                            position: "top-end",
+                                            type: "success",
+                                            title: "Actualización exitosa",
+                                            showConfirmButton: false,
+                                            timer: 1500
+                                        }).then((result) => {
+
+                                            window.location.href = "/FormatApprove/Pendientes";
+                                        });
+                                },
+                                error: function (jqXHR, textStatus, errorThrown) {
+                                    alert(errorThrown);
+                                }
+                            });
+                        }
+                        else if (
+                            // Read more about handling dismissals
+                            result.dismiss === Swal.DismissReason.cancel
+                        ) {
+                            swalWithBootstrapButtons.fire(
+                                "Cancelación",
+                                "Se ha cancelado la acción",
+                                "error"
+                            );
+                        }
+                    });
+
+            });
+
+            
+            $('#declined').click(function () {
+
+
+                var id = $('#formatoid').val();
+                var comments = $('#formatComments').val()
+
+                var swalWithBootstrapButtons = Swal.mixin(
+                    {
+                        customClass:
+                        {
+                            confirmButton: "btn btn-primary",
+                            cancelButton: "btn btn-danger mr-2"
+                        },
+                        buttonsStyling: false
+                    });
+                swalWithBootstrapButtons
+                    .fire(
+                        {
+                            position: "top-end",
+                            title: "Confirmación",
+                            text: "Deseas no aprobar el formato?",
+                            type: "warning",
+                            showCancelButton: true,
+                            confirmButtonText: "Si",
+                            cancelButtonText: "Cancelar",
+                            reverseButtons: true
+                        })
+                    .then(function (result) {
+
+                        if (result.value) {
+
+
+                            $.ajax({
+                                url: '/FormatApprove/Declined',
+                                type: "POST",
+                                data: { idFormat: id, comments:comments },
+                                success: function (data, textStatus, jqXHR) {
+
+                                    Swal.fire(
+                                        {
+                                            position: "top-end",
+                                            type: "success",
+                                            title: "Actualización exitosa",
+                                            showConfirmButton: false,
+                                            timer: 1500
+                                        }).then((result) => {
+
+                                            window.location.href = "/FormatApprove/Pendientes";
+                                        });
+                                },
+                                error: function (jqXHR, textStatus, errorThrown) {
+                                    alert(errorThrown);
+                                }
+                            });
+                        }
+                        else if (
+                            // Read more about handling dismissals
+                            result.dismiss === Swal.DismissReason.cancel
+                        ) {
+                            swalWithBootstrapButtons.fire(
+                                "Cancelación",
+                                "Se ha cancelado la acción",
+                                "error"
+                            );
+                        }
+                    });
+
+            });
+
+        });
+
+    </script>
+}

@@ -66,6 +66,12 @@
                     <a href="javascript:void(0);" class="btn btn-success btn-icon waves-effect waves-themed">
                         <i class="fal fa-print"></i>
                     </a>
+                    @if (!string.IsNullOrEmpty(Model.DocumentPath))
+                    {
+                        <a href='@Url.Action("ViewAssignedDocument", "ProfileEmployee", new { filepath = Model.DocumentPath })' class="btn btn-success btn-icon waves-effect waves-themed">
+                            <i class="fal fa-file-pdf"></i>
+                        </a>
+                    }
                 </div>
             </div>
 
@@ -261,6 +267,18 @@
                         </div>
                     </div>
 
+                    <hr />
+
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <label class="form-label">Archico (Buscar...)</label>
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" id="customFile">
+                                <label class="custom-file-label" for="customFile">Seleccionar archivo</label>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
             <!-- panel footer with utility classes -->
@@ -281,65 +299,88 @@
 
         $(document).ready(function () {
 
+            
+            var documentTemp = "";
 
             $('#btnsaveprofile').click(function () {
 
 
-                var formData = {
-
-                    EmployeeId : $("#idemployee").val(),
-                    Categoria : $("#inputcategoria").val(),
-                    PersonasCargo : $("#inputpersonascargo").val(),
-                    ObjetivoGeneral : $("#inputobjetivogeneral").val(),
-                    Sexo : $("#selectsexo").val(),
-                    Edad : $("#inputedad").val(),
-                    Escolaridad : $("#selectescolaridad").val(),
-                    Titulo : $("#inputtitulo").val(),
-                    Idiomas: $("#inputidiomas").val(),
-                    Nivel : $('#selectnivel').val(),
-                    ExperienciaLaboral : $("#inputexperienciarequerida").val(),
-                    Conocimientos : $("#inputconocimientos").val(),
-                    Requerimientos : $("#inputrequerimientos").val(),
-                    Horario : $("#inputhorarios").val(),
-                    Equipo : $("#inputequiposoftware").val(),
-                    ComunicacionInterna : $("#inputcomunicacioninterna").val(),
-                    ComunicacionExterna  : $("#inputcomunicacionexterna").val(),
-                    Responsabilidad : $("#inputresponsabilidad").val(),
-                    FuncionesActividades : $("#inputfunciones").val()
-                };
-
+                var formDataFile = new FormData();
+                formDataFile.append('file', $('#customFile')[0].files[0]);
 
                 $.ajax({
-                    url: '/ProfileEmployee/SaveProfileData',
-                    type: "POST",
-                    data: formData,
-                    success: function (data, textStatus, jqXHR) {
+                    url: '/ProfileEmployee/UploadFile',
+                    type: 'POST',
+                    data: formDataFile,
+                    processData: false,
+                    contentType: false,
+                    success: function (result) {
+
+                        documentTemp = result.filetemp;
+
+                        var formData = {
+
+                            EmployeeId: $("#idemployee").val(),
+                            Categoria: $("#inputcategoria").val(),
+                            PersonasCargo: $("#inputpersonascargo").val(),
+                            ObjetivoGeneral: $("#inputobjetivogeneral").val(),
+                            Sexo: $("#selectsexo").val(),
+                            Edad: $("#inputedad").val(),
+                            Escolaridad: $("#selectescolaridad").val(),
+                            Titulo: $("#inputtitulo").val(),
+                            Idiomas: $("#inputidiomas").val(),
+                            Nivel: $('#selectnivel').val(),
+                            ExperienciaLaboral: $("#inputexperienciarequerida").val(),
+                            Conocimientos: $("#inputconocimientos").val(),
+                            Requerimientos: $("#inputrequerimientos").val(),
+                            Horario: $("#inputhorarios").val(),
+                            Equipo: $("#inputequiposoftware").val(),
+                            ComunicacionInterna: $("#inputcomunicacioninterna").val(),
+                            ComunicacionExterna: $("#inputcomunicacionexterna").val(),
+                            Responsabilidad: $("#inputresponsabilidad").val(),
+                            FuncionesActividades: $("#inputfunciones").val(),
+                            DocumentPath: documentTemp
+                        };
 
 
-                        Swal.fire(
-                            {
-                                position: "top-end",
-                                type: "success",
-                                title: "Actualización exitosa",
-                                showConfirmButton: false,
-                                timer: 1500
-                            }).then((result) => {
+                        $.ajax({
+                            url: '/ProfileEmployee/SaveProfileData',
+                            type: "POST",
+                            data: formData,
+                            success: function (data, textStatus, jqXHR) {
 
-                                window.location.href = '/ProfileEmployee/PerfilEmpleado?idEmployee=' + $("#idemployee").val();
 
-                            });
+                                Swal.fire(
+                                    {
+                                        position: "top-end",
+                                        type: "success",
+                                        title: "Actualización exitosa",
+                                        showConfirmButton: false,
+                                        timer: 1500
+                                    }).then((result) => {
+
+                                        window.location.href = '/ProfileEmployee/PerfilEmpleado?idEmployee=' + $("#idemployee").val();
+
+                                    });
+
+                            },
+                            error: function (jqXHR, textStatus, errorThrown) {
+
+                            }
+                        });
+
+
+
+
 
                     },
-                    error: function (jqXHR, textStatus, errorThrown) {
-
+                    error: function (jqXHR) {
+                    },
+                    complete: function (jqXHR, status) {
                     }
                 });
 
-
             });
-
-
-
 
 
         });

@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using ISOSA.SARH.Data.Domain.Employee;
 using ISOSA.SARH.Data.Repository;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using SARH.WebUI.Factories;
@@ -31,7 +33,7 @@ namespace SARH.WebUI.Controllers
         {
             EmployeeProfileModel model = new EmployeeProfileModel();
             string employeeFormat = int.Parse(idEmployee).ToString("00000");
-            var row = employeeProfileRepository.SearhItemsFor(l => l.EmployeeId.Equals(employeeFormat));
+            var row = employeeProfileRepository.SearhItemsFor(l => l.EmployeeId.TrimStart('0').Equals(employeeFormat.TrimStart('0')));
             if (row.Any())
             {
                 var data = row.FirstOrDefault();
@@ -44,6 +46,7 @@ namespace SARH.WebUI.Controllers
                 model.Categoria = info.GeneralInfo.JobCenter;
                 model.FirstName = info.GeneralInfo.FirstName;
                 model.LastName = info.GeneralInfo.LastName;
+                model.DocumentPath = data.DocumentPath;
             }
             else 
             {
@@ -62,23 +65,51 @@ namespace SARH.WebUI.Controllers
             return View(model);
         }
 
+        [HttpPost]
         public JsonResult SaveProfileData(EmployeeProfileModel model, 
-            [FromServices]IRepository<EmployeeProfile> employeeProfileRepository) 
+            [FromServices]IRepository<EmployeeProfile> employeeProfileRepository,
+            [FromServices]SARH.Core.Configuration.IConfigurationManager configurationManager) 
         {
             string employeeFormat = int.Parse(model.EmployeeId).ToString("00000");
+            string documentPath = string.Empty;
+            if (!string.IsNullOrEmpty(model.DocumentPath)) 
+            {
+                string path = configurationManager.EmployeeProfileDocumentPath.Replace("|EmpNumber|", model.EmployeeId);
+                if (!Directory.Exists(path))
+                {
+                    Directory.CreateDirectory(path);
+                }
+                System.IO.File.Move(model.DocumentPath, $"{path}PerfilPuesto.pdf");
+                documentPath = $"{path}PerfilPuesto.pdf";
+            }
+
             var row = employeeProfileRepository.SearhItemsFor(l => l.EmployeeId.Equals(model.EmployeeId));
             if (!row.Any())
             {
                 employeeProfileRepository.Create(new EmployeeProfile()
                 {
                     EmployeeId = model.EmployeeId,
-                    ProfileSectionValues = JsonConvert.SerializeObject(model)
+                    ProfileSectionValues = JsonConvert.SerializeObject(model),
+                    DocumentPath = documentPath
                 });
             }
             else 
             {
                 var data = row.FirstOrDefault();
+                bool overwriteDoc = false;
+
+                if (!string.IsNullOrEmpty(data.DocumentPath) && !string.IsNullOrEmpty(documentPath))
+                {
+                    overwriteDoc = true;
+                }
+                if (string.IsNullOrEmpty(data.DocumentPath) && !string.IsNullOrEmpty(documentPath))
+                {
+                    overwriteDoc = true;
+                }
+
+
                 data.ProfileSectionValues = JsonConvert.SerializeObject(model);
+                data.DocumentPath = overwriteDoc ? documentPath : data.DocumentPath;
                 employeeProfileRepository.Update(data);
             }
 
@@ -86,6 +117,35 @@ namespace SARH.WebUI.Controllers
         }
 
 
+        [HttpPost]
+        public ActionResult UploadFile(IFormFile file)
+        {
+
+            string filePath = Path.GetTempFileName();
+            if (file != null)
+            {
+                if (file.Length > 0)
+                {
+                    using (var stream = System.IO.File.Create(filePath))
+                    {
+                        file.CopyTo(stream);
+                    }
+                }
+            }
+            else
+            {
+                filePath = string.Empty;
+            }
+
+            return Json(new { filetemp = filePath });
+        }
+
+
+        public FileResult ViewAssignedDocument(string filepath)
+        {
+            byte[] FileBytes = System.IO.File.ReadAllBytes(filepath);
+            return File(FileBytes, "application/pdf");
+        }
 
 
         #endregion 

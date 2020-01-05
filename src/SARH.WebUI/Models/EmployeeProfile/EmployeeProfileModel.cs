@@ -31,5 +31,6 @@ namespace SARH.WebUI.Models.EmployeeProfile
         public string ComunicacionExterna { get; set; }
         public string Responsabilidad { get; set; }
         public string FuncionesActividades { get; set; }
+        public string DocumentPath { get; set; }
     }
 }

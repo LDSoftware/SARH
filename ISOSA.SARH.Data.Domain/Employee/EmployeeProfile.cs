@@ -8,5 +8,6 @@ namespace ISOSA.SARH.Data.Domain.Employee
     {
         public string EmployeeId { get; set; }
         public string ProfileSectionValues { get; set; }
+        public string DocumentPath { get; set; }
     }
 }

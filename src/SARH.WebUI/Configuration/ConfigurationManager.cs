@@ -72,7 +72,6 @@ namespace SARH.WebUI.Configuration
 
             set { }
         }
-
         public string EmployeePhotoPath 
         {
             get
@@ -83,7 +82,16 @@ namespace SARH.WebUI.Configuration
 
             set { }
         }
+        public string EmployeeProfileDocumentPath
+        {
+            get
+            {
+                var result = _config[$"ApplicationFormatPath:EmployeeProfileDocumentPath"];
+                return result;
+            }
 
+            set { }
+        }
         public string ImgPathPdf
         {
             get

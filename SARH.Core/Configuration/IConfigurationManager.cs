@@ -12,6 +12,7 @@ namespace SARH.Core.Configuration
         string EmployeeVacationsPath { get; set; }
         string EmployeePermissionPath { get; set; }
         string EmployeePhotoPath { get; set; }
+        string EmployeeProfileDocumentPath { get; set; }
         string ImgPathPdf { get; set; }
         string FontPathBarCode { get; set; }
         string FontPathPdf { get; set; }

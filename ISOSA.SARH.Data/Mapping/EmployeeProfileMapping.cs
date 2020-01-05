@@ -12,6 +12,7 @@ namespace ISOSA.SARH.Data.Mapping
             builder.HasKey(x => x.Id);
             builder.Property(x => x.EmployeeId);
             builder.Property(x => x.ProfileSectionValues);
+            builder.Property(x => x.DocumentPath);
         }
     }
 }

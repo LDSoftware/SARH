@@ -1,0 +1,137 @@
+﻿@using SARH.WebUI.Factories;
+@inject INotificationModelFactory notifications;
+@{
+    ViewData["Title"] = "Formatos recibidos";
+    ViewData["PageName"] = "Formatos recibidos";
+    ViewData["PageDescription"] = "Formatos recibidos";
+}
+@section HeadBlock {
+    <link rel="stylesheet" media="screen, print" href="~/css/fa-solid.css">
+    <link rel="stylesheet" media="screen, print" href="~/css/fa-brands.css">
+    <link rel="stylesheet" media="screen, print" href="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/css/datagrid/datatables/datatables.bundle.css">
+    <link rel="stylesheet" media="screen, print" href="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/css/notifications/sweetalert2/sweetalert2.bundle.css">
+}
+
+<div class="subheader">
+    <ol class="breadcrumb breadcrumb-lg breadcrumb-arrow mb-0">
+        <li>
+            <a href='@Url.Action("Index","Home")'>
+                <i class="fal fa-home"></i>
+            </a>
+        </li>
+    </ol>
+
+</div>
+
+<div class="row">
+    <div class="col-xl-12">
+        <div id="panel-1" class="panel">
+            <div class="panel-hdr">
+                <h2>
+                    Aprobación de Formatos <span class="fw-300"><i></i></span>
+                </h2>
+
+                <div class="panel-toolbar demo-h-spacing">
+                    <a id="viewrow" href="javascript:void(0);" class="btn btn-success btn-icon waves-effect waves-themed">
+                        <i class="fal fa-calendar-edit"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="panel-container show">
+                <div class="panel-content">
+                    <div class="form-group row">
+
+                        <div class="col-lg-12">
+                            <form>
+                                <div class="form-group">
+                                    <table id="dt-basic-example" class="table table-bordered table-hover table-striped w-100">
+                                        <thead class="bg-warning-200">
+                                            <tr>
+                                                <th>Id</th>
+                                                <th>Tipo</th>
+                                                <th>Empleado</th>
+                                                <th>Fecha</th>
+                                                <th>Periodo</th>
+                                                <th>Estatus</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="allformats">
+                                            @foreach (var item in notifications.AllNotificaticonsItems)
+                                            {
+                                                <tr id="@item.Id">
+                                                    <td>@item.Id</td>
+                                                    <td>@item.Name</td>
+                                                    <td>@item.Type</td>
+                                                    <td>@item.CreateDate</td>
+                                                    <td>@item.Period</td>
+                                                    <td>@item.Estatus</td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section ScriptsBlock {
+
+    <script src="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/js/datagrid/datatables/datatables.bundle.js"></script>
+    <script src="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/js/notifications/sweetalert2/sweetalert2.bundle.js"></script>
+
+    <script>
+
+
+        $('#dt-basic-example tr').click(function () {
+
+            $(this).addClass('selected').siblings().removeClass('selected');
+
+        });
+
+        $(document).ready(function () {
+
+
+            $('#dt-basic-example').dataTable(
+                {
+                    responsive: true
+                });
+
+            $('#viewrow').click(function () {
+
+
+                var row = $('#allformats tr.selected');
+
+
+                if (row.length === 0) {
+
+                    Swal.fire(
+                        {
+                            type: "warning",
+                            title: "Validación",
+                            text: "Seleccione un registro"
+                        });
+
+                    return;
+
+                }
+
+
+                var id = row[0].id;
+
+                window.location.href = '/FormatApprove/FormatoInfo?idFormat=' + id;
+
+            });
+
+
+
+        });
+
+    </script>
+}

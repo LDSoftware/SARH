@@ -16,63 +16,23 @@ namespace SARH.WebUI.Components
 {
     public class Notification : ViewComponent
     {
-        private readonly IRepository<EmployeeFormat> _formatRepository;
-        private readonly IRepository<FormatApprover> _formatApproverRepository;
-        private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly IOrganigramaModelFactory _organigramaModelFactory;
+        private readonly INotificationModelFactory _notificationModelFactory;
 
 
-        public Notification(IRepository<EmployeeFormat> formatRepository, 
-            IRepository<FormatApprover> formatApproverRepository,
-            IHttpContextAccessor httpContextAccessor,
-            IOrganigramaModelFactory organigramaModelFactory)
+        public Notification(INotificationModelFactory notificationModelFactory)
         {
-            this._formatApproverRepository = formatApproverRepository;
-            this._formatRepository = formatRepository;
-            this._httpContextAccessor = httpContextAccessor;
-            this._organigramaModelFactory = organigramaModelFactory;
+            this._notificationModelFactory = notificationModelFactory;
         }
 
         public IViewComponentResult Invoke()
         {
-            NotificationModel model = new NotificationModel();
-
-            var modellogin = _httpContextAccessor.HttpContext.Session.GetString("loginmodel");
-            var loginInfo = !string.IsNullOrEmpty(modellogin) ? JsonConvert.DeserializeObject<LoginModel.InputModel>(modellogin) : null;
-            string userName = loginInfo != null ? loginInfo.Email : null;
-
-
-            var employees = this._organigramaModelFactory.GetAllData().Employess;
-            var formats = this._formatRepository.GetAll();
-            var employee = employees.Where(t => t.UserName.Equals(userName)).FirstOrDefault();
-            var approver = _formatApproverRepository.SearhItemsFor(s => s.RowGuid.ToString().ToLower().Equals(employee.RowId)).FirstOrDefault();
-
-            var currentformats = (from fmt in formats
-                           join emp in employees on fmt.EmployeeId equals emp.Id
-                           where fmt.ApprovalWorkFlow.Equals(string.Empty)
-                           select new OrganigramaEmployeeModel()
-                           {
-                               Id = fmt.EmployeeId.TrimStart(new Char[] { '0' }),
-                               Area = emp.Area,
-                               JobCenter = emp.JobCenter,
-                               Category = emp.Category,
-                               JobTitle = emp.JobTitle,
-                               Name = emp.Name,
-                               RowId = emp.RowId,
-                               UserName = emp.UserName
-                           }).ToList();
-
-            if (employee != null) 
+            NotificationModel model = new NotificationModel() 
             {
-                var formatsPendigs = currentformats.Where(m => m.Area.Equals(approver.Area)
-                && m.JobCenter.Equals(approver.Centro)
-                && m.Category.Equals(approver.Departamento)).ToList();
-
-                if (formatsPendigs.Any()) 
-                {
-                    model.Notifications = formatsPendigs.Count;
-                }
-            }
+                Notifications = _notificationModelFactory.Notification,
+                LastVacationsNotificationsItems = _notificationModelFactory.LastVacationsNotificationItems,
+                LastPermissionsNotificationsItems = _notificationModelFactory.LastPermissionsNotificationItems,
+                NotificactionsItems = _notificationModelFactory.NotificaticonsItems
+            };
 
             return View(model);
         }
