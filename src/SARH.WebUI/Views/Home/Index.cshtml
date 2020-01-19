@@ -41,7 +41,7 @@
             <i class="fal fa-clock position-absolute pos-right pos-top opacity-70" style="font-size: 3rem;padding-top:5px;"></i>
             <div align="left" style="margin-top:5px;">
                 <div class="custom-control custom-switch mr-2">
-                    <input type="checkbox" class="custom-control-input" name="gra-0" id="filter-0">
+                    <input type="checkbox" class="custom-control-input" name="gra-0" id="filter-0" @(Model.DashboardFiltersApply.StartJobDelay?"checked='checked'":"")>
                     <label class="custom-control-label" for="filter-0"></label>
                 </div>
             </div>
@@ -58,7 +58,7 @@
             <i class="fal fa-clock position-absolute pos-right pos-top opacity-70" style="font-size: 3rem;padding-top:5px;"></i>
             <div align="left" style="margin-top:5px;">
                 <div class="custom-control custom-switch mr-2">
-                    <input type="checkbox" class="custom-control-input" name="gra-1" id="filter-1">
+                    <input type="checkbox" class="custom-control-input" name="gra-1" id="filter-1" @(Model.DashboardFiltersApply.EndJobAnticipate?"checked='checked'":"")>
                     <label class="custom-control-label" for="filter-1"></label>
                 </div>
             </div>
@@ -75,7 +75,7 @@
             <i class="fal fa-clock position-absolute pos-right pos-top opacity-70" style="font-size: 3rem;padding-top:5px;"></i>
             <div align="left" style="margin-top:5px;">
                 <div class="custom-control custom-switch mr-2">
-                    <input type="checkbox" class="custom-control-input" name="gra-2" id="filter-2">
+                    <input type="checkbox" class="custom-control-input" name="gra-2" id="filter-2" @(Model.DashboardFiltersApply.NoEntryCheckShow?"checked='checked'":"")>
                     <label class="custom-control-label" for="filter-2"></label>
                 </div>
             </div>
@@ -92,7 +92,7 @@
             <i class="fal fa-utensils position-absolute pos-right pos-top opacity-70" style="font-size: 3rem;padding-top:5px;"></i>
             <div align="left" style="margin-top:5px;">
                 <div class="custom-control custom-switch mr-2">
-                    <input type="checkbox" class="custom-control-input" name="gra-3" id="filter-3">
+                    <input type="checkbox" class="custom-control-input" name="gra-3" id="filter-3" @(Model.DashboardFiltersApply.FoodStartDelayShow?"checked='checked'":"")>
                     <label class="custom-control-label" for="filter-3"></label>
                 </div>
             </div>
@@ -109,7 +109,7 @@
             <i class="fal fa-utensils position-absolute pos-right pos-top opacity-70" style="font-size: 3rem;padding-top:5px;"></i>
             <div align="left" style="margin-top:5px;">
                 <div class="custom-control custom-switch mr-2">
-                    <input type="checkbox" class="custom-control-input" name="gra-4" id="filter-4">
+                    <input type="checkbox" class="custom-control-input" name="gra-4" id="filter-4" @(Model.DashboardFiltersApply.FoodEndDelayShow?"checked='checked'":"")>
                     <label class="custom-control-label" for="filter-4"></label>
                 </div>
             </div>
@@ -126,7 +126,7 @@
             <i class="fal fa-utensils position-absolute pos-right pos-top opacity-70" style="font-size: 3rem;padding-top:5px;"></i>
             <div align="left" style="margin-top:5px;">
                 <div class="custom-control custom-switch mr-2">
-                    <input type="checkbox" class="custom-control-input" name="gra-5" id="filter-5">
+                    <input type="checkbox" class="custom-control-input" name="gra-5" id="filter-5" @(Model.DashboardFiltersApply.NoFoodEntryCheckShow?"checked='checked'":"")>
                     <label class="custom-control-label" for="filter-5"></label>
                 </div>
             </div>
@@ -142,7 +142,7 @@
                     Incidencias <span class="fw-300"><i>Diarias</i></span>
                 </h2>
                 <div class="panel-toolbar demo-h-spacing">
-                    <a id="applyfilter" href="javascript:void(0);" title="Filtrar" class="btn btn-success btn-icon waves-effect waves-themed">
+                    <a id="refreshDashboard" href="javascript:void(0);" title="Filtrar" class="btn btn-success btn-icon waves-effect waves-themed">
                         <i class="fal fa-filter"></i>
                     </a>
                 </div>
@@ -175,6 +175,62 @@
                 {
                     responsive: true
                 });
+
+            $('#refreshDashboard').click(function () {
+
+
+                var filterParams = '';
+
+                if ($("#filter-0").is(':checked')) {
+
+                    filterParams += "1-";
+                }
+                else {
+                    filterParams += "0-";
+                }
+                if ($("#filter-1").is(':checked')) {
+
+                    filterParams += "1-";
+                }
+                else {
+                    filterParams += "0-";
+                }
+                if ($("#filter-2").is(':checked')) {
+
+                    filterParams += "1-";
+                }
+                else {
+                    filterParams += "0-";
+                }
+                if ($("#filter-3").is(':checked')) {
+
+                    filterParams += "1-";
+                }
+                else {
+                    filterParams += "0-";
+                }
+                if ($("#filter-4").is(':checked')) {
+
+                    filterParams += "1-";
+                }
+                else {
+                    filterParams += "0-";
+                }
+                if ($("#filter-5").is(':checked')) {
+
+                    filterParams += "1";
+                }
+                else {
+                    filterParams += "0";
+                }
+
+
+                window.location.href = '/Home/Index?filters=' + filterParams;
+
+            });
+
+
+
 
         });
     </script>

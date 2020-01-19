@@ -20,24 +20,101 @@ namespace SARH.WebUI.Factories
             this._dashboardRepository = dashboardRepository;
         }
 
-        public DashboardModel GetDay(string date)
+        public DashboardModel GetDay(string date, DashboardFilters filters)
         {
             List<KeyValuePair<string, string>> param = new List<KeyValuePair<string, string>>();
             param.Add(new KeyValuePair<string, string>("@CurrentDate", string.IsNullOrEmpty(date) ? DateTime.Now.ToShortDateString() : date));
             var t = this._dashboardRepository.GetStoredProcData("CreateDashboardInfo", param);
+            List<DashboardEmployeeDetailModel> empsDetail = new List<DashboardEmployeeDetailModel>();
 
-            var emps = t.Select(r => new DashboardEmployeeDetailModel()
+            //var emps = t.Select(r => new DashboardEmployeeDetailModel()
+            //{
+            //    Area = r.Area,
+            //    Name = r.EmployeeName,
+            //    ID = r.EmployeeId,
+            //    JobCenter = r.Centro,
+            //    JobTitle = r.Puesto,
+            //    DetailType = createEmployeeIncidencia(r)
+            //}).ToList();
+
+            if (filters.StartJobDelay)
             {
-                Area = r.Area,
-                Name = r.EmployeeName,
-                ID = r.EmployeeId,
-                JobCenter = r.Centro,
-                JobTitle = r.Puesto,
-                DetailType = createEmployeeIncidencia(r)
-            }).ToList();
-
-
-
+                var a = t.Where(d => d.RetardoEntrada.Equals(1)).Select(r => new DashboardEmployeeDetailModel()
+                {
+                    Area = r.Area,
+                    Name = r.EmployeeName,
+                    ID = r.EmployeeId,
+                    JobCenter = r.Centro,
+                    JobTitle = r.Puesto,
+                    DetailType = createEmployeeIncidencia(r)
+                }).ToList();
+                empsDetail.AddRange(a);
+            }
+            if (filters.EndJobAnticipate)
+            {
+                var a = t.Where(d => d.SalidaAnticipada.Equals(1)).Select(r => new DashboardEmployeeDetailModel()
+                {
+                    Area = r.Area,
+                    Name = r.EmployeeName,
+                    ID = r.EmployeeId,
+                    JobCenter = r.Centro,
+                    JobTitle = r.Puesto,
+                    DetailType = createEmployeeIncidencia(r)
+                }).ToList();
+                empsDetail.AddRange(a);
+            }
+            if (filters.NoEntryCheckShow)
+            {
+                var a = t.Where(d => d.RetardoEntrada.Equals(2)).Select(r => new DashboardEmployeeDetailModel()
+                {
+                    Area = r.Area,
+                    Name = r.EmployeeName,
+                    ID = r.EmployeeId,
+                    JobCenter = r.Centro,
+                    JobTitle = r.Puesto,
+                    DetailType = createEmployeeIncidencia(r)
+                }).ToList();
+                empsDetail.AddRange(a);
+            }
+            if (filters.FoodStartDelayShow)
+            {
+                var a = t.Where(d => d.SalidaAnticipadaComida.Equals(1)).Select(r => new DashboardEmployeeDetailModel()
+                {
+                    Area = r.Area,
+                    Name = r.EmployeeName,
+                    ID = r.EmployeeId,
+                    JobCenter = r.Centro,
+                    JobTitle = r.Puesto,
+                    DetailType = createEmployeeIncidencia(r)
+                }).ToList();
+                empsDetail.AddRange(a);
+            }
+            if (filters.FoodEndDelayShow)
+            {
+                var a = t.Where(d => d.RetardoEntradaComida.Equals(1)).Select(r => new DashboardEmployeeDetailModel()
+                {
+                    Area = r.Area,
+                    Name = r.EmployeeName,
+                    ID = r.EmployeeId,
+                    JobCenter = r.Centro,
+                    JobTitle = r.Puesto,
+                    DetailType = createEmployeeIncidencia(r)
+                }).ToList();
+                empsDetail.AddRange(a);
+            }
+            if (filters.NoFoodEntryCheckShow)
+            {
+                var a = t.Where(d => d.RetardoEntradaComida.Equals(2) && !d.RetardoEntrada.Equals(2)).Select(r => new DashboardEmployeeDetailModel()
+                {
+                    Area = r.Area,
+                    Name = r.EmployeeName,
+                    ID = r.EmployeeId,
+                    JobCenter = r.Centro,
+                    JobTitle = r.Puesto,
+                    DetailType = createEmployeeIncidencia(r)
+                }).ToList();
+                empsDetail.AddRange(a);
+            }
 
             DashboardModel model = new DashboardModel()
             {
@@ -49,30 +126,108 @@ namespace SARH.WebUI.Factories
                 FoodEndDelay = t.Where(d => d.RetardoEntradaComida.Equals(1)).Count(),
                 NoFoodEntryCheck = t.Where(d => d.RetardoEntradaComida.Equals(2)).Count(),
                 NoEntryCheck = t.Where(d => d.RetardoEntrada.Equals(2)).Count(),
-                EmployeeDetail = emps
+                EmployeeDetail = empsDetail
             };
 
             return model;
         }
 
-        public DashboardModel GetToday()
+        public DashboardModel GetToday(DashboardFilters filters)
         {
             List<KeyValuePair<string, string>> param = new List<KeyValuePair<string, string>>();
             param.Add(new KeyValuePair<string, string>("@CurrentDate", DateTime.Now.ToShortDateString()));
             var t = this._dashboardRepository.GetStoredProcData("CreateDashboardInfo", param);
+            List<DashboardEmployeeDetailModel> empsDetail = new List<DashboardEmployeeDetailModel>();
 
-            var emps = t.Select(r => new DashboardEmployeeDetailModel()
+            //var emps = t.Select(r => new DashboardEmployeeDetailModel()
+            //{
+            //    Area = r.Area,
+            //    Name = r.EmployeeName,
+            //    ID = r.EmployeeId,
+            //    JobCenter = r.Centro,
+            //    JobTitle = r.Puesto,
+            //    DetailType = createEmployeeIncidencia(r)
+            //}).ToList();
+
+            if (filters.StartJobDelay) 
             {
-                Area = r.Area,
-                Name = r.EmployeeName,
-                ID = r.EmployeeId,
-                JobCenter = r.Centro,
-                JobTitle = r.Puesto,
-                DetailType = createEmployeeIncidencia(r)
-            }).ToList();
+                var a = t.Where(d => d.RetardoEntrada.Equals(1)).Select(r => new DashboardEmployeeDetailModel()
+                {
+                    Area = r.Area,
+                    Name = r.EmployeeName,
+                    ID = r.EmployeeId,
+                    JobCenter = r.Centro,
+                    JobTitle = r.Puesto,
+                    DetailType = createEmployeeIncidencia(r)
+                }).ToList();
+                empsDetail.AddRange(a);
+            }
+            if (filters.EndJobAnticipate)
+            {
+                var a = t.Where(d => d.SalidaAnticipada.Equals(1)).Select(r => new DashboardEmployeeDetailModel()
+                {
+                    Area = r.Area,
+                    Name = r.EmployeeName,
+                    ID = r.EmployeeId,
+                    JobCenter = r.Centro,
+                    JobTitle = r.Puesto,
+                    DetailType = createEmployeeIncidencia(r)
+                }).ToList();
+                empsDetail.AddRange(a);
+            }
+            if (filters.NoEntryCheckShow)
+            {
+                var a = t.Where(d => d.RetardoEntrada.Equals(2)).Select(r => new DashboardEmployeeDetailModel()
+                {
+                    Area = r.Area,
+                    Name = r.EmployeeName,
+                    ID = r.EmployeeId,
+                    JobCenter = r.Centro,
+                    JobTitle = r.Puesto,
+                    DetailType = createEmployeeIncidencia(r)
+                }).ToList();
+                empsDetail.AddRange(a);
+            }
+            if (filters.FoodStartDelayShow)
+            {
+                var a = t.Where(d => d.SalidaAnticipadaComida.Equals(1)).Select(r => new DashboardEmployeeDetailModel()
+                {
+                    Area = r.Area,
+                    Name = r.EmployeeName,
+                    ID = r.EmployeeId,
+                    JobCenter = r.Centro,
+                    JobTitle = r.Puesto,
+                    DetailType = createEmployeeIncidencia(r)
+                }).ToList();
+                empsDetail.AddRange(a);
+            }
+            if (filters.FoodEndDelayShow)
+            {
+                var a = t.Where(d => d.RetardoEntradaComida.Equals(1)).Select(r => new DashboardEmployeeDetailModel()
+                {
+                    Area = r.Area,
+                    Name = r.EmployeeName,
+                    ID = r.EmployeeId,
+                    JobCenter = r.Centro,
+                    JobTitle = r.Puesto,
+                    DetailType = createEmployeeIncidencia(r)
+                }).ToList();
+                empsDetail.AddRange(a);
+            }
+            if (filters.NoFoodEntryCheckShow)
+            {
+                var a = t.Where(d => d.RetardoEntradaComida.Equals(2) && !d.RetardoEntrada.Equals(2)).Select(r => new DashboardEmployeeDetailModel()
+                {
+                    Area = r.Area,
+                    Name = r.EmployeeName,
+                    ID = r.EmployeeId,
+                    JobCenter = r.Centro,
+                    JobTitle = r.Puesto,
+                    DetailType = createEmployeeIncidencia(r)
+                }).ToList();
+                empsDetail.AddRange(a);
+            }
 
-
-            
 
             DashboardModel model = new DashboardModel()
             {
@@ -84,7 +239,7 @@ namespace SARH.WebUI.Factories
                 FoodEndDelay = t.Where(d => d.RetardoEntradaComida.Equals(1)).Count(),
                 NoFoodEntryCheck = t.Where(d => d.RetardoEntradaComida.Equals(2)).Count(),
                 NoEntryCheck = t.Where(d => d.RetardoEntrada.Equals(2)).Count(),
-                EmployeeDetail = emps
+                EmployeeDetail = empsDetail
             };
 
             return model;

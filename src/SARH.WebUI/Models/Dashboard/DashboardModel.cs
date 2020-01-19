@@ -8,6 +8,11 @@ namespace SARH.WebUI.Models.Dashboard
     public class DashboardModel
     {
 
+        public DashboardModel()
+        {
+            DashboardFiltersApply = new DashboardFilters();
+        }
+
         public int EntryDelay { get; set; }
         public int EndDayDelay { get; set; }
         public int NoEntryCheck { get; set; }
@@ -17,5 +22,7 @@ namespace SARH.WebUI.Models.Dashboard
         public decimal AverageEntryDelay { get; set; }
         public decimal AverageJobPermission { get; set; }
         public IList<DashboardEmployeeDetailModel> EmployeeDetail { get; set; }
+        public DashboardFilters DashboardFiltersApply { get; set; }
+        public string FilterDate { get; set; }
     }
 }
