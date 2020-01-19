@@ -16,5 +16,6 @@ namespace ISOSA.SARH.Data.Domain.Formats
         public string Comments { get; set; }
         public string EmployeeSubstitute { get; set; }
         public bool Declined { get; set; }
+        public bool SubstituteApprove { get; set; }
     }
 }

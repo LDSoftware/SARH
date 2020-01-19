@@ -65,6 +65,7 @@ namespace SARH.WebUI.Models.Organigrama.New
         public string Address { get; set; }
         public string City { get; set; }
         public string State { get; set; }
+        public string Suburb { get; set; }
         public string Zip { get; set; }
         public string Sick { get; set; }
         public string BloodType { get; set; }

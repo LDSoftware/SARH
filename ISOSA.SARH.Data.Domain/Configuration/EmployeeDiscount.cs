@@ -13,5 +13,6 @@ namespace ISOSA.SARH.Data.Domain.Configuration
         public int RangeInitial { get; set; }
         public int RangeEnd { get; set; }
         public bool Enabled { get; set; }
+        public string Description { get; set; }
     }
 }

@@ -19,6 +19,7 @@ namespace SARH.WebUI.Models.Configuration
     {
         public int Id { get; set; }
         public string TipoDescuento { get; set; }
+        public string DiscountName { get; set; }
         public string Descripcion { get; set; }
         public string Discount { get; set; }
         public string Habilitado { get; set; }
@@ -33,6 +34,7 @@ namespace SARH.WebUI.Models.Configuration
         public string Combinacion { get; set; }
         public int RangeInitial { get; set; }
         public int RangeEnd { get; set; }
+        public string Description { get; set; }
     }
 
 }

@@ -25,23 +25,28 @@ namespace SARH.WebUI.Controllers
 
             var allDiscounts = discountRepo.GetAll().ToList();
 
-            model.SchedulesDiscounts = allDiscounts.Select(u => new ScheduleDiscountModelItem()
+            if (allDiscounts.Any()) 
             {
-                Id = u.Id,
-                Descripcion = string.IsNullOrEmpty(u.CombineDiscount) ? $"{DiscountType(u.DiscountType.ToString())} de {u.RangeInitial} a {u.RangeEnd}" : GetDiscountCombine(u.Id, u.CombineDiscount, allDiscounts),
-                Discount = string.IsNullOrEmpty(u.CombineDiscount) ? $"{u.Discount}%" : GetDiscountPorcentaje(u.Id, u.CombineDiscount, allDiscounts),
-                TipoDescuento = string.IsNullOrEmpty(u.CombineDiscount) ? "Simple" : "Mixto",
-                Habilitado = u.Enabled == true ? "Si" : "No"
-            }).ToList();
-
+                model.SchedulesDiscounts = allDiscounts.Select(u => new ScheduleDiscountModelItem()
+                {
+                    Id = u.Id,
+                    DiscountName = string.IsNullOrEmpty(u.CombineDiscount) ? $"{u.Description}" : GetDiscountName(u.Id, u.CombineDiscount, allDiscounts),
+                    Descripcion = string.IsNullOrEmpty(u.CombineDiscount) ? $"{DiscountType(u.DiscountType.ToString())} de {u.RangeInitial} a {u.RangeEnd}" : GetDiscountCombine(u.Id, u.CombineDiscount, allDiscounts),
+                    Discount = string.IsNullOrEmpty(u.CombineDiscount) ? $"{u.Discount}%" : GetDiscountPorcentaje(u.Id, u.CombineDiscount, allDiscounts),
+                    TipoDescuento = string.IsNullOrEmpty(u.CombineDiscount) ? "Simple" : "Mixto",
+                    Habilitado = u.Enabled == true ? "Si" : "No"
+                }).ToList();
+            }
 
             List<SelectListItem> catalog = new List<SelectListItem>();
             catalog.Add(new SelectListItem() { Value = "1", Text = "Retardo entrada" });
             catalog.Add(new SelectListItem() { Value = "2", Text = "Salida anticipada" });
-            catalog.Add(new SelectListItem() { Value = "3", Text = "Sin Registro" });
+            catalog.Add(new SelectListItem() { Value = "3", Text = "Sin Registro de entrada" });
+            catalog.Add(new SelectListItem() { Value = "7", Text = "Sin Registro de salida" });
+            catalog.Add(new SelectListItem() { Value = "8", Text = "Sin Registro de salida comida" });
+            catalog.Add(new SelectListItem() { Value = "9", Text = "Sin Registro de entrada comida" });
             catalog.Add(new SelectListItem() { Value = "4", Text = "Salida anticipada horario de comida" });
             catalog.Add(new SelectListItem() { Value = "5", Text = "Retardo horario de comida" });
-            catalog.Add(new SelectListItem() { Value = "6", Text = "Sin registro de comida" });
 
             ViewBag.Catalog = catalog;
 
@@ -72,7 +77,8 @@ namespace SARH.WebUI.Controllers
                 Days = model.Dias,
                 CombineDiscount = combo,
                 RangeInitial = model.RangeInitial,
-                RangeEnd = model.RangeEnd
+                RangeEnd = model.RangeEnd,
+                Description = model.Description
             });
 
 
@@ -84,8 +90,26 @@ namespace SARH.WebUI.Controllers
         {
 
             var row = discountRepo.GetElement(id);
-            row.Enabled = true;
-            discountRepo.Update(row);
+            if (row != null && row.Enabled) 
+            {
+                row.Enabled = false;
+                discountRepo.Update(row);
+            }
+
+            return Json("ok");
+        }
+
+
+        [HttpPost]
+        public JsonResult EnabledDiscount(int id, [FromServices]IRepository<EmployeeDiscount> discountRepo)
+        {
+
+            var row = discountRepo.GetElement(id);
+            if (row != null)
+            {
+                row.Enabled = true;
+                discountRepo.Update(row);
+            }
 
             return Json("ok");
         }
@@ -139,7 +163,7 @@ namespace SARH.WebUI.Controllers
                     response = "Salida anticipada";
                     break;
                 case "3":
-                    response = "Sin Registro";
+                    response = "Sin Registro de entrada";
                     break;
                 case "4":
                     response = "Salida anticipada horario de comida";
@@ -150,6 +174,16 @@ namespace SARH.WebUI.Controllers
                 case "6":
                     response = "Sin registro de comida";
                     break;
+                case "7":
+                    response = "Sin Registro de salida";
+                    break;
+                case "8":
+                    response = "Sin Registro de salida comida";
+                    break;
+                case "9":
+                    response = "Sin Registro de entrada comida";
+                    break;
+
                 default:
                     break;
             }
@@ -169,6 +203,25 @@ namespace SARH.WebUI.Controllers
                 {
                     var element = discountAll.Where(f => f.Id.Equals(int.Parse(item))).FirstOrDefault();
                     response += $"{DiscountType(element.DiscountType.ToString())} de {element.RangeInitial} a {element.RangeEnd},";
+                }
+            }
+
+            response = response.Remove(response.Length - 1);
+            return response;
+        }
+
+        private string GetDiscountName(int id, string parameters, List<EmployeeDiscount> discountAll)
+        {
+            string response = string.Empty;
+            var row = discountAll.Where(d => d.Id.Equals(id)).FirstOrDefault();
+            response = $"{row.Description} +";
+
+            foreach (var item in parameters.Split('|').ToList())
+            {
+                if (!string.IsNullOrEmpty(item))
+                {
+                    var element = discountAll.Where(f => f.Id.Equals(int.Parse(item))).FirstOrDefault();
+                    response += $"{element.Description} +";
                 }
             }
 

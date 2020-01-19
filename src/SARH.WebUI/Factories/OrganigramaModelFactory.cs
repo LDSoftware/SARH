@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ISOSA.SARH.Data.Domain.Configuration;
 using ISOSA.SARH.Data.Domain.Employee;
 using ISOSA.SARH.Data.Repository;
 using ISOSADataMigrationTools;
@@ -16,14 +17,20 @@ namespace SARH.WebUI.Factories
         private readonly IRepository<Nomipaq_nom10001> _nomipaqRepository;
         private readonly IRepository<EmployeeAditionalInfo> _isosaemployeesRepository;
         private readonly IRepository<EmployeeOrganigrama> _isosaemployeesOrganigramaRepository;
+        private readonly IRepository<EmployeeScheduleAssigned> _employeeAssignedScheduleRepository;
+        private readonly IRepository<Schedule> _scheduleRepository;
 
         public OrganigramaModelFactory(IRepository<Nomipaq_nom10001> nomipaqRepository, 
             IRepository<EmployeeAditionalInfo> isosaemployeesRepository,
-            IRepository<EmployeeOrganigrama> isosaemployeesOrganigramaRepository)
+            IRepository<EmployeeOrganigrama> isosaemployeesOrganigramaRepository,
+            IRepository<EmployeeScheduleAssigned> employeeAssignedScheduleRepository,
+            IRepository<Schedule> scheduleRepository)
         {
             _nomipaqRepository = nomipaqRepository;
             _isosaemployeesRepository = isosaemployeesRepository;
             _isosaemployeesOrganigramaRepository = isosaemployeesOrganigramaRepository;
+            _employeeAssignedScheduleRepository = employeeAssignedScheduleRepository;
+            _scheduleRepository = scheduleRepository;
         }
 
         public OrganigramaModel GetData(string organigramaPath)
@@ -67,6 +74,10 @@ namespace SARH.WebUI.Factories
             var isosaEmp = _isosaemployeesRepository.SearhItemsFor(o => o.EMP_StatusCode.Equals("Active"));
 
 
+            var t = isosaOrg.Where(d => d.RowGuid.ToString().ToLower().Equals("1DF075D8-C519-401A-BDE9-85B4154546E1".ToLower()));
+
+            var t2 = isosaEmp.Where(d => d.HrowGuid.ToString().ToLower().Equals("1DF075D8-C519-401A-BDE9-85B4154546E1".ToLower()));
+
             var emps = (from emp in isosaEmp
                         join org in isosaOrg on emp.HrowGuid.Value equals org.RowGuid
                         where emp.EMP_StatusCode == "Active"
@@ -81,6 +92,19 @@ namespace SARH.WebUI.Factories
                             RowId = emp.HrowGuid.ToString(),
                             UserName = string.IsNullOrEmpty(emp.EMP_EMailAddress) ? "" : emp.EMP_EMailAddress
                         }).ToList();
+
+
+            //var nomipaq = _nomipaqRepository.GetAll();
+
+            //var noasigado = (from nomi in nomipaq
+            //                 join emp in emps on nomi.codigoempleado.TrimStart(new Char[] { '0' }) equals emp.Id into ps
+            //                 from p in ps.DefaultIfEmpty()
+            //                 select new
+            //                 {
+            //                     codigoempleado = nomi.codigoempleado.TrimStart(new Char[] { '0' }),
+            //                     estado = nomi.estadoempleado
+            //                 }
+            //                 ).ToList();
 
             //var emps = _isosaemployeesRepository.SearhItemsFor(o => o.EMP_StatusCode.Equals("Active")).Select(j => new OrganigramaEmployeeModel()
             //{
@@ -156,7 +180,7 @@ namespace SARH.WebUI.Factories
             }
 
             return response;
-        } 
+        }
 
 
         public OrganigramaEmployeeDetailModel GetEmployeeData(string employeeid)
@@ -170,19 +194,20 @@ namespace SARH.WebUI.Factories
             //NomiPaqEmployeeManager nomiemployee = new NomiPaqEmployeeManager();
             //nomiemployee.Create();
 
+            int intParsed = 0;
             var employee = _isosaemployeesRepository.SearhItemsFor(e => e.EMP_EmployeeID.Equals(int.Parse(employeeid).ToString("00000")));
 
-
-            if (employee.Any())
+            if (int.TryParse(employeeid, out intParsed) && employee.Any())
             {
-
-
 
                 var rowIdent = _isosaemployeesOrganigramaRepository.SearhItemsFor(h => h.RowGuid.ToString().ToLower().Equals(employee.FirstOrDefault().HrowGuid.ToString().ToLower()));
                 model.HierarchyGuid = employee.FirstOrDefault().HrowGuid.ToString().ToLower();
                 if (rowIdent.Any())
                 {
-                    model.RowId = rowIdent.FirstOrDefault().IdentPuesto.Value.ToString().ToLower();
+                    if (rowIdent.FirstOrDefault().IdentPuesto.HasValue)
+                    {
+                        model.RowId = rowIdent.FirstOrDefault().IdentPuesto.Value.ToString().ToLower();
+                    }
                 }
                 else
                 {
@@ -221,7 +246,7 @@ namespace SARH.WebUI.Factories
                     model.GeneralInfo.CURP = employee.FirstOrDefault().EMP_curpi;
                     model.GeneralInfo.HireDate = employee.FirstOrDefault().EMP_DateOfHire.Value.ToShortDateString();
                     model.GeneralInfo.FechaNacimiento = employee.FirstOrDefault().EMP_BirthDate.Value.ToShortDateString();
-                    model.GeneralInfo.Sexo = nomiempNew.FirstOrDefault().sexo;
+                    model.GeneralInfo.Sexo = employee.FirstOrDefault().EMP_Sexo;
                 }
 
                 model.GeneralInfo.Email = employee.FirstOrDefault().EMP_EMailAddress;
@@ -261,10 +286,55 @@ namespace SARH.WebUI.Factories
                 model.PersonalInfo.Email = employee.FirstOrDefault().EMP_PersonalEmail;
                 model.PersonalInfo.Sick = employee.FirstOrDefault().EMP_Sick;
                 model.PersonalInfo.CellPhone = employee.FirstOrDefault().EMP_CellPhone;
+                model.PersonalInfo.Suburb = employee.FirstOrDefault().EMP_Suburb;
 
                 model.EmergencyData.Name = employee.FirstOrDefault().EMP_EmergencyContactName;
                 model.EmergencyData.Phone = employee.FirstOrDefault().EMP_EmergencyContactPhone;
                 model.EmergencyData.Relacion = employee.FirstOrDefault().EMP_EmergencyContactRelation;
+            }
+
+            var assigned = _employeeAssignedScheduleRepository.SearhItemsFor(f => f.EmployeeId.Equals(employeeid));
+            if (assigned.Any())
+            {
+                var t = assigned.FirstOrDefault();
+
+                if (t.IdScheduleWorkday != 0)
+                {
+                    var a = _scheduleRepository.GetElement(t.IdScheduleWorkday);
+                    if (a != null)
+                    {
+                        model.GeneralInfo.StartJob = $"{a.StartHour} - {a.EndHour}";
+                    }
+                }
+                if (t.IdScheduleMeal != 0)
+                {
+                    var a = _scheduleRepository.GetElement(t.IdScheduleMeal);
+                    if (a != null)
+                    {
+                        model.GeneralInfo.EndJob = $"{a.StartHour} - {a.EndHour}";
+                    }
+                }
+                if (t.IdScheduleWeekEnd != 0)
+                {
+                    var a = _scheduleRepository.GetElement(t.IdScheduleWeekEnd);
+                    if (a != null)
+                    {
+                        model.GeneralInfo.StartFood = $"{a.StartHour} - {a.EndHour}";
+                    }
+                }
+                if (t.IdScheduleMealWeekEnd != 0)
+                {
+                    var a = _scheduleRepository.GetElement(t.IdScheduleMealWeekEnd);
+                    if (a != null)
+                    {
+                        model.GeneralInfo.EndFood = $"{a.StartHour} - {a.EndHour}";
+                    }
+                }
+
+
+
+
+
             }
 
             return model;

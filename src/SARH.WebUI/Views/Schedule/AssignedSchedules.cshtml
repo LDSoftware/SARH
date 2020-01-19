@@ -47,7 +47,7 @@
                     Horarios configurados <span class="fw-300"><i></i></span>
                 </h2>
                 <div class="dropdown demo-h-spacing left">
-                    <a href="#" class="btn btn-default btn-icon waves-effect waves-themed" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                    <a href="#" title="Acciones" class="btn btn-default btn-icon waves-effect waves-themed" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                         <i class="fal fa-bolt"></i>
                     </a>
                     <div class="dropdown-menu" x-placement="top-start" style="position: absolute; will-change: top, left; top: -201px; left: 0px;">
@@ -58,10 +58,16 @@
 
                 <div class="panel-toolbar">
                     <div class="demo-h-spacing">
-                        <a href="javascript:void(0);" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target=".default-example-modal-right" class="btn btn-primary btn-icon waves-effect waves-themed">
+                        <a href="javascript:void(0);" title="Asignar horario permanente" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target=".default-example-modal-right" class="btn btn-primary btn-icon waves-effect waves-themed">
                             <i class="fal fa-calendar-edit"></i>
                         </a>
-                        <a href="javascript:void(0);" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target=".default-example-modal-right-tmp" class="btn btn-success btn-icon waves-effect waves-themed">
+                        <a href="javascript:void(0);" title="Asignar horario sabatino" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target=".default-example-modal-right-wkn" class="btn btn-secondary btn-icon waves-effect waves-themed">
+                            <i class="fal fa-calendar-edit"></i>
+                        </a>
+                        <a href="javascript:void(0);" title="Asignar horario temporal" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target=".default-example-modal-right-tmp" class="btn btn-success btn-icon waves-effect waves-themed">
+                            <i class="fal fa-calendar-edit"></i>
+                        </a>
+                        <a href="javascript:void(0);" title="Asignar horario temporal sabatino" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target=".default-example-modal-right-tmpwkn" class="btn btn-dark btn-icon waves-effect waves-themed">
                             <i class="fal fa-calendar-edit"></i>
                         </a>
                         <a href='@Url.Action("SchedulesDownloadCSV","Schedule")' class="btn btn-info btn-icon waves-effect waves-themed">
@@ -118,7 +124,8 @@
     </div>
 </div>
 
-        </ Modal Schedule New Permanente-->
+
+</ Modal Schedule New Permanente-->
 
 <div class="panel-container show">
     <div class="panel-content">
@@ -268,7 +275,157 @@
 </div>
 
 
-        </ Modal Schedule New Temporal-->
+</ Modal Schedule Sabatino New Permanente-->
+
+<div class="panel-container show">
+    <div class="panel-content">
+
+        <div class="modal fade default-example-modal-right-wkn" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-right">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title h4">Asignar horario sabatino</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true"><i class="fal fa-times"></i></span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="card mb-5">
+
+                            <div class="card-body p-3">
+                                <h5>
+                                    Asignación de horario sabatino
+                                    <span class="badge badge-primary fw-n position-absolute pos-top pos-right mt-3 mr-3">A</span>
+                                </h5>
+
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text text-success">
+                                                <i class="ni ni-user fs-xl"></i>
+                                            </span>
+                                        </div>
+                                        <input type="text" aria-label="searchtext" class="form-control reseterror-wkn" placeholder="Ingrese el valor" id="searchText-wkn">
+                                        <div class="input-group-append input-group-prepend">
+                                            <span class="input-group-text">
+                                                <i class="fal fa-exchange fs-xl"></i>
+                                            </span>
+                                        </div>
+                                        <select class="custom-select" id="typesearch-wkn" aria-label="typesearch">
+                                            <option value="0" selected="">Busqueda por</option>
+                                            <option value="1">Área</option>
+                                            <option value="2">Centro de trabajo</option>
+                                            <option value="3">Puesto</option>
+                                            <option value="4">No. Empleado</option>
+                                        </select>
+                                        <div class="input-group-append">
+                                            <button id="searchbutton-wkn" type="button" class="btn btn-success shadow-0 waves-effect waves-themed">
+
+                                                <span id="imgsearch-wkn-wkn" class="fal fa-search mr-1"></span>
+
+                                                <span id="spin-wkn" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="display:none"></span>
+
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12">
+                                    <ul id="elementsfinded-wkn">
+                                    </ul>
+                                </div>
+
+
+                                <div id="searchresult-wkn">
+
+                                </div>
+                                <div id="searcherror-wkn" style="display:none;">
+                                    <span id="msgerror-wkn" class="h5 color-danger-900"></span>
+                                </div>
+                                <hr />
+                                <center>
+                                    <button id="addelement-wkn" type="button" class="btn btn-info waves-effect waves-themed" style="display:none;"><span class="fal fa-plus mr-1"></span>Agregar</button>
+                                </center>
+
+                            </div>
+
+                        </div>
+                        <div class="card mb-g">
+
+                            <div class="card-body p-3">
+                                <h5>
+                                    Horarios disponibles
+                                    <span class="badge badge-dark fw-n position-absolute pos-top pos-right mt-3 mr-3">B</span>
+                                </h5>
+                                <div class="form-row">
+                                    <div class="col-md-6">
+                                        <label class="form-label" for="descripcion">Seleccione el horario de entrada</label>
+                                        @Html.DropDownList("dropdownSchedulewkn", (IEnumerable<SelectListItem>)ViewBag.dropdownSchedulewkn, new { id = "dropdownSchedulewkn", @class = "form-control reseterror-wkn" })
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label" for="inputtolerance-wkn">Tolerancia en minutos</label>
+                                        <input class="form-control reseterror" id="inputtolerance-wkn" type="number" name="number" value="0">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label" for="descripcion">Seleccione el horario de comida</label>
+                                        @Html.DropDownList("dropdownScheduleMealwkn", (IEnumerable<SelectListItem>)ViewBag.dropdownScheduleMealwkn, new { id = "dropdownScheduleMealwkn", @class = "form-control reseterror-wkn" })
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label" for="inputtoleranceml-wkn">Tolerancia en minutos</label>
+                                        <input class="form-control reseterror-wkn" id="inputtoleranceml-wkn" type="number" name="number" value="0">
+                                    </div>
+
+                                    <div class="col-md-12">
+                                        <div class="d-flex flex-wrap align-items-center pl-3 pr-1 py-2 px-sm-4 px-lg-5 border-faded border-top-0 border-left-0 border-right-0">
+                                            <div class="flex-1 d-flex align-items-center">
+                                                <a href="javascript:void(0);" id="js-delete-selected-wkn" class="btn btn-icon rounded-circle mr-1 waves-effect waves-themed">
+                                                    <i class="fas fa-trash fs-md"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <br />
+                                        <div class="col-md-12">
+                                            <ul id="elementsadded-wkn">
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div id="errorsave-wkn" class="alert border-danger bg-transparent text-secondary fade show" role="alert" style="display:none">
+                            <div class="d-flex align-items-center">
+                                <div class="alert-icon">
+                                    <span class="icon-stack icon-stack-md">
+                                        <i class="base-7 icon-stack-3x color-danger-900"></i>
+                                        <i class="fal fa-times icon-stack-1x text-white"></i>
+                                    </span>
+                                </div>
+                                <div class="flex-1">
+                                    <span id="msgerror-wkn" class="h5 color-danger-900">No se puede guardar. Validé que existan horarios y se asignarón a empleados, la tolerancia debe ser mayor o igual 0.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <center>
+                        <div id="spinwait-wkn" class="spinner-border" style="width: 3rem; height: 3rem; display:none;" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                    </center>
+
+                    <div class="modal-footer">
+                        <button id="closemodal-wkn" type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                        <button id="savenewschedule-wkn" type="button" class="btn btn-primary">Guardar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+</ Modal Schedule New Temporal-->
 
 <div class="panel-container show">
     <div class="panel-content">
@@ -418,7 +575,160 @@
 </div>
 
 
-        </ Modal Update Schedule-->
+
+</ Modal Schedule New Temporal WeekEnd -->
+
+<div class="panel-container show">
+    <div class="panel-content">
+
+        <div class="modal fade default-example-modal-right-tmpwkn" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-right">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title h4">Asignar horario temporal sabatino</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true"><i class="fal fa-times"></i></span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="card mb-5">
+
+                            <div class="card-body p-3">
+                                <h5>
+                                    Asignación de horario temporal sabatino
+                                    <span class="badge badge-primary fw-n position-absolute pos-top pos-right mt-3 mr-3">A</span>
+                                </h5>
+
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text text-success">
+                                                <i class="ni ni-user fs-xl"></i>
+                                            </span>
+                                        </div>
+                                        <input type="text" aria-label="searchtext" class="form-control reseterrortempwkn" placeholder="Ingrese el valor" id="searchTexttempwkn">
+                                        <div class="input-group-append input-group-prepend">
+                                            <span class="input-group-text">
+                                                <i class="fal fa-exchange fs-xl"></i>
+                                            </span>
+                                        </div>
+                                        <select class="custom-select" id="typesearchtempwkn" aria-label="typesearch">
+                                            <option value="0" selected="">Busqueda por</option>
+                                            <option value="1">Área</option>
+                                            <option value="2">Centro de trabajo</option>
+                                            <option value="3">Puesto</option>
+                                            <option value="4">No. Empleado</option>
+                                        </select>
+                                        <div class="input-group-append">
+                                            <button id="searchbuttontempwkn" type="button" class="btn btn-success shadow-0 waves-effect waves-themed">
+
+                                                <span id="imgsearchtempwkn" class="fal fa-search mr-1"></span>
+
+                                                <span id="spintempwkn" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="display:none"></span>
+
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12">
+                                    <ul id="elementsfindedtempwkn">
+                                    </ul>
+                                </div>
+
+
+                                <div id="searchresulttempwkn">
+
+                                </div>
+                                <div id="searcherrortempwkn" style="display:none;">
+                                    <span id="msgerrortempwkn" class="h5 color-danger-900"></span>
+                                </div>
+                                <hr />
+                                <center>
+                                    <button id="addelementtempwkn" type="button" class="btn btn-info waves-effect waves-themed" style="display:none;"><span class="fal fa-plus mr-1"></span>Agregar</button>
+                                </center>
+
+                            </div>
+
+                        </div>
+                        <div class="card mb-g">
+
+                            <div class="card-body p-3">
+                                <h5>
+                                    Horarios disponibles
+                                    <span class="badge badge-dark fw-n position-absolute pos-top pos-right mt-3 mr-3">B</span>
+                                </h5>
+                                <div class="form-row">
+                                    <div class="col-md-6">
+                                        <label class="form-label" for="descripcion">Seleccione el horario de entrada</label>
+                                        @Html.DropDownList("dropdownScheduletempwkn", (IEnumerable<SelectListItem>)ViewBag.dropdownScheduletempwkn, new { id = "dropdownScheduletempwkn", @class = "form-control reseterrortempwkn" })
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label" for="inputtolerancewdtempwkn">Tolerancia en minutos</label>
+                                        <input class="form-control reseterror" id="inputtolerancewdtempwkn" type="number" name="number" value="0">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label" for="descripcion">Seleccione el horario de comida</label>
+                                        @Html.DropDownList("dropdownScheduleMealtempwkn", (IEnumerable<SelectListItem>)ViewBag.dropdownScheduleMealtempwkn, new { id = "dropdownScheduleMealtempwkn", @class = "form-control reseterrortempwkn" })
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label" for="inputtolerancemltempwkn">Tolerancia en minutos</label>
+                                        <input class="form-control reseterror" id="inputtolerancemltempwkn" type="number" name="number" value="0">
+                                    </div>
+
+                                    <div class="col-md-12">
+                                        <div class="d-flex flex-wrap align-items-center pl-3 pr-1 py-2 px-sm-4 px-lg-5 border-faded border-top-0 border-left-0 border-right-0">
+                                            <div class="flex-1 d-flex align-items-center">
+                                                <a href="javascript:void(0);" id="js-delete-selectedtemp" class="btn btn-icon rounded-circle mr-1 waves-effect waves-themed">
+                                                    <i class="fas fa-trash fs-md"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <br />
+                                        <div class="col-md-12">
+                                            <ul id="elementsaddedtempwkn">
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div id="errorsavetempwkn" class="alert border-danger bg-transparent text-secondary fade show" role="alert" style="display:none">
+                            <div class="d-flex align-items-center">
+                                <div class="alert-icon">
+                                    <span class="icon-stack icon-stack-md">
+                                        <i class="base-7 icon-stack-3x color-danger-900"></i>
+                                        <i class="fal fa-times icon-stack-1x text-white"></i>
+                                    </span>
+                                </div>
+                                <div class="flex-1">
+                                    <span id="msgerrortempwkn" class="h5 color-danger-900">No se puede guardar. Validé que existan horarios y se asignarón a empleados, la tolerancia debe ser mayor o igual 0.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <center>
+                        <div id="spinwaittempwkn" class="spinner-border" style="width: 3rem; height: 3rem; display:none;" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                    </center>
+
+                    <div class="modal-footer">
+                        <button id="closemodaltempwkn" type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                        <button id="savenewscheduletempwkn" type="button" class="btn btn-primary">Guardar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+</ Modal Update Schedule-->
 
 <div class="modal fade" data-backdrop="static" data-keyboard="false" id="default-example-modal-center" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -459,8 +769,9 @@
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">                                
-                Cerrar</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">
+                    Cerrar
+                </button>
                 <button id="btnUpdateSchedule" type="button" class="btn btn-primary">
                     <span id="spinupdateschedule" style="display:none;" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
 
@@ -511,6 +822,7 @@
             var selectedelements = new Array();
             var multipleadded = false;
             var multipleaddedtemp = false;
+            var multipleaddedwkn = false;
 
 
             $('#dt-basic-example').dataTable(
@@ -1127,6 +1439,329 @@
 
 
             });
+
+
+
+            //Horarios Permanentes Sabado
+
+            $('#savenewschedule-wkn').click(function () {
+
+
+                if ($('#inputtolerance-wkn').val() < 0 || $('#inputtoleranceml-wkn').val() < 0) {
+
+                    $('#errorsave').show();
+                    return;
+                }
+
+
+                if ($('#dropdownSchedulewkn').val() === null) {
+
+                    $('#errorsave-wkn').show();
+                    return;
+                }
+
+                if (selectedelements.length === 0) {
+
+                    $('#errorsave-wkn').show();
+                    return;
+                }
+
+                var wklb = $('#dropdownSchedulewkn').val();
+                var wkml = 0;
+                if ($('#dropdownScheduleMealwkn').val() !== null) {
+                    wkml = $('#dropdownScheduleMealwkn').val();
+                }
+
+
+                $('.btn').prop('disabled', true);
+                $('#spinwait-wkn').show();
+
+                $.ajax({
+                    url: '/Schedule/AssignedScheduleWkn',
+                    type: "POST",
+                    data: { selectedInputs: selectedelements, scheduleSelected: wklb, scheduleMealSelected: wkml, toleranceWD: $('#inputtolerance-wkn').val(), toleranceML: $('#inputtoleranceml-wkn').val() },
+                    success: function (data, textStatus, jqXHR) {
+
+                        Swal.fire(
+                            {
+                                position: "top-end",
+                                type: "success",
+                                title: "Actualización exitosa",
+                                showConfirmButton: false,
+                                timer: 1500
+                            }).then((result) => {
+
+                                window.location.href = '/Schedule/AssignedSchedules';
+
+                            });
+
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+
+                    }
+                });
+
+            });
+
+
+            $('.deleterow-wkn').click(function () {
+
+
+                var id = $(this).closest('tr').attr('id');
+
+                var swalWithBootstrapButtons = Swal.mixin(
+                    {
+                        customClass:
+                        {
+                            confirmButton: "btn btn-primary",
+                            cancelButton: "btn btn-danger mr-2"
+                        },
+                        buttonsStyling: false
+                    });
+                swalWithBootstrapButtons
+                    .fire(
+                        {
+                            title: "Confirmación",
+                            text: "Deseas eliminar el elemento?",
+                            type: "warning",
+                            showCancelButton: true,
+                            confirmButtonText: "Si",
+                            cancelButtonText: "Cancelar",
+                            reverseButtons: true
+                        })
+                    .then(function (result) {
+
+                        if (result.value) {
+
+
+                            $.ajax({
+                                url: '/Schedule/DeleteSchedule',
+                                type: "POST",
+                                data: { id: id },
+                                success: function (data, textStatus, jqXHR) {
+
+                                    Swal.fire(
+                                        {
+                                            position: "top-end",
+                                            type: "success",
+                                            title: "Actualización exitosa",
+                                            showConfirmButton: false,
+                                            timer: 1500
+                                        }).then((result) => {
+
+
+                                            window.location.href = '/Schedule/AdminSchedule';
+
+                                        });
+
+
+
+                                },
+                                error: function (jqXHR, textStatus, errorThrown) {
+                                    alert(errorThrown);
+                                }
+                            });
+                        }
+                        else if (
+                            // Read more about handling dismissals
+                            result.dismiss === Swal.DismissReason.cancel
+                        ) {
+                            swalWithBootstrapButtons.fire(
+                                "Cancelación",
+                                "Se ha cancelado la acción",
+                                "error"
+                            );
+                        }
+                    });
+
+            });
+
+
+            $(".reseterror-wkn").change(function () {
+                $('#errorsave-wkn').hide();
+            });
+
+
+            $('#closemodal-wkn').click(function () {
+
+                $('#errorsave-wkn').hide();
+                $('#searcherror-wkn').hide();
+            });
+
+
+            $('#searchbutton-wkn').click(function () {
+
+                $('#errorsave-wkn').hide();
+                $('#addelement-wkn').hide();
+                $('#searchresult-wkn').empty();
+                $('#elementsfinded-wkn').empty();
+                $('#searcherror-wkn').hide();
+                $('#imgsearch-wkn').hide();
+                $('#spin-wkn').show();
+                var ts = $('#typesearch-wkn').val();
+
+                if (ts === "0") {
+
+                    $('#msgerror-wkn').text("Seleccione un tipo de busqueda");
+                    $('#imgsearch-wkn').show();
+                    $('#spin-wkn').hide();
+                    $('#searcherror-wkn').show();
+                    return;
+                }
+
+                if ($('#searchText-wkn').val() === "") {
+                    $('#msgerror-wkn').text("Ingrese el valor de la busqueda");
+                    $('#imgsearch-wkn').show();
+                    $('#spin-wkn').hide();
+                    $('#searcherror-wkn').show();
+                    return;
+                }
+
+
+                $.ajax({
+                    url: '/Schedule/SearchByWkn',
+                    type: "POST",
+                    data: { inputtext: $('#searchText-wkn').val(), typesearch: ts },
+                    success: function (data, textStatus, jqXHR) {
+
+                        if (data.details === "") {
+
+                            if (data.rows > 0) {
+                                $('#searchresult-wkn').append('<span id="' + data.id + '" class="elementresult">' + data.value + '<span class="badge badge-icon position-relative ml-2">' + data.rows + '</span></span>');
+                                $('#addelement-wkn').show();
+                            }
+                            else {
+                                if (data.rows == 0) {
+                                    $('#msgerror-wkn').text("No se encontraron resultados.");
+                                    $('#searcherror-wkn').show();
+                                }
+                                else {
+                                    $('#msgerror-wkn').text("El empleado ya tiene horario asignado.");
+                                    $('#searcherror-wkn').show();
+                                }
+                            }
+
+                            $('#imgsearch-wkn').show();
+                            $('#spin-wkn').hide();
+                        }
+                        else {
+
+                            var showDetail = 0;
+                            data.details.forEach(function (dataDet, index) {
+
+                                $('#elementsfinded-wkn').append('<li><div class="custom-control custom-checkbox"><input type="checkbox" class="custom-control-input" id="' + dataDet.id + '"><label class="custom-control-label" for="' + dataDet.id + '">' + dataDet.value + '</label></div></li>');
+                                showDetail++;
+                            });
+
+                            if (showDetail > 0) {
+                                $('#addelement-wkn').show();
+                                multipleaddedwkn = true;
+                            }
+                            else {
+                                if (data.rows === -1) {
+                                    $('#msgerror-wkn').text("Todos los empleados ya tienen horarios asignados.");
+                                    $('#searcherror-wkn').show();
+                                }
+                                else {
+                                    $('#msgerror-wkn').text("No se encontrarón resultados.");
+                                    $('#searcherror-wkn').show();
+                                }
+                            }
+
+                            $('#imgsearch-wkn').show();
+                            $('#spin-wkn').hide();
+                        }
+
+                        $('#searchText-wkn').val("");
+
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+
+                    }
+                });
+            });
+
+
+            $('#addelement-wkn').click(function () {
+
+
+                if (multipleaddedwkn) {
+
+                    $("#elementsfinded-wkn input[type=checkbox]:checked").each(function () {
+
+                        var idelement = this.id;
+                        var found = selectedelements.find(function (element) {
+                            return element == idelement;
+                        });
+                        if (found === undefined || found.length === 0) {
+
+                            selectedelements.push(idelement);
+                            $('#elementsadded-wkn').append('<li><div class="custom-control custom-checkbox"><input type="checkbox" class="custom-control-input" id="' + idelement + '"><label class="custom-control-label" for="' + idelement + '">' + this.parentElement.innerText + '</label></div></li>');
+                        }
+
+                    });
+
+                    $('#elementsfinded-wkn').empty();
+                    $('#addelement-wkn').hide();
+                    multipleaddedwkn = false;
+                }
+                else {
+
+                    var elementspan = $("#searchresult-wkn > span");
+                    var idelement = elementspan.attr('id');
+
+                    $('#searchresult-wkn').empty();
+                    $('#addelement-wkn').hide();
+
+                    var found = selectedelements.find(function (element) {
+                        return element == idelement;
+                    });
+
+                    if (found === undefined || found.length === 0) {
+
+                        selectedelements.push(idelement);
+                        $('#elementsadded-wkn').append('<li><div class="custom-control custom-checkbox"><input type="checkbox" class="custom-control-input" id="' + idelement + '"><label class="custom-control-label" for="' + idelement + '">' + elementspan.text().slice(0, -1) + '</label></div></li>');
+                    }
+                }
+
+
+            });
+
+            $('#js-delete-selected-wkn').click(function () {
+
+
+                $("#elementsadded-wkn input[type=checkbox]:checked").each(function () {
+
+                    var idelement = this.id;
+
+                    var found = selectedelements.find(function (element) {
+                        return element == idelement;
+                    });
+
+                    if (found !== undefined || found.length !== 0) {
+
+                        selectedelements.splice(selectedelements.indexOf(idelement), 1);
+                        $(this).closest('li').remove();
+                    }
+
+
+                });
+
+
+
+
+            });
+
+
+
+
+
+
+
+
+
+
+
 
 
             //Detalles Horarios

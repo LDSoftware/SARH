@@ -29,8 +29,6 @@
     </div>
 </div>
 
-<p id="onlineUsers">   This element has extra spacing     and contains <span>a span element</span>.</p>
-
 <div class="row">
     <div class="col-sm-6 col-xl-2">
         <div class="p-3 bg-warning-800 rounded overflow-hidden position-relative text-white mb-g">
@@ -41,6 +39,12 @@
                 </h3>
             </div>
             <i class="fal fa-clock position-absolute pos-right pos-top opacity-70" style="font-size: 3rem;padding-top:5px;"></i>
+            <div align="left" style="margin-top:5px;">
+                <div class="custom-control custom-switch mr-2">
+                    <input type="checkbox" class="custom-control-input" name="gra-0" id="filter-0">
+                    <label class="custom-control-label" for="filter-0"></label>
+                </div>
+            </div>
         </div>
     </div>
     <div class="col-sm-6 col-xl-2">
@@ -52,6 +56,12 @@
                 </h3>
             </div>
             <i class="fal fa-clock position-absolute pos-right pos-top opacity-70" style="font-size: 3rem;padding-top:5px;"></i>
+            <div align="left" style="margin-top:5px;">
+                <div class="custom-control custom-switch mr-2">
+                    <input type="checkbox" class="custom-control-input" name="gra-1" id="filter-1">
+                    <label class="custom-control-label" for="filter-1"></label>
+                </div>
+            </div>
         </div>
     </div>
     <div class="col-sm-6 col-xl-2">
@@ -63,6 +73,12 @@
                 </h3>
             </div>
             <i class="fal fa-clock position-absolute pos-right pos-top opacity-70" style="font-size: 3rem;padding-top:5px;"></i>
+            <div align="left" style="margin-top:5px;">
+                <div class="custom-control custom-switch mr-2">
+                    <input type="checkbox" class="custom-control-input" name="gra-2" id="filter-2">
+                    <label class="custom-control-label" for="filter-2"></label>
+                </div>
+            </div>
         </div>
     </div>
     <div class="col-sm-6 col-xl-2">
@@ -74,6 +90,12 @@
                 </h3>
             </div>
             <i class="fal fa-utensils position-absolute pos-right pos-top opacity-70" style="font-size: 3rem;padding-top:5px;"></i>
+            <div align="left" style="margin-top:5px;">
+                <div class="custom-control custom-switch mr-2">
+                    <input type="checkbox" class="custom-control-input" name="gra-3" id="filter-3">
+                    <label class="custom-control-label" for="filter-3"></label>
+                </div>
+            </div>
         </div>
     </div>
     <div class="col-sm-6 col-xl-2">
@@ -85,6 +107,12 @@
                 </h3>
             </div>
             <i class="fal fa-utensils position-absolute pos-right pos-top opacity-70" style="font-size: 3rem;padding-top:5px;"></i>
+            <div align="left" style="margin-top:5px;">
+                <div class="custom-control custom-switch mr-2">
+                    <input type="checkbox" class="custom-control-input" name="gra-4" id="filter-4">
+                    <label class="custom-control-label" for="filter-4"></label>
+                </div>
+            </div>
         </div>
     </div>
     <div class="col-sm-6 col-xl-2">
@@ -96,6 +124,12 @@
                 </h3>
             </div>
             <i class="fal fa-utensils position-absolute pos-right pos-top opacity-70" style="font-size: 3rem;padding-top:5px;"></i>
+            <div align="left" style="margin-top:5px;">
+                <div class="custom-control custom-switch mr-2">
+                    <input type="checkbox" class="custom-control-input" name="gra-5" id="filter-5">
+                    <label class="custom-control-label" for="filter-5"></label>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -107,11 +141,18 @@
                 <h2>
                     Incidencias <span class="fw-300"><i>Diarias</i></span>
                 </h2>
+                <div class="panel-toolbar demo-h-spacing">
+                    <a id="applyfilter" href="javascript:void(0);" title="Filtrar" class="btn btn-success btn-icon waves-effect waves-themed">
+                        <i class="fal fa-filter"></i>
+                    </a>
+                </div>
             </div>
-
-
             <div class="panel-container show">
+
                 <div class="panel-content">
+
+
+
                     @await Component.InvokeAsync("DashboardToday", new { model = @Model.EmployeeDetail })
                 </div>
             </div>

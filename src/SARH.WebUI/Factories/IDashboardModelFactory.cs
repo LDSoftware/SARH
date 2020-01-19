@@ -9,6 +9,6 @@ namespace SARH.WebUI.Factories
     public interface IDashboardModelFactory
     {
         DashboardModel GetToday();
-        DashboardModel GetDay(DateTime date);
+        DashboardModel GetDay(string date);
     }
 }

@@ -49,13 +49,13 @@
 
 
                 <div class="panel-toolbar demo-h-spacing">
-                    <a href="javascript:void(0);" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target=".default-example-modal-right" class="btn btn-primary btn-icon waves-effect waves-themed">
+                    <a href="javascript:void(0);" data-backdrop="static" title="Crear horario" data-keyboard="false" data-toggle="modal" data-target=".default-example-modal-right" class="btn btn-primary btn-icon waves-effect waves-themed">
                         <i class="fal fa-calendar-plus"></i>
                     </a>
-                    <a id="editrow" href="javascript:void(0);" class="btn btn-success btn-icon waves-effect waves-themed">
+                    <a id="editrow" href="javascript:void(0);" title="Editar horario" class="btn btn-success btn-icon waves-effect waves-themed">
                         <i class="fal fa-calendar-edit"></i>
                     </a>
-                    <a id="deleterow" href='javascript:void(0);' class="btn btn-danger btn-icon waves-effect waves-themed">
+                    <a id="deleterow" href='javascript:void(0);' title="Deshabilitar horario" class="btn btn-danger btn-icon waves-effect waves-themed">
                         <i class="fal fa-calendar-times"></i>
                     </a>
                 </div>
@@ -195,18 +195,6 @@
                                                 </span>
                                             </div>
                                         </div>
-                                    </div>
-
-                                    <div class="col-md-12">
-                                        <center>Horario aplica el sábado</center>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label" for="horainicialwke">Hora inicial</label>
-                                        <input class="form-control reseterror" id="horainicialwke" type="time" name="time">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label" for="horafinalwke">Hora final</label>
-                                        <input class="form-control" reseterror id="horafinalwke" type="time" name="time">
                                     </div>
 
                                 </div>
@@ -360,8 +348,6 @@
                     EffectiveTime: d1 + '|' + d2,
                     TypeSchedule: $('#scheduletype').val(),
                     StartHourAnticipated: $('#horaanticipada').val(),
-                    StartHourWke: $('#horainicialwke').val(),
-                    EndHourWke: $('#horafinalwke').val()
                 };
 
                 $.ajax({

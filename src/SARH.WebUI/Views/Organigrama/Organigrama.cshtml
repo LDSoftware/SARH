@@ -43,8 +43,8 @@
             Acciones
         </button>
         <div class="dropdown-menu" aria-labelledby="btnGroupVerticalDrop1">
-            <a class="dropdown-item" href="#">Permisos</a>
-            <a class="dropdown-item" href="#">Vacaciones</a>
+            <a id="permisos" class="dropdown-item" href="#">Permisos</a>
+            <a id="vacaciones" class="dropdown-item" href="#">Vacaciones</a>
         </div>
     </div>
 </div>
@@ -162,6 +162,63 @@
                 var url = str.replace("replaceid", id);
                 window.location.href = url;
             });
+
+
+
+            $('#permisos').click(function () {
+
+                var row = $('#allemployees tr.selected');
+
+                if (row.length === 0) {
+
+                    Swal.fire(
+                        {
+                            type: "warning",
+                            title: "Validación",
+                            text: "Seleccione un registro"
+                        });
+
+                    return;
+                }
+
+                var id = row[0].id;
+                var str = '@Url.Action("RequestFormat","Employee", new {idEmployee = "replaceid" })';
+                var url = str.replace("replaceid", id);
+                window.location.href = url;
+
+            });
+
+
+            $('#vacaciones').click(function () {
+
+                var row = $('#allemployees tr.selected');
+
+                if (row.length === 0) {
+
+                    Swal.fire(
+                        {
+                            type: "warning",
+                            title: "Validación",
+                            text: "Seleccione un registro"
+                        });
+
+                    return;
+                }
+
+                var id = row[0].id;
+                var str = '@Url.Action("RequestFormat","Employee", new {idEmployee = "replaceid" })';
+                var url = str.replace("replaceid", id);
+                window.location.href = url;
+
+            });
+
+
+
+
+
+
+
+
 
         });
     </script>

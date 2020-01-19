@@ -61,6 +61,13 @@ namespace ISOSA.SARH.Data.Repository
             _context.Database.ExecuteSqlCommand(sqlCommand);
         }
 
+        public virtual IEnumerable<T> GetStoredProcData(string spName, List<KeyValuePair<string, string>> paramSp) 
+        {
+            return null;
+        }
+
+
+
 
     }
 }

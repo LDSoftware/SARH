@@ -19,6 +19,7 @@ namespace ISOSA.SARH.Data.Mapping
             builder.Property(x => x.PermissionType);
             builder.Property(x => x.StartDate);
             builder.Property(x => x.Declined);
+            builder.Property(x => x.SubstituteApprove);
         }
 
     }

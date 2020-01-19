@@ -72,6 +72,7 @@ namespace SARH.WebUI.Models.Organigrama
         public string Zip { get; set; }
         public string Sick { get; set; }
         public string BloodType { get; set; }
+        public string Suburb { get; set; }
 
     }
 

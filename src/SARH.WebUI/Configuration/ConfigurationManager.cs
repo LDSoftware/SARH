@@ -122,6 +122,55 @@ namespace SARH.WebUI.Configuration
 
             set { }
         }
+        public string MailUsername
+        {
+            get
+            {
+                var result = _config[$"ServerConfig:MailUsername"];
+                return result;
+            }
 
+            set { }
+        }
+        public string MailUserpassword
+        {
+            get
+            {
+                var result = _config[$"ServerConfig:MailUserpassword"];
+                return result;
+            }
+
+            set { }
+        }
+        public string MailServer
+        {
+            get
+            {
+                var result = _config[$"ServerConfig:MailServer"];
+                return result;
+            }
+
+            set { }
+        }
+        public string MailPort
+        {
+            get
+            {
+                var result = _config[$"ServerConfig:MailPort"];
+                return result;
+            }
+
+            set { }
+        }
+        public string ServerIP
+        {
+            get
+            {
+                var result = _config[$"ServerConfig:ServerIP"];
+                return result;
+            }
+
+            set { }
+        }
     }
 }

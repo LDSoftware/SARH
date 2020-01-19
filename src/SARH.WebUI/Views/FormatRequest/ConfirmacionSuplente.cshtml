@@ -1,0 +1,26 @@
+﻿@using SARH.WebUI.Models.FormatRequest;
+@{
+    ViewData["Title"] = "Confirmación para cubrir puesto";
+    Layout = "~/Views/Shared/_LayoutSimple.cshtml";
+}
+
+
+    <div class="row">
+
+        @if (ViewBag.AlreadyApprove)
+        {
+        <div class="alert bg-danger-400 text-white" role="alert">
+            <strong>Aviso!</strong>&nbsp;La confirmación ya ha sido enviada anteriormente.
+        </div>
+        }
+        else
+        {
+            <div class="alert bg-success-400 text-white" role="alert">
+                <strong>Gracias!</strong>&nbsp;La confirmación ha sido enviada.
+            </div>
+
+        }
+
+    </div>
+
+

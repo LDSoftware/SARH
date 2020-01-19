@@ -18,6 +18,7 @@ namespace ISOSA.SARH.Data.Mapping
             builder.Property(x => x.RangeInitial);
             builder.Property(x => x.RangeEnd);
             builder.Property(x => x.Enabled);
+            builder.Property(x => x.Description);
         }
     }
 }

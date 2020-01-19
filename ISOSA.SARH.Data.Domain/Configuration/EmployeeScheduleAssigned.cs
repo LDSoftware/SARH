@@ -10,9 +10,11 @@ namespace ISOSA.SARH.Data.Domain.Configuration
         public int IdScheduleWorkday { get; set; }
         public int IdScheduleMeal { get; set; }
         public int IdScheduleWeekEnd { get; set; }
+        public int IdScheduleMealWeekEnd { get; set; }
         public int ToleranceWorkday { get; set; }
         public int ToleranceMeal { get; set; }
         public int ToleranceWeekEnd { get; set; }
+        public int ToleranceMealWeekEnd { get; set; }
 
     }
 }

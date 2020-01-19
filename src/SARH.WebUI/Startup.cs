@@ -1,6 +1,7 @@
 using ISOSA.SARH.Data.Domain.Assignation;
 using ISOSA.SARH.Data.Domain.Catalog;
 using ISOSA.SARH.Data.Domain.Configuration;
+using ISOSA.SARH.Data.Domain.Dashboard;
 using ISOSA.SARH.Data.Domain.Employee;
 using ISOSA.SARH.Data.Domain.Formats;
 using ISOSA.SARH.Data.Repository;
@@ -77,6 +78,7 @@ namespace SmartAdmin.WebUI
             services.AddTransient<IRepository<EmployeeDiscount>, EmployeeDiscountRepository>(s => new EmployeeDiscountRepository((Configuration.GetConnectionString("DataConnectionString"))));
             services.AddTransient<IRepository<Nomipaq_nom10001>, NomipaqEmployeesRepository>(s => new NomipaqEmployeesRepository((Configuration.GetConnectionString("DataConnectionStringNomipaq"))));
             services.AddTransient<IRepository<EmployeeAditionalInfo>, EmployeeAditionalInfoRepository>(s => new EmployeeAditionalInfoRepository((Configuration.GetConnectionString("DataConnectionString"))));
+            services.AddTransient<IRepository<DashboardData>, DashboardRepository>(s => new DashboardRepository((Configuration.GetConnectionString("DataConnectionString"))));
             services.AddTransient<IRepository<FormatApprovedEmployee>, FormatApprobedEmployeeRepository>(s => new FormatApprobedEmployeeRepository((Configuration.GetConnectionString("DataConnectionString"))));
             services.AddTransient<IRepository<FormatApprovedHubId>, FormatApprobedHubIdRepository>(s => new FormatApprobedHubIdRepository((Configuration.GetConnectionString("DataConnectionString"))));
             services.AddTransient<IRepository<FormatApprover>, FormatApproverRepository>(s => new FormatApproverRepository((Configuration.GetConnectionString("DataConnectionString"))));

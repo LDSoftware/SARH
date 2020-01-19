@@ -16,5 +16,11 @@ namespace SARH.Core.Configuration
         string ImgPathPdf { get; set; }
         string FontPathBarCode { get; set; }
         string FontPathPdf { get; set; }
+        string MailUsername { get; set; }
+        string MailUserpassword { get; set; }
+        string MailServer { get; set; }
+        string MailPort { get; set; }
+        string ServerIP { get; set; }
+
     }
 }

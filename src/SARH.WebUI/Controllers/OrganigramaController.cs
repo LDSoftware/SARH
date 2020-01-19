@@ -720,7 +720,8 @@ namespace SARH.WebUI.Controllers
         public JsonResult SaveNewEmployee(EmployeeDetailGeneralInfoNew model,
             [FromServices] IRepository<Nomipaq_nom10001> nomipaqRepo,
             [FromServices] IRepository<EmployeeAditionalInfo> isosaRepo,
-            [FromServices] IConfigurationManager configManager)
+            [FromServices] IConfigurationManager configManager,
+            [FromServices] IRepository<EmployeeOrganigrama> organigramaRepository)
         {
             string filePath = string.Empty;
             if (!string.IsNullOrEmpty(model.Picture))
@@ -766,13 +767,24 @@ namespace SARH.WebUI.Controllers
                         element2.EMP_curpF = model.CURP.Substring(10, 8);
                         element2.EMP_BirthDate = string.IsNullOrEmpty(model.FechaNacimiento) == true ? DateTime.Today : DateTime.Parse(model.FechaNacimiento);
                         element2.EMP_DateOfHire = string.IsNullOrEmpty(model.HireDate) == true ? DateTime.Today : DateTime.Parse(model.HireDate);
-                        element2.HrowGuid = Guid.NewGuid();
+                        element2.HrowGuid = !element2.HrowGuid.HasValue ? Guid.NewGuid() : element2.HrowGuid.Value == Guid.Empty ? Guid.NewGuid() : element2.HrowGuid;                        
                         element2.EMP_UserDef4 = filePath;
                         element2.EMP_UserDef1 = model.Observations;
 
                         isosaRepo.Update(element2);
-                    }
 
+                        if (!organigramaRepository.SearhItemsFor(d => d.RowGuid.Equals(element2.HrowGuid.Value)).Any()) 
+                        {
+                            organigramaRepository.Create(new EmployeeOrganigrama()
+                            {
+                                Area = "NA",
+                                Centro = "NA",
+                                Departamento = "NA",
+                                Puesto = "NA",
+                                RowGuid = element2.HrowGuid.Value
+                            });
+                        }
+                    }
 
                 }
                 else
@@ -795,6 +807,8 @@ namespace SARH.WebUI.Controllers
                         CorreoElectronico = model.Email
                     });
 
+                    Guid hrowguid = Guid.NewGuid();
+
                     isosaRepo.Create(new EmployeeAditionalInfo()
                     {
                         EMP_EmployeeID = model.Id,
@@ -806,12 +820,21 @@ namespace SARH.WebUI.Controllers
                         EMP_curpF = model.CURP.Substring(10, 8),
                         EMP_BirthDate = string.IsNullOrEmpty(model.FechaNacimiento) == true ? DateTime.Today : DateTime.Parse(model.FechaNacimiento),
                         EMP_DateOfHire = string.IsNullOrEmpty(model.HireDate) == true ? DateTime.Today : DateTime.Parse(model.HireDate),
-                        HrowGuid = Guid.NewGuid(),
+                        HrowGuid = hrowguid,
                         EMP_UserDef4 = filePath,
                         EMP_EmployeeID_Edit = "-",
                         EMP_StatusCode = "Active",
                         EMP_UserDef1 = model.Observations,
                         EMP_EMailAddress = model.Email
+                    });
+
+                    organigramaRepository.Create(new EmployeeOrganigrama()
+                    {
+                        Area = "NA",
+                        Centro = "NA",
+                        Departamento = "NA",
+                        Puesto = "NA",
+                        RowGuid = hrowguid
                     });
 
 
@@ -851,6 +874,7 @@ namespace SARH.WebUI.Controllers
                 data.EMP_Sick = model.Sick;
                 data.EMP_PersonalEmail = model.Email;
                 data.EMP_Phone = model.Phone;
+                data.EMP_Suburb = model.Suburb;
                 isosaRepo.Update(data);
             }
             return Json("ok");
@@ -1000,16 +1024,29 @@ namespace SARH.WebUI.Controllers
         [HttpPost]
         public JsonResult EmployeeSubscribe(string Id,
         [FromServices] IRepository<Nomipaq_nom10001> nomipaqRepo,
-        [FromServices] IRepository<EmployeeAditionalInfo> isosaRepo)
+        [FromServices] IRepository<EmployeeAditionalInfo> isosaRepo,
+        [FromServices] IRepository<EmployeeOrganigrama> organigramaRepository)
         {
             var isosaRow = isosaRepo.SearhItemsFor(d => d.EMP_EmployeeID.Equals(Id));
             var nomipaqRow = nomipaqRepo.SearhItemsFor(d => d.codigoempleado.Equals(Id));
+            Guid guid = Guid.NewGuid();
 
             if (isosaRow.Any())
             {
                 var row = isosaRow.FirstOrDefault();
                 row.EMP_StatusCode = "Active";
+                row.HrowGuid = guid;
                 isosaRepo.Update(row);
+
+                organigramaRepository.Create(new EmployeeOrganigrama()
+                {
+                    Area = "NA",
+                    Centro = "NA",
+                    Departamento = "NA",
+                    Puesto = "NA",
+                    RowGuid = guid
+                });
+
             }
             if (nomipaqRow.Any())
             {

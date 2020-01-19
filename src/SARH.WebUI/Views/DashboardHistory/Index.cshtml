@@ -1,121 +1,320 @@
-﻿@{
-    ViewData["Title"] = "Dashboard Historico";
+﻿@model SARH.WebUI.Models.Dashboard.DashboardModel
+
+@{
+    ViewData["Title"] = "Dashboard Histórico";
 }
 
 
+@section HeadBlock {
+    <link rel="stylesheet" media="screen, print" href="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/css/datagrid/datatables/datatables.bundle.css">
+    <link rel="stylesheet" media="screen, print" href="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/css/formplugins/bootstrap-datepicker/bootstrap-datepicker.css">
+    <link rel="stylesheet" media="screen, print" href="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/css/notifications/sweetalert2/sweetalert2.bundle.css">
+}
+
 <div class="subheader">
-        <h1 class="subheader-title">
-            <i class="subheader-icon fal fa-chart-area"></i> Dashboard <span class="fw-300">Mensual</span>
-            <small>
-            </small>
-        </h1>
-
-
-        <div class="d-flex mr-4">
-            <div class="mr-2">
-                <span class="peity-donut" style="display: none;" data-peity='{ "fill": ["#967bbd", "#ccbfdf"],  "innerRadius": 14, "radius": 20 }'>7/10</span><svg xmlns="http://www.w3.org/2000/svg" class="peity" width="40" height="40"><path fill="#967bbd" d="M 20 0 A 20 20 0 1 1 0.97887 26.1803 L 6.68521 24.3262 A 14 14 0 1 0 20 6" data-value="7" /><path fill="#ccbfdf" d="M 0.97887 26.1803 A 20 20 0 0 1 20 0 L 20 6 A 14 14 0 0 0 6.68521 24.3262" data-value="3" /></svg>
-            </div>
-            <div>
-                <label class="fs-sm mb-0 mt-2 mt-md-0">Retardos</label>
-                <h4 class="font-weight-bold mb-0">5.60%</h4>
-            </div>
-        </div>
-        <div class="d-flex mr-0">
-            <div class="mr-2">
-                <span class="peity-donut" style="display: none;" data-peity='{ "fill": ["#2196F3", "#9acffa"],  "innerRadius": 14, "radius": 20 }'>3/10</span><svg xmlns="http://www.w3.org/2000/svg" class="peity" width="40" height="40"><path fill="#2196f3" d="M 20 0 A 20 20 0 0 1 39.0211 26.1803 L 33.3148 24.3262 A 14 14 0 0 0 20 6" data-value="3" /><path fill="#9acffa" d="M 39.0211 26.1803 A 20 20 0 1 1 20 0 L 20 6 A 14 14 0 1 0 33.3148 24.3262" data-value="7" /></svg>
-            </div>
-            <div>
-                <label class="fs-sm mb-0 mt-2 mt-md-0">Permisos</label>
-                <h4 class="font-weight-bold mb-0">100</h4>
-            </div>
+    <h1 class="subheader-title">
+        <i class="subheader-icon fal fa-chart-area"></i> Dashboard Historico<span class="fw-300"> - @DateTime.Now.ToShortDateString()</span>
+        <small>
+        </small>
+    </h1>
+    <div class="d-flex mr-4">
+        <div>
+            <label class="fs-sm mb-0 mt-2 mt-md-0">Vacaciones</label>
+            <h4 class="font-weight-bold mb-0">@Model.AverageEntryDelay</h4>
         </div>
     </div>
-    <div class="row">
-        <div class="col-sm-6 col-xl-3">
-            <div class="p-3 bg-primary-300 rounded overflow-hidden position-relative text-white mb-g">
-                <div>
-                    <h3 class="display-4 d-block l-h-n m-0 fw-500">
-                        100
-                        <small class="m-0 l-h-n">Retardos horario entrada</small>
-                    </h3>
-                </div>
-                <i class="fal fa-clock position-absolute pos-right pos-bottom opacity-35 mb-n1 mr-n1" style="font-size:6rem"></i>
-            </div>
-        </div>
-        <div class="col-sm-6 col-xl-3">
-            <div class="p-3 bg-warning-400 rounded overflow-hidden position-relative text-white mb-g">
-                <div>
-                    <h3 class="display-4 d-block l-h-n m-0 fw-500">
-                        50
-                        <small class="m-0 l-h-n">Retardos horario comida</small>
-                    </h3>
-                </div>
-                <i class="fal fa-utensils-alt position-absolute pos-right pos-bottom opacity-35  mb-n1 mr-n4" style="font-size: 6rem;"></i>
-            </div>
-        </div>
-        <div class="col-sm-6 col-xl-3">
-            <div class="p-3 bg-success-200 rounded overflow-hidden position-relative text-white mb-g">
-                <div>
-                    <h3 class="display-4 d-block l-h-n m-0 fw-500">
-                        5
-                        <small class="m-0 l-h-n">Sin registro entrada</small>
-                    </h3>
-                </div>
-                <i class="fal fa-info-circle position-absolute pos-right pos-bottom opacity-35 mb-n1 mr-n4" style="font-size: 6rem;"></i>
-            </div>
-        </div>
-        <div class="col-sm-6 col-xl-3">
-            <div class="p-3 bg-info-200 rounded overflow-hidden position-relative text-white mb-g">
-                <div>
-                    <h3 class="display-4 d-block l-h-n m-0 fw-500">
-                        8
-                        <small class="m-0 l-h-n">Sin registro comida</small>
-                    </h3>
-                </div>
-                <i class="fal fa-info-circle position-absolute pos-right pos-bottom opacity-35 mb-n1 mr-n4" style="font-size: 6rem;"></i>
-            </div>
+    <div class="d-flex mr-0">
+        <div>
+            <label class="fs-sm mb-0 mt-2 mt-md-0">Permisos</label>
+            <h4 class="font-weight-bold mb-0">@Model.AverageJobPermission</h4>
         </div>
     </div>
+</div>
 
 <div class="row">
+    <div class="col-sm-6 col-xl-2">
+        <div class="p-3 bg-warning-800 rounded overflow-hidden position-relative text-white mb-g">
+            <div>
+                <h3 class="display-4 d-block l-h-n m-0 fw-500">
+                    @Model.EntryDelay
+                    <small class="m-0 l-h-n">Retardos entrada</small>
+                </h3>
+            </div>
+            <i class="fal fa-clock position-absolute pos-right pos-top opacity-70" style="font-size: 3rem;padding-top:5px;"></i>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-2">
+        <div class="p-3 bg-info-600 rounded overflow-hidden position-relative text-white mb-g">
+            <div>
+                <h3 class="display-4 d-block l-h-n m-0 fw-500">
+                    @Model.EndDayDelay
+                    <small class="m-0 l-h-n">Salidas anticipadas</small>
+                </h3>
+            </div>
+            <i class="fal fa-clock position-absolute pos-right pos-top opacity-70" style="font-size: 3rem;padding-top:5px;"></i>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-2">
+        <div class="p-3 bg-danger-800 rounded overflow-hidden position-relative text-white mb-g">
+            <div>
+                <h3 class="display-4 d-block l-h-n m-0 fw-500">
+                    @Model.NoEntryCheck
+                    <small class="m-0 l-h-n">Sin registros</small>
+                </h3>
+            </div>
+            <i class="fal fa-clock position-absolute pos-right pos-top opacity-70" style="font-size: 3rem;padding-top:5px;"></i>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-2">
+        <div class="p-3 bg-warning-800 rounded overflow-hidden position-relative text-white mb-g">
+            <div>
+                <h3 class="display-4 d-block l-h-n m-0 fw-500">
+                    @Model.FoodStartDelay
+                    <small class="m-0 l-h-n">Salida comida</small>
+                </h3>
+            </div>
+            <i class="fal fa-utensils position-absolute pos-right pos-top opacity-70" style="font-size: 3rem;padding-top:5px;"></i>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-2">
+        <div class="p-3 bg-info-600 rounded overflow-hidden position-relative text-white mb-g">
+            <div>
+                <h3 class="display-4 d-block l-h-n m-0 fw-500">
+                    @Model.FoodEndDelay
+                    <small class="m-0 l-h-n">Entrada comida</small>
+                </h3>
+            </div>
+            <i class="fal fa-utensils position-absolute pos-right pos-top opacity-70" style="font-size: 3rem;padding-top:5px;"></i>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-2">
+        <div class="p-3 bg-danger-800 rounded overflow-hidden position-relative text-white mb-g">
+            <div>
+                <h3 class="display-4 d-block l-h-n m-0 fw-500">
+                    @Model.NoFoodEntryCheck
+                    <small class="m-0 l-h-n">Sin registro</small>
+                </h3>
+            </div>
+            <i class="fal fa-utensils position-absolute pos-right pos-top opacity-70" style="font-size: 3rem;padding-top:5px;"></i>
+        </div>
+    </div>
+</div>
 
-        <div class="col-lg-12">
-            <div id="panel-4" class="panel">
-                <div class="panel-hdr">
-                    <h2>
-                        Incidencias <span class="fw-300"><i>Mensuales</i></span>
-                    </h2>
+<div class="row">
+    <div class="col-lg-12">
+        <div id="panel-4" class="panel">
+            <div class="panel-hdr">
+                <h2>
+                    Incidencias <span class="fw-300"><i>Diarias</i></span>
+                </h2>
+
+                <div class="panel-toolbar demo-h-spacing">
+
+
                     <label class="form-label" for="example-date">Seleccione la fecha&nbsp;</label>
-                    <div class="form-group">
-                        <input class="form-control" id="example-date" type="date" name="date" value="2023-07-23">
+                    <div class="form-group" style="margin-top:22px;">
+                        <div class="input-group">
+                            <input type="text" class="form-control reseterror" id="datepicker-4-4">
+                            <div class="input-group-append">
+                                <span class="input-group-text fs-xl">
+                                    <i class="fal fa-calendar-plus"></i>
+                                </span>
+                            </div>
+                        </div>
                     </div>
+
+
+                    <a id="refreshDashboard" href="javascript:void(0);" class="btn btn-primary btn-icon waves-effect waves-themed">
+                        <i class="fal fa-recycle"></i>
+                    </a>
+                    <a id="ViewRow" href="javascript:void(0);" class="btn btn-secondary btn-icon waves-effect waves-themed">
+                        <i class="fal fa-edit"></i>
+                    </a>
+
                 </div>
-                <div class="panel-container show">
-                    <div class="panel-content">
-                        <table id="dt-basic-example" class="table table-bordered table-hover table-striped w-100">
-                            <thead class="bg-warning-200">
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Empleado</th>
-                                    <th>Area</th>
-                                    <th>Centro de trabajo</th>
-                                    <th>Puesto</th>
-                                    <th>Tipo de incidencia</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>0001</td>
-                                    <td>Prueba</td>
-                                    <td>Almacen planta</td>
-                                    <td>Flotilla</td>
-                                    <td>Mensajero</td>
-                                    <td>Permiso</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+
+
+            </div>
+
+
+            <div class="panel-container show">
+                <div class="panel-content">
+                    @await Component.InvokeAsync("DashboardToday", new { model = @Model.EmployeeDetail })
                 </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+
+</ Modal View Data Employee-->
+
+<div class="modal fade" data-backdrop="static" data-keyboard="false" id="viewregmodal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-warning-500">
+                <h4 class="modal-title">
+                    Ver detalle de los registros
+                </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"><i class="fal fa-times"></i></span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <div class="alert border-secondary bg-transparent text-secondary" role="alert">
+                    <span id="employeename"></span>
+                </div>
+
+                <div class="form-row">
+
+                    <table class="table table-bordered table-hover table-striped w-100">
+                        <thead class="bg-warning-200">
+                            <tr>
+                                <th>
+                                    Horario Entrada
+                                </th>
+                                <th>
+                                    Hora Registrada
+                                </th>
+                                <th>
+                                    Horario Salida Comida
+                                </th>
+                                <th>
+                                    Hora Registrada
+                                </th>
+                                <th>
+                                    Horario Entrada Comida
+                                </th>
+                                <th>
+                                    Hora Registrada
+                                </th>
+                                <th>
+                                    Horario Salida
+                                </th>
+                                <th>
+                                    Hora Registrada
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="elementsfinded">
+
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">
+                    Cerrar
+                </button>
             </div>
         </div>
     </div>
+</div>
+
+
+
+
+
+@section ScriptsBlock {
+
+    <script src="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/js/datagrid/datatables/datatables.bundle.js"></script>
+    <script src="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/js/formplugins/bootstrap-datepicker/bootstrap-datepicker.js"></script>
+    <script src="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/js/notifications/sweetalert2/sweetalert2.bundle.js"></script>
+
+    <script>
+
+        var controls = {
+            leftArrow: '<i class="fal fa-angle-left" style="font-size: 1.25rem"></i>',
+            rightArrow: '<i class="fal fa-angle-right" style="font-size: 1.25rem"></i>'
+        }
+
+        var runDatePicker = function () {
+
+
+            $('#datepicker-4-4').datepicker(
+                {
+                    orientation: "top left",
+                    todayHighlight: true,
+                    templates: controls,
+                    format: 'dd/mm/yyyy'
+                }).on('changeDate', function (e) {
+
+                });
+        }
+
+        $('#dt-basic-example tr').click(function () {
+
+            $(this).addClass('selected').siblings().removeClass('selected');
+
+        });
+
+        $(document).ready(function () {
+
+            runDatePicker();
+
+
+            /* init datatables */
+
+            $('#dt-basic-example').dataTable(
+                {
+                    responsive: true
+                });
+
+            $('#refreshDashboard').click(function () {
+
+
+                window.location.href = '/DashboardHistory/Index?date=' + $('#datepicker-4-4').val();
+
+            });
+
+
+
+            $('#ViewRow').click(function () {
+
+                var row = $('#allemployees tr.selected');
+                var idrow = row.data("id");
+
+                if (idrow === undefined) {
+
+                    Swal.fire(
+                        {
+                            type: "warning",
+                            title: "Validación",
+                            text: "Seleccione un registro"
+                        });
+
+                    return;
+
+                }
+
+                $('#elementsfinded').empty();
+
+                $.ajax({
+                    url: '/DashboardHistory/GetRegisterData',
+                    type: "POST",
+                    data: { id: idrow },
+                    success: function (data, textStatus, jqXHR) {
+
+                        $('#employeename').val(data.employeename);
+
+                        $('#elementsfinded').append('<tr><th>' + data.c1 + '</th><th>' + data.c2 + '</th><th' + data.c3 + '</th><th>' + data.c4 + '</th><th>' + data.c5 + '</th><th>' + data.c6 + '</th><th>' + data.c7 + '</th><th>' + data.c8 + '</th></tr>');
+
+                        $('#viewregmodal').modal();
+
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        alert(errorThrown);
+                    }
+                });
+
+            });
+
+
+
+        });
+    </script>
+}

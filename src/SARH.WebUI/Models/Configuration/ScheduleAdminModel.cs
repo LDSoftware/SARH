@@ -13,7 +13,9 @@ namespace SARH.WebUI.Models.Configuration
             CatalogSchedule = new List<ScheduleCatalogItem>() 
             {
                 new ScheduleCatalogItem(){ Id = 1, Descripcion ="Horario Laboral" },
-                new ScheduleCatalogItem(){ Id = 2, Descripcion ="Horario Comida"  }
+                new ScheduleCatalogItem(){ Id = 2, Descripcion ="Horario Comida"  },
+                new ScheduleCatalogItem(){ Id = 3, Descripcion ="Horario Laboral Sabatino" },
+                new ScheduleCatalogItem(){ Id = 4, Descripcion ="Horario Comida Sabatino"  }
             };
         }
 

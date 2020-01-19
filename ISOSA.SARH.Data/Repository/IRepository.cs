@@ -22,5 +22,8 @@ namespace ISOSA.SARH.Data.Repository
         T GetLastAdded { get; set; }
 
         void CreateTableBackup(string tableName);
+
+        IEnumerable<T> GetStoredProcData(string spName, List<KeyValuePair<string, string>> paramSp);
+
     }
 }

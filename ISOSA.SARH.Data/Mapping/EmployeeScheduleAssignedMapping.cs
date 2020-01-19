@@ -14,9 +14,11 @@ namespace ISOSA.SARH.Data.Mapping
             builder.Property(x => x.IdScheduleWorkday);
             builder.Property(x => x.IdScheduleMeal);
             builder.Property(x => x.IdScheduleWeekEnd);
+            builder.Property(x => x.IdScheduleMealWeekEnd);
             builder.Property(x => x.ToleranceWorkday);
             builder.Property(x => x.ToleranceMeal);
             builder.Property(x => x.ToleranceWeekEnd);
+            builder.Property(x => x.ToleranceMealWeekEnd);
         }
     }
 }

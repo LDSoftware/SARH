@@ -150,6 +150,27 @@ namespace SARH.WebUI.Controllers
             return Json("ok");
         }
 
+        [AllowAnonymous]
+        [ActionName("ConfirmacionSuplente")]
+        public IActionResult ConfirmFormat(string IdFormat,
+        [FromServices] IRepository<EmployeeFormat> formatRepository)
+        {
 
+            var format = formatRepository.GetElement(int.Parse(IdFormat));
+            ViewBag.AlreadyApprove = true;
+
+            if (format != null) 
+            {
+                if (format.SubstituteApprove == false)
+                {
+                    format.SubstituteApprove = true;
+                    formatRepository.Update(format);
+                    ViewBag.AlreadyApprove = false;
+                }
+            }
+
+
+            return View();
+        }
     }
 }

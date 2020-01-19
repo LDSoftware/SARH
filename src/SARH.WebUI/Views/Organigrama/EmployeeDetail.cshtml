@@ -227,20 +227,28 @@
                                 </div>
 
                                 <div class="form-row">
-                                    <div class="col-md-6 mb-3">
-                                        <label class="form-label" for="validationCustom03">Puesto <span class="text-danger">*</span></label>
-                                        <input class="form-control" id="validationCustom03" disabled="disabled" type="text" placeholder="Puesto" value="@Model.GeneralInfo.JobTitle">
-                                    </div>
                                     <div class="col-md-3 mb-3">
-                                        <label class="form-label" for="validationCustom03">Horario Laboral <span class="text-danger">*</span></label>
+                                        <label class="form-label" for="validationCustom03">Horario Laboral</label>
                                         <select class="custom-select" disabled="disabled">
-                                            <option value="">@Model.GeneralInfo.StartJob-@Model.GeneralInfo.EndJob </option>
+                                            <option value="">@Model.GeneralInfo.StartJob</option>
                                         </select>
                                     </div>
                                     <div class="col-md-3 mb-3">
-                                        <label class="form-label" for="validationCustom03">Horario Comida<span class="text-danger">*</span></label>
+                                        <label class="form-label" for="validationCustom03">Horario Laboral Sabatino</label>
                                         <select class="custom-select" disabled="disabled">
-                                            <option value="">@Model.GeneralInfo.StartFood-@Model.GeneralInfo.EndFood</option>
+                                            <option value="">@Model.GeneralInfo.StartFood</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3 mb-3">
+                                        <label class="form-label" for="validationCustom03">Horario Comida</label>
+                                        <select class="custom-select" disabled="disabled">
+                                            <option value="">@Model.GeneralInfo.EndJob</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3 mb-3">
+                                        <label class="form-label" for="validationCustom03">Horario Comida Sabtino</label>
+                                        <select class="custom-select" disabled="disabled">
+                                            <option value="">@Model.GeneralInfo.EndFood</option>
                                         </select>
                                     </div>
                                 </div>
@@ -318,11 +326,11 @@
                             <div class="form-row">
                                 <div class="col-md-4 mb-3">
                                     <label class="form-label" for="personalphone">Telefono</label>
-                                    <input class="form-control" id="personalphone" required="" type="text" placeholder="Telefono" value="@Model.PersonalInfo.Phone">
+                                    <input class="form-control" id="personalphone" required="" type="text" placeholder="Telefono" value="@Model.PersonalInfo.Phone" maxlength="20">
                                 </div>
                                 <div class="col-md-4 mb-3">
                                     <label class="form-label" for="personalcellphone">Celular</label>
-                                    <input class="form-control" id="personalcellphone" required="" type="text" placeholder="Celular" value="@Model.PersonalInfo.CellPhone">
+                                    <input class="form-control" id="personalcellphone" required="" type="text" placeholder="Celular" value="@Model.PersonalInfo.CellPhone" maxlength="20">
                                 </div>
                                 <div class="col-md-4 mb-3">
                                     <label class="form-label" for="personalemail">Correo electronico personal</label>
@@ -330,7 +338,7 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text" id="inputGroupPrepend"><i class="fal fa-envelope"></i></span>
                                         </div>
-                                        <input class="form-control" id="personalemail" aria-describedby="inputGroupPrepend" required="" type="text" placeholder="Correo electronico" value="@Model.PersonalInfo.Email">
+                                        <input class="form-control" id="personalemail" aria-describedby="inputGroupPrepend" required="" type="text" placeholder="Correo electronico" value="@Model.PersonalInfo.Email" maxlength="100">
                                     </div>
                                 </div>
 
@@ -340,22 +348,26 @@
                             <div class="form-row">
                                 <div class="col-12 mb-3">
                                     <label class="form-label" for="personaladdress">Calle</label>
-                                    <input class="form-control" id="personaladdress" required="" type="text" placeholder="Dirección" value="@Model.PersonalInfo.Address">
+                                    <input class="form-control" id="personaladdress" required="" type="text" placeholder="Dirección" value="@Model.PersonalInfo.Address" maxlength="50">
                                 </div>
                             </div>
 
                             <div class="form-row">
-                                <div class="col-md-4 mb-3">
+                                <div class="col-md-3 mb-3">
                                     <label class="form-label" for="personalcity">Ciudad</label>
-                                    <input class="form-control" id="personalcity" required="" type="text" placeholder="Ciudad" value="@Model.PersonalInfo.City">
+                                    <input class="form-control" id="personalcity" required="" type="text" placeholder="Ciudad" value="@Model.PersonalInfo.City" maxlength="30">
                                 </div>
-                                <div class="col-md-4 mb-3">
+                                <div class="col-md-3 mb-3">
                                     <label class="form-label" for="personalstate">Estado</label>
-                                    <input class="form-control" id="personalstate" required="" type="text" placeholder="Estado" value="@Model.PersonalInfo.State">
+                                    <input class="form-control" id="personalstate" required="" type="text" placeholder="Estado" value="@Model.PersonalInfo.State" maxlength="30">
                                 </div>
-                                <div class="col-md-4 mb-3">
+                                <div class="col-md-3 mb-3">
+                                    <label class="form-label" for="personalsuburb">Colonia</label>
+                                    <input class="form-control" id="personalsuburb" required="" type="text" placeholder="Colonia" value="@Model.PersonalInfo.Suburb" maxlength="30">
+                                </div>
+                                <div class="col-md-3 mb-3">
                                     <label class="form-label" for="personalzip">Codigo Postal</label>
-                                    <input class="form-control" id="personalzip" required="" type="text" placeholder="Codigo Postal" value="@Model.PersonalInfo.Zip">
+                                    <input class="form-control" id="personalzip" required="" type="text" placeholder="Codigo Postal" value="@Model.PersonalInfo.Zip" maxlength="30">
                                 </div>
 
                             </div>
@@ -363,11 +375,11 @@
                             <div class="form-row">
                                 <div class="col-md-4 mb-3">
                                     <label class="form-label" for="personalsick">Enfermedades Cronicas</label>
-                                    <textarea class="form-control" id="personalsick" required="" placeholder="Enfermedades Cronicas">@Model.PersonalInfo.Sick</textarea>
+                                    <textarea class="form-control" id="personalsick" maxlength="50" required="" placeholder="Enfermedades Cronicas">@Model.PersonalInfo.Sick</textarea>
                                 </div>
                                 <div class="col-md-4 mb-3">
                                     <label class="form-label" for="personalbloodtype">Tipo de sangre</label>
-                                    <textarea class="form-control" id="personalbloodtype" required="" placeholder="Tipo de sangre">@Model.PersonalInfo.BloodType</textarea>
+                                    <textarea class="form-control" id="personalbloodtype" maxlength="30" required="" placeholder="Tipo de sangre">@Model.PersonalInfo.BloodType</textarea>
                                 </div>
                             </div>
 
@@ -408,15 +420,15 @@
                             <div class="form-row">
                                 <div class="col-md-4 mb-3">
                                     <label class="form-label" for="contactname">Nombre</label>
-                                    <input class="form-control" id="contactname" required="" type="text" placeholder="Nombre" value="@Model.EmergencyData.Name">
+                                    <input class="form-control" id="contactname" required="" type="text" placeholder="Nombre" value="@Model.EmergencyData.Name" maxlength="70">
                                 </div>
                                 <div class="col-md-4 mb-3">
                                     <label class="form-label" for="contactrelation">Relación</label>
-                                    <input class="form-control" id="contactrelation" required="" type="text" placeholder="Relación" value="@Model.EmergencyData.Relacion">
+                                    <input class="form-control" id="contactrelation" required="" type="text" placeholder="Relación" value="@Model.EmergencyData.Relacion" maxlength="15">
                                 </div>
                                 <div class="col-md-4 mb-3">
                                     <label class="form-label" for="contactphone">Telefono</label>
-                                    <input class="form-control" id="contactphone" required="" type="text" placeholder="Telefono" value="@Model.EmergencyData.Phone">
+                                    <input class="form-control" id="contactphone" required="" type="text" placeholder="Telefono" value="@Model.EmergencyData.Phone" maxlength="20">
                                 </div>
 
                             </div>
@@ -1881,6 +1893,7 @@
                 var Id = $('#idEmpleadoGenerales').val();
                 var City = $('#personalcity').val();
                 var EMP_State = $('#personalstate').val();
+                var EMP_Suburb = $('#personalsuburb').val();
                 var EMP_Zip = $('#personalzip').val();
                 var EMP_Phone = $('#personalphone').val();
                 var EMP_Address = $('#personaladdress').val();
@@ -1893,6 +1906,7 @@
                     EmployeeId: Id,
                     City: City,
                     State: EMP_State,
+                    Suburb : EMP_Suburb,
                     Zip: EMP_Zip,
                     Phone: EMP_Phone,
                     Address: EMP_Address,

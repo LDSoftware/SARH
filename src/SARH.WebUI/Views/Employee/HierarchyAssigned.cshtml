@@ -155,7 +155,7 @@
                         $.ajax({
                             url: '/Employee/SetNewJobReactive',
                             type: "POST",
-                            data: { jobGuid: element, employeeGuid: $('#rowid').val() },
+                            data: { jobGuid: element, employeeId: $('#employeeId').val() },
                             success: function (data, textStatus, jqXHR) {
 
                                 Swal.fire(

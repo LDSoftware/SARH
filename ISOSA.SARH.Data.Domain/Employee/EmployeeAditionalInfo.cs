@@ -18,6 +18,7 @@ namespace ISOSA.SARH.Data.Domain.Employee
         public string EMP_State { get; set; }
         public string EMP_Zip { get; set; }
         public string EMP_Phone { get; set; }
+        public string EMP_Suburb { get; set; }
         public string EMP_SocialSecurNbr { get; set; }
         public string EMP_SkillCode { get; set; }
         public DateTime? EMP_BirthDate { get; set; }

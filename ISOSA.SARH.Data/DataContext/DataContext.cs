@@ -2,6 +2,7 @@
 using ISOSA.SARH.Data.Domain.Catalog;
 using ISOSA.SARH.Data.Domain.Common;
 using ISOSA.SARH.Data.Domain.Configuration;
+using ISOSA.SARH.Data.Domain.Dashboard;
 using ISOSA.SARH.Data.Domain.Employee;
 using ISOSA.SARH.Data.Domain.Formats;
 using ISOSA.SARH.Data.Mapping;
@@ -45,6 +46,7 @@ namespace ISOSA.SARH.Data
         public virtual DbSet<FormatApprovedEmployee> FormatApprobedEmployees { get; set; }
         public virtual DbSet<FormatApprovedHubId> FormatApprobedHubIds { get; set; }
         public virtual DbSet<FormatApprover> FormatApprovers { get; set; }
+        public virtual DbSet<DashboardData> DashboardInfo { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder builder)
