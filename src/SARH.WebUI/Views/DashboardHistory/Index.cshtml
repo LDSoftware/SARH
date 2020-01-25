@@ -209,28 +209,13 @@
                         <thead class="bg-warning-200">
                             <tr>
                                 <th>
-                                    Horario Entrada
+                                    Horario
                                 </th>
                                 <th>
-                                    Hora Registrada
+                                    Hora
                                 </th>
                                 <th>
-                                    Horario Salida Comida
-                                </th>
-                                <th>
-                                    Hora Registrada
-                                </th>
-                                <th>
-                                    Horario Entrada Comida
-                                </th>
-                                <th>
-                                    Hora Registrada
-                                </th>
-                                <th>
-                                    Horario Salida
-                                </th>
-                                <th>
-                                    Hora Registrada
+                                    Registro
                                 </th>
                             </tr>
                         </thead>
@@ -367,17 +352,20 @@
 
                 }
 
+                $('#employeename').empty();
                 $('#elementsfinded').empty();
 
                 $.ajax({
                     url: '/DashboardHistory/GetRegisterData',
                     type: "POST",
-                    data: { id: idrow },
+                    data: { EmployeeId: idrow, date: $('#datepicker-4-4').val() },
                     success: function (data, textStatus, jqXHR) {
 
-                        $('#employeename').val(data.employeename);
+                        $('#employeename').append(data.employeename);
 
-                        $('#elementsfinded').append('<tr><th>' + data.c1 + '</th><th>' + data.c2 + '</th><th' + data.c3 + '</th><th>' + data.c4 + '</th><th>' + data.c5 + '</th><th>' + data.c6 + '</th><th>' + data.c7 + '</th><th>' + data.c8 + '</th></tr>');
+                        data.rows.forEach(function (doc, index) {
+                            $('#elementsfinded').append('<tr><td>' + doc.horario + '</td><td>' + doc.hora + '</td><td>' + doc.registro + '</td></tr>');
+                        });
 
                         $('#viewregmodal').modal();
 

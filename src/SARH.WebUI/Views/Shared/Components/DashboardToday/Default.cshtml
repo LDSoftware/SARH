@@ -16,7 +16,7 @@
         <tbody id="allemployees">
             @foreach (var item in Model)
             {
-                <tr>
+                <tr data-id="@item.ID">
                     <td>
                         @item.ID
                     </td>

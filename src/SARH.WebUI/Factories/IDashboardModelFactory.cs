@@ -1,4 +1,5 @@
-﻿using SARH.WebUI.Models.Dashboard;
+﻿using ISOSA.SARH.Data.Domain.Dashboard;
+using SARH.WebUI.Models.Dashboard;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,5 +11,6 @@ namespace SARH.WebUI.Factories
     {
         DashboardModel GetToday(DashboardFilters filters);
         DashboardModel GetDay(string date, DashboardFilters filters);
+        List<DashboardDataDetail> GetDashboardDetail(string employee, string date, DashboardFilters filters);
     }
 }

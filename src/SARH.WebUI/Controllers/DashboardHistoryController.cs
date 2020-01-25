@@ -16,14 +16,16 @@ namespace SARH.WebUI.Controllers
         #region Variables
 
         private readonly IDashboardModelFactory _dashboardModelFactory;
+        private readonly IOrganigramaModelFactory _organigramaModelFactory;
 
         #endregion
 
         #region Constructor
 
-        public DashboardHistoryController(IDashboardModelFactory dashboardModelFactory)
+        public DashboardHistoryController(IDashboardModelFactory dashboardModelFactory, IOrganigramaModelFactory organigramaModelFactory)
         {
             this._dashboardModelFactory = dashboardModelFactory;
+            this._organigramaModelFactory = organigramaModelFactory;
         }
 
         #endregion
@@ -49,5 +51,29 @@ namespace SARH.WebUI.Controllers
 
             return View(model);
         }
+
+        public JsonResult GetRegisterData(string EmployeeId, string date)
+        {
+            var model = this._dashboardModelFactory.GetDashboardDetail(EmployeeId, date, new DashboardFilters()
+            {
+                EndJobAnticipate = true,
+                FoodEndDelayShow = true,
+                FoodStartDelayShow = true,
+                NoEntryCheckShow = true,
+                NoFoodEntryCheckShow = true,
+                StartJobDelay = true
+            });
+
+            var employee = this._organigramaModelFactory.GetEmployeeData(EmployeeId);
+
+            var response = new
+            {
+                employeename = $"{employee.GeneralInfo.Id} - {employee.GeneralInfo.FirstName} {employee.GeneralInfo.LastName} {employee.GeneralInfo.LastName2}",
+                rows = model
+            };
+
+            return Json(response);
+        }
+
     }
 }

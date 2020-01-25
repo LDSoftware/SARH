@@ -41,7 +41,7 @@
             <i class="fal fa-clock position-absolute pos-right pos-top opacity-70" style="font-size: 3rem;padding-top:5px;"></i>
             <div align="left" style="margin-top:5px;">
                 <div class="custom-control custom-switch mr-2">
-                    <input type="checkbox" class="custom-control-input" name="gra-0" id="filter-0" @(Model.DashboardFiltersApply.StartJobDelay?"checked='checked'":"")>
+                    <input type="checkbox" class="custom-control-input" name="gra-0" id="filter-0" @(Model.DashboardFiltersApply.StartJobDelay ? "checked='checked'" : "")>
                     <label class="custom-control-label" for="filter-0"></label>
                 </div>
             </div>
@@ -58,7 +58,7 @@
             <i class="fal fa-clock position-absolute pos-right pos-top opacity-70" style="font-size: 3rem;padding-top:5px;"></i>
             <div align="left" style="margin-top:5px;">
                 <div class="custom-control custom-switch mr-2">
-                    <input type="checkbox" class="custom-control-input" name="gra-1" id="filter-1" @(Model.DashboardFiltersApply.EndJobAnticipate?"checked='checked'":"")>
+                    <input type="checkbox" class="custom-control-input" name="gra-1" id="filter-1" @(Model.DashboardFiltersApply.EndJobAnticipate ? "checked='checked'" : "")>
                     <label class="custom-control-label" for="filter-1"></label>
                 </div>
             </div>
@@ -75,7 +75,7 @@
             <i class="fal fa-clock position-absolute pos-right pos-top opacity-70" style="font-size: 3rem;padding-top:5px;"></i>
             <div align="left" style="margin-top:5px;">
                 <div class="custom-control custom-switch mr-2">
-                    <input type="checkbox" class="custom-control-input" name="gra-2" id="filter-2" @(Model.DashboardFiltersApply.NoEntryCheckShow?"checked='checked'":"")>
+                    <input type="checkbox" class="custom-control-input" name="gra-2" id="filter-2" @(Model.DashboardFiltersApply.NoEntryCheckShow ? "checked='checked'" : "")>
                     <label class="custom-control-label" for="filter-2"></label>
                 </div>
             </div>
@@ -92,7 +92,7 @@
             <i class="fal fa-utensils position-absolute pos-right pos-top opacity-70" style="font-size: 3rem;padding-top:5px;"></i>
             <div align="left" style="margin-top:5px;">
                 <div class="custom-control custom-switch mr-2">
-                    <input type="checkbox" class="custom-control-input" name="gra-3" id="filter-3" @(Model.DashboardFiltersApply.FoodStartDelayShow?"checked='checked'":"")>
+                    <input type="checkbox" class="custom-control-input" name="gra-3" id="filter-3" @(Model.DashboardFiltersApply.FoodStartDelayShow ? "checked='checked'" : "")>
                     <label class="custom-control-label" for="filter-3"></label>
                 </div>
             </div>
@@ -109,7 +109,7 @@
             <i class="fal fa-utensils position-absolute pos-right pos-top opacity-70" style="font-size: 3rem;padding-top:5px;"></i>
             <div align="left" style="margin-top:5px;">
                 <div class="custom-control custom-switch mr-2">
-                    <input type="checkbox" class="custom-control-input" name="gra-4" id="filter-4" @(Model.DashboardFiltersApply.FoodEndDelayShow?"checked='checked'":"")>
+                    <input type="checkbox" class="custom-control-input" name="gra-4" id="filter-4" @(Model.DashboardFiltersApply.FoodEndDelayShow ? "checked='checked'" : "")>
                     <label class="custom-control-label" for="filter-4"></label>
                 </div>
             </div>
@@ -126,7 +126,7 @@
             <i class="fal fa-utensils position-absolute pos-right pos-top opacity-70" style="font-size: 3rem;padding-top:5px;"></i>
             <div align="left" style="margin-top:5px;">
                 <div class="custom-control custom-switch mr-2">
-                    <input type="checkbox" class="custom-control-input" name="gra-5" id="filter-5" @(Model.DashboardFiltersApply.NoFoodEntryCheckShow?"checked='checked'":"")>
+                    <input type="checkbox" class="custom-control-input" name="gra-5" id="filter-5" @(Model.DashboardFiltersApply.NoFoodEntryCheckShow ? "checked='checked'" : "")>
                     <label class="custom-control-label" for="filter-5"></label>
                 </div>
             </div>
@@ -145,13 +145,14 @@
                     <a id="refreshDashboard" href="javascript:void(0);" title="Filtrar" class="btn btn-success btn-icon waves-effect waves-themed">
                         <i class="fal fa-filter"></i>
                     </a>
+                    <a id="ViewRow" href="javascript:void(0);" class="btn btn-secondary btn-icon waves-effect waves-themed">
+                        <i class="fal fa-edit"></i>
+                    </a>
                 </div>
             </div>
             <div class="panel-container show">
 
                 <div class="panel-content">
-
-
 
                     @await Component.InvokeAsync("DashboardToday", new { model = @Model.EmployeeDetail })
                 </div>
@@ -162,11 +163,69 @@
     </div>
 </div>
 
+
+</ Modal View Data Employee-->
+
+<div class="modal fade" data-backdrop="static" data-keyboard="false" id="viewregmodal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-warning-500">
+                <h4 class="modal-title">
+                    Ver detalle de los registros
+                </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"><i class="fal fa-times"></i></span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <div class="alert border-secondary bg-transparent text-secondary" role="alert">
+                    <span id="employeename"></span>
+                </div>
+
+                <div class="form-row">
+
+                    <table class="table table-bordered table-hover table-striped w-100">
+                        <thead class="bg-warning-200">
+                            <tr>
+                                <th>
+                                    Horario
+                                </th>
+                                <th>
+                                    Hora
+                                </th>
+                                <th>
+                                    Registro
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="elementsfinded">
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">
+                    Cerrar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 @section ScriptsBlock {
 
     <script src="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/js/datagrid/datatables/datatables.bundle.js"></script>
 
     <script>
+
+        $('#dt-basic-example tr').click(function () {
+
+            $(this).addClass('selected').siblings().removeClass('selected');
+
+        });
 
         $(document).ready(function () {
             /* init datatables */
@@ -229,7 +288,48 @@
 
             });
 
+            $('#ViewRow').click(function () {
 
+                var row = $('#allemployees tr.selected');
+                var idrow = row.data("id");
+
+                if (idrow === undefined) {
+
+                    Swal.fire(
+                        {
+                            type: "warning",
+                            title: "Validación",
+                            text: "Seleccione un registro"
+                        });
+
+                    return;
+
+                }
+
+                $('#employeename').empty();
+                $('#elementsfinded').empty();
+
+                $.ajax({
+                    url: '/DashboardHistory/GetRegisterData',
+                    type: "POST",
+                    data: { EmployeeId: idrow, date: $('#datepicker-4-4').val() },
+                    success: function (data, textStatus, jqXHR) {
+
+                        $('#employeename').append(data.employeename);
+
+                        data.rows.forEach(function (doc, index) {
+                            $('#elementsfinded').append('<tr><td>' + doc.horario + '</td><td>' + doc.hora + '</td><td>' + doc.registro + '</td></tr>');
+                        });
+
+                        $('#viewregmodal').modal();
+
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        alert(errorThrown);
+                    }
+                });
+
+            });
 
 
         });

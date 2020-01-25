@@ -116,6 +116,9 @@ namespace SARH.WebUI.Factories
                 empsDetail.AddRange(a);
             }
 
+
+
+
             DashboardModel model = new DashboardModel()
             {
                 AverageEntryDelay = 0,
@@ -126,7 +129,7 @@ namespace SARH.WebUI.Factories
                 FoodEndDelay = t.Where(d => d.RetardoEntradaComida.Equals(1)).Count(),
                 NoFoodEntryCheck = t.Where(d => d.RetardoEntradaComida.Equals(2)).Count(),
                 NoEntryCheck = t.Where(d => d.RetardoEntrada.Equals(2)).Count(),
-                EmployeeDetail = empsDetail
+                EmployeeDetail = empsDetail.GroupBy(o=>o.ID).Select(o=>o.FirstOrDefault()).ToList()
             };
 
             return model;
@@ -239,7 +242,7 @@ namespace SARH.WebUI.Factories
                 FoodEndDelay = t.Where(d => d.RetardoEntradaComida.Equals(1)).Count(),
                 NoFoodEntryCheck = t.Where(d => d.RetardoEntradaComida.Equals(2)).Count(),
                 NoEntryCheck = t.Where(d => d.RetardoEntrada.Equals(2)).Count(),
-                EmployeeDetail = empsDetail
+                EmployeeDetail = empsDetail.GroupBy(o => o.ID).Select(o => o.FirstOrDefault()).ToList()
             };
 
             return model;
@@ -304,6 +307,43 @@ namespace SARH.WebUI.Factories
             }
 
             return sb.ToString();
+        }
+
+        public List<DashboardDataDetail> GetDashboardDetail(string employee, string date, DashboardFilters filters)
+        {
+            List<KeyValuePair<string, string>> param = new List<KeyValuePair<string, string>>();
+            param.Add(new KeyValuePair<string, string>("@CurrentDate", string.IsNullOrEmpty(date) ? DateTime.Now.ToShortDateString() : date));
+            var t = this._dashboardRepository.GetStoredProcData("CreateDashboardInfo", param).Where(y => y.EmployeeId.Equals(employee));
+
+            List<DashboardDataDetail> detail = new List<DashboardDataDetail>() 
+            {
+                new DashboardDataDetail()
+                {
+                    horario = "Entrada",
+                    hora = t.First().StartWorkDate,
+                    registro = t.First().StartJobDay
+                },
+                new DashboardDataDetail()
+                {
+                    horario = "Salida comida",
+                    hora = t.First().StartMealDate,
+                    registro = t.First().StartMealDay
+                },
+                new DashboardDataDetail()
+                {
+                    horario = "Entrada Comida",
+                    hora = t.First().EndMealDate,
+                    registro = t.First().EndMealDay
+                },
+                new DashboardDataDetail()
+                {
+                    horario = "Salida",
+                    hora = t.First().EndWorkDate,
+                    registro = t.First().EndJobDay
+                }
+            };
+
+            return detail;
         }
 
 
