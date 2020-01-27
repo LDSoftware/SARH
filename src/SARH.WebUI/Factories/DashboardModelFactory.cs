@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ISOSA.SARH.Data.Domain.Configuration;
 using ISOSA.SARH.Data.Domain.Dashboard;
+using ISOSA.SARH.Data.Domain.Employee;
+using ISOSA.SARH.Data.Domain.Formats;
 using ISOSA.SARH.Data.Repository;
 using SARH.WebUI.Models.Dashboard;
 
@@ -13,29 +16,36 @@ namespace SARH.WebUI.Factories
     {
 
         private readonly IRepository<DashboardData> _dashboardRepository;
+        private readonly IRepository<EmployeeFormat> _employeeFormatRepository;
+        private readonly IRepository<EmployeeAditionalInfo> _employeeAdditionalInfo;
+        private readonly IRepository<NonWorkingDay> _nonworkingDays;
+        private readonly IRepository<NonWorkingDayException> _nonworkingDaysExeption;
 
-
-        public DashboardModelFactory(IRepository<DashboardData> dashboardRepository)
+        public DashboardModelFactory(IRepository<DashboardData> dashboardRepository,
+        IRepository<EmployeeFormat> employeeFormatRepository,
+        IRepository<EmployeeAditionalInfo> employeeAdditionalInfo,
+        IRepository<NonWorkingDay> nonworkingDays,
+        IRepository<NonWorkingDayException> nonworkingDaysExeption)
         {
             this._dashboardRepository = dashboardRepository;
+            this._employeeFormatRepository = employeeFormatRepository;
+            this._employeeAdditionalInfo = employeeAdditionalInfo;
+            this._nonworkingDays = nonworkingDays;
+            this._nonworkingDaysExeption = nonworkingDaysExeption;
         }
 
         public DashboardModel GetDay(string date, DashboardFilters filters)
         {
+
+            if (string.IsNullOrEmpty(date)) 
+            {
+                date = DateTime.Now.ToShortDateString();
+            }
+
             List<KeyValuePair<string, string>> param = new List<KeyValuePair<string, string>>();
             param.Add(new KeyValuePair<string, string>("@CurrentDate", string.IsNullOrEmpty(date) ? DateTime.Now.ToShortDateString() : date));
             var t = this._dashboardRepository.GetStoredProcData("CreateDashboardInfo", param);
             List<DashboardEmployeeDetailModel> empsDetail = new List<DashboardEmployeeDetailModel>();
-
-            //var emps = t.Select(r => new DashboardEmployeeDetailModel()
-            //{
-            //    Area = r.Area,
-            //    Name = r.EmployeeName,
-            //    ID = r.EmployeeId,
-            //    JobCenter = r.Centro,
-            //    JobTitle = r.Puesto,
-            //    DetailType = createEmployeeIncidencia(r)
-            //}).ToList();
 
             if (filters.StartJobDelay)
             {
@@ -116,9 +126,6 @@ namespace SARH.WebUI.Factories
                 empsDetail.AddRange(a);
             }
 
-
-
-
             DashboardModel model = new DashboardModel()
             {
                 AverageEntryDelay = 0,
@@ -132,6 +139,26 @@ namespace SARH.WebUI.Factories
                 EmployeeDetail = empsDetail.GroupBy(o=>o.ID).Select(o=>o.FirstOrDefault()).ToList()
             };
 
+            if (IsHoliday(date))
+            {
+                var exeptions = HaveHolidayExepcions(date);
+                if (exeptions.Any())
+                {
+                    exeptions.ToList().ForEach(v =>
+                    {
+                        var emp = model.EmployeeDetail.Where(f => f.ID.Equals(v)).FirstOrDefault();
+                        if (emp != null)
+                        {
+                            model.EmployeeDetail.Remove(emp);
+                        }
+                    });
+                }
+                else
+                {
+                    model.EmployeeDetail.Clear();
+                }
+            }
+
             return model;
         }
 
@@ -141,16 +168,6 @@ namespace SARH.WebUI.Factories
             param.Add(new KeyValuePair<string, string>("@CurrentDate", DateTime.Now.ToShortDateString()));
             var t = this._dashboardRepository.GetStoredProcData("CreateDashboardInfo", param);
             List<DashboardEmployeeDetailModel> empsDetail = new List<DashboardEmployeeDetailModel>();
-
-            //var emps = t.Select(r => new DashboardEmployeeDetailModel()
-            //{
-            //    Area = r.Area,
-            //    Name = r.EmployeeName,
-            //    ID = r.EmployeeId,
-            //    JobCenter = r.Centro,
-            //    JobTitle = r.Puesto,
-            //    DetailType = createEmployeeIncidencia(r)
-            //}).ToList();
 
             if (filters.StartJobDelay) 
             {
@@ -231,7 +248,6 @@ namespace SARH.WebUI.Factories
                 empsDetail.AddRange(a);
             }
 
-
             DashboardModel model = new DashboardModel()
             {
                 AverageEntryDelay = 0,
@@ -244,6 +260,26 @@ namespace SARH.WebUI.Factories
                 NoEntryCheck = t.Where(d => d.RetardoEntrada.Equals(2)).Count(),
                 EmployeeDetail = empsDetail.GroupBy(o => o.ID).Select(o => o.FirstOrDefault()).ToList()
             };
+
+            if (IsHoliday(DateTime.Now.ToShortDateString())) 
+            {
+                var exeptions = HaveHolidayExepcions(DateTime.Now.ToShortDateString());
+                if (exeptions.Any())
+                {
+                    exeptions.ToList().ForEach(v => 
+                    {
+                        var emp = model.EmployeeDetail.Where(f => f.ID.Equals(v)).FirstOrDefault();
+                        if (emp != null) 
+                        {
+                            model.EmployeeDetail.Remove(emp);
+                        }
+                    });
+                }
+                else
+                {
+                    model.EmployeeDetail.Clear();
+                }
+            }
 
             return model;
         }
@@ -344,6 +380,63 @@ namespace SARH.WebUI.Factories
             };
 
             return detail;
+        }
+
+        public FormatApproved GetFormats(string date) 
+        {
+            FormatApproved result = new FormatApproved();
+            DateTime dashboardDate = DateTime.Parse(date);
+            var formats = this._employeeFormatRepository.SearhItemsFor(u => u.StartDate >= dashboardDate && u.EndDate <= dashboardDate);
+            var employees = this._employeeAdditionalInfo.GetAll();
+            if (formats.Any()) 
+            {
+                var fmts = (from format in formats
+                            join emp in employees on format.EmployeeId equals emp.EMP_EmployeeID
+                            select new FormatApprovedItem()
+                            {
+                                EmployeeId = emp.EMP_EmployeeID,
+                                EmployeeName = $"{emp.EMP_FirstName} {emp.EMP_LastName}",
+                                Id = format.Id,
+                                PeriodDates = $"{format.StartDate.ToShortDateString()}-{format.EndDate.ToShortDateString()}",
+                                Type = ""
+                            }).ToList();
+
+                result.Date = date;
+                result.TotalFormats = fmts.Count;
+                result.FormaApprovedtItems.AddRange(fmts);
+            }
+
+            return result;
+        }
+
+        private bool IsHoliday(string date) 
+        {
+            bool isholiday = false;
+            var result = _nonworkingDays.SearhItemsFor(t => t.Holiday.Equals(DateTime.Parse(date)));
+            if (result.Any()) 
+            {
+                isholiday = true;
+            }
+            return isholiday;
+        }
+
+        private List<string> HaveHolidayExepcions(string date) 
+        {
+            List<string> exeptionList = new List<string>();
+            var result = _nonworkingDays.SearhItemsFor(t => t.Holiday.Equals(DateTime.Parse(date)));
+            if (result.Any())
+            {
+                var exeptions = this._nonworkingDaysExeption.SearhItemsFor(r => r.Id.Equals(result.FirstOrDefault().Id));
+                if (exeptions.Any()) 
+                {
+                    exeptions.ToList().ForEach(x => 
+                    {
+                        exeptionList.Add(x.EmployeeId);
+                    });
+                }
+            }
+
+            return exeptionList;
         }
 
 
