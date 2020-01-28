@@ -158,6 +158,8 @@
                                     </h5>
 
                                     <div class="form-row">
+
+
                                         <div class="col-md-12">
                                             <label class="form-label" for="descripcion">Comentarios</label>
                                             <input class="form-control reseterror" id="descripcion" required="" type="text">
@@ -183,6 +185,24 @@
                                                         <i class="fal fa-calendar-plus"></i>
                                                     </span>
                                                 </div>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="col-md-6" id="divhouri" style="display:none;">
+                                            <label class="form-label" for="horainicial">Hora Inicial</label>
+                                            <input type="time" class="form-control" id="horainicial">
+                                        </div>
+
+                                        <div class="col-md-6" id="divhoure" style="display:none;">
+                                            <label class="form-label" for="horafinal">Hora Final</label>
+                                            <input type="time" class="form-control" id="horafinal">
+                                        </div>
+
+                                        <div class="col-md-12" style="margin-top:10px;margin-bottom:10px;display:none;" id="divcheckpay">
+                                            <div class="custom-control custom-checkbox custom-checkbox-circle">
+                                                <input type="checkbox" class="custom-control-input" id="defaultChecked" checked="">
+                                                <label class="custom-control-label" for="defaultChecked">Permiso con goce de sueldo</label>
                                             </div>
                                         </div>
 
@@ -504,13 +524,22 @@
                 $('.btn').prop('disabled', true);
                 $('#spinwait').show();
 
+                var ischecked = $('#defaultChecked').is(':checked');
+
+                if (!isPermission) {
+                    ischecked = false;
+                }
+
                 var formData = {
                     EmployeeId: "17",
                     StartDate: dtpinicial,
                     EndDate: dtpfinal,
                     PermissionType: $('#permissionType').val(),
                     Comments: $('#descripcion').val(),
-                    EmployeeSubId: idsustituto
+                    EmployeeSubId: idsustituto,
+                    StartTime: $('#horainicial').val(),
+                    EndTime: $('#horafinal').val(),
+                    WithPay: ischecked
                 };
 
                 $.ajax({
@@ -728,7 +757,28 @@
 
             });
 
+            var isPermission = false;
 
+            $('#permissionType').change(function () {
+
+                var type = $("#permissionType :selected").text();
+
+                var nperm = type.includes("Permiso");
+
+                if (nperm) {
+                    $('#divhouri').show();
+                    $('#divhoure').show();
+                    $('#divcheckpay').show();
+                    isPermission = true;
+                }
+                else {
+                    $('#divhouri').hide();
+                    $('#divhoure').hide();
+                    $('#divcheckpay').hide();
+                    isPermission = false;
+                }
+
+            });
 
 
 

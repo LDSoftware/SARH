@@ -17,5 +17,8 @@ namespace ISOSA.SARH.Data.Domain.Formats
         public string EmployeeSubstitute { get; set; }
         public bool Declined { get; set; }
         public bool SubstituteApprove { get; set; }
+        public string StartTime { get; set; }
+        public string EndTime { get; set; }
+        public bool WithPay { get; set; }
     }
 }

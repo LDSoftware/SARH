@@ -99,8 +99,8 @@ namespace SARH.WebUI.Controllers
         {
 
 
-            var element = new EmployeeFormat() 
-            {                
+            var element = new EmployeeFormat()
+            {
                 Comments = format.Comments,
                 EmployeeId = format.EmployeeId,
                 EmployeeSubstitute = string.IsNullOrEmpty(format.EmployeeSubId) ? "0" : format.EmployeeSubId,
@@ -109,7 +109,10 @@ namespace SARH.WebUI.Controllers
                 StartDate = DateTime.Parse(format.StartDate),
                 CreateDate = DateTime.Today,
                 ApprovalDate = null,
-                ApprovalWorkFlow = ""
+                ApprovalWorkFlow = "",
+                EndTime = format.EndTime,
+                StartTime = format.StartTime,
+                WithPay = format.WithPay
             };
 
             formatRepository.Create(element);

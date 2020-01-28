@@ -11,6 +11,18 @@
     <StartAction>Project</StartAction>
     <ApplicationURL>https://localhost:5001;http://localhost:5000</ApplicationURL>
   </PropertyGroup>
+
+
+  <ItemGroup>
+    <Compile Remove="Document\**" />
+    <Compile Remove="Migrations\**" />
+    <Content Remove="Document\**" />
+    <Content Remove="Migrations\**" />
+    <EmbeddedResource Remove="Document\**" />
+    <EmbeddedResource Remove="Migrations\**" />
+    <None Remove="Document\**" />
+    <None Remove="Migrations\**" />
+  </ItemGroup>
   <ItemGroup>
     <None Update="app.db" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
@@ -26,8 +38,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Document\Temp\" />
-    <Folder Include="Migrations\" />
     <Folder Include="Views\Catalog\Infraestructure\" />
     <Folder Include="Views\Home\" />
     <Folder Include="Views\DashboardHistory\" />

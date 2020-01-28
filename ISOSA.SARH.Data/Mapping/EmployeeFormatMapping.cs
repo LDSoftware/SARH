@@ -20,6 +20,9 @@ namespace ISOSA.SARH.Data.Mapping
             builder.Property(x => x.StartDate);
             builder.Property(x => x.Declined);
             builder.Property(x => x.SubstituteApprove);
+            builder.Property(x => x.StartTime);
+            builder.Property(x => x.EndTime);
+            builder.Property(x => x.WithPay);
         }
 
     }

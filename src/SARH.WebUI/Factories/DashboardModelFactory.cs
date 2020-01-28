@@ -20,18 +20,24 @@ namespace SARH.WebUI.Factories
         private readonly IRepository<EmployeeAditionalInfo> _employeeAdditionalInfo;
         private readonly IRepository<NonWorkingDay> _nonworkingDays;
         private readonly IRepository<NonWorkingDayException> _nonworkingDaysExeption;
+        private readonly IRepository<EmployeeScheduleAssigned> _employeeScheduleAssigned;
+        private readonly IRepository<Schedule> _scheduleRepository;
 
         public DashboardModelFactory(IRepository<DashboardData> dashboardRepository,
         IRepository<EmployeeFormat> employeeFormatRepository,
         IRepository<EmployeeAditionalInfo> employeeAdditionalInfo,
         IRepository<NonWorkingDay> nonworkingDays,
-        IRepository<NonWorkingDayException> nonworkingDaysExeption)
+        IRepository<NonWorkingDayException> nonworkingDaysExeption,
+        IRepository<EmployeeScheduleAssigned> employeeScheduleAssigned,
+        IRepository<Schedule> scheduleRepository)
         {
             this._dashboardRepository = dashboardRepository;
             this._employeeFormatRepository = employeeFormatRepository;
             this._employeeAdditionalInfo = employeeAdditionalInfo;
             this._nonworkingDays = nonworkingDays;
             this._nonworkingDaysExeption = nonworkingDaysExeption;
+            this._employeeScheduleAssigned = employeeScheduleAssigned;
+            this._scheduleRepository = scheduleRepository;
         }
 
         public DashboardModel GetDay(string date, DashboardFilters filters)
@@ -46,6 +52,23 @@ namespace SARH.WebUI.Factories
             param.Add(new KeyValuePair<string, string>("@CurrentDate", string.IsNullOrEmpty(date) ? DateTime.Now.ToShortDateString() : date));
             var t = this._dashboardRepository.GetStoredProcData("CreateDashboardInfo", param);
             List<DashboardEmployeeDetailModel> empsDetail = new List<DashboardEmployeeDetailModel>();
+
+            if (DateTime.Parse(date).DayOfWeek == DayOfWeek.Saturday)
+            {
+                var wkworkers = this.WeekEndWorkers();
+
+                DashboardData[] ops = new DashboardData[t.Count()];
+                t.ToList().CopyTo(ops, 0);
+
+                var wkemployees = (from wk in wkworkers
+                                   join dd in ops on wk equals dd.EmployeeId
+                                   select dd);
+
+                t = null;
+                t = new List<DashboardData>(wkemployees);
+            }
+
+
 
             if (filters.StartJobDelay)
             {
@@ -169,6 +192,22 @@ namespace SARH.WebUI.Factories
             var t = this._dashboardRepository.GetStoredProcData("CreateDashboardInfo", param);
             List<DashboardEmployeeDetailModel> empsDetail = new List<DashboardEmployeeDetailModel>();
 
+
+            if (DateTime.Now.DayOfWeek == DayOfWeek.Saturday)
+            {
+                var wkworkers = this.WeekEndWorkers();
+
+                DashboardData[] ops = new DashboardData[t.Count()];
+                t.ToList().CopyTo(ops, 0);
+
+                var wkemployees = (from wk in wkworkers
+                                   join dd in ops on wk equals dd.EmployeeId
+                                   select dd);
+
+                t = null;
+                t = new List<DashboardData>(wkemployees);
+            }
+
             if (filters.StartJobDelay) 
             {
                 var a = t.Where(d => d.RetardoEntrada.Equals(1)).Select(r => new DashboardEmployeeDetailModel()
@@ -280,6 +319,7 @@ namespace SARH.WebUI.Factories
                     model.EmployeeDetail.Clear();
                 }
             }
+
 
             return model;
         }
@@ -438,6 +478,25 @@ namespace SARH.WebUI.Factories
 
             return exeptionList;
         }
+
+        private List<string> WeekEndWorkers()
+        {
+            List<string> result = new List<string>();
+
+            var schedules = this._scheduleRepository.SearhItemsFor(u => u.Weekend == true);
+            var employees = this._employeeScheduleAssigned.GetAll();
+
+            if (schedules.Any() && employees.Any())
+            {
+                var wkworkers = (from emps in employees
+                                 join sche in schedules on emps.IdScheduleWeekEnd equals sche.Id
+                                 select new { emps.EmployeeId }).ToList();
+                result.AddRange(wkworkers.Select(g => g.EmployeeId));
+            }
+
+            return result;
+        }
+
 
 
     }

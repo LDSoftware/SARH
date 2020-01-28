@@ -176,6 +176,27 @@ namespace SARH.WebUI.Controllers
         }
 
 
+        [HttpPost]
+        public JsonResult GetEditSchedule(int id)
+        {
+            bool success = true;
+            string message = string.Empty;
+            Schedule schedule = new Schedule();
+            var sch = _repository.SearhItemsFor(d => d.Id.Equals(id));
+            if (sch.Any())
+            {
+                schedule = sch.FirstOrDefault();
+                schedule.Description = $"{GetScheduleType(schedule.TypeSchedule)} - {schedule.Description}";
+                if (!schedule.Enabled)
+                {
+                    success = false;
+                    message = "El horario se encuentra deshabilitado, no se puede editar";
+                }              
+            }
+
+            return Json(new { success = success, message = message, row = schedule });
+        }
+
         #endregion
 
 

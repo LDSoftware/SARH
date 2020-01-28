@@ -84,15 +84,15 @@
                                         <tbody id="allschedules">
                                             @foreach (var item in Model.ScheduleItems)
                                             {
-                                            <tr id="@item.Id">
-                                                <td>@item.TypeSchedule</td>
-                                                <td>@item.Description</td>
-                                                <td>@item.StartHour</td>
-                                                <td>@item.EndHour</td>
-                                                <td>@item.Enabled</td>
-                                                <td>@item.EffectiveTime</td>
-                                                <td>@item.StartHourAnticipated</td>
-                                            </tr>
+                                                <tr id="@item.Id">
+                                                    <td>@item.TypeSchedule</td>
+                                                    <td>@item.Description</td>
+                                                    <td>@item.StartHour</td>
+                                                    <td>@item.EndHour</td>
+                                                    <td>@item.Enabled</td>
+                                                    <td>@item.EffectiveTime</td>
+                                                    <td>@item.StartHourAnticipated</td>
+                                                </tr>
                                             }
                                         </tbody>
                                     </table>
@@ -107,7 +107,7 @@
     </div>
 </div>
 
-        </ Modal Crear Nuevo Horario -->
+</ Modal Crear Nuevo Horario -->
 
 <div class="panel-container show">
     <div class="panel-content">
@@ -166,7 +166,7 @@
                                     </div>
                                     <div class="col-md-6">
                                         <label class="form-label" for="horafinal">Hora final</label>
-                                        <input class="form-control" reseterror id="horafinal" type="time" name="time">
+                                        <input class="form-control reseterror" id="horafinal" type="time" name="time">
                                     </div>
                                     <div class="col-md-12">
                                         <label class="form-label" for="horaanticipada">Reportar registros anticipados (mins.)</label>
@@ -226,8 +226,80 @@
     </div>
 </div>
 
-<input id='QA' type="hidden" />
-<input id='QB' type="hidden" />
+
+</ Modal Update Schedule-->
+
+<div class="modal fade" data-backdrop="static" data-keyboard="false" id="default-example-modal-center" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-warning-500">
+                <h4 class="modal-title">
+                    Actualización del horario
+                    <span id="detailtitle"></span>
+                </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"><i class="fal fa-times"></i></span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <div class="form-row">
+                    <div class="col-md-12">
+                        <label class="form-label" for="descriptionedit">Descripción</label>
+                        <input type="text" class="form-control" id="descriptionedit">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="inputstartedtime">Hora inicial</label>
+                        <input class="form-control reseterroredit" id="inputstartedtime" type="time">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="inputendtime">Hora final</label>
+                        <input class="form-control reseterroredit" id="inputendtime" type="time">
+                    </div>
+
+
+                    <div class="col-md-6">
+                        <label class="form-label" for="datepicker-4-44">Vigencia inicial</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control reseterror" id="datepicker-4-44">
+                            <div class="input-group-append">
+                                <span class="input-group-text fs-xl">
+                                    <i class="fal fa-calendar-plus"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="datepicker-4-54">Vigencia final</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control reseterror" id="datepicker-4-54">
+                            <div class="input-group-append">
+                                <span class="input-group-text fs-xl">
+                                    <i class="fal fa-calendar-plus"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">
+                    Cerrar
+                </button>
+                <button id="btnUpdateSchedule" type="button" class="btn btn-primary">
+                    <span id="spinupdateschedule" style="display:none;" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    Actualizar
+                </button>
+
+            </div>
+        </div>
+    </div>
+</div>
 
 
 
@@ -254,9 +326,6 @@
                     todayHighlight: true,
                     templates: controls,
                     format: 'dd/mm/yyyy'
-                }).on('changeDate', function (e) {
-
-                    $('#QA').val(convert(e.date));
                 });
 
             $('#datepicker-4-5').datepicker(
@@ -265,9 +334,22 @@
                     todayHighlight: true,
                     templates: controls,
                     format: 'dd/mm/yyyy'
-                }).on('changeDate', function (e) {
+                });
 
-                    $('#QB').val(convert(e.date));
+            $('#datepicker-4-44').datepicker(
+                {
+                    orientation: "top left",
+                    todayHighlight: true,
+                    templates: controls,
+                    format: 'dd/mm/yyyy'
+                });
+
+            $('#datepicker-4-54').datepicker(
+                {
+                    orientation: "top left",
+                    todayHighlight: true,
+                    templates: controls,
+                    format: 'dd/mm/yyyy'
                 });
 
 
@@ -493,10 +575,8 @@
             });
 
 
-
-
             $(".reseterror").change(function () {
-                    $('#errorsave').hide();
+                $('#errorsave').hide();
             });
 
 
@@ -505,6 +585,102 @@
                 $('#errorsave').hide();
             });
 
+
+            $('#editrow').click(function () {
+
+
+                var row = $('#allschedules tr.selected');
+                if (row.length === 0) {
+
+                    Swal.fire(
+                        {
+                            type: "warning",
+                            title: "Validación",
+                            text: "Seleccione un registro"
+                        });
+
+                    return;
+
+                }
+
+
+                var id = row[0].id;
+
+
+
+                var swalWithBootstrapButtons = Swal.mixin(
+                    {
+                        customClass:
+                        {
+                            confirmButton: "btn btn-primary",
+                            cancelButton: "btn btn-danger mr-2"
+                        },
+                        buttonsStyling: false
+                    });
+                swalWithBootstrapButtons
+                    .fire(
+                        {
+                            title: "Confirmación",
+                            text: "Deseas editar el elemento? la edición del elemento puede causar inconsistencias en dias anteriores",
+                            type: "warning",
+                            showCancelButton: true,
+                            confirmButtonText: "Si",
+                            cancelButtonText: "Cancelar",
+                            reverseButtons: true
+                        })
+                    .then(function (result) {
+
+                        if (result.value) {
+
+
+                            $.ajax({
+                                url: '/Schedule/GetEditSchedule',
+                                type: "POST",
+                                data: { id: id },
+                                success: function (data, textStatus, jqXHR) {
+
+                                    if (data.success) {
+
+                                        $('#descriptionedit').val(data.row.description);
+                                        $('#inputstartedtime').val(data.row.starthour);
+                                        $('#inputendtime').val(data.row.endhour);
+
+
+                                        $('#default-example-modal-center').modal();
+
+
+
+                                    }
+                                    else {
+
+                                        Swal.fire(
+                                            {
+                                                type: "warning",
+                                                title: "Validación",
+                                                text: data.message
+                                            });
+
+                                        return;
+                                    }
+                                },
+                                error: function (jqXHR, textStatus, errorThrown) {
+                                    alert(errorThrown);
+                                }
+                            });
+                        }
+                        else if (
+                            // Read more about handling dismissals
+                            result.dismiss === Swal.DismissReason.cancel
+                        ) {
+                            swalWithBootstrapButtons.fire(
+                                "Cancelación",
+                                "Se ha cancelado la acción",
+                                "error"
+                            );
+                        }
+                    });
+
+            });
 
         });
 

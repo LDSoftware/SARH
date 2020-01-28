@@ -13,5 +13,8 @@ namespace SARH.WebUI.Models.Formats
         public int PermissionType { get; set; }
         public string Comments { get; set; }
         public string EmployeeSubId { get; set; }
+        public string StartTime { get; set; }
+        public string EndTime { get; set; }
+        public bool WithPay { get; set; }
     }
 }
