@@ -172,5 +172,28 @@ namespace SARH.WebUI.Configuration
 
             set { }
         }
+        public string NotifyToEmployee
+        {
+            get
+            {
+                var result = _config[$"SchedulerTempNotifications:NotifyToEmployee"];
+                return result;
+            }
+
+            set { }
+        }
+        public bool NotifyToRHManager
+        {
+            get
+            {
+                var result = _config[$"SchedulerTempNotifications:NotifyToRHManager"];
+                return bool.Parse(result);
+            }
+
+            set { }
+        }
+
+
+
     }
 }

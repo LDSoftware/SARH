@@ -585,6 +585,7 @@
                 $('#errorsave').hide();
             });
 
+            var idSelected = 0;
 
             $('#editrow').click(function () {
 
@@ -606,7 +607,7 @@
 
                 var id = row[0].id;
 
-
+                idSelected = id;
 
                 var swalWithBootstrapButtons = Swal.mixin(
                     {
@@ -642,9 +643,10 @@
                                     if (data.success) {
 
                                         $('#descriptionedit').val(data.row.description);
-                                        $('#inputstartedtime').val(data.row.starthour);
-                                        $('#inputendtime').val(data.row.endhour);
-
+                                        $('#inputstartedtime').val(data.row.startHour);
+                                        $('#inputendtime').val(data.row.endHour);
+                                        $('#datepicker-4-44').val(data.row.effectiveTimeStart);
+                                        $('#datepicker-4-54').val(data.row.effectiveTimeEnd);
 
                                         $('#default-example-modal-center').modal();
 
@@ -682,7 +684,53 @@
 
             });
 
+
+            $('#btnUpdateSchedule').click(function () {
+
+                var formData = {
+                    Id: idSelected,
+                    Description: $('#descriptionedit').val(),
+                    StartHour: $('#inputstartedtime').val(),
+                    EndHour: $('#inputendtime').val(),
+                    EffectiveTime: $('#datepicker-4-44').val() + '|' + $('#datepicker-4-54').val()
+                };
+
+                $.ajax({
+                    url: '/Schedule/SaveScheduleEdit',
+                    type: "POST",
+                    data: formData,
+                    success: function (data, textStatus, jqXHR) {
+
+                        $('#descriptionedit').val('');
+                        $('#inputstartedtime').val('');
+                        $('#inputendtime').val('');
+                        $('#datepicker-4-44').val('');
+                        $('#datepicker-4-54').val('');
+
+                        Swal.fire(
+                            {
+                                position: "top-end",
+                                type: "success",
+                                title: "Actualización exitosa",
+                                showConfirmButton: false,
+                                timer: 1500
+                            }).then((result) => {
+
+                                window.location.href = '/Schedule/AdminSchedule';
+
+                            });
+
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+
+                    }
+                });
+
+
+            });
+
         });
 
     </script>
 }
+

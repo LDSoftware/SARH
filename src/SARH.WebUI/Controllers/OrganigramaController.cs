@@ -1060,5 +1060,54 @@ namespace SARH.WebUI.Controllers
 
         #endregion
 
+        #region Employee Remove Job Title
+
+
+        [HttpPost]
+        public JsonResult RemoveJobTible(string Id, 
+            [FromServices] IRepository<EmployeeOrganigrama> organigramaRepository,
+            [FromServices] IRepository<EmployeeAditionalInfo> isosaRepo) 
+        {
+
+            string response = "success";
+
+            try
+            {
+                var employee = this._organigramaModelFactory.GetEmployeeData(Id);
+                if (employee != null)
+                {
+                    Guid empGuid = Guid.Empty;
+
+                    if (Guid.TryParse(employee.HierarchyGuid, out empGuid) && employee.RowId != Guid.Empty.ToString())
+                    {
+                        var organigramaJob = organigramaRepository.SearhItemsFor(g => g.RowGuid.Equals(empGuid));
+                        if (organigramaJob.Any())
+                        {
+                            organigramaJob.First().RowGuid = Guid.Empty;
+                            organigramaRepository.Update(organigramaJob.First());
+                        }
+                        var empIsosa = isosaRepo.SearhItemsFor(o => o.HrowGuid.Value.Equals(empGuid));
+                        if (empIsosa.Any())
+                        {
+                            empIsosa.First().HrowGuid = Guid.Empty;
+                            isosaRepo.Update(empIsosa.First());
+                        }
+                    }
+                }
+
+            }
+            catch
+            {
+                response = "fail";
+            }
+
+
+            return Json(new { response = response });
+        }
+
+        #endregion
+
+
+
     }
 }

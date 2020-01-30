@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
 using ISOSA.SARH.Data.Domain.Configuration;
 using ISOSA.SARH.Data.Repository;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using SARH.Core.Configuration;
 using SARH.WebUI.Factories;
 using SARH.WebUI.Models.Configuration;
 using SARH.WebUI.Models.Organigrama;
@@ -196,6 +198,37 @@ namespace SARH.WebUI.Controllers
 
             return Json(new { success = success, message = message, row = schedule });
         }
+
+
+        public JsonResult SaveScheduleEdit(ScheduleItem sheduleInfo)
+        {
+
+            DateTime? effectiveTime = null;
+            DateTime? efectiveTimeEnd = null;
+            if (!string.IsNullOrEmpty(sheduleInfo.EffectiveTime))
+            {
+                string[] values = sheduleInfo.EffectiveTime.Split('|');
+                if (!string.IsNullOrEmpty(values[0]))
+                {
+                    effectiveTime = DateTime.Parse(values[0]);
+                    efectiveTimeEnd = DateTime.Parse(values[1]);
+                }
+            }
+
+            var row = _repository.GetElement(sheduleInfo.Id);
+
+            if (row != null) 
+            {
+                row.EffectiveTimeStart = effectiveTime;
+                row.EffectiveTimeEnd = efectiveTimeEnd;
+                row.EndHour = sheduleInfo.EndHour;
+                row.StartHour = sheduleInfo.StartHour;
+                _repository.Update(row);
+            }
+
+            return Json("Ok");
+        }
+
 
         #endregion
 
@@ -583,8 +616,14 @@ namespace SARH.WebUI.Controllers
             return Json(new { id = id, value = value, rows = row, details = list.Count != 0 ? list[0] : "" });
         }
 
-        public JsonResult AssignedScheduleTemp(string[] selectedInputs, string scheduleSelected, string scheduleMealSelected, string toleranceWD, string toleranceML, [FromServices] IOrganigramaModelFactory _organigramaModelFactory)
+        public JsonResult AssignedScheduleTemp(string[] selectedInputs, string scheduleSelected, 
+        string scheduleMealSelected, string toleranceWD, string toleranceML, 
+        [FromServices] IOrganigramaModelFactory _organigramaModelFactory,
+        [FromServices] IConfigurationManager configurationManager)
         {
+            List<string> employees = new List<string>();
+
+
             selectedInputs.ToList().ForEach((y) =>
             {
                 var data = y.Split('|');
@@ -599,8 +638,52 @@ namespace SARH.WebUI.Controllers
                         ToleranceMeal = int.Parse(toleranceML),
                         ToleranceWorkday = int.Parse(toleranceWD)
                     });
+                    employees.Add(data[1].TrimStart(new Char[] { '0' }));
                 }
             });
+
+            try
+            {
+
+                string jobTNotify = configurationManager.NotifyToEmployee;
+                bool includeRHNotify = configurationManager.NotifyToRHManager;
+
+                employees.ForEach((y) =>
+                {
+                    var notify = _organigramaModelFactory.GetEmployeesSchedulerTempNotify(y, jobTNotify, includeRHNotify);
+
+                    notify.ForEach(n => 
+                    {
+                        MailMessage mail = new MailMessage();
+                        mail.To.Add(n.Email);
+                        mail.From = new MailAddress(configurationManager.MailUsername);
+                        mail.Subject = "Notificación de horario temporal";
+                        string htmlString = $@"<html>
+                          <p>Hola, <br>{n.Name}</br></p>
+                          <p>El empledo {y} se le ha asignado un horario temporal de</p>
+                      <body>
+                      </body>
+                      </html>
+                     ";
+
+                        mail.Body = htmlString;
+                        mail.IsBodyHtml = true;
+                        SmtpClient smtp = new SmtpClient(configurationManager.MailServer, int.Parse(configurationManager.MailPort));
+                        smtp.UseDefaultCredentials = false;
+                        smtp.EnableSsl = true;
+                        smtp.Credentials = new System.Net.NetworkCredential(configurationManager.MailUsername, configurationManager.MailUserpassword);
+                        smtp.Send(mail);
+                    });
+                });
+
+            }
+            catch
+            {
+            }
+
+
+
+
 
             return Json("ok");
         }

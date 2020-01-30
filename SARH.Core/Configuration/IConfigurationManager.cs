@@ -21,6 +21,7 @@ namespace SARH.Core.Configuration
         string MailServer { get; set; }
         string MailPort { get; set; }
         string ServerIP { get; set; }
-
+        string NotifyToEmployee { get; set; }
+        bool NotifyToRHManager { get; set; }
     }
 }

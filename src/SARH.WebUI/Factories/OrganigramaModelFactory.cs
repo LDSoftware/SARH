@@ -551,7 +551,48 @@ namespace SARH.WebUI.Factories
 
         }
 
+        public List<EmployeeNotifyModel> GetEmployeesSchedulerTempNotify(string employeeId, string JobsTitle, bool GetRHManager) 
+        {
+            List<EmployeeNotifyModel> result = new List<EmployeeNotifyModel>();
 
+            var isosaEmp = _isosaemployeesRepository.SearhItemsFor(o => o.EMP_StatusCode.Equals("Active"));
+            var currentEmp = isosaEmp.Where(d => d.EMP_EmployeeID.Equals(int.Parse(employeeId).ToString("00000")));
+            var jobsT = JobsTitle.Split('|').ToList();
+            var emp = this._isosaemployeesOrganigramaRepository.SearhItemsFor(y => y.RowGuid.Equals(currentEmp.FirstOrDefault().HrowGuid.Value));
+            if (emp.Any()) 
+            {
+                var row = emp.FirstOrDefault();
+
+                if (row != null) 
+                {
+                    var empNotify = _isosaemployeesOrganigramaRepository.SearhItemsFor(f => f.Area.Equals(row.Area) && f.Centro.Equals(row.Centro));
+                    if (empNotify.Any()) 
+                    {
+                        jobsT.ForEach(s => 
+                        {
+                            var emps = (from em in empNotify.Where(g => g.Puesto.Contains(s))
+                                        join iso in isosaEmp on em.RowGuid equals iso.HrowGuid.Value
+                                        select new EmployeeNotifyModel()
+                                        {
+                                            IdEmployee = iso.EMP_EmployeeID,
+                                            Email = iso.EMP_EMailAddress,
+                                            JobTitle = em.Puesto,
+                                            Name = $"{iso.EMP_FirstName} {iso.EMP_LastName}"
+                                        }).ToList();
+
+                            if (emps.Any()) 
+                            {
+                                result.AddRange(emps);
+                            }
+
+                        });
+
+                    }
+                }
+            }
+
+            return result;
+        }
 
     }
 }

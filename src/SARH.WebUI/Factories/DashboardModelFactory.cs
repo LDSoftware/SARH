@@ -22,6 +22,9 @@ namespace SARH.WebUI.Factories
         private readonly IRepository<NonWorkingDayException> _nonworkingDaysExeption;
         private readonly IRepository<EmployeeScheduleAssigned> _employeeScheduleAssigned;
         private readonly IRepository<Schedule> _scheduleRepository;
+        private const string dashboard = "CreateDashboardInfo";
+        private const string dashboardweekend = "CreateDashboardInfoWeekEnd";
+
 
         public DashboardModelFactory(IRepository<DashboardData> dashboardRepository,
         IRepository<EmployeeFormat> employeeFormatRepository,
@@ -50,7 +53,14 @@ namespace SARH.WebUI.Factories
 
             List<KeyValuePair<string, string>> param = new List<KeyValuePair<string, string>>();
             param.Add(new KeyValuePair<string, string>("@CurrentDate", string.IsNullOrEmpty(date) ? DateTime.Now.ToShortDateString() : date));
-            var t = this._dashboardRepository.GetStoredProcData("CreateDashboardInfo", param);
+
+            string spName = dashboard;
+            if (DateTime.Parse(date).DayOfWeek == DayOfWeek.Saturday) 
+            {
+                spName = dashboardweekend;
+            }
+
+            var t = this._dashboardRepository.GetStoredProcData(spName, param);
             List<DashboardEmployeeDetailModel> empsDetail = new List<DashboardEmployeeDetailModel>();
 
             if (DateTime.Parse(date).DayOfWeek == DayOfWeek.Saturday)
@@ -189,7 +199,13 @@ namespace SARH.WebUI.Factories
         {
             List<KeyValuePair<string, string>> param = new List<KeyValuePair<string, string>>();
             param.Add(new KeyValuePair<string, string>("@CurrentDate", DateTime.Now.ToShortDateString()));
-            var t = this._dashboardRepository.GetStoredProcData("CreateDashboardInfo", param);
+
+            string spName = dashboard;
+            if (DateTime.Now.DayOfWeek == DayOfWeek.Saturday)
+            {
+                spName = dashboardweekend;
+            }
+            var t = this._dashboardRepository.GetStoredProcData(spName, param);
             List<DashboardEmployeeDetailModel> empsDetail = new List<DashboardEmployeeDetailModel>();
 
 
@@ -387,9 +403,19 @@ namespace SARH.WebUI.Factories
 
         public List<DashboardDataDetail> GetDashboardDetail(string employee, string date, DashboardFilters filters)
         {
+
+            string cdate = string.IsNullOrEmpty(date) ? DateTime.Now.ToShortDateString() : date;
+
             List<KeyValuePair<string, string>> param = new List<KeyValuePair<string, string>>();
-            param.Add(new KeyValuePair<string, string>("@CurrentDate", string.IsNullOrEmpty(date) ? DateTime.Now.ToShortDateString() : date));
-            var t = this._dashboardRepository.GetStoredProcData("CreateDashboardInfo", param).Where(y => y.EmployeeId.Equals(employee));
+            param.Add(new KeyValuePair<string, string>("@CurrentDate", cdate));
+
+            string spName = dashboard;
+            if (DateTime.Parse(cdate).DayOfWeek == DayOfWeek.Saturday)
+            {
+                spName = dashboardweekend;
+            }
+
+            var t = this._dashboardRepository.GetStoredProcData(spName, param).Where(y => y.EmployeeId.Equals(employee));
 
             List<DashboardDataDetail> detail = new List<DashboardDataDetail>() 
             {

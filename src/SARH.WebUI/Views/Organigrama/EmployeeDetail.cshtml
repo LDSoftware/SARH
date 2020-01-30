@@ -150,6 +150,7 @@
                                     <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; will-change: top, left; top: 37px; left: 0px;">
                                         <a id="saveEmployeeUnsubscribe" class="dropdown-item" href="javascript:void(0)">Baja del Empleado</a>
                                         <a id="moveEmployee" class="dropdown-item" href="javascript:void(0)">Cambiar Puesto</a>
+                                        <a id="removeJobTitle" class="dropdown-item" href="javascript:void(0)">Remover Puesto</a>
                                     </div>
                                 </div>
                             </div>
@@ -2204,6 +2205,90 @@
                 }
 
             });
+
+            $('#removeJobTitle').click(function () {
+
+
+                var Id = $('#idEmpleadoGenerales').val();
+
+                var swalWithBootstrapButtons = Swal.mixin(
+                    {
+                        customClass:
+                        {
+                            confirmButton: "btn btn-primary",
+                            cancelButton: "btn btn-danger mr-2"
+                        },
+                        buttonsStyling: false
+                    });
+                swalWithBootstrapButtons
+                    .fire(
+                        {
+                            title: "Confirmación",
+                            text: "Deseas remover el puesto actual? Esta acción no se puede deshacer.",
+                            type: "warning",
+                            position: "top-end",
+                            allowOutsideClick: false,
+                            showCancelButton: true,
+                            confirmButtonText: "Si",
+                            cancelButtonText: "Cancelar",
+                            reverseButtons: true
+                        })
+                    .then(function (result) {
+
+                        if (result.value) {
+
+                            $.ajax({
+                                url: '/Organigrama/RemoveJobTible',
+                                type: "POST",
+                                data: { Id: Id },
+                                success: function (data, textStatus, jqXHR) {
+
+                                    if (data.success == "success") {
+                                        Swal.fire(
+                                            {
+                                                position: "top-end",
+                                                type: "success",
+                                                title: "Actualización exitosa",
+                                                showConfirmButton: false,
+                                                timer: 1500
+                                            });
+
+                                        window.location.href = '@Url.Action("Index","Hierarchy")';
+                                    }
+                                    else {
+
+                                        Swal.fire(
+                                            {
+                                                position: "top-end",
+                                                type: "error",
+                                                title: "Fallo el proceso",
+                                            });
+
+                                        return;
+                                    }
+
+
+                                },
+                                error: function (jqXHR, textStatus, errorThrown) {
+
+                                }
+                            });
+
+                        }
+                        else if (
+                            // Read more about handling dismissals
+                            result.dismiss === Swal.DismissReason.cancel
+                        ) {
+                            swalWithBootstrapButtons.fire(
+                                "Cancelación",
+                                "Se ha cancelado la acción",
+                                "error"
+                            );
+                        }
+                    });
+
+            });
+
 
         });
 
