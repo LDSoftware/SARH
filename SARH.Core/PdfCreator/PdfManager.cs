@@ -527,10 +527,6 @@ namespace SARH.Core.PdfCreator
             document.Add(new Paragraph($"{Environment.NewLine}"));
         }
 
-
-
-
-
         private void CreateDetailInfoSection(Document document, DocumentInfoPdfData pdfData) 
         {
             var font = DocumentFont();
@@ -562,6 +558,254 @@ namespace SARH.Core.PdfCreator
             });
             document.Add(new Phrase(Environment.NewLine));
         }
+
+        private void CreateProfileJobTitleSectionA(Document document, DocumentInfoPdfData pdfData, string sectionName) 
+        {
+            var font = DocumentFont();
+            var fontRev = HeaderFont();
+
+            var productsTable = new PdfPTable(2)
+            {
+                RunDirection = PdfWriter.RUN_DIRECTION_LTR,
+                WidthPercentage = 100f
+            };
+
+            productsTable.SetWidths(new[] { 30, 70 });
+
+            var cellProductItem = new PdfPCell(new Phrase(sectionName, fontRev));
+            cellProductItem.HorizontalAlignment = Element.ALIGN_LEFT;
+            cellProductItem.BackgroundColor = BaseColor.LightGray;
+            cellProductItem.BorderColor = BaseColor.White;
+            productsTable.AddCell(cellProductItem);
+
+
+            var p1 = new Paragraph($"   Nombre del puesto: {pdfData.EmployeProfile.NombrePuesto}" +
+               $"{Environment.NewLine}   Área: {pdfData.EmployeProfile.Area}" +
+               $"{Environment.NewLine}   Reporta a: " +
+               $"{Environment.NewLine}   Supervisa a: " +
+               $"{Environment.NewLine}   Tipo de funciones: " +
+               $"{Environment.NewLine}" +
+               $"{Environment.NewLine}   _____________________________________________________________________________", font);
+            p1.SetLeading(4, 18);
+
+            cellProductItem = new PdfPCell(p1);
+            cellProductItem.HorizontalAlignment = Element.ALIGN_LEFT;
+            cellProductItem.BorderColor = BaseColor.White;
+            productsTable.AddCell(cellProductItem);
+
+
+            document.Add(productsTable);
+            document.Add(new Paragraph($"{Environment.NewLine}"));
+        }
+
+        private void CreateProfileJobTitleSectionB(Document document, DocumentInfoPdfData pdfData, string sectionName)
+        {
+            var font = DocumentFont();
+            var fontRev = HeaderFont();
+
+            var productsTable = new PdfPTable(2)
+            {
+                RunDirection = PdfWriter.RUN_DIRECTION_LTR,
+                WidthPercentage = 100f
+            };
+
+            productsTable.SetWidths(new[] { 30, 70 });
+
+            var cellProductItem = new PdfPCell(new Phrase(sectionName, fontRev));
+            cellProductItem.HorizontalAlignment = Element.ALIGN_LEFT;
+            cellProductItem.BackgroundColor = BaseColor.LightGray;
+            cellProductItem.BorderColor = BaseColor.White;
+            productsTable.AddCell(cellProductItem);
+
+
+            var p1 = new Paragraph($"   Sexo: {pdfData.EmployeProfile.Sexo}" +
+               $"{Environment.NewLine}   Estado civil: {pdfData.EmployeProfile.EstadoCivil}" +
+               $"{Environment.NewLine}   Edad: {pdfData.EmployeProfile.Edad}" +
+               $"{Environment.NewLine}   Escolaridad: {pdfData.EmployeProfile.Escolaridad}" +
+               $"{Environment.NewLine}   Especialidad: {pdfData.EmployeProfile.Especialidad}" +
+               $"{Environment.NewLine}   Habilidades Técnicas y Administrativas: " +
+               $"{Environment.NewLine}   Experiencia Laboral: {pdfData.EmployeProfile.Experiencia}" +
+               $"{Environment.NewLine}   _____________________________________________________________________________", font);
+            p1.SetLeading(4, 18);
+
+            cellProductItem = new PdfPCell(p1);
+            cellProductItem.HorizontalAlignment = Element.ALIGN_LEFT;
+            cellProductItem.BorderColor = BaseColor.White;
+            productsTable.AddCell(cellProductItem);
+
+
+            document.Add(productsTable);
+            document.Add(new Paragraph($"{Environment.NewLine}"));
+        }
+
+        private void CreateProfileJobTitleSectionC(Document document, DocumentInfoPdfData pdfData, string sectionName)
+        {
+            var font = DocumentFont();
+            var fontRev = HeaderFont();
+
+            var productsTable = new PdfPTable(2)
+            {
+                RunDirection = PdfWriter.RUN_DIRECTION_LTR,
+                WidthPercentage = 100f
+            };
+
+            productsTable.SetWidths(new[] { 30, 70 });
+
+            var cellProductItem = new PdfPCell(new Phrase(sectionName, fontRev));
+            cellProductItem.HorizontalAlignment = Element.ALIGN_LEFT;
+            cellProductItem.BackgroundColor = BaseColor.LightGray;
+            cellProductItem.BorderColor = BaseColor.White;
+            productsTable.AddCell(cellProductItem);
+
+
+            var p1 = new Paragraph($"{pdfData.EmployeProfile.RequerimientosOCondiciones}" +
+               $"{Environment.NewLine}" +
+               $"Horario de trabajo: {pdfData.EmployeProfile.Horario}" +
+               $"{Environment.NewLine}   _____________________________________________________________________________", font);
+            p1.SetLeading(4, 18);
+
+            cellProductItem = new PdfPCell(p1);
+            cellProductItem.HorizontalAlignment = Element.ALIGN_LEFT;
+            cellProductItem.BorderColor = BaseColor.White;
+            productsTable.AddCell(cellProductItem);
+
+
+            document.Add(productsTable);
+            document.Add(new Paragraph($"{Environment.NewLine}"));
+        }
+
+        private void CreateProfileJobTitleSectionD(Document document, DocumentInfoPdfData pdfData, string sectionName)
+        {
+            var font = DocumentFont();
+            var fontRev = HeaderFont();
+
+            var productsTable = new PdfPTable(2)
+            {
+                RunDirection = PdfWriter.RUN_DIRECTION_LTR,
+                WidthPercentage = 100f
+            };
+
+            productsTable.SetWidths(new[] { 30, 70 });
+
+            var cellProductItem = new PdfPCell(new Phrase(sectionName, fontRev));
+            cellProductItem.HorizontalAlignment = Element.ALIGN_LEFT;
+            cellProductItem.BackgroundColor = BaseColor.LightGray;
+            cellProductItem.BorderColor = BaseColor.White;
+            productsTable.AddCell(cellProductItem);
+
+            var p1 = new Paragraph($"Internta{Environment.NewLine}" +
+            $"{pdfData.EmployeProfile.ComunicacionInterna}" +
+            $"{Environment.NewLine}" +
+            $"Externa{Environment.NewLine}" +
+            $"{pdfData.EmployeProfile.ComunicacionExterna}" +
+            $"{Environment.NewLine}   _____________________________________________________________________________", font);
+            p1.SetLeading(4, 18);
+
+            cellProductItem = new PdfPCell(p1);
+            cellProductItem.HorizontalAlignment = Element.ALIGN_LEFT;
+            cellProductItem.BorderColor = BaseColor.White;
+            productsTable.AddCell(cellProductItem);
+
+            document.Add(productsTable);
+            document.Add(new Paragraph($"{Environment.NewLine}"));
+        }
+
+        private void CreateProfileJobTitleSectionE(Document document, DocumentInfoPdfData pdfData, string sectionName)
+        {
+            var font = DocumentFont();
+            var fontRev = HeaderFont();
+
+            var productsTable = new PdfPTable(2)
+            {
+                RunDirection = PdfWriter.RUN_DIRECTION_LTR,
+                WidthPercentage = 100f
+            };
+
+            productsTable.SetWidths(new[] { 30, 70 });
+
+            var cellProductItem = new PdfPCell(new Phrase(sectionName, fontRev));
+            cellProductItem.HorizontalAlignment = Element.ALIGN_LEFT;
+            cellProductItem.BackgroundColor = BaseColor.LightGray;
+            cellProductItem.BorderColor = BaseColor.White;
+            productsTable.AddCell(cellProductItem);
+
+            var p1 = new Paragraph($"{pdfData.EmployeProfile.ObjetivoGeneralPuesto}" +
+            $"{Environment.NewLine}   _____________________________________________________________________________", font);
+            p1.SetLeading(4, 18);
+
+            cellProductItem = new PdfPCell(p1);
+            cellProductItem.HorizontalAlignment = Element.ALIGN_LEFT;
+            cellProductItem.BorderColor = BaseColor.White;
+            productsTable.AddCell(cellProductItem);
+
+            document.Add(productsTable);
+            document.Add(new Paragraph($"{Environment.NewLine}"));
+        }
+
+        private void CreateProfileJobTitleSectionF(Document document, DocumentInfoPdfData pdfData, string sectionName)
+        {
+            var font = DocumentFont();
+            var fontRev = HeaderFont();
+
+            var productsTable = new PdfPTable(2)
+            {
+                RunDirection = PdfWriter.RUN_DIRECTION_LTR,
+                WidthPercentage = 100f
+            };
+
+            productsTable.SetWidths(new[] { 30, 70 });
+
+            var cellProductItem = new PdfPCell(new Phrase(sectionName, fontRev));
+            cellProductItem.HorizontalAlignment = Element.ALIGN_LEFT;
+            cellProductItem.BackgroundColor = BaseColor.LightGray;
+            cellProductItem.BorderColor = BaseColor.White;
+            productsTable.AddCell(cellProductItem);
+
+            var p1 = new Paragraph($"{pdfData.EmployeProfile.ResponsabilidadPuesto}" +
+            $"{Environment.NewLine}   _____________________________________________________________________________", font);
+            p1.SetLeading(4, 18);
+
+            cellProductItem = new PdfPCell(p1);
+            cellProductItem.HorizontalAlignment = Element.ALIGN_LEFT;
+            cellProductItem.BorderColor = BaseColor.White;
+            productsTable.AddCell(cellProductItem);
+
+            document.Add(productsTable);
+            document.Add(new Paragraph($"{Environment.NewLine}"));
+        }
+
+        private void CreateProfileJobTitleSectionG(Document document, DocumentInfoPdfData pdfData, string sectionName)
+        {
+            var font = DocumentFont();
+            var fontRev = HeaderFont();
+
+            var productsTable = new PdfPTable(2)
+            {
+                RunDirection = PdfWriter.RUN_DIRECTION_LTR,
+                WidthPercentage = 100f
+            };
+
+            productsTable.SetWidths(new[] { 30, 70 });
+
+            var cellProductItem = new PdfPCell(new Phrase(sectionName, fontRev));
+            cellProductItem.HorizontalAlignment = Element.ALIGN_LEFT;
+            cellProductItem.BackgroundColor = BaseColor.LightGray;
+            cellProductItem.BorderColor = BaseColor.White;
+            productsTable.AddCell(cellProductItem);
+
+            var p1 = new Paragraph($"{pdfData.EmployeProfile.FuncionesActividades}" +
+            $"{Environment.NewLine}   _____________________________________________________________________________", font);
+            p1.SetLeading(4, 18);
+
+            cellProductItem = new PdfPCell(p1);
+            cellProductItem.HorizontalAlignment = Element.ALIGN_LEFT;
+            cellProductItem.BorderColor = BaseColor.White;
+            productsTable.AddCell(cellProductItem);
+
+            document.Add(productsTable);
+            document.Add(new Paragraph($"{Environment.NewLine}"));
+        }
+
 
         private void CreateObservationSection(Document document, DocumentInfoPdfData pdfData)
         {
@@ -685,7 +929,27 @@ namespace SARH.Core.PdfCreator
             fileStream.Dispose();
         }
 
+        public void CreateEmployeeProfileJobTitle(DocumentInfoPdfData pdfData, string pdfFile)
+        {
+            var pdfDoc = new Document(PageSize.A4);
+            var pdfFilePath = pdfFile;
+            var fileStream = new FileStream(pdfFilePath, FileMode.Create);
+            PdfWriter.GetInstance(pdfDoc, fileStream);
+            pdfDoc.AddAuthor("ISOSA SARH");
+            pdfDoc.Open();
 
+            CreateHeaderSection(pdfDoc, pdfData);
+            CreateProfileJobTitleSectionA(pdfDoc, pdfData, "Identifiación del puesto");
+            CreateProfileJobTitleSectionB(pdfDoc, pdfData, "Perfil");
+            CreateProfileJobTitleSectionC(pdfDoc, pdfData, "Requerimientos o condiciones especificas");
+            CreateProfileJobTitleSectionD(pdfDoc, pdfData, "Comunicación");
+            CreateProfileJobTitleSectionE(pdfDoc, pdfData, "Objetivo General del puesto");
+            CreateProfileJobTitleSectionF(pdfDoc, pdfData, "Responsabilidad del puesto");
+            CreateProfileJobTitleSectionG(pdfDoc, pdfData, "Funciones o actividades");
+
+            pdfDoc.Close();
+            fileStream.Dispose();
+        }
 
 
 

@@ -63,7 +63,7 @@
                     <a id="btnsaveprofile" href="javascript:void(0);" class="btn btn-primary btn-icon waves-effect waves-themed">
                         <i class="fal fa-save"></i>
                     </a>
-                    <a href="javascript:void(0);" class="btn btn-success btn-icon waves-effect waves-themed">
+                    <a href='@Url.Action("PrintEmployeeProfile","Organigrama",new { EmployeeId = Model.EmployeeId })' target="_blank" class="btn btn-success btn-icon waves-effect waves-themed">
                         <i class="fal fa-print"></i>
                     </a>
                     @if (!string.IsNullOrEmpty(Model.DocumentPath))

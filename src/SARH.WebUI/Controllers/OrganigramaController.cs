@@ -22,6 +22,7 @@ using SARH.Core.PdfCreator;
 using SARH.Core.PdfCreator.Interface;
 using SARH.WebUI.Factories;
 using SARH.WebUI.Models.Employee;
+using SARH.WebUI.Models.EmployeeProfile;
 using SARH.WebUI.Models.Formats;
 using SARH.WebUI.Models.Organigrama;
 using SARH.WebUI.Models.Organigrama.New;
@@ -1245,7 +1246,7 @@ namespace SARH.WebUI.Controllers
             }
             catch (Exception ex)
             {
-                byte[] FileBytesError = System.Text.Encoding.UTF8.GetBytes(ex.Message);
+                byte[] FileBytesError = System.Text.Encoding.UTF8.GetBytes($"{ex.Message} {Environment.NewLine} {ex.Source} {Environment.NewLine} {ex.StackTrace}");
                 return File(FileBytesError, "text/plain");
             }
 
@@ -1256,6 +1257,91 @@ namespace SARH.WebUI.Controllers
         }
 
         #endregion
+
+        #region PDF Employee Profile
+
+        public FileResult PrintEmployeeProfile(string EmployeeId,
+            [FromServices] IOrganigramaModelFactory organigramaModelFactory,
+            [FromServices] SARH.Core.Configuration.IConfigurationManager configManager,
+            [FromServices] IRepository<EmployeeProfile> profileRepository)
+        {
+
+            string fileName = "";
+
+            try
+            {
+                var empInfo = organigramaModelFactory.GetEmployeeData(EmployeeId.TrimStart('0'));
+                EmployeeProfileModel model = new EmployeeProfileModel();
+                string employeeFormat = int.Parse(EmployeeId).ToString("00000");
+                var row = profileRepository.SearhItemsFor(l => l.EmployeeId.TrimStart('0').Equals(employeeFormat.TrimStart('0')));
+                if (row.Any())
+                {
+                    var data = row.FirstOrDefault();
+                    model = JsonConvert.DeserializeObject<EmployeeProfileModel>(data.ProfileSectionValues);
+                }
+
+                IConfigPdf config = new ConfigPdf()
+                {
+                    FontPathPdf = configManager.FontPathPdf,
+                    ImgPathPdf = configManager.ImgPathPdf,
+                    FontPathBarCode = configManager.FontPathBarCode
+                };
+                PdfManager manager = new PdfManager(config);
+
+                if (!Directory.Exists($@"{configManager.EmployeeProfileDocumentPath.Replace("|EmpNumber|", empInfo.GeneralInfo.Id)}"))
+                {
+                    Directory.CreateDirectory($@"{configManager.EmployeeProfileDocumentPath.Replace("|EmpNumber|", empInfo.GeneralInfo.Id)}");
+                }
+
+                fileName = $@"{configManager.EmployeeProfileDocumentPath.Replace("|EmpNumber|", empInfo.GeneralInfo.Id)}EmployeeProfilePrintv.pdf";
+
+
+                manager.CreateEmployeeProfileJobTitle(new Core.PdfCreator.FormatData.DocumentInfoPdfData()
+                {
+                    EmployeeNumber = EmployeeId,
+                    EmployeeName = $"{empInfo.GeneralInfo.FirstName} {empInfo.GeneralInfo.LastName}",
+                    JobTitle = empInfo.GeneralInfo.JobTitle,
+                    Area = empInfo.GeneralInfo.Area,
+                    TitleDocumento = "Perfil de Puesto",
+                     Comments = empInfo.GeneralInfo.Observations,
+                    EmployeProfile = new Core.PdfCreator.FormatData.EmployeProfileData() 
+                    {
+                        Area = empInfo.Area,
+                        ComunicacionExterna = model.ComunicacionExterna,
+                        ComunicacionInterna = model.ComunicacionInterna,
+                        Edad = model.Edad,
+                        Escolaridad = model.Escolaridad,
+                        Especialidad = model.Titulo,
+                        EstadoCivil = "",
+                        FuncionesActividades = model.FuncionesActividades,
+                        Idiomas = model.Idiomas,
+                        Horario = model.Horario,
+                        Experiencia = model.ExperienciaLaboral,
+                        ObjetivoGeneralPuesto = model.ObjetivoGeneral,
+                        Sexo = model.Sexo,
+                        NombrePuesto = empInfo.GeneralInfo.JobTitle,
+                        RequerimientosOCondiciones= model.Requerimientos,
+                        ResponsabilidadPuesto = model.Responsabilidad
+                    }
+                }, fileName);
+            }
+            catch (Exception ex)
+            {
+                byte[] FileBytesError = System.Text.Encoding.UTF8.GetBytes($"{ex.Message} {Environment.NewLine} {ex.Source} {Environment.NewLine} {ex.StackTrace}");
+                return File(FileBytesError, "text/plain");
+            }
+
+
+
+            byte[] FileBytes = System.IO.File.ReadAllBytes(fileName);
+            return File(FileBytes, "application/pdf");
+        }
+
+
+
+
+        #endregion
+
 
     }
 }

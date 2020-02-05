@@ -74,7 +74,7 @@ namespace SARH.WebUI.Controllers
             string documentPath = string.Empty;
             if (!string.IsNullOrEmpty(model.DocumentPath)) 
             {
-                string path = configurationManager.EmployeeProfileDocumentPath.Replace("|EmpNumber|", model.EmployeeId);
+                string path = configurationManager.EmployeeProfileDocumentPath.Replace("|EmpNumber|", employeeFormat);
                 if (!Directory.Exists(path))
                 {
                     Directory.CreateDirectory(path);
