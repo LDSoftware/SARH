@@ -1,0 +1,183 @@
+﻿@using SARH.WebUI.Models.Dashboard;
+@model PersonalDashboardData;
+@{
+    ViewData["Title"] = "Dashboard Personal";
+    ViewData["PageName"] = "Dashboard Personal";
+    ViewData["Heading"] = "<i class='subheader-icon fal fa-chart-pie'></i> Dashboard Personal";
+    ViewData["PageDescription"] = "Dashboard Personal";
+}
+
+@section HeadBlock {
+
+    <link rel="stylesheet" media="screen, print" href="~/css/fa-solid.css">
+    <link rel="stylesheet" media="screen, print" href="~/css/fa-brands.css">
+    <link rel="stylesheet" media="screen, print" href="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/css/datagrid/datatables/datatables.bundle.css">
+    <link rel="stylesheet" media="screen, print" href="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/css/formplugins/bootstrap-datepicker/bootstrap-datepicker.css">
+    <link rel="stylesheet" media="screen, print" href="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/css/notifications/sweetalert2/sweetalert2.bundle.css">
+}
+
+
+<div class="row">
+
+    <div class="card mb-g rounded-top">
+        <div class="row no-gutters row-grid">
+
+            <div class="col-lg-7 col-xl-8">
+                <div class="position-relative">
+                    <div class="d-flex flex-column align-items-center justify-content-center p-4">
+                        <img class="rounded-circle shadow-2 img-thumbnail" alt="" src="@Model.Picture">
+                        <h5 class="mb-0 fw-700 text-center mt-3">
+                            <small> @Model.Name</small>
+                            @Model.Area
+                            <br />
+                            @Model.Centro
+                            <br />
+                            @Model.Puesto
+                        </h5>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-5 col-xl-4 pl-lg-3">
+                <div class="d-flex mt-2">
+                    Retardos
+                    <span class="d-inline-block ml-auto">65%</span>
+                </div>
+                <div class="progress progress-sm mb-3">
+                    <div class="progress-bar bg-fusion-400" role="progressbar" style="width: 65%;" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+                <div class="d-flex">
+                    Salidas Anticipadas comida
+                    <span class="d-inline-block ml-auto">34%</span>
+                </div>
+                <div class="progress progress-sm mb-3">
+                    <div class="progress-bar bg-success-500" role="progressbar" style="width: 34%;" aria-valuenow="34" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+                <div class="d-flex">
+                    Retardos Comida
+                    <span class="d-inline-block ml-auto">77%</span>
+                </div>
+                <div class="progress progress-sm mb-3">
+                    <div class="progress-bar bg-info-400" role="progressbar" style="width: 77%;" aria-valuenow="77" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+                <div class="d-flex">
+                    Salidas Anticipadas
+                    <span class="d-inline-block ml-auto">84%</span>
+                </div>
+                <div class="progress progress-sm mb-g">
+                    <div class="progress-bar bg-primary-300" role="progressbar" style="width: 84%;" aria-valuenow="84" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+                <div class="row no-gutters">
+                    <div class="col-6 pr-1">
+                        <a href="#" class="btn btn-default btn-block waves-effect waves-themed">Exportar Excel</a>
+                    </div>
+                    <div class="col-6 pl-1">
+                        <a href="#" class="btn btn-default btn-block waves-effect waves-themed">Imprimir</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-12">
+                <div id="panel-4" class="panel">
+                    <div class="panel-hdr">
+                        <h2>
+                            <span class="fw-300"><i>Registros </i></span>
+                        </h2>
+                    </div>
+
+
+                    <div class="panel-container show">
+                        <div class="panel-content">
+                            <form>
+                                <div class="form-group">
+                                    <table id="dt-basic-example" class="table table-bordered table-hover table-striped w-100">
+                                        <thead class="bg-warning-200">
+                                            <tr>
+                                                <th>Fecha</th>
+                                                <th>Entrada</th>
+                                                <th>Registro</th>
+                                                <th>Salida Comida</th>
+                                                <th>Registro</th>
+                                                <th>Entrada Comida</th>
+                                                <th>Registro</th>
+                                                <th>Salida</th>
+                                                <th>Registro</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="allrequest">
+                                            @foreach (var item in Model.Days)
+                                            {
+                                            <tr>
+                                                <td>
+                                                    @item.RegisterDate
+                                                </td>
+                                                <td>
+                                                    @item.StartWorkDate
+                                                </td>
+                                                <td>
+                                                    @item.StartJobDay
+                                                </td>
+                                                <td>
+                                                    @item.StartMealDate
+                                                </td>
+                                                <td>
+                                                    @item.StartMealDay
+                                                </td>
+                                                <td>
+                                                    @item.EndMealDate
+                                                </td>
+                                                <td>
+                                                    @item.EndMealDay
+                                                </td>
+                                                <td>
+                                                    @item.EndWorkDate
+                                                </td>
+                                                <td>
+                                                    @item.EndJobDay
+                                                </td>
+                                            </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+
+</div>
+
+
+<input id='EmployeeId' type="hidden" value="@Model.EmployeeId" />
+
+
+@section ScriptsBlock {
+
+    <script src="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/js/datagrid/datatables/datatables.bundle.js"></script>
+    <script src="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/js/formplugins/bootstrap-datepicker/bootstrap-datepicker.js"></script>
+    <script src="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/js/notifications/sweetalert2/sweetalert2.bundle.js"></script>
+
+    <script>
+
+
+        $(document).ready(function () {
+            /* init datatables */
+
+            runDatePicker();
+
+            $('#dt-basic-example').dataTable(
+                {
+                    responsive: true
+                });
+
+        });
+    </script>
+}

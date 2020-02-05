@@ -7,6 +7,7 @@
 
 @section HeadBlock {
     <link rel="stylesheet" media="screen, print" href="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/css/datagrid/datatables/datatables.bundle.css">
+    <link rel="stylesheet" media="screen, print" href="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/css/notifications/sweetalert2/sweetalert2.bundle.css">
 }
 
 <div class="subheader">
@@ -134,6 +135,29 @@
     </div>
 </div>
 
+@*<div class="alert alert-danger alert-dismissible fade show">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true"><i class="fal fa-times"></i></span>
+    </button>
+    <div class="d-flex align-items-center">
+        <div class="alert-icon width-8">
+            <span class="icon-stack icon-stack-xl">
+                <i class="base-2 icon-stack-3x color-danger-400"></i>
+                <i class="base-10 text-white icon-stack-1x"></i>
+                <i class="ni md-profile color-danger-800 icon-stack-2x"></i>
+            </span>
+        </div>
+        <div class="flex-1 pl-1">
+            <span class="h2">
+                La extracción en alguno de los dispositivos no fue exitosa.
+            </span>
+            <br>
+            El procesar sin todos los datos de los relojes checadores genera inconsistencia en la calificación de las incidencias.
+        </div>
+        <a href="#" class="btn btn-warning btn-w-m fw-500 btn-sm waves-effect waves-themed" aria-label="Reintentar">Ejecutar Extracción</a>
+    </div>
+</div>*@
+
 <div class="row">
     <div class="col-lg-12">
         <div id="panel-4" class="panel">
@@ -145,8 +169,11 @@
                     <a id="refreshDashboard" href="javascript:void(0);" title="Filtrar" class="btn btn-success btn-icon waves-effect waves-themed">
                         <i class="fal fa-filter"></i>
                     </a>
-                    <a id="ViewRow" href="javascript:void(0);" class="btn btn-secondary btn-icon waves-effect waves-themed">
+                    <a id="ViewRow" href="javascript:void(0);" title="Ver Registros" class="btn btn-secondary btn-icon waves-effect waves-themed">
                         <i class="fal fa-edit"></i>
+                    </a>
+                    <a id="PersonalDashboard" href="javascript:void(0);" title="Dashboard Empleado" class="btn btn-primary btn-icon waves-effect waves-themed">
+                        <i class="fal fa-chart-pie"></i>
                     </a>
                 </div>
             </div>
@@ -218,6 +245,7 @@
 @section ScriptsBlock {
 
     <script src="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/js/datagrid/datatables/datatables.bundle.js"></script>
+    <script src="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/js/notifications/sweetalert2/sweetalert2.bundle.js"></script>
 
     <script>
 
@@ -330,6 +358,35 @@
                 });
 
             });
+
+            $('#PersonalDashboard').click(function () {
+
+
+                var row = $('#allemployees tr.selected');
+                var idrow = row.data("id");
+
+                if (idrow === undefined) {
+
+                    Swal.fire(
+                        {
+                            type: "warning",
+                            title: "Validación",
+                            text: "Seleccione un registro"
+                        });
+
+                    return;
+
+                }
+
+
+                window.location.href = '/DashboardHistory/EmployeePersonalDashboard?employee=' + idrow;
+
+
+
+
+            });
+
+
 
 
         });

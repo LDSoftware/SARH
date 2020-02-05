@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace SARH.Core.PdfCreator
 {
@@ -65,6 +66,15 @@ namespace SARH.Core.PdfCreator
             return new Font(fontBase, 9, Font.NORMAL);
         }
 
+        private Font IncidenciaFont() 
+        {
+            BaseFont fontBase = BaseFont.CreateFont(_pdfConfig.FontPathPdf, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+            Font f = new Font(fontBase);
+            f.Size = 18;
+            f.Color = BaseColor.Black;
+            return f;
+        }
+
         private void CreateHeaderSection(Document document, DocumentInfoPdfData pdfData) 
         {
             var p = new PdfPTable(2)
@@ -78,7 +88,7 @@ namespace SARH.Core.PdfCreator
 
             var cell = new PdfPCell(Image.GetInstance(File.ReadAllBytes(_pdfConfig.ImgPathPdf)));
             cell.HorizontalAlignment = Element.ALIGN_LEFT;
-            cell.BackgroundColor = BaseColor.Black;
+            cell.BackgroundColor = new BaseColor(34, 31, 32);
             p.AddCell(cell);
 
             var fontH1 = HeaderFont();
@@ -93,7 +103,6 @@ namespace SARH.Core.PdfCreator
             document.Add(p);
             document.Add(new Phrase(Environment.NewLine));
         }
-
 
         private void CreateInfoEmployeeSection(Document document, DocumentInfoPdfData pdfData)
         {
@@ -155,6 +164,371 @@ namespace SARH.Core.PdfCreator
             document.Add(productsTable);
             document.Add(new Phrase(Environment.NewLine));
         }
+
+        private void CreateInfoDataEmployeeSection(Document document, DocumentInfoPdfData pdfData)
+        {
+            var font = DocumentFont();
+            var fontRev = TitleFont();
+
+            var productsTable = new PdfPTable(3)
+            {
+                RunDirection = PdfWriter.RUN_DIRECTION_LTR,
+                WidthPercentage = 100f
+            };
+
+            productsTable.SetWidths(new[] { 45, 35, 20 });
+
+            var p1 = new Paragraph($"   ID Empleado: {pdfData.EmployeInfo.EmployeeId}" +
+               $"{Environment.NewLine}   Nombre: {pdfData.EmployeInfo.EmployeeName.ToUpper()}" +
+               $"{Environment.NewLine}   RFC: {pdfData.EmployeInfo.Rfc}" +
+               $"{Environment.NewLine}   CURP: {pdfData.EmployeInfo.Curp}" +
+               $"{Environment.NewLine}   NSS: {pdfData.EmployeInfo.NSS}" +
+               $"{Environment.NewLine}" +
+               $"{Environment.NewLine}   Fecha de Nacimiento: {pdfData.EmployeInfo.BrithDate}", font);
+            p1.SetLeading(4, 18);
+
+            var cellProductItem = new PdfPCell(p1);
+            cellProductItem.HorizontalAlignment = Element.ALIGN_LEFT;
+            cellProductItem.BackgroundColor = new BaseColor(231, 231, 232);
+            productsTable.AddCell(cellProductItem);
+
+            cellProductItem = new PdfPCell(new Phrase($"   Fecha de Alta: {pdfData.EmployeInfo.HireDate}" +
+                $"{Environment.NewLine}   Fecha de Baja: {pdfData.EmployeInfo.FireDate}", font));
+            cellProductItem.HorizontalAlignment = Element.ALIGN_LEFT;
+            cellProductItem.BackgroundColor = new BaseColor(231, 231, 232);
+            productsTable.AddCell(cellProductItem);
+
+
+            Byte[] bytes = Convert.FromBase64String(Regex.Replace(pdfData.EmployeInfo.PhotoPath, @"^data:image\/[a-zA-Z]+;base64,", string.Empty));
+
+            iTextSharp.text.Image image1 = iTextSharp.text.Image.GetInstance(bytes);
+            image1.SetAbsolutePosition(140, 70);
+            image1.ScalePercent(45f);
+
+            cellProductItem = new PdfPCell(image1);
+            cellProductItem.HorizontalAlignment = Element.ALIGN_CENTER;
+            productsTable.AddCell(cellProductItem);
+
+
+            document.Add(productsTable);
+        }
+
+        private void CreatePersonalDataEmployeeSection(Document document, DocumentInfoPdfData pdfData)
+        {
+            var font = DocumentFont();
+            var fontRev = TitleFont();
+
+
+            document.Add(new Paragraph($"{Environment.NewLine}"));
+
+            var productsHeader = new PdfPTable(1)
+            {
+                RunDirection = PdfWriter.RUN_DIRECTION_LTR,
+                WidthPercentage = 100f
+            };
+            var cellProducts = new PdfPCell(new Phrase("DATOS PERSONALES", fontRev));
+            cellProducts.HorizontalAlignment = Element.ALIGN_CENTER;
+            cellProducts.BackgroundColor = BaseColor.Black;
+            productsHeader.AddCell(cellProducts);
+            document.Add(productsHeader);
+
+            var productsTable = new PdfPTable(3)
+            {
+                RunDirection = PdfWriter.RUN_DIRECTION_LTR,
+                WidthPercentage = 100f
+            };
+
+            //
+
+            productsTable.SetWidths(new[] { 50, 20, 30 });
+
+            var cellProductItem = new PdfPCell(new Phrase($"   Telefóno{Environment.NewLine}   {pdfData.EmployeInfo.PersonalPhone}", font));
+            cellProductItem.HorizontalAlignment = Element.ALIGN_LEFT;
+            productsTable.AddCell(cellProductItem);
+
+
+            cellProductItem = new PdfPCell(new Phrase($"   Celular{Environment.NewLine}   {pdfData.EmployeInfo.CellNumber}", font));
+            cellProductItem.HorizontalAlignment = Element.ALIGN_LEFT;
+            productsTable.AddCell(cellProductItem);
+
+            cellProductItem = new PdfPCell(new Phrase($"   Email{Environment.NewLine}   {pdfData.EmployeInfo.PersonalEmail}", font));
+            cellProductItem.HorizontalAlignment = Element.ALIGN_LEFT;
+            productsTable.AddCell(cellProductItem);
+
+            document.Add(productsTable);
+
+            var productsTable2 = new PdfPTable(4)
+            {
+                RunDirection = PdfWriter.RUN_DIRECTION_LTR,
+                WidthPercentage = 100f
+            };
+            productsTable2.SetWidths(new[] { 50, 20, 15, 15 });
+
+
+            var cellProductItem2 = new PdfPCell(new Phrase($"   Dirección{Environment.NewLine}   {pdfData.EmployeInfo.Address}", font));
+            cellProductItem2.HorizontalAlignment = Element.ALIGN_LEFT;
+            productsTable2.AddCell(cellProductItem2);
+
+
+            cellProductItem2 = new PdfPCell(new Phrase($"   Ciudad{Environment.NewLine}   {pdfData.EmployeInfo.City}", font));
+            cellProductItem2.HorizontalAlignment = Element.ALIGN_LEFT;
+            productsTable2.AddCell(cellProductItem2);
+
+            cellProductItem2 = new PdfPCell(new Phrase($"   Estado{Environment.NewLine}   {pdfData.EmployeInfo.State}", font));
+            cellProductItem2.HorizontalAlignment = Element.ALIGN_LEFT;
+            productsTable2.AddCell(cellProductItem2);
+
+            cellProductItem2 = new PdfPCell(new Phrase($"   C.P.{Environment.NewLine}   {pdfData.EmployeInfo.Cp}", font));
+            cellProductItem2.HorizontalAlignment = Element.ALIGN_LEFT;
+            productsTable2.AddCell(cellProductItem2);
+
+            document.Add(productsTable2);
+        }
+
+
+        private void CreateContactDataEmployeeSection(Document document, DocumentInfoPdfData pdfData)
+        {
+            var font = DocumentFont();
+            var fontRev = TitleFont();
+
+
+            document.Add(new Paragraph($"{Environment.NewLine}"));
+
+            var productsHeader = new PdfPTable(1)
+            {
+                RunDirection = PdfWriter.RUN_DIRECTION_LTR,
+                WidthPercentage = 100f
+            };
+            var cellProducts = new PdfPCell(new Phrase("CONTACTO EMERGENCIA", fontRev));
+            cellProducts.HorizontalAlignment = Element.ALIGN_CENTER;
+            cellProducts.BackgroundColor = BaseColor.Black;
+            productsHeader.AddCell(cellProducts);
+            document.Add(productsHeader);
+
+            var productsTable = new PdfPTable(3)
+            {
+                RunDirection = PdfWriter.RUN_DIRECTION_LTR,
+                WidthPercentage = 100f
+            };
+
+            //
+
+            productsTable.SetWidths(new[] { 50, 20, 30 });
+
+            var cellProductItem = new PdfPCell(new Phrase($"   Nombre Contacto{Environment.NewLine}   {pdfData.EmployeInfo.ContactName}", font));
+            cellProductItem.HorizontalAlignment = Element.ALIGN_LEFT;
+            productsTable.AddCell(cellProductItem);
+
+
+            cellProductItem = new PdfPCell(new Phrase($"   Relación{Environment.NewLine}   {pdfData.EmployeInfo.ContactRelation}", font));
+            cellProductItem.HorizontalAlignment = Element.ALIGN_LEFT;
+            productsTable.AddCell(cellProductItem);
+
+            cellProductItem = new PdfPCell(new Phrase($"   Teléfono{Environment.NewLine}   {pdfData.EmployeInfo.ContactPhone}", font));
+            cellProductItem.HorizontalAlignment = Element.ALIGN_LEFT;
+            productsTable.AddCell(cellProductItem);
+
+            document.Add(productsTable);
+        }
+
+        private void CreateJobDataEmployeeSection(Document document, DocumentInfoPdfData pdfData)
+        {
+            var font = DocumentFont();
+            var fontRev = TitleFont();
+
+
+            document.Add(new Paragraph($"{Environment.NewLine}"));
+
+            var productsHeader = new PdfPTable(1)
+            {
+                RunDirection = PdfWriter.RUN_DIRECTION_LTR,
+                WidthPercentage = 100f
+            };
+            var cellProducts = new PdfPCell(new Phrase("PUESTO", fontRev));
+            cellProducts.HorizontalAlignment = Element.ALIGN_CENTER;
+            cellProducts.BackgroundColor = BaseColor.Black;
+            productsHeader.AddCell(cellProducts);
+            document.Add(productsHeader);
+
+            var productsTable = new PdfPTable(6)
+            {
+                RunDirection = PdfWriter.RUN_DIRECTION_LTR,
+                WidthPercentage = 100f
+            };
+
+            //
+
+            string stwork = string.Empty;
+            string enwork = string.Empty;
+            string stmeal = string.Empty;
+            string enmeal = string.Empty;
+
+            if (!string.IsNullOrEmpty(pdfData.EmployeInfo.StarWorkDay)) 
+            {
+                var job1 = pdfData.EmployeInfo.StarWorkDay.Split('-');
+                stwork = job1[0];
+                enwork = job1[1];
+            }
+            if (!string.IsNullOrEmpty(pdfData.EmployeInfo.StartMealDay))
+            {
+                var job2 = pdfData.EmployeInfo.StartMealDay.Split('-');
+                stmeal = job2[0];
+                enmeal = job2[1];
+
+            }
+
+            productsTable.SetWidths(new[] { 26, 18, 14, 14, 14, 14 });
+
+            var cellProductItem = new PdfPCell(new Phrase($"   Puesto{Environment.NewLine}{pdfData.EmployeInfo.JobTitle}", font));
+            cellProductItem.HorizontalAlignment = Element.ALIGN_LEFT;
+            productsTable.AddCell(cellProductItem);
+
+
+            cellProductItem = new PdfPCell(new Phrase($"   Salario{Environment.NewLine}{pdfData.EmployeInfo.Salary}", font));
+            cellProductItem.HorizontalAlignment = Element.ALIGN_LEFT;
+            productsTable.AddCell(cellProductItem);
+
+            cellProductItem = new PdfPCell(new Phrase($"   Horario Inicio{Environment.NewLine}{stwork}", font));
+            cellProductItem.HorizontalAlignment = Element.ALIGN_CENTER;
+            productsTable.AddCell(cellProductItem);
+
+            cellProductItem = new PdfPCell(new Phrase($"   Horario Salida{Environment.NewLine}{enwork}", font));
+            cellProductItem.HorizontalAlignment = Element.ALIGN_CENTER;
+            productsTable.AddCell(cellProductItem);
+
+            cellProductItem = new PdfPCell(new Phrase($"   Inicio Comida{Environment.NewLine}{stmeal}", font));
+            cellProductItem.HorizontalAlignment = Element.ALIGN_CENTER;
+            productsTable.AddCell(cellProductItem);
+
+            cellProductItem = new PdfPCell(new Phrase($"   Fin Comida{Environment.NewLine}{enmeal}", font));
+            cellProductItem.HorizontalAlignment = Element.ALIGN_CENTER;
+            productsTable.AddCell(cellProductItem);
+
+
+            document.Add(productsTable);
+
+            var productsTable2 = new PdfPTable(2)
+            {
+                RunDirection = PdfWriter.RUN_DIRECTION_LTR,
+                WidthPercentage = 100f
+            };
+            productsTable2.SetWidths(new[] { 44, 56 });
+
+
+            var cellProductItem2 = new PdfPCell(new Phrase($"   Equipo en resguardo{Environment.NewLine}   {pdfData.EmployeInfo.AssignedEquipment}", font));
+            cellProductItem2.HorizontalAlignment = Element.ALIGN_LEFT;
+            productsTable2.AddCell(cellProductItem2);
+
+
+            cellProductItem2 = new PdfPCell(new Phrase($"   Otros{Environment.NewLine}", font));
+            cellProductItem2.HorizontalAlignment = Element.ALIGN_LEFT;
+            productsTable2.AddCell(cellProductItem2);
+
+
+            document.Add(productsTable2);
+        }
+
+        private void CreateHolidayEmployeeSection(Document document, DocumentInfoPdfData pdfData)
+        {
+            var font = DocumentFont();
+            var fontRev = TitleFont();
+            var fontInc = IncidenciaFont();
+
+
+            document.Add(new Paragraph($"{Environment.NewLine}"));
+
+            var productsHeader = new PdfPTable(1)
+            {
+                RunDirection = PdfWriter.RUN_DIRECTION_LTR,
+                WidthPercentage = 100f
+            };
+            var cellProducts = new PdfPCell(new Phrase("VACACIONES/PERMISOS/FALTAS", fontRev));
+            cellProducts.HorizontalAlignment = Element.ALIGN_CENTER;
+            cellProducts.BackgroundColor = BaseColor.Black;
+            productsHeader.AddCell(cellProducts);
+            document.Add(productsHeader);
+
+            var productsTable = new PdfPTable(4)
+            {
+                RunDirection = PdfWriter.RUN_DIRECTION_LTR,
+                WidthPercentage = 100f
+            };
+
+            productsTable.SetWidths(new[] { 40, 20, 20, 20 });
+
+
+            var p1 = new Paragraph($"   Vacaciones" +
+               $"{Environment.NewLine}   Días correspondientes por año: 0" +
+               $"{Environment.NewLine}   Días no gozados año anterior: 0" +
+               $"{Environment.NewLine}   Total días por gozar: 0" +
+               $"{Environment.NewLine}   Días Gozados: 0" +
+               $"{Environment.NewLine}   Días por gozar: 0" +
+               $"{Environment.NewLine}", font);
+
+
+
+            var cellProductItem = new PdfPCell(p1);
+            cellProductItem.HorizontalAlignment = Element.ALIGN_LEFT;
+            productsTable.AddCell(cellProductItem);
+
+
+            cellProductItem = new PdfPCell(new Phrase($"   Permisos{Environment.NewLine}{Environment.NewLine}00", font));
+            cellProductItem.HorizontalAlignment = Element.ALIGN_CENTER;
+            productsTable.AddCell(cellProductItem);
+
+            cellProductItem = new PdfPCell(new Phrase($"   Retardos{Environment.NewLine}{Environment.NewLine}00", font));
+            cellProductItem.HorizontalAlignment = Element.ALIGN_CENTER;
+            productsTable.AddCell(cellProductItem);
+
+            cellProductItem = new PdfPCell(new Phrase($"   Faltas{Environment.NewLine}{Environment.NewLine}00", font));
+            cellProductItem.HorizontalAlignment = Element.ALIGN_CENTER;
+            productsTable.AddCell(cellProductItem);
+
+            document.Add(productsTable);
+        }
+
+
+        private void CreateDocumentEmployeeSection(Document document, DocumentInfoPdfData pdfData)
+        {
+            var font = DocumentFont();
+            var fontRev = TitleFont();
+
+            document.Add(new Paragraph($"{Environment.NewLine}"));
+
+            var productsHeader = new PdfPTable(1)
+            {
+                RunDirection = PdfWriter.RUN_DIRECTION_LTR,
+                WidthPercentage = 100f
+            };
+            var cellProducts = new PdfPCell(new Phrase("Expendiente", fontRev));
+            cellProducts.HorizontalAlignment = Element.ALIGN_CENTER;
+            cellProducts.BackgroundColor = BaseColor.Black;
+            productsHeader.AddCell(cellProducts);
+            document.Add(productsHeader);
+
+            var productsTable = new PdfPTable(2)
+            {
+                RunDirection = PdfWriter.RUN_DIRECTION_LTR,
+                WidthPercentage = 100f
+            };
+
+            productsTable.SetWidths(new[] { 50, 50 });
+
+            var cellProductItem = new PdfPCell(new Phrase($"   Documento               Última Actialización{Environment.NewLine}{pdfData.EmployeInfo.Documents}", font));
+            cellProductItem.HorizontalAlignment = Element.ALIGN_LEFT;
+            productsTable.AddCell(cellProductItem);
+
+            cellProductItem = new PdfPCell(new Phrase($"", font));
+            cellProductItem.HorizontalAlignment = Element.ALIGN_LEFT;
+            productsTable.AddCell(cellProductItem);
+
+            document.Add(productsTable);
+
+            document.Add(new Paragraph($"{Environment.NewLine}"));
+        }
+
+
+
 
 
         private void CreateDetailInfoSection(Document document, DocumentInfoPdfData pdfData) 
@@ -289,10 +663,33 @@ namespace SARH.Core.PdfCreator
             fileStream.Dispose();
         }
 
+        public void CreateEmployeeProfile(DocumentInfoPdfData pdfData, string pdfFile) 
+        {
+            var pdfDoc = new Document(PageSize.A4);
+            var pdfFilePath = pdfFile;
+            var fileStream = new FileStream(pdfFilePath, FileMode.Create);
+            PdfWriter.GetInstance(pdfDoc, fileStream);
+            pdfDoc.AddAuthor("ISOSA SARH");
+            pdfDoc.Open();
+
+            CreateHeaderSection(pdfDoc, pdfData);
+            CreateInfoDataEmployeeSection(pdfDoc, pdfData);
+            CreatePersonalDataEmployeeSection(pdfDoc, pdfData);
+            CreateContactDataEmployeeSection(pdfDoc, pdfData);
+            CreateJobDataEmployeeSection(pdfDoc, pdfData);
+            CreateHolidayEmployeeSection(pdfDoc, pdfData);
+            CreateDocumentEmployeeSection(pdfDoc, pdfData);
+            CreateObservationSection(pdfDoc, pdfData);
+
+            pdfDoc.Close();
+            fileStream.Dispose();
+        }
 
 
 
 
-        
+
+
+
     }
 }

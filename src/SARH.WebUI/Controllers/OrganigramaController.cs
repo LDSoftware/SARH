@@ -228,63 +228,74 @@ namespace SARH.WebUI.Controllers
 
             string fileName = "";
 
-            if (repository.SearhItemsFor(p => p.EmployeeId.Equals(EmployeeId) && p.AssignationType.Equals(1)).Any())
+            try
             {
-                var jsonData = repository.SearhItemsFor(p => p.EmployeeId.Equals(EmployeeId) && p.AssignationType.Equals(1)).FirstOrDefault();
-
-                IConfigPdf config = new ConfigPdf()
+                if (repository.SearhItemsFor(p => p.EmployeeId.Equals(EmployeeId) && p.AssignationType.Equals(1)).Any())
                 {
-                    FontPathPdf = configManager.FontPathPdf,
-                    ImgPathPdf = configManager.ImgPathPdf,
-                    FontPathBarCode = configManager.FontPathBarCode
-                };
-                PdfManager manager = new PdfManager(config);
+                    var jsonData = repository.SearhItemsFor(p => p.EmployeeId.Equals(EmployeeId) && p.AssignationType.Equals(1)).FirstOrDefault();
+
+                    IConfigPdf config = new ConfigPdf()
+                    {
+                        FontPathPdf = configManager.FontPathPdf,
+                        ImgPathPdf = configManager.ImgPathPdf,
+                        FontPathBarCode = configManager.FontPathBarCode
+                    };
+                    PdfManager manager = new PdfManager(config);
 
 
-                if (!Directory.Exists(jsonData.PathPDF))
-                {
-                    Directory.CreateDirectory(jsonData.PathPDF);
+                    if (!Directory.Exists(jsonData.PathPDF))
+                    {
+                        Directory.CreateDirectory(jsonData.PathPDF);
+                    }
+
+                    fileName = $"{jsonData.PathPDF}{EmployeeId}-F002-{DateTime.Now.ToShortDateString().Replace("/", string.Empty)}-001.pdf";
+
+
+                    var empInfo = organigramaModelFactory.GetEmployeeData(EmployeeId.TrimStart('0'));
+
+                    var detail = JsonConvert.DeserializeObject<List<HardwareAssignedModel>>(jsonData.AssignationDetail);
+
+                    List<string> _list = new List<string>();
+                    StringBuilder strb = new StringBuilder();
+                    detail.ForEach((det) =>
+                    {
+                        var _tt = "\t\t\t";
+                        var _ii = $"Carateristicas \t\t Marca:{det.Marca}  \t\t Serie:{det.Serie}";
+                        var _rr = $"\t\t Fecha de entrega {det.AssignationDate}";
+                        _list.Add($"{det.HadwareName} {_tt} {_ii} {_rr}");
+                        strb.Append(det.Description);
+                        strb.AppendLine();
+                    });
+
+                    jsonData.DocumentId = $"{EmployeeId}-F002-{DateTime.Now.ToShortDateString().Replace("/", string.Empty)}-001";
+                    repository.Update(jsonData);
+
+                    manager.CreateAssigedHardwareFormat(new Core.PdfCreator.FormatData.DocumentInfoPdfData()
+                    {
+                        EmployeeNumber = EmployeeId,
+                        EmployeeName = $"{empInfo.GeneralInfo.FirstName} {empInfo.GeneralInfo.LastName}",
+                        JobTitle = empInfo.GeneralInfo.JobTitle,
+                        Area = empInfo.GeneralInfo.Area,
+                        DocumentDetailInfo = _list,
+                        Comments = strb.ToString(),
+                        TitleDocumento = "Equipo en Resguardo",
+                        FormatId = "F002",
+                        EmployeeInfoTitle = "DATOS PERSONALES",
+                        DetailDocument = "TECNOLOGíA DE LA INFORMACIÓN",
+                        DocumentObservationsTitle = "OBSERVACIONES",
+                        SingEmployeeTitle = "NOMBRE Y FIRMA DE RECIBIDO",
+                        IdDocument = $"{EmployeeId}-F002-{DateTime.Now.ToShortDateString().Replace("/", string.Empty)}-001"
+                    }, fileName);
                 }
 
-                fileName = $"{jsonData.PathPDF}{EmployeeId}-F002-{DateTime.Now.ToShortDateString().Replace("/", string.Empty)}-001.pdf";
-
-
-                var empInfo = organigramaModelFactory.GetEmployeeData(EmployeeId.TrimStart('0'));
-
-                var detail = JsonConvert.DeserializeObject<List<HardwareAssignedModel>>(jsonData.AssignationDetail);
-
-                List<string> _list = new List<string>();
-                StringBuilder strb = new StringBuilder();
-                detail.ForEach((det) =>
-                {
-                    var _tt = "\t\t\t";
-                    var _ii = $"Carateristicas \t\t Marca:{det.Marca}  \t\t Serie:{det.Serie}";
-                    var _rr = $"\t\t Fecha de entrega {det.AssignationDate}";
-                    _list.Add($"{det.HadwareName} {_tt} {_ii} {_rr}");
-                    strb.Append(det.Description);
-                    strb.AppendLine();
-                });
-
-                jsonData.DocumentId = $"{EmployeeId}-F002-{DateTime.Now.ToShortDateString().Replace("/", string.Empty)}-001";
-                repository.Update(jsonData);
-
-                manager.CreateAssigedHardwareFormat(new Core.PdfCreator.FormatData.DocumentInfoPdfData()
-                {
-                    EmployeeNumber = EmployeeId,
-                    EmployeeName = $"{empInfo.GeneralInfo.FirstName} {empInfo.GeneralInfo.LastName}",
-                    JobTitle = empInfo.GeneralInfo.JobTitle,
-                    Area = empInfo.GeneralInfo.Area,
-                    DocumentDetailInfo = _list,
-                    Comments = strb.ToString(),
-                    TitleDocumento = "Equipo en Resguardo",
-                    FormatId = "F002",
-                    EmployeeInfoTitle = "DATOS PERSONALES",
-                    DetailDocument = "TECNOLOGíA DE LA INFORMACIÓN",
-                    DocumentObservationsTitle = "OBSERVACIONES",
-                    SingEmployeeTitle = "NOMBRE Y FIRMA DE RECIBIDO",
-                    IdDocument = $"{EmployeeId}-F002-{DateTime.Now.ToShortDateString().Replace("/", string.Empty)}-001"
-                }, fileName);
             }
+            catch (Exception ex)
+            {
+                byte[] FileBytesError = System.Text.Encoding.UTF8.GetBytes(ex.Message);
+                return File(FileBytesError, "text/plain");
+            }
+
+
 
             byte[] FileBytes = System.IO.File.ReadAllBytes(fileName);
             return File(FileBytes, "application/pdf");
@@ -418,10 +429,10 @@ namespace SARH.WebUI.Controllers
                 detail.ForEach((det) =>
                 {
                     var _tt = "\t\t\t";
-                    var _ii = $"Carateristicas \t\t {det.Description} ";
+                    var _ii = $"Carateristicas \t\t {det.SecurityEquimentName} ";
                     var _rr = $"\t\t Fecha de entrega {det.AssignationDate}";
-                    _list.Add($"{det.Description} {_tt} {_ii} {_rr}");
-                    strb.Append(det.Description);
+                    _list.Add($"{_ii} {det.Description} {_tt} {_rr}");
+                    strb.Append($"{_ii} {det.Description}");
                     strb.AppendLine();
                 });
 
@@ -971,12 +982,24 @@ namespace SARH.WebUI.Controllers
 
                 element.EMP_FirstName = model.FirstName;
                 element.EMP_LastName = $"{model.LastName} {model.LastName2}";
-                element.EMP_RFC = model.RFC.Substring(0, 4);
-                element.EMP_homoclave = model.RFC.Substring(10, 3);
-                element.EMP_curpi = model.CURP.Substring(0, 4);
-                element.EMP_curpF = model.CURP.Substring(10, 8);
-                element.EMP_BirthDate = DateTime.Parse(model.FechaNacimiento);
-                element.EMP_DateOfHire = DateTime.Parse(model.HireDate);
+                if (!string.IsNullOrEmpty(model.RFC)) 
+                {
+                    element.EMP_RFC = model.RFC.Substring(0, 4);
+                    element.EMP_homoclave = model.RFC.Substring(10, 3);
+                }
+                if (!string.IsNullOrEmpty(model.CURP)) 
+                {
+                    element.EMP_curpi = model.CURP.Substring(0, 4);
+                    element.EMP_curpF = model.CURP.Substring(10, 8);
+                }
+                if (string.IsNullOrEmpty(model.FechaNacimiento)) 
+                {
+                    element.EMP_BirthDate = DateTime.Parse(model.FechaNacimiento);
+                }
+                if (string.IsNullOrEmpty(model.HireDate))
+                {
+                    element.EMP_DateOfHire = DateTime.Parse(model.HireDate);
+                }
                 if (!string.IsNullOrEmpty(filePath)) 
                 {
                     element.EMP_UserDef4 = filePath;
@@ -1107,7 +1130,132 @@ namespace SARH.WebUI.Controllers
 
         #endregion
 
+        #region Employee PDF Ficha Empleado
 
+        public FileResult PrintEmployeeInfo(string EmployeeId, 
+            [FromServices] IOrganigramaModelFactory organigramaModelFactory, 
+            [FromServices] SARH.Core.Configuration.IConfigurationManager configManager,
+            [FromServices] IRepository<EmployeeObjectAsignation> repository,
+            [FromServices]IRepository<PersonalDocument> personalDocumentRepository,
+            [FromServices] IRepository<DocumentType> documentType)
+        {
+
+            string fileName = "";
+            StringBuilder strb = new StringBuilder();
+            StringBuilder strbDocs = new StringBuilder();
+
+            try
+            {
+                if (repository.SearhItemsFor(p => p.EmployeeId.Equals(int.Parse(EmployeeId).ToString("00000")) && p.AssignationType.Equals(1)).Any())
+                {
+                    var jsonData = repository.SearhItemsFor(p => p.EmployeeId.Equals(int.Parse(EmployeeId).ToString("00000")) && p.AssignationType.Equals(1)).FirstOrDefault();
+
+                    var detail = JsonConvert.DeserializeObject<List<HardwareAssignedModel>>(jsonData.AssignationDetail);
+
+                    detail.ForEach((det) =>
+                    {
+                        var _tt = "\t\t\t";
+                        var _ii = $"Carateristicas \t\t Marca:{det.Marca}  \t\t Serie:{det.Serie}";
+                        strb.Append($"{det.HadwareName} {_tt} {_ii}");
+                        strb.AppendLine();
+                    });
+
+               }
+                var personalDocs = personalDocumentRepository.SearhItemsFor(p => p.EmployeeID.Equals(int.Parse(EmployeeId).ToString("00000")));
+                if (personalDocs.Any())
+                {
+                    var docType = documentType.GetAll().Select(k => new SelectListItem() { Text = k.Description, Value = k.Id.ToString() });
+                    var docs = personalDocs.Select(y => new EmployeeDetailDocuments()
+                    {
+                        Id = y.Id,
+                        EmployeeID = y.EmployeeID,
+                        DocumentPathInfo = System.IO.File.GetCreationTime(y.DocumentPathInfo).ToShortDateString(),
+                        DocumentType = docType.Where(d => d.Value.Equals(y.DocumentType.ToString())).FirstOrDefault().Text,
+                        IsValid = y.IsValid ? "Si" : "No",
+                        Checked = y.Checked ? "Si" : "No"
+                    }).ToList();
+
+                    docs.ForEach(f => 
+                    {
+                        var _tt = "               ";
+                        strbDocs.Append($"  {f.DocumentType}{_tt}{f.DocumentPathInfo}");
+                        strbDocs.AppendLine();
+                    });
+                }
+
+                var empInfo = organigramaModelFactory.GetEmployeeData(EmployeeId.TrimStart('0'));
+
+                IConfigPdf config = new ConfigPdf()
+                {
+                    FontPathPdf = configManager.FontPathPdf,
+                    ImgPathPdf = configManager.ImgPathPdf,
+                    FontPathBarCode = configManager.FontPathBarCode
+                };
+                PdfManager manager = new PdfManager(config);
+
+
+                if (!Directory.Exists($@"{configManager.EmployeeDataInfo.Replace("|EmpNumber|", empInfo.GeneralInfo.Id)}"))
+                {
+                    Directory.CreateDirectory($@"{configManager.EmployeeDataInfo.Replace("|EmpNumber|", empInfo.GeneralInfo.Id)}");
+                }
+
+                fileName = $@"{configManager.EmployeeDataInfo.Replace("|EmpNumber|", empInfo.GeneralInfo.Id)}FichaEmpleado.pdf";
+
+
+
+
+                manager.CreateEmployeeProfile(new Core.PdfCreator.FormatData.DocumentInfoPdfData()
+                {
+                    EmployeeNumber = EmployeeId,
+                    EmployeeName = $"{empInfo.GeneralInfo.FirstName} {empInfo.GeneralInfo.LastName}",
+                    JobTitle = empInfo.GeneralInfo.JobTitle,
+                    Area = empInfo.GeneralInfo.Area,
+                    TitleDocumento = "Ficha del Empleado",
+                    DocumentObservationsTitle = "COMENTARIOS DE RECOMENDACIONES",
+                    Comments = empInfo.GeneralInfo.Observations,
+                    EmployeInfo = new Core.PdfCreator.FormatData.EmployeeInfoData()
+                    {
+                        EmployeeId = empInfo.GeneralInfo.Id,
+                        EmployeeName = $"{empInfo.GeneralInfo.FirstName} {empInfo.GeneralInfo.LastName} {empInfo.GeneralInfo.LastName2}",
+                        Rfc = empInfo.GeneralInfo.RFC,
+                        Curp = empInfo.GeneralInfo.CURP,
+                        NSS = empInfo.GeneralInfo.NSS,
+                        BrithDate = empInfo.GeneralInfo.FechaNacimiento,
+                        HireDate = empInfo.GeneralInfo.HireDate,
+                        FireDate = "N/A",
+                        PhotoPath = empInfo.GeneralInfo.Picture,
+                        PersonalPhone = empInfo.PersonalInfo.Phone,
+                        CellNumber = empInfo.PersonalInfo.CellPhone,
+                        PersonalEmail = empInfo.PersonalInfo.Email,
+                        Address = empInfo.PersonalInfo.Address,
+                        City = empInfo.PersonalInfo.City,
+                        State = empInfo.PersonalInfo.State,
+                        Cp = empInfo.PersonalInfo.Zip,
+                        ContactName = empInfo.EmergencyData.Name,
+                        ContactRelation = empInfo.EmergencyData.Relacion,
+                        ContactPhone = empInfo.EmergencyData.Phone,
+                        JobTitle = empInfo.GeneralInfo.JobTitle,
+                        Salary = "$ 00.00",
+                        StarWorkDay = empInfo.GeneralInfo.StartJob,
+                        StartMealDay = empInfo.GeneralInfo.EndJob,
+                        AssignedEquipment = strb.ToString(),
+                        Documents = strbDocs.ToString()
+                    }
+                }, fileName);
+            }
+            catch (Exception ex)
+            {
+                byte[] FileBytesError = System.Text.Encoding.UTF8.GetBytes(ex.Message);
+                return File(FileBytesError, "text/plain");
+            }
+
+
+
+            byte[] FileBytes = System.IO.File.ReadAllBytes(fileName);
+            return File(FileBytes, "application/pdf");
+        }
+
+        #endregion
 
     }
 }

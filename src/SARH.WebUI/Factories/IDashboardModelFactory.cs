@@ -13,5 +13,7 @@ namespace SARH.WebUI.Factories
         DashboardModel GetDay(string date, DashboardFilters filters);
         List<DashboardDataDetail> GetDashboardDetail(string employee, string date, DashboardFilters filters);
         FormatApproved GetFormats(string date);
+        PersonalDashboardData GetPersonalDashboardData(string employee, DateTime startDate, DateTime endDate);
+
     }
 }

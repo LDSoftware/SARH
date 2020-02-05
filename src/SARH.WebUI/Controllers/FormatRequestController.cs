@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
 using ISOSA.SARH.Data.Domain.Catalog;
@@ -10,6 +11,7 @@ using ISOSA.SARH.Data.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using SARH.Core.Configuration;
 using SARH.WebUI.Factories;
 using SARH.WebUI.Models.FormatRequest;
 using SARH.WebUI.Models.Formats;
@@ -95,7 +97,10 @@ namespace SARH.WebUI.Controllers
 
         [AllowAnonymous]
         [HttpPost]
-        public JsonResult SaveFormat(FormatInputModel format, [FromServices] IRepository<EmployeeFormat> formatRepository)
+        public JsonResult SaveFormat(FormatInputModel format, 
+            [FromServices] IRepository<EmployeeFormat> formatRepository,
+            [FromServices] IOrganigramaModelFactory organigramaModelFactory,
+            [FromServices] IConfigurationManager configurationManager)
         {
 
 
@@ -116,6 +121,46 @@ namespace SARH.WebUI.Controllers
             };
 
             formatRepository.Create(element);
+
+            var suplente = organigramaModelFactory.GetEmployeeData(format.EmployeeSubId.TrimStart(new Char[] { '0' }));
+            var solicitante = organigramaModelFactory.GetEmployeeData(format.EmployeeId.TrimStart(new Char[] { '0' }));
+
+            string urlRoute = $"http://{configurationManager.ServerIP}/FormatRequest/ConfirmacionSuplente?IdFormat={element.Id.ToString()}";
+
+            if (suplente != null && !string.IsNullOrEmpty(suplente.GeneralInfo.Email))
+            {
+                try
+                {
+                    MailMessage mail = new MailMessage();
+                    mail.To.Add(suplente.GeneralInfo.Email);
+                    mail.From = new MailAddress(configurationManager.MailUsername);
+                    mail.Subject = "Solicitud de Confirmación para cubrir puesto";
+
+                    string htmlString = $@"<html>
+                      <body>
+                      <p>Hola, <br>{suplente.GeneralInfo.FirstName} {suplente.GeneralInfo.LastName} {suplente.GeneralInfo.LastName2}</br></p>
+                      <p><br>{solicitante.GeneralInfo.JobTitle}</br> solicita tu confirmación para cubrir su puesto durante el periodo:</p>
+                      <p>{format.StartDate}-{format.EndDate}</p>
+                      <p>Da click en el siguiente enlace para confirmar que estas enterado y aceptas su solicitud</p>
+                      <p><a href = '{urlRoute}'>Confirmar solicitud</a></p>
+                      </body>
+                      </html>
+                     ";
+
+                    mail.Body = htmlString;
+                    mail.IsBodyHtml = true;
+                    SmtpClient smtp = new SmtpClient(configurationManager.MailServer, int.Parse(configurationManager.MailPort));
+                    smtp.UseDefaultCredentials = false;
+                    smtp.EnableSsl = true;
+                    smtp.Credentials = new System.Net.NetworkCredential(configurationManager.MailUsername, configurationManager.MailUserpassword);
+                    smtp.Send(mail);
+                }
+                catch
+                {
+                }
+            }
+
+
 
             return Json(new { idformat = element.Id });
         }

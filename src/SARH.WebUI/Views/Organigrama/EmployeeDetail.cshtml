@@ -94,7 +94,7 @@
         </div>
         <div class="card mb-g">
             <div class="card-body">
-                <a class="d-flex flex-row align-items-center" href='#'>
+                <a class="d-flex flex-row align-items-center" href='@Url.Action("Index","HistoryEmployee", new { employee = Model.GeneralInfo.Id.TrimStart(new Char[] { '0' }) })'>
                     <div class="icon-stack display-3 flex-shrink-0">
                         <i class="fal fa-circle icon-stack-3x opacity-100 color-warning-400"></i>
                         <i class="fal fa-database icon-stack-1x opacity-100 color-warning-500"></i>
@@ -143,7 +143,7 @@
 
 
                             <div role="group" aria-label="Vertical button group">
-                                <a class="btn btn-secondary" href="#"><i class="fal fa-print"></i> Imprimir</a>
+                                <a class="btn btn-secondary" href='@Url.Action("PrintEmployeeInfo","Organigrama",new { EmployeeId = Model.GeneralInfo.Id.TrimStart(new Char[] { '0' }) })' target="_blank"><i class="fal fa-print"></i> Imprimir</a>
                                 <a id="saveGeneralInfo" class="btn btn-secondary" href="#"><i class="fal fa-save"></i> Guardar</a>
                                 <div class="btn-group" role="group">
                                     <button type="button" class="btn btn-secondary dropdown-toggle waves-effect waves-themed" data-toggle="dropdown" aria-expanded="false"><i class="fal fa-bolt"></i>&nbsp;Acciones</button>
@@ -270,15 +270,15 @@
 
                                     <div class="col-md-3 mb-3">
                                         <label class="form-label" for="employeeNSS">NSS</label>
-                                        <input class="form-control" id="employeeNSS" required="" type="text" placeholder="NSS" value="@Model.GeneralInfo.NSS">
+                                        <input class="form-control" id="employeeNSS" required type="text" placeholder="NSS" value="@Model.GeneralInfo.NSS">
                                     </div>
                                     <div class="col-md-3 mb-3">
                                         <label class="form-label" for="employeeCurp">CURP</label>
-                                        <input class="form-control" id="employeeCurp" required="" type="text" placeholder="CURP" value="@Model.GeneralInfo.CURP">
+                                        <input class="form-control" id="employeeCurp" required type="text" placeholder="CURP" value="@Model.GeneralInfo.CURP">
                                     </div>
                                     <div class="col-md-3 mb-3">
                                         <label class="form-label" for="employeeRFC">RFC</label>
-                                        <input class="form-control" id="employeeRFC" required="" type="text" placeholder="RFC" value="@Model.GeneralInfo.RFC">
+                                        <input class="form-control" id="employeeRFC" required type="text" placeholder="RFC" value="@Model.GeneralInfo.RFC">
                                     </div>
 
                                 </div>

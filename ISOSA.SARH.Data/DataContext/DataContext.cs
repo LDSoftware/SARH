@@ -47,6 +47,7 @@ namespace ISOSA.SARH.Data
         public virtual DbSet<FormatApprovedHubId> FormatApprobedHubIds { get; set; }
         public virtual DbSet<FormatApprover> FormatApprovers { get; set; }
         public virtual DbSet<DashboardData> DashboardInfo { get; set; }
+        public virtual DbSet<EmployeeNotify> EmployeeNotifications { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -73,6 +74,7 @@ namespace ISOSA.SARH.Data
             new FormatApprovedEmployeeMapping(builder.Entity<FormatApprovedEmployee>());
             new FormatApprovedHubIdMapping(builder.Entity<FormatApprovedHubId>());
             new FormatApproverMapping(builder.Entity<FormatApprover>());
+            new EmployeeNotifyMapping(builder.Entity<EmployeeNotify>());
         }
 
 

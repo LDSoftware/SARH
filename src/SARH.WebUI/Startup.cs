@@ -82,6 +82,7 @@ namespace SmartAdmin.WebUI
             services.AddTransient<IRepository<FormatApprovedEmployee>, FormatApprobedEmployeeRepository>(s => new FormatApprobedEmployeeRepository((Configuration.GetConnectionString("DataConnectionString"))));
             services.AddTransient<IRepository<FormatApprovedHubId>, FormatApprobedHubIdRepository>(s => new FormatApprobedHubIdRepository((Configuration.GetConnectionString("DataConnectionString"))));
             services.AddTransient<IRepository<FormatApprover>, FormatApproverRepository>(s => new FormatApproverRepository((Configuration.GetConnectionString("DataConnectionString"))));
+            services.AddTransient<IRepository<EmployeeNotify>, EmployeeNotifyRepository>(s => new EmployeeNotifyRepository((Configuration.GetConnectionString("DataConnectionString"))));
             services.AddTransient<IRepository<EmployeeOrganigrama>, EmployeeOrganigramaRepository>(s => new EmployeeOrganigramaRepository((Configuration.GetConnectionString("DataConnectionStringISOSA"))));
             services.AddTransient<SARH.Core.Configuration.IConfigurationManager, SARH.WebUI.Configuration.ConfigurationManager>(s => new SARH.WebUI.Configuration.ConfigurationManager("appsettings.json", "ApplicationFormatPath"));
             services.AddTransient<IElementUpdateModelFactory, ElementUpdateModelFactory>(s => new ElementUpdateModelFactory(new ElementUpdateRepository(Configuration.GetConnectionString("DataConnectionString"))));

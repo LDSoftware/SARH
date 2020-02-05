@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ISOSA.SARH.Data.Domain.Catalog;
 using ISOSA.SARH.Data.Domain.Configuration;
 using ISOSA.SARH.Data.Domain.Employee;
 using ISOSA.SARH.Data.Repository;
@@ -19,18 +20,21 @@ namespace SARH.WebUI.Factories
         private readonly IRepository<EmployeeOrganigrama> _isosaemployeesOrganigramaRepository;
         private readonly IRepository<EmployeeScheduleAssigned> _employeeAssignedScheduleRepository;
         private readonly IRepository<Schedule> _scheduleRepository;
+        private readonly IRepository<EmployeeNotify> _employeeNotifiers;
 
         public OrganigramaModelFactory(IRepository<Nomipaq_nom10001> nomipaqRepository, 
             IRepository<EmployeeAditionalInfo> isosaemployeesRepository,
             IRepository<EmployeeOrganigrama> isosaemployeesOrganigramaRepository,
             IRepository<EmployeeScheduleAssigned> employeeAssignedScheduleRepository,
-            IRepository<Schedule> scheduleRepository)
+            IRepository<Schedule> scheduleRepository,
+            IRepository<EmployeeNotify> employeeNotifiers)
         {
             _nomipaqRepository = nomipaqRepository;
             _isosaemployeesRepository = isosaemployeesRepository;
             _isosaemployeesOrganigramaRepository = isosaemployeesOrganigramaRepository;
             _employeeAssignedScheduleRepository = employeeAssignedScheduleRepository;
             _scheduleRepository = scheduleRepository;
+            _employeeNotifiers = employeeNotifiers;
         }
 
         public OrganigramaModel GetData(string organigramaPath)
@@ -565,28 +569,23 @@ namespace SARH.WebUI.Factories
 
                 if (row != null) 
                 {
-                    var empNotify = _isosaemployeesOrganigramaRepository.SearhItemsFor(f => f.Area.Equals(row.Area) && f.Centro.Equals(row.Centro));
+                    var empNotify = _employeeNotifiers.SearhItemsFor(e => e.Area.Equals(emp.FirstOrDefault().Area));
                     if (empNotify.Any()) 
                     {
-                        jobsT.ForEach(s => 
+                        var emps = (from em in empNotify
+                                    join iso in isosaEmp on em.RowGuid equals iso.HrowGuid.Value
+                                    select new EmployeeNotifyModel()
+                                    {
+                                        IdEmployee = iso.EMP_EmployeeID,
+                                        Email = iso.EMP_EMailAddress,
+                                        JobTitle = em.Puesto,
+                                        Name = $"{iso.EMP_FirstName} {iso.EMP_LastName}"
+                                    }).ToList();
+
+                        if (emps.Any())
                         {
-                            var emps = (from em in empNotify.Where(g => g.Puesto.Contains(s))
-                                        join iso in isosaEmp on em.RowGuid equals iso.HrowGuid.Value
-                                        select new EmployeeNotifyModel()
-                                        {
-                                            IdEmployee = iso.EMP_EmployeeID,
-                                            Email = iso.EMP_EMailAddress,
-                                            JobTitle = em.Puesto,
-                                            Name = $"{iso.EMP_FirstName} {iso.EMP_LastName}"
-                                        }).ToList();
-
-                            if (emps.Any()) 
-                            {
-                                result.AddRange(emps);
-                            }
-
-                        });
-
+                            result.AddRange(emps);
+                        }
                     }
                 }
             }

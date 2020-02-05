@@ -620,11 +620,11 @@
                                             <option value="4">No. Empleado</option>
                                         </select>
                                         <div class="input-group-append">
-                                            <button id="searchbuttontempwkn" type="button" class="btn btn-success shadow-0 waves-effect waves-themed">
+                                            <button id="searchbutton-wkntmp" type="button" class="btn btn-success shadow-0 waves-effect waves-themed">
 
-                                                <span id="imgsearchtempwkn" class="fal fa-search mr-1"></span>
+                                                <span id="imgsearchtempwkntmp" class="fal fa-search mr-1"></span>
 
-                                                <span id="spintempwkn" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="display:none"></span>
+                                                <span id="spintempwkntmp" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="display:none"></span>
 
                                             </button>
                                         </div>
@@ -641,7 +641,7 @@
 
                                 </div>
                                 <div id="searcherrortempwkn" style="display:none;">
-                                    <span id="msgerrortempwkn" class="h5 color-danger-900"></span>
+                                    <span id="msgerrortempwknfind" class="h5 color-danger-900"></span>
                                 </div>
                                 <hr />
                                 <center>
@@ -679,7 +679,7 @@
                                     <div class="col-md-12">
                                         <div class="d-flex flex-wrap align-items-center pl-3 pr-1 py-2 px-sm-4 px-lg-5 border-faded border-top-0 border-left-0 border-right-0">
                                             <div class="flex-1 d-flex align-items-center">
-                                                <a href="javascript:void(0);" id="js-delete-selectedtemp" class="btn btn-icon rounded-circle mr-1 waves-effect waves-themed">
+                                                <a href="javascript:void(0);" id="js-delete-selectedtempwkn" class="btn btn-icon rounded-circle mr-1 waves-effect waves-themed">
                                                     <i class="fas fa-trash fs-md"></i>
                                                 </a>
                                             </div>
@@ -821,6 +821,7 @@
             var multipleadded = false;
             var multipleaddedtemp = false;
             var multipleaddedwkn = false;
+            var multipleaddedwkntmp = false;
 
 
             $('#dt-basic-example').dataTable(
@@ -1751,15 +1752,310 @@
             });
 
 
+            //Horarios Temporales Sabado
+
+            $('#savenewscheduletempwkn').click(function () {
+
+
+                if ($('#inputtolerancewdtempwkn').val() < 0 || $('#inputtolerancemltempwkn').val() < 0) {
+
+                    $('#errorsavetempwkn').show();
+                    return;
+                }
+
+
+                if ($('#dropdownScheduletempwkn').val() === null) {
+
+                    $('#errorsavetempwkn').show();
+                    return;
+                }
+
+                if (selectedelements.length === 0) {
+
+                    $('#errorsavetempwkn').show();
+                    return;
+                }
+
+                var wklb = $('#dropdownScheduletempwkn').val();
+                var wkml = 0;
+                if ($('#dropdownScheduleMealtempwkn').val() !== null) {
+                    wkml = $('#dropdownScheduleMealtempwkn').val();
+                }
+
+
+                $('.btn').prop('disabled', true);
+                $('#spinwaittempwkn').show();
+
+                $.ajax({
+                    url: '/Schedule/AssignedScheduleTempWkn',
+                    type: "POST",
+                    data: { selectedInputs: selectedelements, scheduleSelected: wklb, scheduleMealSelected: wkml, toleranceWD: $('#inputtolerancewdtempwkn').val(), toleranceML: $('#inputtolerancemltempwkn').val() },
+                    success: function (data, textStatus, jqXHR) {
+
+                        Swal.fire(
+                            {
+                                position: "top-end",
+                                type: "success",
+                                title: "Actualización exitosa",
+                                showConfirmButton: false,
+                                timer: 1500
+                            }).then((result) => {
+
+                                window.location.href = '/Schedule/AssignedSchedules';
+
+                            });
+
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+
+                    }
+                });
+
+            });
+
+
+            $('.deleterow-wkntmp').click(function () {
+
+
+                var id = $(this).closest('tr').attr('id');
+
+                var swalWithBootstrapButtons = Swal.mixin(
+                    {
+                        customClass:
+                        {
+                            confirmButton: "btn btn-primary",
+                            cancelButton: "btn btn-danger mr-2"
+                        },
+                        buttonsStyling: false
+                    });
+                swalWithBootstrapButtons
+                    .fire(
+                        {
+                            title: "Confirmación",
+                            text: "Deseas eliminar el elemento?",
+                            type: "warning",
+                            showCancelButton: true,
+                            confirmButtonText: "Si",
+                            cancelButtonText: "Cancelar",
+                            reverseButtons: true
+                        })
+                    .then(function (result) {
+
+                        if (result.value) {
+
+
+                            $.ajax({
+                                url: '/Schedule/DeleteScheduleWknTmp',
+                                type: "POST",
+                                data: { id: id },
+                                success: function (data, textStatus, jqXHR) {
+
+                                    Swal.fire(
+                                        {
+                                            position: "top-end",
+                                            type: "success",
+                                            title: "Actualización exitosa",
+                                            showConfirmButton: false,
+                                            timer: 1500
+                                        }).then((result) => {
+
+
+                                            window.location.href = '/Schedule/AdminSchedule';
+
+                                        });
 
 
 
+                                },
+                                error: function (jqXHR, textStatus, errorThrown) {
+                                    alert(errorThrown);
+                                }
+                            });
+                        }
+                        else if (
+                            // Read more about handling dismissals
+                            result.dismiss === Swal.DismissReason.cancel
+                        ) {
+                            swalWithBootstrapButtons.fire(
+                                "Cancelación",
+                                "Se ha cancelado la acción",
+                                "error"
+                            );
+                        }
+                    });
+
+            });
 
 
+            $(".reseterror-wkntmp").change(function () {
+                $('#errorsavetempwkn').hide();
+            });
 
 
+            $('#closemodaltempwkn').click(function () {
+
+                $('#errorsavetempwkn').hide();
+                $('#searcherrortempwkn').hide();
+            });
 
 
+            $('#searchbutton-wkntmp').click(function () {
+
+                $('#errorsavetempwkn').hide();
+                $('#addelementtempwkn').hide();
+                $('#searchresult-wkntmp').empty();
+                $('#elementsfindedtempwkn').empty();
+                $('#searcherrortempwkn').hide();
+                $('#imgsearchtempwkntmp').hide();
+                $('#spintempwkntmp').show();
+                var ts = $('#typesearchtempwkn').val();
+
+                if (ts === "0") {
+
+                    $('#msgerrortempwknfind').text("Seleccione un tipo de busqueda");
+                    $('#imgsearchtempwkntmp').show();
+                    $('#spintempwkntmp').hide();
+                    $('#searcherrortempwkn').show();
+                    return;
+                }
+
+                if ($('#searchText-wkntmp').val() === "") {
+                    $('#msgerrortempwknfind').text("Ingrese el valor de la busqueda");
+                    $('#imgsearchtempwkntmp').show();
+                    $('#spintempwkntmp').hide();
+                    $('#searcherrortempwkn').show();
+                    return;
+                }
+
+
+                $.ajax({
+                    url: '/Schedule/SearchByTempWkn',
+                    type: "POST",
+                    data: { inputtext: $('#searchTexttempwkn').val(), typesearch: ts },
+                    success: function (data, textStatus, jqXHR) {
+
+                        if (data.details === "") {
+
+                            if (data.rows > 0) {
+                                $('#searchresulttempwkn').append('<span id="' + data.id + '" class="elementresult">' + data.value + '<span class="badge badge-icon position-relative ml-2">' + data.rows + '</span></span>');
+                                $('#addelementtempwkn').show();
+                            }
+                            else {
+                                if (data.rows == 0) {
+                                    $('#msgerrortempwknfind').text("No se encontraron resultados.");
+                                    $('#searcherrortempwkn').show();
+                                }
+                                else {
+                                    $('#msgerrortempwknfind').text("El empleado ya tiene horario asignado.");
+                                    $('#searcherrortempwkn').show();
+                                }
+                            }
+
+                            $('#imgsearchtempwkntmp').show();
+                            $('#spintempwkntmp').hide();
+                        }
+                        else {
+
+                            var showDetail = 0;
+                            data.details.forEach(function (dataDet, index) {
+
+                                $('#elementsfindedtempwkn').append('<li><div class="custom-control custom-checkbox"><input type="checkbox" class="custom-control-input" id="' + dataDet.id + '"><label class="custom-control-label" for="' + dataDet.id + '">' + dataDet.value + '</label></div></li>');
+                                showDetail++;
+                            });
+
+                            if (showDetail > 0) {
+                                $('#addelementtempwkn').show();
+                                multipleaddedwkntmp = true;
+                            }
+                            else {
+                                if (data.rows === -1) {
+                                    $('#msgerrortempwknfind').text("Todos los empleados ya tienen horarios asignados.");
+                                    $('#searcherror-wkntmp').show();
+                                }
+                                else {
+                                    $('#msgerrortempwknfind').text("No se encontrarón resultados.");
+                                    $('#searcherrortempwkn').show();
+                                }
+                            }
+
+                            $('#imgsearchtempwkntmp').show();
+                            $('#spintempwkntmp').hide();
+                        }
+
+                        $('#searchText-wkntmp').val("");
+
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+
+                    }
+                });
+            });
+
+
+            $('#addelementtempwkn').click(function () {
+
+
+                if (multipleaddedwkntmp) {
+
+                    $("#elementsfindedtempwkn input[type=checkbox]:checked").each(function () {
+
+                        var idelement = this.id;
+                        var found = selectedelements.find(function (element) {
+                            return element == idelement;
+                        });
+                        if (found === undefined || found.length === 0) {
+
+                            selectedelements.push(idelement);
+                            $('#elementsaddedtempwkn').append('<li><div class="custom-control custom-checkbox"><input type="checkbox" class="custom-control-input" id="' + idelement + '"><label class="custom-control-label" for="' + idelement + '">' + this.parentElement.innerText + '</label></div></li>');
+                        }
+
+                    });
+
+                    $('#elementsfindedtempwkn').empty();
+                    $('#addelementtempwkn').hide();
+                    multipleaddedwkntmp = false;
+                }
+                else {
+
+                    var elementspan = $("#searchresulttempwkn > span");
+                    var idelement = elementspan.attr('id');
+
+                    $('#searchresulttempwkn').empty();
+                    $('#addelementtempwkn').hide();
+
+                    var found = selectedelements.find(function (element) {
+                        return element == idelement;
+                    });
+
+                    if (found === undefined || found.length === 0) {
+
+                        selectedelements.push(idelement);
+                        $('#elementsaddedtempwkn').append('<li><div class="custom-control custom-checkbox"><input type="checkbox" class="custom-control-input" id="' + idelement + '"><label class="custom-control-label" for="' + idelement + '">' + elementspan.text().slice(0, -1) + '</label></div></li>');
+                    }
+                }
+
+
+            });
+
+
+            $('#js-delete-selectedtempwkn').click(function () {
+
+
+                $("#elementsaddedtempwkn input[type=checkbox]:checked").each(function () {
+
+                    var idelement = this.id;
+
+                    var found = selectedelements.find(function (element) {
+                        return element == idelement;
+                    });
+
+                    if (found !== undefined || found.length !== 0) {
+
+                        selectedelements.splice(selectedelements.indexOf(idelement), 1);
+                        $(this).closest('li').remove();
+                    }
+                });
+            });
 
 
             //Detalles Horarios

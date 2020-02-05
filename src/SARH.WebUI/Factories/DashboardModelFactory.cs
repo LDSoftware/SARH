@@ -523,7 +523,59 @@ namespace SARH.WebUI.Factories
             return result;
         }
 
+        public PersonalDashboardData GetPersonalDashboardData(string employee, DateTime startDate, DateTime endDate)
+        {
+            PersonalDashboardData result = new PersonalDashboardData();
 
+            List<KeyValuePair<string, string>> param = new List<KeyValuePair<string, string>>();
+            param.Add(new KeyValuePair<string, string>("@Employee", $"{employee}"));
+            var t = this._dashboardRepository.GetStoredProcData("CreatePersonalDashboardInfo", param);
+            decimal days = (decimal)System.Math.Round((startDate - endDate).TotalDays, 0);
+
+
+            result.Area = t.First().Area;
+            result.Centro = t.First().Centro;
+            result.Puesto = t.First().Puesto;
+            result.EmployeeId = int.Parse(t.First().EmployeeId).ToString("00000");
+            result.Name = t.First().EmployeeName;
+
+            var detail = t.Select(h => new PersonalDashboardDataItem()
+            {
+                RegisterDate = h.RegisterDate.ToShortDateString(),
+                StartWorkDate = h.StartWorkDate,
+                StartJobDay = h.StartJobDay,
+
+                StartMealDate = h.StartMealDate,
+                StartMealDay = h.StartMealDay,
+                EndMealDate = h.EndMealDate,
+                EndMealDay = h.EndMealDay,
+                EndWorkDate = h.EndWorkDate,
+                EndJobDay = h.EndJobDay
+            });
+
+            if (detail.Any()) 
+            {
+                if (detail.Where(s => s.RetardoEntrada.Equals(1)).Count() != 0) 
+                {
+                    result.PorcentajeRetardos = days / decimal.Parse(detail.Where(s => s.RetardoEntrada.Equals(1)).Count().ToString());
+                }
+                if (detail.Where(s => s.SalidaAnticipadaComida.Equals(1)).Count() != 0)
+                {
+                    result.PorcentajeSalidasAnticipadasComida = days / decimal.Parse(detail.Where(s => s.SalidaAnticipadaComida.Equals(1)).Count().ToString());
+                }
+                if (detail.Where(s => s.RetardoEntradaComida.Equals(1)).Count() != 0)
+                {
+                    result.PorcentajeRetardosRegresoComida = days / decimal.Parse(detail.Where(s => s.RetardoEntradaComida.Equals(1)).Count().ToString());
+                }
+                if (detail.Where(s => s.SalidaAnticipada.Equals(1)).Count() != 0) 
+                {
+                    result.PorcentajeSalidasAnticipadas = days / decimal.Parse(detail.Where(s => s.SalidaAnticipada.Equals(1)).Count().ToString());
+                }
+                result.Days.AddRange(detail);
+            }
+
+            return result;
+        }
 
     }
 }

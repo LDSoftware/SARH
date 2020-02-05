@@ -46,10 +46,10 @@ namespace ISOSA.SARH.Data.Repository
         {
             List<DashboardData> result = new List<DashboardData>();
 
-            if (paramSp.Any()) 
+            if (paramSp.Any())
             {
                 var data = this._context.DashboardInfo.FromSql<DashboardData>($"{spName} {paramSp[0].Value.ToString()}");
-                if (data.Any()) 
+                if (data.Any())
                 {
                     result.AddRange(data);
                 }

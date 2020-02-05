@@ -75,5 +75,26 @@ namespace SARH.WebUI.Controllers
             return Json(response);
         }
 
+
+
+        public IActionResult EmployeePersonalDashboard(string employee, string date) 
+        {
+            if (string.IsNullOrEmpty(date)) 
+            {
+                date = DateTime.Now.ToShortDateString();
+            }
+
+            DateTime currentDate = DateTime.Parse(date);
+            DateTime startDate = new DateTime(currentDate.Year, currentDate.Month, 1);
+            DateTime endDate = startDate.AddMonths(1).AddDays(-1);
+
+            var emp = this._organigramaModelFactory.GetEmployeeData(employee);
+            var model = _dashboardModelFactory.GetPersonalDashboardData(int.Parse(employee).ToString("00000"), startDate, endDate);
+            model.Picture = emp.GeneralInfo.Picture;
+
+
+            return View(model);
+        }
+
     }
 }

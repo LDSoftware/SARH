@@ -92,6 +92,18 @@ namespace SARH.WebUI.Configuration
 
             set { }
         }
+
+        public string EmployeeDataInfo 
+        {
+            get
+            {
+                var result = _config[$"ApplicationFormatPath:EmployeeDataInfo"];
+                return result;
+            }
+
+            set { }
+        }
+        
         public string ImgPathPdf
         {
             get

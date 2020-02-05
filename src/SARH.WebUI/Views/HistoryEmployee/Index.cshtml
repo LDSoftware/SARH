@@ -1,5 +1,172 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@using SARH.WebUI.Models.EmployeeProfile
+@model EmployeeProfileModel
 @{
+    ViewData["Title"] = "Historial del Empleado";
+    ViewData["PageName"] = "Historial del Empleado";
+    ViewData["PageDescription"] = "Historial del Empleado";
 }
+
+@section HeadBlock {
+
+    <link rel="stylesheet" media="screen, print" href="~/css/fa-solid.css">
+    <link rel="stylesheet" media="screen, print" href="~/css/fa-brands.css">
+    <link rel="stylesheet" media="screen, print" href="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/css/datagrid/datatables/datatables.bundle.css">
+    <link rel="stylesheet" media="screen, print" href="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/css/formplugins/bootstrap-datepicker/bootstrap-datepicker.css">
+    <link rel="stylesheet" media="screen, print" href="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/css/notifications/sweetalert2/sweetalert2.bundle.css">
+}
+
+<div class="subheader">
+    <ol class="breadcrumb breadcrumb-lg breadcrumb-arrow mb-0">
+        <li>
+            <a href='@Url.Action("Index","Home")'>
+                <i class="fal fa-home"></i>
+            </a>
+        </li>
+        <li>
+            <a href='@Url.Action("Index","Hierarchy")'>
+                <i class="fal fa-sitemap"></i>
+                <span class="hidden-lg-down">Organigrama</span>
+            </a>
+        </li>
+        <li>
+            <a href='@Url.Action("Organigrama","Organigrama", new { organigramaitem = Model.Area + "." + Model.JobCenter })'>
+                <i class="fal fa-users"></i>
+                <span class="hidden-lg-down">@Model.JobCenter</span>
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                <i class="fal fa-user"></i>
+                <span class="hidden-lg-down">@Model.FirstName @Model.LastName</span>
+            </a>
+        </li>
+        <li>
+            <a href='@Url.Action("EmployeeDetail", "Organigrama", new { employeeid = @Model.EmployeeId  })'>
+                <i class="fal fa-arrow-alt-left"></i>
+                <span class="hidden-lg-down">Regresar</span>
+            </a>
+        </li>
+
+    </ol>
+
+</div>
+
+<div class="row">
+    <div class="col-xl-12">
+        <div id="panel-1" class="panel">
+
+            <div class="panel-container show">
+                <div class="panel-content">
+                    <div class="form-group row">
+
+
+                        <div class="col-lg-12">
+                            <form>
+                                <div class="form-group">
+                                    <table id="dt-basic-example" class="table table-bordered table-hover table-striped w-100">
+                                        <thead class="bg-warning-200">
+                                            <tr>
+                                                <th>Fecha</th>
+                                                <th>Descripción</th>
+                                                <th>Puesto Anterior</th>
+                                                <th>Puesto Actual</th>
+                                                <th>Fecha de Cambio</th>
+                                                <th>Usuario Cambio</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="allhistory">
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section ScriptsBlock {
+
+    <script src="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/js/datagrid/datatables/datatables.bundle.js"></script>
+    <script src="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/js/formplugins/bootstrap-datepicker/bootstrap-datepicker.js"></script>
+    <script src="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/js/notifications/sweetalert2/sweetalert2.bundle.js"></script>
+
+    <script>
+
+
+        var controls = {
+            leftArrow: '<i class="fal fa-angle-left" style="font-size: 1.25rem"></i>',
+            rightArrow: '<i class="fal fa-angle-right" style="font-size: 1.25rem"></i>'
+        }
+
+        var runDatePicker = function () {
+
+
+            $('#datepicker-4-4').datepicker(
+                {
+                    orientation: "top left",
+                    todayHighlight: true,
+                    templates: controls,
+                    format: 'dd/mm/yyyy'
+                });
+
+            $('#datepicker-4-5').datepicker(
+                {
+                    orientation: "top left",
+                    todayHighlight: true,
+                    templates: controls,
+                    format: 'dd/mm/yyyy'
+                });
+
+            $('#datepicker-4-44').datepicker(
+                {
+                    orientation: "top left",
+                    todayHighlight: true,
+                    templates: controls,
+                    format: 'dd/mm/yyyy'
+                });
+
+            $('#datepicker-4-54').datepicker(
+                {
+                    orientation: "top left",
+                    todayHighlight: true,
+                    templates: controls,
+                    format: 'dd/mm/yyyy'
+                });
+
+
+        }
+
+        function convert(str) {
+            var date = new Date(str),
+                mnth = ("0" + (date.getMonth() + 1)).slice(-2),
+                day = ("0" + date.getDate()).slice(-2);
+            hours = ("0" + date.getHours()).slice(-2);
+            minutes = ("0" + date.getMinutes()).slice(-2);
+            return [day, mnth, date.getFullYear()].join("/");
+        }
+
+        $('#dt-basic-example tr').click(function () {
+
+            $(this).addClass('selected').siblings().removeClass('selected');
+
+        });
+
+        $(document).ready(function () {
+
+            runDatePicker();
+
+            $('#dt-basic-example').dataTable(
+                {
+                    responsive: true
+                });
+
+
+        });
+
+    </script>
+}
+

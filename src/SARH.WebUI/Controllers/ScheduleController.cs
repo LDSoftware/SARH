@@ -5,6 +5,7 @@ using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
 using ISOSA.SARH.Data.Domain.Configuration;
+using ISOSA.SARH.Data.Domain.Employee;
 using ISOSA.SARH.Data.Repository;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -616,13 +617,17 @@ namespace SARH.WebUI.Controllers
             return Json(new { id = id, value = value, rows = row, details = list.Count != 0 ? list[0] : "" });
         }
 
-        public JsonResult AssignedScheduleTemp(string[] selectedInputs, string scheduleSelected, 
-        string scheduleMealSelected, string toleranceWD, string toleranceML, 
+        public JsonResult AssignedScheduleTemp(string[] selectedInputs, string scheduleSelected,
+        string scheduleMealSelected, string toleranceWD, string toleranceML,
         [FromServices] IOrganigramaModelFactory _organigramaModelFactory,
-        [FromServices] IConfigurationManager configurationManager)
+        [FromServices] IConfigurationManager configurationManager,
+        [FromServices] IRepository<EmployeeAditionalInfo> employeeAdditionalInfoRepo)
         {
             List<string> employees = new List<string>();
 
+            var employeesdata = employeeAdditionalInfoRepo.GetAll();
+            var organigramadata = _organigramaModelFactory.GetAllData();
+            var scheduledata = this._repository.GetAll();
 
             selectedInputs.ToList().ForEach((y) =>
             {
@@ -647,10 +652,27 @@ namespace SARH.WebUI.Controllers
 
                 string jobTNotify = configurationManager.NotifyToEmployee;
                 bool includeRHNotify = configurationManager.NotifyToRHManager;
+                var swk = scheduledata.Where(h => h.Id.Equals(int.Parse(scheduleSelected))).FirstOrDefault();
+                var sml = scheduledata.Where(h => h.Id.Equals(int.Parse(scheduleMealSelected))).FirstOrDefault();
+                string swktext = string.Empty;
+                string smltext = string.Empty;
+
+                if (swk != null) 
+                {
+                    swktext = $"Horario Laboral: {swk.StartHour} - {swk.EndHour} Vigencia: {swk.EffectiveTimeStart.Value.ToShortDateString()} al {swk.EffectiveTimeEnd.Value.ToShortDateString()}";
+                }
+
+                if (sml != null)
+                {
+                    smltext = $"Horario Comida: {sml.StartHour} - {sml.EndHour} Vigencia: {sml.EffectiveTimeStart.Value.ToShortDateString()} al {sml.EffectiveTimeEnd.Value.ToShortDateString()}";
+                }
 
                 employees.ForEach((y) =>
                 {
                     var notify = _organigramaModelFactory.GetEmployeesSchedulerTempNotify(y, jobTNotify, includeRHNotify);
+
+                    var e = employeesdata.Where(v => v.EMP_EmployeeID.Equals(int.Parse(y).ToString("00000"))).FirstOrDefault();
+                    var o = organigramadata.Employess.Where(d => d.RowId.Equals(e.HrowGuid.Value));
 
                     notify.ForEach(n => 
                     {
@@ -660,7 +682,10 @@ namespace SARH.WebUI.Controllers
                         mail.Subject = "Notificación de horario temporal";
                         string htmlString = $@"<html>
                           <p>Hola, <br>{n.Name}</br></p>
-                          <p>El empledo {y} se le ha asignado un horario temporal de</p>
+                          <p>El empledo {e.EMP_FirstName} {e.EMP_LastName}, Se le ha asignado un horario temporal</p>
+                          <p>{swktext}</p>                          
+                          <p>{smltext}</p>                          
+                          <p>Cualquier Información adicional contacte al área de Recursos Humanos</p>                          
                       <body>
                       </body>
                       </html>
@@ -1148,6 +1173,12 @@ namespace SARH.WebUI.Controllers
                         response = true;
                     }
                 }
+                else
+                { 
+                
+                }
+
+
             }
 
             return response;

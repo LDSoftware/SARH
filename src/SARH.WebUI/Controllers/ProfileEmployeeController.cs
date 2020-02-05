@@ -79,6 +79,7 @@ namespace SARH.WebUI.Controllers
                 {
                     Directory.CreateDirectory(path);
                 }
+                System.IO.File.Delete($"{path}PerfilPuesto.pdf");
                 System.IO.File.Move(model.DocumentPath, $"{path}PerfilPuesto.pdf");
                 documentPath = $"{path}PerfilPuesto.pdf";
             }

@@ -44,24 +44,18 @@
                         <div class="panel-toolbar">
                             <div class="demo-h-spacing">
 
-                                <a href="javascript:void(0);" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target=".default-example-modal-right" class="btn btn-primary btn-icon waves-effect waves-themed">
+                                <a href="javascript:void(0);" title="Crear formato" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target=".default-example-modal-right" class="btn btn-primary btn-icon waves-effect waves-themed">
                                     <i class="fal fa-calendar-plus"></i>
                                 </a>
-                                <a id="viewrow" href="javascript:void(0)" class="btn btn-info btn-icon waves-effect waves-themed">
+                                <a id="viewrow" href="javascript:void(0)" title="Ver formato" class="btn btn-info btn-icon waves-effect waves-themed">
                                     <i class="fal fa-eye"></i>
                                 </a>
-                                <a id="approbedrow" href="javascript:void(0)" class="btn btn-success btn-icon waves-effect waves-themed">
-                                    <i class="fal fa-calendar-check"></i>
-                                </a>
-                                <a id="deletedrow" href="javascript:void(0)" class="btn btn-danger btn-icon waves-effect waves-themed">
+                                <a id="deletedrow" href="javascript:void(0)" title="Eliminar formato" class="btn btn-danger btn-icon waves-effect waves-themed">
                                     <i class="fal fa-trash-alt"></i>
                                 </a>
                             </div>
-
                         </div>
-
                     </div>
-
 
                     <div class="panel-container show">
                         <div class="panel-content">
@@ -194,6 +188,23 @@
                                                         <i class="fal fa-calendar-plus"></i>
                                                     </span>
                                                 </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6" id="divhouri" style="display:none;">
+                                            <label class="form-label" for="horainicial">Hora Inicial</label>
+                                            <input type="time" class="form-control" id="horainicial">
+                                        </div>
+
+                                        <div class="col-md-6" id="divhoure" style="display:none;">
+                                            <label class="form-label" for="horafinal">Hora Final</label>
+                                            <input type="time" class="form-control" id="horafinal">
+                                        </div>
+
+                                        <div class="col-md-12" style="margin-top:10px;margin-bottom:10px;display:none;" id="divcheckpay">
+                                            <div class="custom-control custom-checkbox custom-checkbox-circle">
+                                                <input type="checkbox" class="custom-control-input" id="defaultChecked" checked="">
+                                                <label class="custom-control-label" for="defaultChecked">Permiso con goce de sueldo</label>
                                             </div>
                                         </div>
 
@@ -511,14 +522,24 @@
                 $('.btn').prop('disabled', true);
                 $('#spinwait').show();
 
+                var ischecked = $('#defaultChecked').is(':checked');
+
+                if (!isPermission) {
+                    ischecked = false;
+                }
+
                 var formData = {
-                    EmployeeId: $('#EmployeeId').val(),
+                    EmployeeId: "17",
                     StartDate: dtpinicial,
                     EndDate: dtpfinal,
                     PermissionType: $('#permissionType').val(),
                     Comments: $('#descripcion').val(),
-                    EmployeeSubId: idsustituto
+                    EmployeeSubId: idsustituto,
+                    StartTime: $('#horainicial').val(),
+                    EndTime: $('#horafinal').val(),
+                    WithPay: ischecked
                 };
+
 
                 $.ajax({
                     url: '/Employee/SaveFormat',
@@ -738,7 +759,28 @@
             });
 
 
+            var isPermission = false;
 
+            $('#permissionType').change(function () {
+
+                var type = $("#permissionType :selected").text();
+
+                var nperm = type.includes("Permiso");
+
+                if (nperm) {
+                    $('#divhouri').show();
+                    $('#divhoure').show();
+                    $('#divcheckpay').show();
+                    isPermission = true;
+                }
+                else {
+                    $('#divhouri').hide();
+                    $('#divhoure').hide();
+                    $('#divcheckpay').hide();
+                    isPermission = false;
+                }
+
+            });
 
 
 

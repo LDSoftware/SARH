@@ -224,6 +224,10 @@
                         move = true;
                         moveelement();
                     }
+                    if (key === "delete") {
+
+                        deleteelement();
+                    }
 
                 },
                 items: {
@@ -231,6 +235,7 @@
                     "edit": { name: "Editar", icon: "fal fa-edit" },
                     "navigate": { name: "Navegar", icon: "fal fa-arrow-square-right" },
                     "move": { name: "Mover", icon: "fal fa-arrows" },
+                    "delete": { name: "Eliminar", icon: "fal fa-user-times" },
                     "sep1": "---------",
                     "quit": {
                         name: "Cerrar menu", icon: function () {
@@ -441,6 +446,64 @@
                 });
         };
 
+        function deleteelement() {
+
+
+            var swalWithBootstrapButtons = Swal.mixin(
+                {
+                    customClass:
+                    {
+                        confirmButton: "btn btn-primary",
+                        cancelButton: "btn btn-danger mr-2"
+                    },
+                    buttonsStyling: false
+                });
+            swalWithBootstrapButtons
+                .fire(
+                    {
+                        title: "Confirmación",
+                        text: "Deseas eliminar el puesto del organigrama?",
+                        type: "warning",
+                        showCancelButton: true,
+                        confirmButtonText: "Si",
+                        cancelButtonText: "Cancelar",
+                        reverseButtons: true
+                    })
+                .then(function (result) {
+
+                    if (result.value) {
+
+
+                        var select = $('.bg-warning');
+                        var element = select[0];
+
+                        $.ajax({
+                            url: '/Catalog/RemoveJobTitle',
+                            type: "POST",
+                            data: { rowGuid: element.id },
+                            success: function (data, textStatus, jqXHR) {
+
+                                window.location.href = '/Catalog/Organigrama';
+                            },
+                            error: function (jqXHR, textStatus, errorThrown) {
+
+                            }
+                        });
+                    }
+                    else if (
+                        // Read more about handling dismissals
+                        result.dismiss === Swal.DismissReason.cancel
+                    ) {
+                        swalWithBootstrapButtons.fire(
+                            "Cancelación",
+                            "Se ha cancelado la acción",
+                            "error"
+                        );
+                    }
+                });
+
+
+        };
 
 
         $(document).ready(function () {

@@ -359,6 +359,21 @@ namespace SARH.WebUI.Controllers
             return Json("ok");
         }
 
+
+        public JsonResult RemoveJobTitle(string rowGuid, [FromServices]IRepository<EmployeeOrganigrama> isosaemployeesOrganigramaRepositor) 
+        {
+
+            var row = isosaemployeesOrganigramaRepositor.SearhItemsFor(g => g.RowGuid.ToString().ToLower().Equals(rowGuid.ToLower())).FirstOrDefault();
+            if (row != null) 
+            {
+                isosaemployeesOrganigramaRepositor.Delete(row);
+            }
+
+            return Json("ok");
+        }
+
+
+
         #endregion
 
         #region Job Assigned
@@ -526,7 +541,7 @@ namespace SARH.WebUI.Controllers
             var aprovOrder = formatApproversRepository.SearhItemsFor(f => f.Area.Equals(area) && f.Centro.Equals(centro) && f.Departamento.Equals(depto));
             if (aprovOrder.Any()) 
             {
-                order++;
+                order = aprovOrder.Count() + 1;
             }
 
             var emp = organigramaModelFactory.GetEmployeeData(approver);
@@ -545,7 +560,7 @@ namespace SARH.WebUI.Controllers
 
 
 
-            return Json("");
+            return Json("ok");
         }
 
 
@@ -602,6 +617,182 @@ namespace SARH.WebUI.Controllers
         }
 
 
+        #endregion
+
+        #region Notification
+
+        public IActionResult NotifyIndex([FromServices] IRepository<EmployeeNotify> employeeNotifyRepository,
+        [FromServices]IOrganigramaModelFactory organigramaModelFactory)
+        {
+            EmployeeNotificationModel model = new EmployeeNotificationModel();
+            var notifiers = employeeNotifyRepository.GetAll();
+            var organigrama = organigramaModelFactory.GetAllData().Employess;
+
+            var emps = (from apv in notifiers
+                        join org in organigrama on apv.RowGuid.ToString().ToLower() equals org.RowId.ToLower()
+                        select new EmployeeNotificationItem()
+                        {
+                            Id = apv.Id,
+                            Area = apv.Area,
+                            Centro = apv.Centro,
+                            Puesto = org.JobTitle,
+                            RowGuid = apv.RowGuid.ToString(),
+                            Notifier = $"{org.Name}",
+                            Email = org.UserName
+                        }).ToList();
+
+            model.Notifications = emps;
+
+            List<SelectListItem> areas = new List<SelectListItem>()
+            {
+                new SelectListItem()
+                {
+                    Text = "Seleccione una opción",
+                    Value = "0"
+                }
+            };
+
+            areas.AddRange(organigramaModelFactory.GetAreas().Select(o => new SelectListItem()
+            {
+                Text = o.Descripcion,
+                Value = o.Id.ToString()
+            }).ToList());
+
+            ViewBag.Areas = areas;
+
+            return View(model);
+        }
+
+
+        [HttpPost]
+        public JsonResult GetEmployeeNotifier(string employeeId,
+        [FromServices] IRepository<EmployeeNotify> formatApproversRepository,
+        [FromServices]IOrganigramaModelFactory organigramaModelFactory)
+        {
+            string name = string.Empty;
+            int row = 0;
+
+            if (!string.IsNullOrEmpty(employeeId))
+            {
+                var employeeInfo = organigramaModelFactory.GetEmployeeData(employeeId);
+                if (employeeInfo != null && employeeInfo.HierarchyGuid != null)
+                {
+                    var empApprover = formatApproversRepository.SearhItemsFor(r => r.RowGuid.ToString().ToLower().Equals(employeeInfo.HierarchyGuid.ToLower()));
+                    if (empApprover != null && empApprover.Any())
+                    {
+                        name = "El empleado ya está asignado para notificaciones";
+
+                    }
+                    else
+                    {
+                        if (!string.IsNullOrEmpty(employeeInfo.GeneralInfo.Email))
+                        {
+                            name = $"{employeeInfo.GeneralInfo.FirstName} {employeeInfo.GeneralInfo.LastName} - {employeeInfo.GeneralInfo.Email}";
+                            row = 1;
+                        }
+                        else
+                        {
+                            name = "El empleado seleccionado no tiene cuenta de correo eléctronico";
+                            row = 0;
+                        }
+                    }
+                }
+                else
+                {
+                    name = "No se encontrarón resultados";
+                }
+            }
+            else
+            {
+                name = "No se encontrarón resultados";
+            }
+
+            return Json(new { id = employeeId, value = name, rows = row });
+        }
+
+        [HttpPost]
+        public JsonResult SaveNotifier(string area, string centro, string depto, string approver,
+            [FromServices] IRepository<EmployeeNotify> employeeNotify,
+            [FromServices]IOrganigramaModelFactory organigramaModelFactory)
+        {
+            int order = 1;
+            var aprovOrder = employeeNotify.SearhItemsFor(f => f.Area.Equals(area) && f.Centro.Equals(centro) && f.Departamento.Equals(depto));
+            if (aprovOrder.Any())
+            {
+                order = aprovOrder.Count() + 1;
+            }
+
+            var emp = organigramaModelFactory.GetEmployeeData(approver);
+
+            var empNotify = new EmployeeNotify()
+            {
+                Area = area,
+                Centro = centro,
+                Departamento = depto,
+                Orden = order,
+                Puesto = emp.GeneralInfo.JobTitle,
+                RowGuid = Guid.Parse(emp.HierarchyGuid)
+            };
+
+            employeeNotify.Create(empNotify);
+
+
+
+            return Json("ok");
+        }
+
+
+        [HttpPost]
+        public JsonResult GetNotifiers(int id,
+        [FromServices] IRepository<EmployeeNotify> employeeNotify,
+        [FromServices]IOrganigramaModelFactory organigramaModelFactory)
+        {
+            var organigrama = organigramaModelFactory.GetAllData().Employess;
+            var row = employeeNotify.GetElement(id);
+            var rows = employeeNotify.SearhItemsFor(u => u.Area.Equals(row.Area) && u.Centro.Equals(row.Centro) && u.Departamento.Equals(row.Departamento));
+            EmployeeNotificationModel model = new EmployeeNotificationModel();
+
+            if (rows.Any())
+            {
+                var emps = (from apv in rows
+                            join org in organigrama on apv.RowGuid.ToString().ToLower() equals org.RowId.ToLower()
+                            select new EmployeeNotificationItem()
+                            {
+                                Id = apv.Id,
+                                Area = apv.Area,
+                                Centro = apv.Centro,
+                                Puesto = org.JobTitle,
+                                RowGuid = apv.RowGuid.ToString(),
+                                Notifier = $"{org.Name}",
+                                Email = org.UserName
+                            }).ToList();
+
+                model.Notifications = emps;
+            }
+
+
+            return Json(new { area = row.Area, centro = row.Centro, depto = row.Departamento, collection = model.Notifications });
+        }
+
+        [HttpPost]
+        public JsonResult DeleteNotifier(string[] items,
+        [FromServices] IRepository<EmployeeNotify> employeeNotify)
+        {
+
+            items.ToList().ForEach(d =>
+            {
+                var code = d.Split("-");
+                int codeint = int.Parse(code[1].ToString());
+                var row = employeeNotify.GetElement(codeint);
+                if (row != null)
+                {
+                    employeeNotify.Delete(row);
+                }
+
+            });
+
+            return Json("Ok");
+        }
 
         #endregion
 

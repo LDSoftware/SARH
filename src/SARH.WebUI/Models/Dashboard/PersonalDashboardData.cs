@@ -1,20 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace ISOSA.SARH.Data.Domain.Dashboard
+namespace SARH.WebUI.Models.Dashboard
 {
-    public class DashboardData
+    public class PersonalDashboardData
     {
-        [Key]
+
+        public PersonalDashboardData()
+        {
+            Days = new List<PersonalDashboardDataItem>();
+        }
+
         public string EmployeeId { get; set; }
-        public string EmployeeName { get; set; }
+        public string Name { get; set; }
         public string Area { get; set; }
         public string Centro { get; set; }
-        public string Departamento { get; set; }
         public string Puesto { get; set; }
-        public DateTime RegisterDate { get; set; }
+        public int TotalDays { get; set; }
+        public string Picture { get; set; }
+        public decimal PorcentajeRetardos { get; set; }
+        public decimal PorcentajeSalidasAnticipadasComida { get; set; }
+        public decimal PorcentajeRetardosRegresoComida { get; set; }
+        public decimal PorcentajeSalidasAnticipadas { get; set; }
+        public List<PersonalDashboardDataItem> Days { get; set; }
+    }
+
+    public class PersonalDashboardDataItem 
+    {
+        public string RegisterDate { get; set; }
         public string StartWorkDate { get; set; }
         public string StartJobDay { get; set; }
         public int RetardoEntrada { get; set; }
@@ -27,6 +42,7 @@ namespace ISOSA.SARH.Data.Domain.Dashboard
         public string EndWorkDate { get; set; }
         public string EndJobDay { get; set; }
         public int SalidaAnticipada { get; set; }
-
     }
+
+
 }

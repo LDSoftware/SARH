@@ -16,12 +16,16 @@
   <ItemGroup>
     <Compile Remove="Document\**" />
     <Compile Remove="Migrations\**" />
+    <Compile Remove="Views\Catalog\Infraestructure\**" />
     <Content Remove="Document\**" />
     <Content Remove="Migrations\**" />
+    <Content Remove="Views\Catalog\Infraestructure\**" />
     <EmbeddedResource Remove="Document\**" />
     <EmbeddedResource Remove="Migrations\**" />
+    <EmbeddedResource Remove="Views\Catalog\Infraestructure\**" />
     <None Remove="Document\**" />
     <None Remove="Migrations\**" />
+    <None Remove="Views\Catalog\Infraestructure\**" />
   </ItemGroup>
   <ItemGroup>
     <None Update="app.db" CopyToOutputDirectory="PreserveNewest" />
@@ -38,9 +42,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Views\Catalog\Infraestructure\" />
     <Folder Include="Views\Home\" />
-    <Folder Include="Views\DashboardHistory\" />
     <Folder Include="Views\Profile\" />
     <Folder Include="Views\HistoryEmployee\" />
     <Folder Include="wwwroot\images\" />

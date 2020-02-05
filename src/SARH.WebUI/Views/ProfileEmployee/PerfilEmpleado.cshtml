@@ -68,7 +68,7 @@
                     </a>
                     @if (!string.IsNullOrEmpty(Model.DocumentPath))
                     {
-                        <a href='@Url.Action("ViewAssignedDocument", "ProfileEmployee", new { filepath = Model.DocumentPath })' class="btn btn-success btn-icon waves-effect waves-themed">
+                        <a href='@Url.Action("ViewAssignedDocument", "ProfileEmployee", new { filepath = Model.DocumentPath })' target="_blank" class="btn btn-success btn-icon waves-effect waves-themed">
                             <i class="fal fa-file-pdf"></i>
                         </a>
                     }
