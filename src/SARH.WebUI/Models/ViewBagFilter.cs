@@ -47,11 +47,16 @@ namespace SARH.WebUI.Models
                 var loginInfo = !string.IsNullOrEmpty(modellogin) ? JsonConvert.DeserializeObject<LoginModel.InputModel>(modellogin) : null;
                 string userName = loginInfo != null ? loginInfo.Email : null;
 
-                if (!string.IsNullOrEmpty(userName)) 
+                if (!string.IsNullOrEmpty(userName))
                 {
                     controller.ViewBag.User = userName;
                     controller.ViewBag.Email = userName;
                 }
+                else
+                {
+                    
+                }
+
 
             }
         }

@@ -20,5 +20,6 @@ namespace SARH.WebUI.Factories
         List<OrganizationChartItem> GetCentros(string area, string centro = "");
         List<OrganizationChartItem> GetDeptos(string area, string centro, string depto = "");
         List<EmployeeNotifyModel> GetEmployeesSchedulerTempNotify(string employeeId, string JobsTitle, bool GetRHManager);
+        string GetEmployeeIDByRowGuid(Guid RowGuid);
     }
 }

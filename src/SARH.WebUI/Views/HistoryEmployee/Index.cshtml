@@ -1,5 +1,5 @@
-﻿@using SARH.WebUI.Models.EmployeeProfile
-@model EmployeeProfileModel
+﻿@using SARH.WebUI.Models.Employee
+@model EmployeeHistoryModel
 @{
     ViewData["Title"] = "Historial del Empleado";
     ViewData["PageName"] = "Historial del Empleado";
@@ -75,6 +75,17 @@
                                             </tr>
                                         </thead>
                                         <tbody id="allhistory">
+                                        @foreach (var item in Model.EmployeeHistory)
+                                        {
+                                            <tr>
+                                                <td>@item.RegisterDate</td>
+                                                <td>@item.Descripcion</td>
+                                                <td>@item.JobLast</td>
+                                                <td>@item.JobActual</td>
+                                                <td>@item.DateChange</td>
+                                                <td>@item.UserId</td>
+                                            </tr>
+                                        }
                                         </tbody>
                                     </table>
                                 </div>

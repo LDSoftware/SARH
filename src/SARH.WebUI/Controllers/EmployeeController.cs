@@ -12,11 +12,13 @@ using ISOSADataMigrationTools;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Newtonsoft.Json;
 using SARH.Core.Configuration;
 using SARH.WebUI.Factories;
 using SARH.WebUI.Models;
 using SARH.WebUI.Models.FormatRequest;
 using SARH.WebUI.Models.Formats;
+using SmartAdmin.WebUI.Areas.Identity.Pages.Account;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -61,7 +63,11 @@ namespace SARH.WebUI.Controllers
         }
 
         [HttpPost]
-        public JsonResult SetNewJob(string jobGuid, string employeeGuid, [FromServices] IRepository<EmployeeOrganigrama> isosaemployeesOrganigramaRepository) 
+        public JsonResult SetNewJob(string jobGuid, string employeeGuid, 
+            [FromServices] IRepository<EmployeeOrganigrama> isosaemployeesOrganigramaRepository,
+            [FromServices] IRepository<EmployeeHistory> employeeHistoryRepo,
+            [FromServices] IHttpContextAccessor httpContextAccessor,
+            [FromServices] IOrganigramaModelFactory organigramaModelFactory) 
         {
 
             isosaemployeesOrganigramaRepository.CreateTableBackup("Horarios");
@@ -69,7 +75,24 @@ namespace SARH.WebUI.Controllers
             var source = isosaemployeesOrganigramaRepository.SearhItemsFor(j => j.RowGuid.ToString().Equals(employeeGuid));
             var destiny = isosaemployeesOrganigramaRepository.SearhItemsFor(j => j.RowGuid.ToString().Equals(jobGuid));
 
+            var modellogin = httpContextAccessor.HttpContext.Session.GetString("loginmodel");
+            var loginInfo = !string.IsNullOrEmpty(modellogin) ? JsonConvert.DeserializeObject<LoginModel.InputModel>(modellogin) : null;
+            string userName = loginInfo != null ? loginInfo.Email : null;
 
+            string IdEmp = organigramaModelFactory.GetEmployeeIDByRowGuid(source.FirstOrDefault().RowGuid);
+
+            employeeHistoryRepo.Create(new EmployeeHistory()
+            {
+                EmployeeId = IdEmp,
+                RegisterDate = DateTime.Now,
+                Descripcion = "El empleado fue asignado a nuevo puesto",
+                JobActual = destiny.FirstOrDefault().Puesto,
+                JobLast = source.FirstOrDefault().Puesto,
+                RowGuidActual = destiny.FirstOrDefault().RowGuid,
+                RowGuidLast = source.FirstOrDefault().RowGuid,
+                DateChange = DateTime.Now,
+                UserId = userName
+            });
 
             Guid nGuid = Guid.NewGuid();
             var s = source.First();
@@ -180,12 +203,34 @@ namespace SARH.WebUI.Controllers
         [HttpPost]
         public JsonResult SetNewJobReactive(string jobGuid, string employeeId, 
             [FromServices] IRepository<EmployeeOrganigrama> isosaemployeesOrganigramaRepository,
-            [FromServices] IRepository<EmployeeAditionalInfo> employeAdditionalInfoRepository)
+            [FromServices] IRepository<EmployeeAditionalInfo> employeAdditionalInfoRepository,
+            [FromServices] IRepository<EmployeeHistory> employeeHistoryRepo,
+            [FromServices] IHttpContextAccessor httpContextAccessor,
+            [FromServices] IOrganigramaModelFactory organigramaModelFactory)
         {
 
             isosaemployeesOrganigramaRepository.CreateTableBackup("Horarios");
             var destiny = isosaemployeesOrganigramaRepository.SearhItemsFor(j => j.RowGuid.ToString().Equals(jobGuid));
             var employee = employeAdditionalInfoRepository.SearhItemsFor(f => f.EMP_EmployeeID.Equals(int.Parse(employeeId).ToString("00000")));
+
+            var modellogin = httpContextAccessor.HttpContext.Session.GetString("loginmodel");
+            var loginInfo = !string.IsNullOrEmpty(modellogin) ? JsonConvert.DeserializeObject<LoginModel.InputModel>(modellogin) : null;
+            string userName = loginInfo != null ? loginInfo.Email : null;
+
+            var orgEmp = organigramaModelFactory.GetEmployeeData(employeeId);
+
+            employeeHistoryRepo.Create(new EmployeeHistory()
+            {
+                EmployeeId = employee.FirstOrDefault().EMP_EmployeeID,
+                RegisterDate = DateTime.Now,
+                Descripcion = "El empleado fue asignado a nuevo puesto",
+                JobActual = destiny.FirstOrDefault().Puesto,
+                JobLast = orgEmp.GeneralInfo.JobTitle,
+                RowGuidActual = destiny.FirstOrDefault().RowGuid,
+                RowGuidLast = employee.FirstOrDefault().HrowGuid.Value,
+                DateChange = DateTime.Now,
+                UserId = userName
+            });
 
             bool success = true;
 

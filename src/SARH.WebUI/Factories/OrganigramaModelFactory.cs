@@ -593,5 +593,12 @@ namespace SARH.WebUI.Factories
             return result;
         }
 
+        public string GetEmployeeIDByRowGuid(Guid RowGuid)
+        {
+            var employee = _isosaemployeesRepository.SearhItemsFor(e => e.HrowGuid.Equals(RowGuid));
+            return employee.FirstOrDefault().EMP_EmployeeID;
+        }
+
+
     }
 }

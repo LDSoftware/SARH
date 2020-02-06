@@ -662,58 +662,6 @@
                 </div>
 
 
-                </ Solicitud de Formatos -->
-
-                <div class="card">
-                    <div class="card-header">
-                        <a class="card-title collapsed" aria-expanded="false" href="javascript:void(0);" data-toggle="collapse" data-target="#js_list_accordion-e" data-filter-tags="formatos">
-                            <i class="fal fa-folder-open width-2 fs-xl"></i>
-                            Formatos
-                            <span class="ml-auto">
-                                <span class="collapsed-reveal">
-                                    <i class="fal fa-chevron-up fs-xl"></i>
-                                </span>
-                                <span class="collapsed-hidden">
-                                    <i class="fal fa-chevron-down fs-xl"></i>
-                                </span>
-                            </span>
-                        </a>
-                    </div>
-
-                    <div class="collapse" id="js_list_accordion-e" data-parent="#js_list_accordion">
-                        <div class="card-body">
-
-                            <div role="group" aria-label="Vertical button group">
-                                <div class="btn-group" role="group">
-                                    <button class="btn btn-secondary dropdown-toggle" id="btnGroupVerticalDrop1" aria-expanded="false" aria-haspopup="true" type="button" data-toggle="dropdown">
-                                        <i class="fal fa-bolt"></i>
-                                        Acciones
-                                    </button>
-                                    <div class="dropdown-menu" aria-labelledby="btnGroupVerticalDrop1">
-                                        <a class="dropdown-item demo" href="javascript:void(0);" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target=".default-example-modal-right-lg-2"><i class="fal fa-file"></i>Nuevo formato</a>
-                                        <a class="dropdown-item" href='@Url.Action("PermisosIncidencias","Catalog")'>Ir al Catalogo</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <hr />
-
-                            <table class="table table-bordered table-hover m-0">
-                                <thead class="thead-themed">
-                                    <tr>
-                                        <th>Fecha</th>
-                                        <th>Tipo</th>
-                                        <th>Vigencia</th>
-                                        <th>Fecha Aprobación</th>
-                                        <th>Sustituto</th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-
             </div>
             <span class="filter-message js-filter-message"></span>
         </div>
@@ -2243,7 +2191,7 @@
                                 data: { Id: Id },
                                 success: function (data, textStatus, jqXHR) {
 
-                                    if (data.success == "success") {
+                                    if (data.response == "success") {
                                         Swal.fire(
                                             {
                                                 position: "top-end",

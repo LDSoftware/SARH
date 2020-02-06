@@ -26,6 +26,7 @@ using SARH.WebUI.Models.EmployeeProfile;
 using SARH.WebUI.Models.Formats;
 using SARH.WebUI.Models.Organigrama;
 using SARH.WebUI.Models.Organigrama.New;
+using SmartAdmin.WebUI.Areas.Identity.Pages.Account;
 
 namespace SARH.WebUI.Controllers
 {
@@ -1022,8 +1023,29 @@ namespace SARH.WebUI.Controllers
         [HttpPost]
         public JsonResult EmployeeUnsubscribe(string Id,
         [FromServices] IRepository<Nomipaq_nom10001> nomipaqRepo,
-        [FromServices] IRepository<EmployeeAditionalInfo> isosaRepo)
+        [FromServices] IRepository<EmployeeAditionalInfo> isosaRepo,
+        [FromServices] IRepository<EmployeeHistory> employeeHistoryRepo,
+        [FromServices] IHttpContextAccessor httpContextAccessor)
         {
+            var modellogin = httpContextAccessor.HttpContext.Session.GetString("loginmodel");
+            var loginInfo = !string.IsNullOrEmpty(modellogin) ? JsonConvert.DeserializeObject<LoginModel.InputModel>(modellogin) : null;
+            string userName = loginInfo != null ? loginInfo.Email : null;
+
+            var empOrg = _organigramaModelFactory.GetEmployeeData(Id);
+
+            employeeHistoryRepo.Create(new EmployeeHistory()
+            {
+                EmployeeId = int.Parse(Id).ToString("00000"),
+                RegisterDate = DateTime.Now,
+                Descripcion = "El empleado se ha dado de baja",
+                JobActual = "NA",
+                JobLast = empOrg.GeneralInfo.JobTitle,
+                RowGuidActual = Guid.Empty,
+                RowGuidLast = Guid.Parse(empOrg.HierarchyGuid),
+                DateChange = DateTime.Now,
+                UserId = userName
+            });
+
             var isosaRow = isosaRepo.SearhItemsFor(d => d.EMP_EmployeeID.Equals(Id));
             var nomipaqRow = nomipaqRepo.SearhItemsFor(d => d.codigoempleado.Equals(Id));
 
@@ -1090,13 +1112,34 @@ namespace SARH.WebUI.Controllers
         [HttpPost]
         public JsonResult RemoveJobTible(string Id, 
             [FromServices] IRepository<EmployeeOrganigrama> organigramaRepository,
-            [FromServices] IRepository<EmployeeAditionalInfo> isosaRepo) 
+            [FromServices] IRepository<EmployeeAditionalInfo> isosaRepo,
+            [FromServices] IRepository<EmployeeHistory> employeeHistoryRepo,
+            [FromServices] IHttpContextAccessor httpContextAccessor) 
         {
 
             string response = "success";
 
             try
             {
+                var modellogin = httpContextAccessor.HttpContext.Session.GetString("loginmodel");
+                var loginInfo = !string.IsNullOrEmpty(modellogin) ? JsonConvert.DeserializeObject<LoginModel.InputModel>(modellogin) : null;
+                string userName = loginInfo != null ? loginInfo.Email : null;
+
+                var empOrg = _organigramaModelFactory.GetEmployeeData(Id);
+
+                employeeHistoryRepo.Create(new EmployeeHistory()
+                {
+                    EmployeeId = int.Parse(Id).ToString("00000"),
+                    RegisterDate = DateTime.Now,
+                    Descripcion = "El empleado fue removido del puesto",
+                    JobActual = "NA",
+                    JobLast = empOrg.GeneralInfo.JobTitle,
+                    RowGuidActual = Guid.Empty,
+                    RowGuidLast = Guid.Parse(empOrg.HierarchyGuid),
+                    DateChange = DateTime.Now,
+                    UserId = userName
+                });
+
                 var employee = this._organigramaModelFactory.GetEmployeeData(Id);
                 if (employee != null)
                 {
@@ -1107,20 +1150,23 @@ namespace SARH.WebUI.Controllers
                         var organigramaJob = organigramaRepository.SearhItemsFor(g => g.RowGuid.Equals(empGuid));
                         if (organigramaJob.Any())
                         {
-                            organigramaJob.First().RowGuid = Guid.Empty;
+                            organigramaJob.First().RowGuid = Guid.NewGuid();
                             organigramaRepository.Update(organigramaJob.First());
-                        }
-                        var empIsosa = isosaRepo.SearhItemsFor(o => o.HrowGuid.Value.Equals(empGuid));
-                        if (empIsosa.Any())
-                        {
-                            empIsosa.First().HrowGuid = Guid.Empty;
-                            isosaRepo.Update(empIsosa.First());
+
+                            organigramaRepository.Create(new EmployeeOrganigrama() 
+                            {
+                                Area = "NA",
+                                Centro = "NA",
+                                Departamento = "NA",
+                                Puesto = "NA",
+                                RowGuid = empGuid
+                            });
                         }
                     }
                 }
 
             }
-            catch
+            catch(Exception)
             {
                 response = "fail";
             }

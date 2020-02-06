@@ -7,9 +7,6 @@ using ISOSA.SARH.Data.Domain.Employee;
 using ISOSA.SARH.Data.Domain.Formats;
 using ISOSA.SARH.Data.Mapping;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ISOSA.SARH.Data
 {
@@ -48,7 +45,7 @@ namespace ISOSA.SARH.Data
         public virtual DbSet<FormatApprover> FormatApprovers { get; set; }
         public virtual DbSet<DashboardData> DashboardInfo { get; set; }
         public virtual DbSet<EmployeeNotify> EmployeeNotifications { get; set; }
-
+        public virtual DbSet<EmployeeHistory> EmployeeHistory { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -75,6 +72,7 @@ namespace ISOSA.SARH.Data
             new FormatApprovedHubIdMapping(builder.Entity<FormatApprovedHubId>());
             new FormatApproverMapping(builder.Entity<FormatApprover>());
             new EmployeeNotifyMapping(builder.Entity<EmployeeNotify>());
+            new EmployeeHistoryMapping(builder.Entity<EmployeeHistory>());
         }
 
 
