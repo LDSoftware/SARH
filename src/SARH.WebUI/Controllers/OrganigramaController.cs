@@ -734,7 +734,8 @@ namespace SARH.WebUI.Controllers
             [FromServices] IRepository<Nomipaq_nom10001> nomipaqRepo,
             [FromServices] IRepository<EmployeeAditionalInfo> isosaRepo,
             [FromServices] IConfigurationManager configManager,
-            [FromServices] IRepository<EmployeeOrganigrama> organigramaRepository)
+            [FromServices] IRepository<EmployeeOrganigrama> organigramaRepository,
+            [FromServices] IRepository<EmployeeScheduleAssigned> empscheduleassignedRepo)
         {
             string filePath = string.Empty;
             if (!string.IsNullOrEmpty(model.Picture))
@@ -848,6 +849,20 @@ namespace SARH.WebUI.Controllers
                         Departamento = "NA",
                         Puesto = "NA",
                         RowGuid = hrowguid
+                    });
+
+
+                    empscheduleassignedRepo.Create(new EmployeeScheduleAssigned() 
+                    {
+                        EmployeeId = model.Id.TrimStart(new Char[] { '0' }),
+                        IdScheduleMeal = model.HorarioComida,
+                        IdScheduleWorkday = model.HorarioTrabajo,
+                        IdScheduleMealWeekEnd = 0,
+                        IdScheduleWeekEnd = 0,
+                        ToleranceMeal = 0,
+                        ToleranceMealWeekEnd = 0,
+                        ToleranceWeekEnd = 0,
+                        ToleranceWorkday = 0
                     });
 
 
@@ -1184,7 +1199,8 @@ namespace SARH.WebUI.Controllers
             [FromServices] SARH.Core.Configuration.IConfigurationManager configManager,
             [FromServices] IRepository<EmployeeObjectAsignation> repository,
             [FromServices]IRepository<PersonalDocument> personalDocumentRepository,
-            [FromServices] IRepository<DocumentType> documentType)
+            [FromServices] IRepository<DocumentType> documentType,
+            [FromServices] INomipaqEmployeeVacationModelFactory nomipaqEmployeeVacation)
         {
 
             string fileName = "";
@@ -1248,7 +1264,16 @@ namespace SARH.WebUI.Controllers
 
                 fileName = $@"{configManager.EmployeeDataInfo.Replace("|EmpNumber|", empInfo.GeneralInfo.Id)}FichaEmpleado.pdf";
 
-
+                var empVacations = new Core.PdfCreator.FormatData.EmployeeVacation();
+                var vacations = nomipaqEmployeeVacation.GetEmployeeVacations(int.Parse(EmployeeId).ToString("00000"));
+                if (vacations != null) 
+                {
+                    empVacations.Antiguedad = vacations.Antiguedad;
+                    empVacations.DiasDisponibles = vacations.DiasDisponibles;
+                    empVacations.DiasTomados = vacations.DiasTomados;
+                    empVacations.Employee = vacations.Employee;
+                    empVacations.TotalDias = vacations.TotalDias;
+                }
 
 
                 manager.CreateEmployeeProfile(new Core.PdfCreator.FormatData.DocumentInfoPdfData()
@@ -1287,7 +1312,8 @@ namespace SARH.WebUI.Controllers
                         StartMealDay = empInfo.GeneralInfo.EndJob,
                         AssignedEquipment = strb.ToString(),
                         Documents = strbDocs.ToString()
-                    }
+                    },
+                    EmployeeVacations = empVacations
                 }, fileName);
             }
             catch (Exception ex)

@@ -460,9 +460,9 @@ namespace SARH.Core.PdfCreator
             var p1 = new Paragraph($"   Vacaciones" +
                $"{Environment.NewLine}   Días correspondientes por año: 0" +
                $"{Environment.NewLine}   Días no gozados año anterior: 0" +
-               $"{Environment.NewLine}   Total días por gozar: 0" +
-               $"{Environment.NewLine}   Días Gozados: 0" +
-               $"{Environment.NewLine}   Días por gozar: 0" +
+               $"{Environment.NewLine}   Total días por gozar: { pdfData.EmployeeVacations.TotalDias }" +
+               $"{Environment.NewLine}   Días Gozados: {pdfData.EmployeeVacations.DiasTomados}" +
+               $"{Environment.NewLine}   Días por gozar: {pdfData.EmployeeVacations.DiasDisponibles}" +
                $"{Environment.NewLine}", font);
 
 

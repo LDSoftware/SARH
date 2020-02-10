@@ -319,7 +319,7 @@
                         <div class="card-body">
 
                             <div role="group" aria-label="Vertical button group">
-                                <a class="btn btn-secondary" href="#"><i class="fal fa-print"></i> Imprimir</a>
+                                <a class="btn btn-secondary" href='@Url.Action("PrintEmployeeInfo","Organigrama",new { EmployeeId = Model.GeneralInfo.Id.TrimStart(new Char[] { '0' }) })' target="_blank"><i class="fal fa-print"></i> Imprimir</a>
                                 <a id="savePersonalInfo" class="btn btn-secondary" href="#"><i class="fal fa-save"></i> Guardar</a>
                             </div>
                             <hr />
@@ -413,7 +413,7 @@
                         <div class="card-body">
 
                             <div role="group" aria-label="Vertical button group">
-                                <a class="btn btn-secondary" href="#"><i class="fal fa-print"></i> Imprimir</a>
+                                <a class="btn btn-secondary" href='@Url.Action("PrintEmployeeInfo","Organigrama",new { EmployeeId = Model.GeneralInfo.Id.TrimStart(new Char[] { '0' }) })' target="_blank"><i class="fal fa-print"></i> Imprimir</a>
                                 <a id="saveContactInfo" class="btn btn-secondary" href="#"><i class="fal fa-save"></i> Guardar</a>
                             </div>
                             <hr />

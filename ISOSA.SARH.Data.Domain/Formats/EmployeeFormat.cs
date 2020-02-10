@@ -20,5 +20,6 @@ namespace ISOSA.SARH.Data.Domain.Formats
         public string StartTime { get; set; }
         public string EndTime { get; set; }
         public bool WithPay { get; set; }
+        public string NomipaqVacations { get; set; }
     }
 }

@@ -602,6 +602,63 @@
                 var FirstName = $('#employeefirstname').val();
                 var LastName =  $('#employeelastname').val();
 
+                
+
+                if ($('#datepicker-4-4').val() === "") {
+
+                    Swal.fire(
+                        {
+                            position: "top-end",
+                            type: "warning",
+                            title: "Validación",
+                            text: "Se debe capturar la fecha de alta."
+                        });
+
+                    return;
+                }
+
+
+
+                if ($('#datepicker-4-5').val() === "") {
+
+                    Swal.fire(
+                        {
+                            position: "top-end",
+                            type: "warning",
+                            title: "Validación",
+                            text: "Se debe capturar la fecha de nacimiento."
+                        });
+
+                    return;
+                }
+
+                if ($('#employeeCurp').val() === "" || $('#employeeCurp').val().length < 18 ) {
+
+                    Swal.fire(
+                        {
+                            position: "top-end",
+                            type: "warning",
+                            title: "Validación",
+                            text: "Se debe capturar una curp válida."
+                        });
+
+                    return;
+                }
+
+                if ($('#employeerfc').val() === "" || $('#employeerfc').val().length < 13) {
+
+                    Swal.fire(
+                        {
+                            position: "top-end",
+                            type: "warning",
+                            title: "Validación",
+                            text: "Se debe capturar un rfc válido."
+                        });
+
+                    return;
+                }
+
+
                 if (FirstName === "" && LastName === "") {
 
                     Swal.fire(
@@ -629,6 +686,8 @@
                     var fechanacimiento = $('#datepicker-4-5').val();
                     var curp = $('#employeeCurp').val();
                     var rfc = $('#employeerfc').val();
+                    var horariot = $('#dropdownSchedule').val();
+                    var horarioc = $('#dropdownScheduleMeal').val();
 
                     var model = {
                         ContratcType: ContratcType,
@@ -645,7 +704,9 @@
                         Sexo: sexo,
                         FechaNacimiento: fechanacimiento,
                         CURP: curp,
-                        RFC : rfc
+                        RFC: rfc,
+                        HorarioTrabajo: horariot,
+                        Horariocomida: horarioc
                     };
 
                     $.ajax({

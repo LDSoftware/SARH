@@ -30,6 +30,10 @@ namespace SARH.WebUI.Controllers
 
         public IActionResult Index(string filters = "")
         {
+
+
+
+
             DashboardFilters filter = new DashboardFilters();
             if (!string.IsNullOrEmpty(filters)) 
             {

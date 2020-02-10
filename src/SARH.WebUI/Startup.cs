@@ -62,6 +62,7 @@ namespace SmartAdmin.WebUI
             services.AddTransient<OrganizationChartAreaModelFactory>();
             services.AddTransient<IOrganigramaModelFactory, OrganigramaModelFactory>();
             services.AddTransient<INotificationModelFactory, NotificationModelFactory>();
+            services.AddTransient<INomipaqEmployeeVacationModelFactory, NomipaqEmployeeVacationModelFactory>();
             services.AddTransient<IRepository<DocumentType>, DocumentTypeRepository>(s => new DocumentTypeRepository((Configuration.GetConnectionString("DataConnectionString"))));
             services.AddTransient<IRepository<HardwareAssigned>, HardwareAssignedRepository>(s => new HardwareAssignedRepository((Configuration.GetConnectionString("DataConnectionString"))));
             services.AddTransient<IRepository<PermissionType>, PermissionTypeRepository>(s => new PermissionTypeRepository((Configuration.GetConnectionString("DataConnectionString"))));
@@ -77,6 +78,7 @@ namespace SmartAdmin.WebUI
             services.AddTransient<IRepository<EmployeeProfile>, EmployeeProfileRepository>(s => new EmployeeProfileRepository((Configuration.GetConnectionString("DataConnectionString"))));
             services.AddTransient<IRepository<EmployeeDiscount>, EmployeeDiscountRepository>(s => new EmployeeDiscountRepository((Configuration.GetConnectionString("DataConnectionString"))));
             services.AddTransient<IRepository<Nomipaq_nom10001>, NomipaqEmployeesRepository>(s => new NomipaqEmployeesRepository((Configuration.GetConnectionString("DataConnectionStringNomipaq"))));
+            services.AddTransient<IRepository<Nomipaq_nom10014>, NomipaqEmployeeVacationsRepository>(s => new NomipaqEmployeeVacationsRepository((Configuration.GetConnectionString("DataConnectionStringNomipaq"))));
             services.AddTransient<IRepository<EmployeeAditionalInfo>, EmployeeAditionalInfoRepository>(s => new EmployeeAditionalInfoRepository((Configuration.GetConnectionString("DataConnectionString"))));
             services.AddTransient<IRepository<DashboardData>, DashboardRepository>(s => new DashboardRepository((Configuration.GetConnectionString("DataConnectionString"))));
             services.AddTransient<IRepository<FormatApprovedEmployee>, FormatApprobedEmployeeRepository>(s => new FormatApprobedEmployeeRepository((Configuration.GetConnectionString("DataConnectionString"))));

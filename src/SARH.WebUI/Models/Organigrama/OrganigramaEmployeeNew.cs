@@ -53,6 +53,8 @@ namespace SARH.WebUI.Models.Organigrama.New
         public string Picture { get; set; }
         public string FechaNacimiento { get; set; }
         public string Sexo { get; set; }
+        public int HorarioTrabajo { get; set; }
+        public int HorarioComida { get; set; }
 
     }
 

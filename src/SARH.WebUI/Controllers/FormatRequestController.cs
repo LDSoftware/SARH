@@ -11,8 +11,10 @@ using ISOSA.SARH.Data.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Newtonsoft.Json;
 using SARH.Core.Configuration;
 using SARH.WebUI.Factories;
+using SARH.WebUI.Models.Employee;
 using SARH.WebUI.Models.FormatRequest;
 using SARH.WebUI.Models.Formats;
 
@@ -32,7 +34,8 @@ namespace SARH.WebUI.Controllers
         public IActionResult MainRequestFormat(string pinEmployee, 
             [FromServices] IRepository<PermissionType> _permissionTypeRepository, 
             [FromServices] IOrganigramaModelFactory organigramaModelFactory, 
-            [FromServices] IRepository<EmployeeFormat> formatRepository)
+            [FromServices] IRepository<EmployeeFormat> formatRepository,
+            [FromServices] INomipaqEmployeeVacationModelFactory nomipaqEmployeeVacations)
         {
             var data = System.Convert.FromBase64String(pinEmployee);
             string base64Decoded = System.Text.ASCIIEncoding.ASCII.GetString(data);
@@ -50,7 +53,8 @@ namespace SARH.WebUI.Controllers
                 Picture = info.GeneralInfo.Picture,
                 JobTitle = $"Puesto: {info.GeneralInfo.JobTitle}",
                 Area = $"Area: {info.Area}",
-                JobCenter = $"Centro de trabajo: {info.JobCenter}"
+                JobCenter = $"Centro de trabajo: {info.JobCenter}",
+                EmployeeVacations = nomipaqEmployeeVacations.GetEmployeeVacations(int.Parse("17").ToString("00000"))
             };
 
             if (formatRepository.SearhItemsFor(y => y.EmployeeId.Equals("17")).Any()) 
@@ -100,9 +104,16 @@ namespace SARH.WebUI.Controllers
         public JsonResult SaveFormat(FormatInputModel format, 
             [FromServices] IRepository<EmployeeFormat> formatRepository,
             [FromServices] IOrganigramaModelFactory organigramaModelFactory,
-            [FromServices] IConfigurationManager configurationManager)
+            [FromServices] IConfigurationManager configurationManager,
+            [FromServices] INomipaqEmployeeVacationModelFactory nomipaqEmployeeVacations)
         {
 
+            var vacations = nomipaqEmployeeVacations.GetEmployeeVacations(int.Parse(format.EmployeeId).ToString("00000"));
+            string vacationsConfig = string.Empty;
+            if (vacations != null)
+            {
+                vacationsConfig = JsonConvert.SerializeObject(vacations);
+            }
 
             var element = new EmployeeFormat()
             {
@@ -117,7 +128,8 @@ namespace SARH.WebUI.Controllers
                 ApprovalWorkFlow = "",
                 EndTime = format.EndTime,
                 StartTime = format.StartTime,
-                WithPay = format.WithPay
+                WithPay = format.WithPay,
+                NomipaqVacations = vacationsConfig
             };
 
             formatRepository.Create(element);
@@ -167,11 +179,15 @@ namespace SARH.WebUI.Controllers
 
         [AllowAnonymous]
         [HttpPost]
-        public JsonResult GetFormatData(int id, [FromServices] IRepository<EmployeeFormat> formatRepository, [FromServices] IOrganigramaModelFactory _organigramaModelFactory)
+        public JsonResult GetFormatData(int id, 
+            [FromServices] IRepository<EmployeeFormat> formatRepository, 
+            [FromServices] IOrganigramaModelFactory _organigramaModelFactory,
+            [FromServices] IRepository<PermissionType> _permissionTypeRepository)
         {
+            StringBuilder sb = new StringBuilder();
 
             var result = formatRepository.GetElement(id);
-            
+            string type = _permissionTypeRepository.GetElement(result.PermissionType).Description;
 
             string name = "";
             if (result.EmployeeSubstitute != "0")
@@ -180,7 +196,39 @@ namespace SARH.WebUI.Controllers
                 name = $"{employee.GeneralInfo.FirstName} {employee.GeneralInfo.LastName}";
             }
 
-            return Json(new { comment = result.Comments, dateini = result.StartDate.ToShortDateString(), datefin = result.EndDate.ToShortDateString(), sustitute = name });
+            if (type.ToLower().Contains("permiso") || type.ToLower().Contains("pase"))
+            {
+                sb.Append($"Hora inicial : {result.StartTime}{Environment.NewLine}");
+                sb.Append($"Hora final : {result.EndTime}{Environment.NewLine}");
+                if (result.WithPay)
+                {
+                    sb.Append($"Con goze de sueldo : Si{Environment.NewLine}");
+                }
+                else
+                {
+                    sb.Append($"Con goze de sueldo : No{Environment.NewLine}");
+                }
+            }
+            else if (type.ToLower().Contains("vacacion"))
+            {
+                if (!string.IsNullOrEmpty(result.NomipaqVacations))
+                {
+                    EmployeeVacation empvac = JsonConvert.DeserializeObject<EmployeeVacation>(result.NomipaqVacations);
+                    sb.Append($"Total de días : {empvac.TotalDias}{Environment.NewLine}");
+                    sb.Append($"Total de días gozados : {empvac.DiasTomados}{Environment.NewLine}");
+                    sb.Append($"Total de días disponibles : {empvac.DiasDisponibles}{Environment.NewLine}");
+                }
+            }
+
+            return Json(new
+            {
+                type = type,
+                comment = result.Comments,
+                dateini = result.StartDate.ToShortDateString(),
+                datefin = result.EndDate.ToShortDateString(),
+                sustitute = name,
+                config = sb.ToString()
+            });
         }
 
         [AllowAnonymous]

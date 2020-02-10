@@ -11,6 +11,7 @@ namespace SARH.Core.PdfCreator.FormatData
             DocumentDetailInfo = new List<string>();
             EmployeInfo = new EmployeeInfoData();
             EmployeProfile = new EmployeProfileData();
+            EmployeeVacations = new EmployeeVacation();
         }
 
         public string EmployeeNumber { get; set; }
@@ -28,6 +29,7 @@ namespace SARH.Core.PdfCreator.FormatData
         public string IdDocument { get; set; }
         public EmployeeInfoData EmployeInfo { get; set; }
         public EmployeProfileData EmployeProfile { get; set; }
+        public EmployeeVacation EmployeeVacations { get; set; }
     }
 
     public class EmployeeInfoData 
@@ -85,6 +87,15 @@ namespace SARH.Core.PdfCreator.FormatData
         public string ResponsabilidadPuesto { get; set; }
         public string FuncionesActividades { get; set; }
         public string Horario { get; set; }
+    }
+
+    public class EmployeeVacation
+    {
+        public string Employee { get; set; }
+        public int Antiguedad { get; set; }
+        public int TotalDias { get; set; }
+        public int DiasTomados { get; set; }
+        public int DiasDisponibles { get; set; }
     }
 
 

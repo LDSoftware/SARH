@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SARH.WebUI.Models.Employee;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,6 +12,7 @@ namespace SARH.WebUI.Models.FormatRequest
         public FormatRequestModel()
         {
             EmployeeFormats = new List<EmployeeFormatItem>();
+            EmployeeVacations = new EmployeeVacation();
         }
 
         public string Employee { get; set; }
@@ -19,7 +21,11 @@ namespace SARH.WebUI.Models.FormatRequest
         public string JobTitle { get; set; }
         public string Area { get; set; }
         public string JobCenter { get; set; }
+        public int TotalPermisos { get; set; }
         public List<EmployeeFormatItem> EmployeeFormats { get; set; }
+        public EmployeeVacation EmployeeVacations { get; set; }
+        public string DetallesFormato { get; set; }
+
     }
 
     public class EmployeeFormatItem

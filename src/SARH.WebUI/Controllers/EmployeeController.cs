@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
+using System.Text;
 using System.Threading.Tasks;
 using ISOSA.SARH.Data.Domain.Catalog;
 using ISOSA.SARH.Data.Domain.Employee;
@@ -16,6 +17,7 @@ using Newtonsoft.Json;
 using SARH.Core.Configuration;
 using SARH.WebUI.Factories;
 using SARH.WebUI.Models;
+using SARH.WebUI.Models.Employee;
 using SARH.WebUI.Models.FormatRequest;
 using SARH.WebUI.Models.Formats;
 using SmartAdmin.WebUI.Areas.Identity.Pages.Account;
@@ -75,24 +77,24 @@ namespace SARH.WebUI.Controllers
             var source = isosaemployeesOrganigramaRepository.SearhItemsFor(j => j.RowGuid.ToString().Equals(employeeGuid));
             var destiny = isosaemployeesOrganigramaRepository.SearhItemsFor(j => j.RowGuid.ToString().Equals(jobGuid));
 
-            var modellogin = httpContextAccessor.HttpContext.Session.GetString("loginmodel");
-            var loginInfo = !string.IsNullOrEmpty(modellogin) ? JsonConvert.DeserializeObject<LoginModel.InputModel>(modellogin) : null;
-            string userName = loginInfo != null ? loginInfo.Email : null;
+            //var modellogin = httpContextAccessor.HttpContext.Session.GetString("loginmodel");
+            //var loginInfo = !string.IsNullOrEmpty(modellogin) ? JsonConvert.DeserializeObject<LoginModel.InputModel>(modellogin) : null;
+            //string userName = loginInfo != null ? loginInfo.Email : null;
 
-            string IdEmp = organigramaModelFactory.GetEmployeeIDByRowGuid(source.FirstOrDefault().RowGuid);
+            //string IdEmp = organigramaModelFactory.GetEmployeeIDByRowGuid(source.FirstOrDefault().RowGuid);
 
-            employeeHistoryRepo.Create(new EmployeeHistory()
-            {
-                EmployeeId = IdEmp,
-                RegisterDate = DateTime.Now,
-                Descripcion = "El empleado fue asignado a nuevo puesto",
-                JobActual = destiny.FirstOrDefault().Puesto,
-                JobLast = source.FirstOrDefault().Puesto,
-                RowGuidActual = destiny.FirstOrDefault().RowGuid,
-                RowGuidLast = source.FirstOrDefault().RowGuid,
-                DateChange = DateTime.Now,
-                UserId = userName
-            });
+            //employeeHistoryRepo.Create(new EmployeeHistory()
+            //{
+            //    EmployeeId = IdEmp,
+            //    RegisterDate = DateTime.Now,
+            //    Descripcion = "El empleado fue asignado a nuevo puesto",
+            //    JobActual = destiny.FirstOrDefault().Puesto,
+            //    JobLast = source.FirstOrDefault().Puesto,
+            //    RowGuidActual = destiny.FirstOrDefault().RowGuid,
+            //    RowGuidLast = source.FirstOrDefault().RowGuid,
+            //    DateChange = DateTime.Now,
+            //    UserId = userName
+            //});
 
             Guid nGuid = Guid.NewGuid();
             var s = source.First();
@@ -213,24 +215,24 @@ namespace SARH.WebUI.Controllers
             var destiny = isosaemployeesOrganigramaRepository.SearhItemsFor(j => j.RowGuid.ToString().Equals(jobGuid));
             var employee = employeAdditionalInfoRepository.SearhItemsFor(f => f.EMP_EmployeeID.Equals(int.Parse(employeeId).ToString("00000")));
 
-            var modellogin = httpContextAccessor.HttpContext.Session.GetString("loginmodel");
-            var loginInfo = !string.IsNullOrEmpty(modellogin) ? JsonConvert.DeserializeObject<LoginModel.InputModel>(modellogin) : null;
-            string userName = loginInfo != null ? loginInfo.Email : null;
+            //var modellogin = httpContextAccessor.HttpContext.Session.GetString("loginmodel");
+            //var loginInfo = !string.IsNullOrEmpty(modellogin) ? JsonConvert.DeserializeObject<LoginModel.InputModel>(modellogin) : null;
+            //string userName = loginInfo != null ? loginInfo.Email : null;
 
-            var orgEmp = organigramaModelFactory.GetEmployeeData(employeeId);
+            //var orgEmp = organigramaModelFactory.GetEmployeeData(employeeId);
 
-            employeeHistoryRepo.Create(new EmployeeHistory()
-            {
-                EmployeeId = employee.FirstOrDefault().EMP_EmployeeID,
-                RegisterDate = DateTime.Now,
-                Descripcion = "El empleado fue asignado a nuevo puesto",
-                JobActual = destiny.FirstOrDefault().Puesto,
-                JobLast = orgEmp.GeneralInfo.JobTitle,
-                RowGuidActual = destiny.FirstOrDefault().RowGuid,
-                RowGuidLast = employee.FirstOrDefault().HrowGuid.Value,
-                DateChange = DateTime.Now,
-                UserId = userName
-            });
+            //employeeHistoryRepo.Create(new EmployeeHistory()
+            //{
+            //    EmployeeId = employee.FirstOrDefault().EMP_EmployeeID,
+            //    RegisterDate = DateTime.Now,
+            //    Descripcion = "El empleado fue asignado a nuevo puesto",
+            //    JobActual = destiny.FirstOrDefault().Puesto,
+            //    JobLast = orgEmp.GeneralInfo.JobTitle,
+            //    RowGuidActual = destiny.FirstOrDefault().RowGuid,
+            //    RowGuidLast = employee.FirstOrDefault().HrowGuid.Value,
+            //    DateChange = DateTime.Now,
+            //    UserId = userName
+            //});
 
             bool success = true;
 
@@ -267,7 +269,8 @@ namespace SARH.WebUI.Controllers
         public IActionResult MainRequestFormat(string idEmployee,
             [FromServices] IRepository<PermissionType> _permissionTypeRepository,
             [FromServices] IOrganigramaModelFactory organigramaModelFactory,
-            [FromServices] IRepository<EmployeeFormat> formatRepository)
+            [FromServices] IRepository<EmployeeFormat> formatRepository,
+            [FromServices] INomipaqEmployeeVacationModelFactory nomipaqEmployeeVacations)
         {
 
             ViewBag.permissionType = _permissionTypeRepository.GetAll().Select(k => new SelectListItem() { Text = k.Description, Value = k.Id.ToString() });
@@ -283,10 +286,13 @@ namespace SARH.WebUI.Controllers
                 Picture = info.GeneralInfo.Picture,
                 JobTitle = $"Puesto: {info.GeneralInfo.JobTitle}",
                 Area = $"Area: {info.Area}",
-                JobCenter = $"Centro de trabajo: {info.JobCenter}"
+                JobCenter = $"Centro de trabajo: {info.JobCenter}",
+                EmployeeVacations = nomipaqEmployeeVacations.GetEmployeeVacations(int.Parse(idEmployee).ToString("00000"))
             };
 
-            if (formatRepository.SearhItemsFor(y => y.EmployeeId.Equals(idEmployee)).Any())
+            var formats = formatRepository.SearhItemsFor(y => y.EmployeeId.Equals(idEmployee));
+
+            if (formats.Any())
             {
                 model.EmployeeFormats.AddRange(formatRepository.SearhItemsFor(y => y.EmployeeId.Equals(idEmployee)).Select(r => new EmployeeFormatItem()
                 {
@@ -300,6 +306,9 @@ namespace SARH.WebUI.Controllers
                     StartDate = $"({r.StartDate.ToShortDateString()})-({r.EndDate.ToShortDateString()})",
                     EmployeeSubstitute = employees.Where(k => k.Id.Equals(r.EmployeeSubstitute.TrimStart('0'))).FirstOrDefault().Name
                 }));
+
+
+
             }
 
             return View(model);
@@ -331,8 +340,18 @@ namespace SARH.WebUI.Controllers
         public JsonResult SaveFormat(FormatInputModel format, 
             [FromServices] IRepository<EmployeeFormat> formatRepository,
             [FromServices] IOrganigramaModelFactory organigramaModelFactory,
-            [FromServices] IConfigurationManager configurationManager)
+            [FromServices] IConfigurationManager configurationManager,
+            [FromServices] INomipaqEmployeeVacationModelFactory nomipaqEmployeeVacations)
         {
+
+            var vacations = nomipaqEmployeeVacations.GetEmployeeVacations(int.Parse(format.EmployeeId).ToString("00000"));
+            string vacationsConfig = string.Empty;
+            if (vacations != null) 
+            {
+                vacationsConfig = JsonConvert.SerializeObject(vacations);
+            }
+
+
             var element = new EmployeeFormat()
             {
                 Comments = format.Comments,
@@ -343,10 +362,19 @@ namespace SARH.WebUI.Controllers
                 StartDate = DateTime.Parse(format.StartDate),
                 CreateDate = DateTime.Today,
                 ApprovalDate = null,
-                ApprovalWorkFlow = ""
+                ApprovalWorkFlow = "",
+                WithPay = format.WithPay,
+                StartTime = format.StartTime,
+                EndTime = format.EndTime,
+                NomipaqVacations = vacationsConfig
             };
 
             formatRepository.Create(element);
+
+            if (format.EmployeeSubId == null) 
+            {
+                format.EmployeeSubId = "99999";
+            }
 
             var suplente = organigramaModelFactory.GetEmployeeData(format.EmployeeSubId.TrimStart(new Char[] { '0' }));
             var solicitante = organigramaModelFactory.GetEmployeeData(format.EmployeeId.TrimStart(new Char[] { '0' }));
@@ -390,11 +418,15 @@ namespace SARH.WebUI.Controllers
         }
 
         [HttpPost]
-        public JsonResult GetFormatData(int id, [FromServices] IRepository<EmployeeFormat> formatRepository, [FromServices] IOrganigramaModelFactory _organigramaModelFactory)
+        public JsonResult GetFormatData(int id, 
+        [FromServices] IRepository<EmployeeFormat> formatRepository, 
+        [FromServices] IOrganigramaModelFactory _organigramaModelFactory,
+        [FromServices] IRepository<PermissionType> _permissionTypeRepository)
         {
+            StringBuilder sb = new StringBuilder();
 
             var result = formatRepository.GetElement(id);
-
+            string type = _permissionTypeRepository.GetElement(result.PermissionType).Description;
 
             string name = "";
             if (result.EmployeeSubstitute != "0")
@@ -403,7 +435,39 @@ namespace SARH.WebUI.Controllers
                 name = $"{employee.GeneralInfo.FirstName} {employee.GeneralInfo.LastName}";
             }
 
-            return Json(new { comment = result.Comments, dateini = result.StartDate.ToShortDateString(), datefin = result.EndDate.ToShortDateString(), sustitute = name });
+            if (type.ToLower().Contains("permiso") || type.ToLower().Contains("pase"))
+            {
+                sb.Append($"Hora inicial : {result.StartTime}{Environment.NewLine}");
+                sb.Append($"Hora final : {result.EndTime}{Environment.NewLine}");
+                if (result.WithPay)
+                {
+                    sb.Append($"Con goze de sueldo : Si{Environment.NewLine}");
+                }
+                else
+                {
+                    sb.Append($"Con goze de sueldo : No{Environment.NewLine}");
+                }
+            }
+            else if (type.ToLower().Contains("vacacion")) 
+            {
+                if (!string.IsNullOrEmpty(result.NomipaqVacations)) 
+                {
+                    EmployeeVacation empvac = JsonConvert.DeserializeObject<EmployeeVacation>(result.NomipaqVacations);
+                    sb.Append($"Total de días : {empvac.TotalDias}{Environment.NewLine}");
+                    sb.Append($"Total de días gozados : {empvac.DiasTomados}{Environment.NewLine}");
+                    sb.Append($"Total de días disponibles : {empvac.DiasDisponibles}{Environment.NewLine}");
+                }
+            }
+
+            return Json(new
+            {
+                type = type,
+                comment = result.Comments,
+                dateini = result.StartDate.ToShortDateString(),
+                datefin = result.EndDate.ToShortDateString(),
+                sustitute = name,
+                config = sb.ToString()
+            });
         }
 
         [HttpPost]

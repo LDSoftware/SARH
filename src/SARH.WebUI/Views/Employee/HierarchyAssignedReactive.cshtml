@@ -30,35 +30,35 @@
         @foreach (var item in Model)
         {
             <li class="@(string.IsNullOrEmpty(item.Title)?"available":"notavailable")" id="@item.I18n">
-                <a class="btn btn-xs btn-primary waves-effect waves-themed" data-rowid="@item.I18n" href='@Url.Action("HierarchyAssignedSub","Employee", new {rowid = item.I18n, empRowId=ViewBag.AssignedHGuid, employeeID=ViewBag.EmployeeID })'>@item.Text</a>
+                <a class="btn btn-xs btn-primary waves-effect waves-themed" data-rowid="@item.I18n" href='@Url.Action("HierarchyAssignedSubReactive","Employee", new {rowid = item.I18n, empRowId=ViewBag.AssignedHGuid, employeeID=ViewBag.EmployeeID })'>@item.Text</a>
                 <br />
                 <a class="btn btn-xs btn-outline-dark waves-effect waves-themed" href='@item.Route'><small>@item.Title</small></a>
                 <ul>
                     @foreach (var ite in item.Items)
                     {
                         <li class="@(string.IsNullOrEmpty(ite.Title)?"available":"notavailable")" id="@ite.I18n">
-                            <a class="btn btn-xs btn-primary waves-effect waves-themed" data-rowid="@ite.I18n" href='@Url.Action("HierarchyAssignedSub","Employee", new {rowid = ite.I18n, empRowId=ViewBag.AssignedHGuid, employeeID=ViewBag.EmployeeID })'>@ite.Text</a>
+                            <a class="btn btn-xs btn-primary waves-effect waves-themed" data-rowid="@ite.I18n" href='@Url.Action("HierarchyAssignedSubReactive","Employee", new {rowid = ite.I18n, empRowId=ViewBag.AssignedHGuid, employeeID=ViewBag.EmployeeID })'>@ite.Text</a>
                             <br />
                             <a class="btn btn-xs btn-outline-dark waves-effect waves-themed" href='@ite.Route'><small>@ite.Title</small></a>
                             <ul>
                                 @foreach (var it in ite.Items)
                                 {
                                     <li class="@(string.IsNullOrEmpty(it.Title)?"available":"notavailable")" id="@it.I18n">
-                                        <a class="btn btn-xs btn-primary waves-effect waves-themed" data-rowid="@it.I18n" href='@Url.Action("HierarchyAssignedSub","Employee", new {rowid = it.I18n, empRowId=ViewBag.AssignedHGuid, employeeID=ViewBag.EmployeeID })'>@it.Text</a>
+                                        <a class="btn btn-xs btn-primary waves-effect waves-themed" data-rowid="@it.I18n" href='@Url.Action("HierarchyAssignedSubReactive","Employee", new {rowid = it.I18n, empRowId=ViewBag.AssignedHGuid, employeeID=ViewBag.EmployeeID })'>@it.Text</a>
                                         <br />
                                         <a class="btn btn-xs btn-outline-dark waves-effect waves-themed" href='@it.Route'><small>@it.Title</small></a>
                                         <ul>
                                             @foreach (var i in it.Items)
                                             {
                                                 <li class="@(string.IsNullOrEmpty(i.Title)?"available":"notavailable")" id="@i.I18n">
-                                                    <a class="btn btn-xs btn-primary waves-effect waves-themed" data-rowid="@i.I18n" href='@Url.Action("HierarchyAssignedSub","Employee", new {rowid = i.I18n, empRowId=ViewBag.AssignedHGuid, employeeID=ViewBag.EmployeeID })'>@i.Text</a>
+                                                    <a class="btn btn-xs btn-primary waves-effect waves-themed" data-rowid="@i.I18n" href='@Url.Action("HierarchyAssignedSubReactive","Employee", new {rowid = i.I18n, empRowId=ViewBag.AssignedHGuid, employeeID=ViewBag.EmployeeID })'>@i.Text</a>
                                                     <br />
                                                     <a class="btn btn-xs btn-outline-dark waves-effect waves-themed" href='@i.Route'><small>@i.Title</small></a>
                                                     <ul type="vertical">
                                                         @foreach (var a in i.Items)
                                                         {
                                                             <li data-state="@(string.IsNullOrEmpty(a.Title)?"available":"notavailable")" id="@a.I18n">
-                                                                <a class="btn btn-xs btn-primary waves-effect waves-themed" data-rowid="@a.I18n" href='@Url.Action("HierarchyAssignedSub","Employee", new {rowid = a.I18n, empRowId=ViewBag.AssignedHGuid, employeeID=ViewBag.EmployeeID })'>@a.Text</a>
+                                                                <a class="btn btn-xs btn-primary waves-effect waves-themed" data-rowid="@a.I18n" href='@Url.Action("HierarchyAssignedSubReactive","Employee", new {rowid = a.I18n, empRowId=ViewBag.AssignedHGuid, employeeID=ViewBag.EmployeeID })'>@a.Text</a>
                                                                 <br />
                                                                 <a class="btn btn-xs btn-outline-dark waves-effect waves-themed" href='@a.Route'><small>@a.Title</small></a>
                                                             </li>

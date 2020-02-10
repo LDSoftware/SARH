@@ -185,6 +185,19 @@
                                             </div>
                                         </div>
 
+                                        <div class="col-md-4" id="diasVacaciones" style="display:none;">
+                                            <label class="form-label" for="diasVacacionesinput">Dias de Vacaciones</label>
+                                            <input type="text" class="form-control" id="diasVacacionesinput" disabled="disabled" value="@Model.EmployeeVacations.TotalDias">
+                                        </div>
+                                        <div class="col-md-4" id="diasDisfrutados" style="display:none;">
+                                            <label class="form-label" for="diasdisfrutadosinput">Dias Disfrutados</label>
+                                            <input type="text" class="form-control" id="diasdisfrutadosinput" disabled="disabled" value="@Model.EmployeeVacations.DiasTomados">
+                                        </div>
+                                        <div class="col-md-4" id="diasDisponibles" style="display:none;">
+                                            <label class="form-label" for="diasdisponiblesintput">Dias Disponibles</label>
+                                            <input type="text" class="form-control" id="diasdisponiblesintput" disabled="disabled"  value="@Model.EmployeeVacations.DiasDisponibles">
+                                        </div>
+
 
                                         <div class="col-md-6" id="divhouri" style="display:none;">
                                             <label class="form-label" for="horainicial">Hora Inicial</label>
@@ -266,7 +279,7 @@
 
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
                             <button id="saveformat" type="button" class="btn btn-primary">Guardar</button>
                         </div>
                     </div>
@@ -350,6 +363,13 @@
                                             </div>
 
                                         </div>
+
+
+                                        <div class="col-md-12">
+                                            <label class="form-label" for="detalles">Detalles</label>
+                                            <textarea class="form-control">@Model.DetallesFormato</textarea>
+                                        </div>
+
 
                                     </div>
 
@@ -449,6 +469,22 @@
             /* init datatables */
 
             runDatePicker();
+
+            init();
+
+            function init() {
+
+                var type = $("#permissionType :selected").text();
+                var nperm = type.includes("Vacacion");
+
+                if (nperm) {
+                    $('#diasVacaciones').show();
+                    $('#diasDisfrutados').show();
+                    $('#diasDisponibles').show();
+                }
+
+            }
+
 
             $('#dt-basic-example').dataTable(
                 {
@@ -763,16 +799,50 @@
                 var nperm = type.includes("Permiso");
 
                 if (nperm) {
+
+                    $('#diasVacaciones').hide();
+                    $('#diasDisfrutados').hide();
+                    $('#diasDisponibles').hide();
                     $('#divhouri').show();
                     $('#divhoure').show();
                     $('#divcheckpay').show();
                     isPermission = true;
                 }
                 else {
-                    $('#divhouri').hide();
-                    $('#divhoure').hide();
-                    $('#divcheckpay').hide();
-                    isPermission = false;
+                    nperm = type.includes("Pase");
+
+                    if (nperm) {
+                        $('#diasVacaciones').hide();
+                        $('#diasDisfrutados').hide();
+                        $('#diasDisponibles').hide();
+                        $('#divhouri').show();
+                        $('#divhoure').show();
+                        $('#divcheckpay').show();
+                        isPermission = true;
+                    }
+                    else {
+                        $('#diasVacaciones').hide();
+                        $('#diasDisfrutados').hide();
+                        $('#diasDisponibles').hide();
+                        $('#divhouri').hide();
+                        $('#divhoure').hide();
+                        $('#divcheckpay').hide();
+                        isPermission = false;
+                    }
+
+                    nperm = type.includes("Vacacion");
+
+                    if (nperm) {
+                        $('#diasVacaciones').show();
+                        $('#diasDisfrutados').show();
+                        $('#diasDisponibles').show();
+                    }
+                    else {
+                        $('#diasVacaciones').hide();
+                        $('#diasDisfrutados').hide();
+                        $('#diasDisponibles').hide();
+                    }
+
                 }
 
             });
