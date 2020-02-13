@@ -72,7 +72,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{C0A30B79-5
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ISOSA.SARH.DataTests", "ISOSA.SARH.DataTests\ISOSA.SARH.DataTests.csproj", "{251061AB-C41B-48C4-84CF-7F7B95843560}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SARH.CoreTests", "SARH.CoreTests\SARH.CoreTests.csproj", "{4E581481-1584-4635-8408-27E21FB10896}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SARH.CoreTests", "SARH.CoreTests\SARH.CoreTests.csproj", "{4E581481-1584-4635-8408-27E21FB10896}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

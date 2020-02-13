@@ -1,0 +1,432 @@
+﻿@{
+    ViewData["Title"] = "Reporte Incidencias";
+    ViewData["PageName"] = "Reporte Incidencias";
+    ViewData["PageDescription"] = "Reporte Incidencias";
+}
+@section HeadBlock {
+    <link rel="stylesheet" media="screen, print" href="~/css/fa-solid.css">
+    <link rel="stylesheet" media="screen, print" href="~/css/fa-brands.css">
+    <link rel="stylesheet" media="screen, print" href="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/css/datagrid/datatables/datatables.bundle.css">
+    <link rel="stylesheet" media="screen, print" href="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/css/notifications/sweetalert2/sweetalert2.bundle.css">
+    <link rel="stylesheet" media="screen, print" href="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/css/formplugins/bootstrap-datepicker/bootstrap-datepicker.css">
+}
+
+
+<div class="subheader">
+    <h1 class="subheader-title">
+        <i class="subheader-icon fal fa-chart-area"></i> Reporte Diario de Incidencias
+    </h1>
+    <div class="d-flex mr-4">
+        <div>
+
+            <label class="form-label" for="example-date">Fecha Inicial</label>
+            <div class="form-group" style="margin-top:22px;">
+                <div class="input-group">
+                    <input type="text" class="form-control" id="datepicker-4-4">
+                    <div class="input-group-append">
+                        <span class="input-group-text fs-xl">
+                            <i class="fal fa-calendar-plus"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+    <div class="d-flex mr-0">
+        <div>
+
+            <label class="form-label" for="example-date">Fecha Final</label>
+            <div class="form-group" style="margin-top:22px;">
+                <div class="input-group">
+                    <input type="text" class="form-control" id="datepicker-4-5">
+                    <div class="input-group-append">
+                        <span class="input-group-text fs-xl">
+                            <i class="fal fa-calendar-plus"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+
+
+</div>
+
+<div role="group" aria-label="Vertical button group" style="margin-bottom:10px;">
+    <a id="generatereport" class="btn btn-secondary" href='#'><i class="fal fa-cogs"></i> Generar</a>
+    <div class="btn-group" role="group">
+        <button class="btn btn-secondary dropdown-toggle" id="btnGroupVerticalDrop1" aria-expanded="false" aria-haspopup="true" type="button" data-toggle="dropdown">
+            <i class="fal fa-bolt"></i>
+            Acciones
+        </button>
+
+        <div class="dropdown-menu" aria-labelledby="btnGroupVerticalDrop1">
+            <a id="print" class="dropdown-item" href="#">Imprimir</a>
+            <a id="export" class="dropdown-item" href="#">Exportar Excel</a>
+        </div>
+    </div>
+
+
+    <div id="panelwait" style="margin-top:20px;display:none;" class="alert alert-success alert-dismissible fade show" role="alert">
+        <div class="d-flex align-items-center">
+            <div class="alert-icon width-1">
+                <i class="fal fa-sync fs-xxl fa-spin"></i>
+            </div>
+            <div class="flex-1" style="margin-left:30px;">
+                <span class="h6 m-0 fw-700">Generando el reporte...</span>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<div class="row">
+
+
+
+    <div class="col-lg-12">
+
+        <div class="border bg-light rounded-top">
+            <div class="accordion accordion-hover accordion-clean js-list-filter" id="js_list_accordion">
+
+                </ Incapacidades -->
+
+                <div class="card border-top-left-radius-0 border-top-right-radius-0">
+                    <div class="card-header">
+                        <a class="card-title" style="background-color:orange;color:black;" aria-expanded="true" href="javascript:void(0);" data-toggle="collapse" data-target="#js_list_accordion-a">
+                            <b>INCAPACIDADES</b>&nbsp;&nbsp;<span class="badge badge-dark">0</span>
+                            <span class="ml-auto">
+                                <span class="collapsed-reveal">
+                                    <i class="fal fa-chevron-up fs-xl"></i>
+                                </span>
+                                <span class="collapsed-hidden">
+                                    <i class="fal fa-chevron-down fs-xl"></i>
+                                </span>
+                            </span>
+                        </a>
+                    </div>
+                    <div class="collapse show" id="js_list_accordion-a" data-parent="#js_list_accordion">
+                        <div class="card-body">
+
+                            <table id="dt-incapacidades" class="table table-bordered table-hover table-striped w-100">
+                                <thead class="bg-warning-200">
+                                    <tr>
+                                        <th style="width:10px;"></th>
+                                        <th>AREA</th>
+                                        <th>PUESTO</th>
+                                        <th>NOMBRE</th>
+                                        <th  style="width:45px;">DURACIÓN INICIO</th>
+                                        <th  style="width:45px;">DURACIÓN FIN</th>
+                                        <th>OBSERVACIONES</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="allincapacidades">
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+                </div>
+
+
+                </ Faltas -->
+
+                <div class="card">
+                    <div class="card-header">
+                        <a class="card-title collapsed" style="background-color:red;color:black;" aria-expanded="false" href="javascript:void(0);" data-toggle="collapse" data-target="#js_list_accordion-z">
+                            <b>FALTAS</b>&nbsp;&nbsp;<span id="totfaltas" class="badge badge-dark">0</span>
+                            <span class="ml-auto">
+                                <span class="collapsed-reveal">
+                                    <i class="fal fa-chevron-up fs-xl"></i>
+                                </span>
+                                <span class="collapsed-hidden">
+                                    <i class="fal fa-chevron-down fs-xl"></i>
+                                </span>
+                            </span>
+                        </a>
+                    </div>
+                    <div class="collapse" id="js_list_accordion-z" data-parent="#js_list_accordion">
+                        <div class="card-body">
+
+                            <table id="dt-faltas" class="table table-bordered table-hover table-striped w-100">
+                                <thead class="bg-warning-200">
+                                    <tr>
+                                        <th style="width:10px;"></th>
+                                        <th>AREA</th>
+                                        <th>PUESTO</th>
+                                        <th>NOMBRE</th>
+                                        <th style="width:45px;">FECHA</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="allfaltas">
+                                </tbody>
+                            </table>
+
+
+                        </div>
+                    </div>
+                </div>
+
+
+                </ Vacaciones -->
+
+
+                <div class="card">
+                    <div class="card-header">
+                        <a class="card-title collapsed" style="background-color:deepskyblue;color:black;" aria-expanded="false" href="javascript:void(0);" data-toggle="collapse" data-target="#js_list_accordion-y">
+                            <b>VACACIONES</b>&nbsp;&nbsp;<span class="badge badge-dark">0</span>
+                            <span class="ml-auto">
+                                <span class="collapsed-reveal">
+                                    <i class="fal fa-chevron-up fs-xl"></i>
+                                </span>
+                                <span class="collapsed-hidden">
+                                    <i class="fal fa-chevron-down fs-xl"></i>
+                                </span>
+                            </span>
+                        </a>
+                    </div>
+                    <div class="collapse" id="js_list_accordion-y" data-parent="#js_list_accordion">
+                        <div class="card-body">
+
+                            <table id="dt-vacaciones" class="table table-bordered table-hover table-striped w-100">
+                                <thead class="bg-warning-200">
+                                    <tr>
+                                        <th style="width:10px;"></th>
+                                        <th>AREA</th>
+                                        <th>PUESTO</th>
+                                        <th>NOMBRE</th>
+                                        <th style="width:45px;">DURACIÓN INICIO</th>
+                                        <th style="width:45px;">DURACIÓN FIN</th>
+                                        <th>OBSERVACIONES</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="allvacaciones">
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+                </div>
+
+
+                </ Permisos -->
+
+
+                <div class="card">
+                    <div class="card-header">
+                        <a class="card-title collapsed" style="background-color:green;color:black;" aria-expanded="false" href="javascript:void(0);" data-toggle="collapse" data-target="#js_list_accordion-b">
+                            <b>PERMISOS</b>&nbsp;&nbsp;<span class="badge badge-dark">0</span>
+                            <span class="ml-auto">
+                                <span class="collapsed-reveal">
+                                    <i class="fal fa-chevron-up fs-xl"></i>
+                                </span>
+                                <span class="collapsed-hidden">
+                                    <i class="fal fa-chevron-down fs-xl"></i>
+                                </span>
+                            </span>
+                        </a>
+                    </div>
+                    <div class="collapse" id="js_list_accordion-b" data-parent="#js_list_accordion">
+                        <div class="card-body">
+
+
+                            <table id="dt-permisos" class="table table-bordered table-hover table-striped w-100">
+                                <thead class="bg-warning-200">
+                                    <tr>
+                                        <th style="width:10px;"></th>
+                                        <th>AREA</th>
+                                        <th>PUESTO</th>
+                                        <th>NOMBRE</th>
+                                        <th style="width:45px;">DURACIÓN INICIO</th>
+                                        <th style="width:45px;">DURACIÓN FIN</th>
+                                        <th>OBSERVACIONES</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="allpermisos">
+                                </tbody>
+                            </table>
+
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+@section ScriptsBlock {
+
+    <script src="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/js/datagrid/datatables/datatables.bundle.js"></script>
+    <script src="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/js/notifications/sweetalert2/sweetalert2.bundle.js"></script>
+    <script src="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/js/formplugins/bootstrap-datepicker/bootstrap-datepicker.js"></script>
+    <script>
+
+        var controls = {
+            leftArrow: '<i class="fal fa-angle-left" style="font-size: 1.25rem"></i>',
+            rightArrow: '<i class="fal fa-angle-right" style="font-size: 1.25rem"></i>'
+        }
+
+        var runDatePicker = function () {
+
+
+            $('#datepicker-4-4').datepicker(
+                {
+                    orientation: "bottom right",
+                    todayHighlight: true,
+                    templates: controls,
+                    format: 'dd/mm/yyyy'
+                }).on('changeDate', function (e) {
+
+                });
+
+            $('#datepicker-4-5').datepicker(
+                {
+                    orientation: "bottom right",
+                    todayHighlight: true,
+                    templates: controls,
+                    format: 'dd/mm/yyyy'
+                }).on('changeDate', function (e) {
+
+                });
+
+        }
+
+        $(document).ready(function () {
+
+            runDatePicker();
+
+            init();
+
+            $('#dt-incapacidades').dataTable(
+                {
+                    responsive: true,
+                    bFilter: false,
+                    bInfo: false
+                });
+
+            $('#dt-faltas').dataTable(
+                {
+                    responsive: true,
+                    bFilter: false,
+                    bInfo: false
+                });
+
+            $('#dt-vacaciones').dataTable(
+                {
+                    responsive: true,
+                    bFilter: false,
+                    bInfo: false
+                });
+
+            $('#dt-permisos').dataTable(
+                {
+                    responsive: true,
+                    bFilter: false,
+                    bInfo: false
+                });
+
+            function init() {
+
+                $('#js_list_accordion-a').collapse({
+                  toggle: true
+                })
+
+            };
+
+
+            $('#generatereport').click(function () {
+
+
+                var dateIni = $('#datepicker-4-4').val();
+                var dateFin = $('#datepicker-4-5').val();
+
+
+                if (dateIni === '' || dateFin === '') {
+
+
+                    Swal.fire(
+                        {
+                            type: "warning",
+                            title: "Validación",
+                            text: "Rango de fechas no Válidos"
+                        });
+
+
+                    return;
+
+                }
+
+                var i = new Date(dateIni);
+                var f = new Date(dateFin);
+
+                if (f < i) {
+
+                    Swal.fire(
+                        {
+                            type: "warning",
+                            title: "Validación",
+                            text: "Rango de fechas no Válidos"
+                        });
+
+
+                    return;
+
+                }
+
+                $('#generatereport').hide();
+                $('.btn').prop('disabled', true);
+                $('#panelwait').show();
+
+
+                $.ajax({
+                    url: '/ReporteIncidencia/GenerateIncidenciaReportData',
+                    type: "POST",
+                    data: { dateIni: dateIni, dateFin: dateFin },
+                    success: function (data, textStatus, jqXHR) {
+
+                        $('#generatereport').show();
+                        $('.btn').prop('disabled', false);
+                        $('#panelwait').hide();
+
+                        if (data.faltastotal > 0) {
+
+                            if (data.faltas.length > 0) {
+                                var htmlLicenseinfo = '';
+                                var numeracion = 1;
+                                for (var i = 0; i < data.faltas.length; i++) {
+                                    htmlLicenseinfo = htmlLicenseinfo + '<tr><td>' +  data.faltas[i]['id'] + '</td><td>' + data.faltas[i]['area'] + '</td><td>' + data.faltas[i]['jobTitle'] + '</td><td>' + data.faltas[i]['name'] + '</td><td>' + data.faltas[i]['fecha'] + '</td></tr>';
+                                    numeracion++;
+                                }
+                                $('#allfaltas').html(htmlLicenseinfo);
+                            }
+                            $('#totfaltas').text(data.faltastotal);
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+
+                    }
+                });
+
+
+
+
+
+            });
+
+
+
+
+        });
+
+    </script>
+}

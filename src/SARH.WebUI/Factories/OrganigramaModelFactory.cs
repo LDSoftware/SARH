@@ -366,7 +366,7 @@ namespace SARH.WebUI.Factories
 
                 var rowIdent = _isosaemployeesOrganigramaRepository.SearhItemsFor(h => h.RowGuid.ToString().ToLower().Equals(employee.FirstOrDefault().HrowGuid.ToString().ToLower()));
                 model.HierarchyGuid = employee.FirstOrDefault().HrowGuid.ToString().ToLower();
-                if (rowIdent.Any())
+                if (rowIdent.Any() && rowIdent.FirstOrDefault().IdentPuesto != null)
                 {
                     model.RowId = rowIdent.FirstOrDefault().IdentPuesto.Value.ToString().ToLower();
                 }

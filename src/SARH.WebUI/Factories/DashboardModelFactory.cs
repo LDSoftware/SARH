@@ -9,6 +9,7 @@ using ISOSA.SARH.Data.Domain.Employee;
 using ISOSA.SARH.Data.Domain.Formats;
 using ISOSA.SARH.Data.Repository;
 using SARH.WebUI.Models.Dashboard;
+using SARH.WebUI.Models.Report;
 
 namespace SARH.WebUI.Factories
 {
@@ -576,6 +577,78 @@ namespace SARH.WebUI.Factories
 
             return result;
         }
+
+        public List<ReportEmployeeDetailModel> GetNoRegistry(string date) 
+        {
+            List<KeyValuePair<string, string>> param = new List<KeyValuePair<string, string>>();
+            param.Add(new KeyValuePair<string, string>("@CurrentDate", string.IsNullOrEmpty(date) ? DateTime.Now.ToShortDateString() : date));
+
+            string spName = dashboard;
+            if (DateTime.Parse(date).DayOfWeek == DayOfWeek.Saturday)
+            {
+                spName = dashboardweekend;
+            }
+
+            var t = this._dashboardRepository.GetStoredProcData(spName, param);
+            List<ReportEmployeeDetailModel> empsDetail = new List<ReportEmployeeDetailModel>();
+
+            if (DateTime.Parse(date).DayOfWeek == DayOfWeek.Saturday)
+            {
+                var wkworkers = this.WeekEndWorkers();
+
+                DashboardData[] ops = new DashboardData[t.Count()];
+                t.ToList().CopyTo(ops, 0);
+
+                var wkemployees = (from wk in wkworkers
+                                   join dd in ops on wk equals dd.EmployeeId
+                                   where dd.RetardoEntrada == 2
+                                   where dd.SalidaAnticipada ==2
+                                   where dd.SalidaAnticipadaComida ==2
+                                   where dd.RetardoEntradaComida == 2
+                                   select dd);
+
+                t = null;
+                t = new List<DashboardData>(wkemployees);
+            }
+
+
+            var a = t.Where(d => d.RetardoEntrada.Equals(2) && d.SalidaAnticipada.Equals(2) && d.SalidaAnticipadaComida.Equals(2) && d.RetardoEntradaComida.Equals(2)).Select(r => new ReportEmployeeDetailModel()
+            {
+                Area = r.Area,
+                Name = r.EmployeeName,
+                ID = r.EmployeeId,
+                JobCenter = r.Centro,
+                JobTitle = r.Puesto,
+                DetailType = "Falta",
+                Fecha = date
+            }).ToList();
+            empsDetail.AddRange(a);
+
+
+
+            if (IsHoliday(date))
+            {
+                var exeptions = HaveHolidayExepcions(date);
+                if (exeptions.Any())
+                {
+                    exeptions.ToList().ForEach(v =>
+                    {
+                        var emp = empsDetail.Where(f => f.ID.Equals(v)).FirstOrDefault();
+                        if (emp != null)
+                        {
+                            empsDetail.Remove(emp);
+                        }
+                    });
+                }
+                else
+                {
+                    empsDetail.Clear();
+                }
+            }
+
+            return empsDetail;
+        }
+
 
     }
 }

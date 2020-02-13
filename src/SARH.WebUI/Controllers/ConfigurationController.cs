@@ -149,6 +149,42 @@ namespace SARH.WebUI.Controllers
             return Json(assigneddiscounts);
         }
 
+        [HttpPost]
+        public JsonResult GetEditDiscount(int id, [FromServices]IRepository<EmployeeDiscount> discountRepo) 
+        {
+
+            var row = discountRepo.GetElement(id);
+            var response = new
+            {
+                id = id,
+                discounttype = $"{DiscountType(row.DiscountType.ToString())}",
+                rangeini = row.RangeInitial,
+                rangefin = row.RangeEnd,
+                dias = row.Days,
+                descripcion = row.Description,
+                discount = row.Discount,
+                enabled = row.Enabled
+            };
+
+            return Json(response);
+        }
+
+
+        [HttpPost]
+        public JsonResult SaveDiscountEdit(int id, ScheduleDiscountInput model, [FromServices]IRepository<EmployeeDiscount> discountRepo)
+        {
+            var row = discountRepo.GetElement(id);
+
+            row.Discount = model.Porcentaje;
+            row.Days = model.Dias;
+            row.RangeInitial = model.RangeInitial;
+            row.RangeEnd = model.RangeEnd;
+            row.Description = model.Description;
+            discountRepo.Update(row);
+
+            return Json("Ok");
+        }
+
 
 
         private string DiscountType(string id) 

@@ -51,12 +51,16 @@
                         <a id="enabledrow" href="javascript:void(0);" title="Activar descuento" class="btn btn-info btn-icon waves-effect waves-themed">
                             <i class="fal fa-check-square"></i>
                         </a>
-                        <a id="viewMixed" href="javascript:void(0);"  title="Ver descuento" class="btn btn-success btn-icon waves-effect waves-themed">
-                            <i class="fal fa-pen-square"></i>
+                        <a id="viewMixed" href="javascript:void(0);" title="Ver descuento" class="btn btn-success btn-icon waves-effect waves-themed">
+                            <i class="fal fa-eye"></i>
                         </a>
-                        <a href="javascript:void(0);" data-backdrop="static"  title="Nuevo descuento" data-keyboard="false" data-toggle="modal" data-target=".default-example-modal-right" class="btn btn-primary btn-icon waves-effect waves-themed">
+                        <a href="javascript:void(0);" data-backdrop="static" title="Nuevo descuento" data-keyboard="false" data-toggle="modal" data-target=".default-example-modal-right" class="btn btn-primary btn-icon waves-effect waves-themed">
                             <i class="fal fa-plus-circle"></i>
                         </a>
+                        <a id="editdiscount" href="javascript:void(0);" data-backdrop="static" title="Editar descuento"class="btn btn-default btn-icon waves-effect waves-themed">
+                            <i class="fal fa-pen-square"></i>
+                        </a>
+
                     </div>
 
                 </div>
@@ -83,13 +87,13 @@
                                         <tbody id="alldiscounts">
                                             @foreach (var item in Model.SchedulesDiscounts)
                                             {
-                                            <tr id="@item.Id">
-                                                <td>@item.TipoDescuento</td>
-                                                <td>@item.DiscountName</td>
-                                                <td>@item.Descripcion</td>
-                                                <td>@item.Discount</td>
-                                                <td>@item.Habilitado</td>
-                                            </tr>
+                                                <tr id="@item.Id">
+                                                    <td>@item.TipoDescuento</td>
+                                                    <td>@item.DiscountName</td>
+                                                    <td>@item.Descripcion</td>
+                                                    <td>@item.Discount</td>
+                                                    <td>@item.Habilitado</td>
+                                                </tr>
                                             }
                                         </tbody>
                                     </table>
@@ -153,7 +157,7 @@
                                 <div class="form-row">
                                     <div class="col-md-12">
                                         <label class="form-label" for="discountname">Identificador</label>
-                                        <input class="form-control reseterror" id="discountname" required="" type="text" maxlength="10" >
+                                        <input class="form-control reseterror" id="discountname" required="" type="text" maxlength="10">
                                     </div>
                                 </div>
 
@@ -247,7 +251,151 @@
                                     </tr>
                                 </thead>
                                 <tbody id="discountincluded">
+                                </tbody>
+                            </table>
 
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+    </div>
+</div>
+
+
+
+        </ Modal Editar Descuento -->
+
+<div class="panel-container show">
+    <div class="panel-content">
+
+        <div class="modal fade default-example-modal-right-edit" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-right">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title h4">Crear un nuevo descuento</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true"><i class="fal fa-times"></i></span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="card mb-5">
+
+                            <div class="card-body p-3">
+                                <h5>
+                                    <small class="mt-0 mb-3 text-muted">
+                                        Tipo de descuento
+                                    </small>
+                                    <span class="badge badge-primary fw-n position-absolute pos-top pos-right mt-3 mr-3">A</span>
+                                </h5>
+
+                                <div class="form-row">
+                                    <div class="col-md-12">
+                                        <label class="form-label" for="tipodescuento">Tipo de descuento</label>
+                                        <input class="form-control" id="tipodescuento" disabled="disabled" type="text">
+                                        <input id="iddescuentoedit" type="hidden" />
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="card mb-g">
+
+                            <div class="card-body p-3">
+                                <h5>
+                                    Información del descuento
+                                    <small class="mt-0 mb-3 text-muted">
+                                        Ingrese la configuración del descuento.
+                                    </small>
+                                    <span class="badge badge-dark fw-n position-absolute pos-top pos-right mt-3 mr-3">B</span>
+                                </h5>
+
+
+                                <div class="form-row">
+                                    <div class="col-md-12">
+                                        <label class="form-label" for="discountnameedit">Identificador</label>
+                                        <input class="form-control reseterror" id="discountnameedit" required="" type="text" maxlength="10">
+                                    </div>
+                                </div>
+
+
+                                <div class="form-row">
+                                    <div class="col-md-6">
+                                        <label class="form-label" for="diasedit">Dias de incidencia</label>
+                                        <input class="form-control reseterror" id="diasedit" required="" type="number">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label" for="descuentoedit">Descuento en porcentaje</label>
+                                        <input class="form-control reseterror" id="descuentoedit" type="number">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col-md-6">
+                                        <label class="form-label" for="rangeinitialedit">Rango inicial (Minutos)</label>
+                                        <input class="form-control reseterror" id="rangeinitialedit" required="" type="number">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label" for="rangeendedit">Rango final (Minutos)</label>
+                                        <input class="form-control reseterror" id="rangeendedit" type="number">
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <div id="errorsaveedit" class="alert border-danger bg-transparent text-secondary fade show" role="alert" style="display:none">
+                                <div class="d-flex align-items-center">
+                                    <div class="alert-icon">
+                                        <span class="icon-stack icon-stack-md">
+                                            <i class="base-7 icon-stack-3x color-danger-900"></i>
+                                            <i class="fal fa-times icon-stack-1x text-white"></i>
+                                        </span>
+                                    </div>
+                                    <div class="flex-1">
+                                        <span class="h5 color-danger-900">No se puede guardar, verifique que se han ingresando todos los datos </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button id="closemodaledit" type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                            <button id="savenewscheduleedit" type="button" class="btn btn-primary">Guardar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" data-backdrop="static" data-keyboard="false" id="default-example-modal-center-edit" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header  bg-warning-500">
+                        <h4 class="modal-title">
+                            Detalle del descuento
+                        </h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true"><i class="fal fa-times"></i></span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+
+                        <div class="form-group">
+
+                            <table class="table table-bordered table-hover table-striped w-100">
+                                <thead class="bg-warning-200">
+                                    <tr>
+                                        <th>Descripción</th>
+                                        <th>Descuento</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="discountincluded">
                                 </tbody>
                             </table>
 
@@ -270,297 +418,392 @@
 
 
 
+@section ScriptsBlock {
 
-    @section ScriptsBlock {
+    <script src="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/js/datagrid/datatables/datatables.bundle.js"></script>
+    <script src="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/js/formplugins/bootstrap-datepicker/bootstrap-datepicker.js"></script>
+    <script src="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/js/notifications/sweetalert2/sweetalert2.bundle.js"></script>
 
-        <script src="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/js/datagrid/datatables/datatables.bundle.js"></script>
-        <script src="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/js/formplugins/bootstrap-datepicker/bootstrap-datepicker.js"></script>
-        <script src="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/js/notifications/sweetalert2/sweetalert2.bundle.js"></script>
-
-        <script>
+    <script>
 
 
-            $('#dt-basic-example tr').click(function () {
+        $('#dt-basic-example tr').click(function () {
 
-                $(this).addClass('selected').siblings().removeClass('selected');
+            $(this).addClass('selected').siblings().removeClass('selected');
 
-            });
+        });
 
-            $(document).ready(function () {
+        $(document).ready(function () {
 
-                $('#dt-basic-example').dataTable(
-                    {
-                        responsive: true
-                    });
-            });
-
-            $('#savenewschedule').click(function () {
-
-                var combinationId = "";
-
-                $("#combination input[type=checkbox]:checked").each(function () {
-
-                    var idelement = this.id;
-                    if (idelement !== "") {
-                        combinationId += idelement + "|";
-                    }
+            $('#dt-basic-example').dataTable(
+                {
+                    responsive: true
                 });
+        });
 
-                var model = {
-                    Dias: $('#dias').val(),
-                    Description: $('#discountname').val(),
-                    Porcentaje: $('#descuento').val(),
-                    Tipo: $('#catalog').val(),
-                    RangeInitial: $('#rangeinitial').val(),
-                    RangeEnd: $('#rangeend').val(),
-                    Combinacion: combinationId
-                };
+        $('#savenewschedule').click(function () {
 
-                $.ajax({
-                    url: '/Configuration/SaveDiscount',
-                    type: "POST",
-                    data: model,
-                    success: function (data, textStatus, jqXHR) {
+            var combinationId = "";
 
-                        Swal.fire(
-                            {
-                                position: "top-end",
-                                type: "success",
-                                title: "Actualización exitosa",
-                                showConfirmButton: false,
-                                timer: 1500
-                            }).then((result) => {
+            $("#combination input[type=checkbox]:checked").each(function () {
 
-
-                                window.location.href = '/Configuration/Descuentos';
-
-                            });
-
-
-
-                    },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        alert(errorThrown);
-                    }
-                });
-
-
-
-
+                var idelement = this.id;
+                if (idelement !== "") {
+                    combinationId += idelement + "|";
+                }
             });
 
-            $('#disabledrow').click(function () {
+            var model = {
+                Dias: $('#dias').val(),
+                Description: $('#discountname').val(),
+                Porcentaje: $('#descuento').val(),
+                Tipo: $('#catalog').val(),
+                RangeInitial: $('#rangeinitial').val(),
+                RangeEnd: $('#rangeend').val(),
+                Combinacion: combinationId
+            };
 
-                var row = $('#alldiscounts tr.selected');
-
-                if (row.length === 0) {
+            $.ajax({
+                url: '/Configuration/SaveDiscount',
+                type: "POST",
+                data: model,
+                success: function (data, textStatus, jqXHR) {
 
                     Swal.fire(
                         {
-                            type: "warning",
-                            title: "Validación",
-                            text: "Seleccione un registro"
+                            position: "top-end",
+                            type: "success",
+                            title: "Actualización exitosa",
+                            showConfirmButton: false,
+                            timer: 1500
+                        }).then((result) => {
+
+
+                            window.location.href = '/Configuration/Descuentos';
+
                         });
 
-                    return;
+
+
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert(errorThrown);
                 }
-                var iddiscount = row[0].id;
-                var swalWithBootstrapButtons = Swal.mixin(
+            });
+
+
+
+
+        });
+
+        $('#disabledrow').click(function () {
+
+            var row = $('#alldiscounts tr.selected');
+
+            if (row.length === 0) {
+
+                Swal.fire(
                     {
-                        customClass:
-                        {
-                            confirmButton: "btn btn-primary",
-                            cancelButton: "btn btn-danger mr-2"
-                        },
-                        buttonsStyling: false
+                        type: "warning",
+                        title: "Validación",
+                        text: "Seleccione un registro"
                     });
-                swalWithBootstrapButtons
-                    .fire(
-                        {
-                            title: "Confirmación",
-                            text: "Deseas desactivar el descuento?",
-                            type: "warning",
-                            showCancelButton: true,
-                            confirmButtonText: "Si",
-                            cancelButtonText: "Cancelar",
-                            reverseButtons: true
-                        })
-                    .then(function (result) {
 
-                        if (result.value) {
+                return;
+            }
+            var iddiscount = row[0].id;
+            var swalWithBootstrapButtons = Swal.mixin(
+                {
+                    customClass:
+                    {
+                        confirmButton: "btn btn-primary",
+                        cancelButton: "btn btn-danger mr-2"
+                    },
+                    buttonsStyling: false
+                });
+            swalWithBootstrapButtons
+                .fire(
+                    {
+                        title: "Confirmación",
+                        text: "Deseas desactivar el descuento?",
+                        type: "warning",
+                        showCancelButton: true,
+                        confirmButtonText: "Si",
+                        cancelButtonText: "Cancelar",
+                        reverseButtons: true
+                    })
+                .then(function (result) {
+
+                    if (result.value) {
 
 
-                            $.ajax({
-                                url: '/Configuration/DisabledDiscount',
-                                type: "POST",
-                                data: { id: iddiscount },
-                                success: function (data, textStatus, jqXHR) {
+                        $.ajax({
+                            url: '/Configuration/DisabledDiscount',
+                            type: "POST",
+                            data: { id: iddiscount },
+                            success: function (data, textStatus, jqXHR) {
+
+                                Swal.fire(
+                                    {
+                                        position: "top-end",
+                                        type: "success",
+                                        title: "Actualización exitosa",
+                                        showConfirmButton: false,
+                                        timer: 1500
+                                    }).then((result) => {
+
+
+                                        window.location.href = '/Configuration/Descuentos';
+
+                                    });
+
+                            },
+                            error: function (jqXHR, textStatus, errorThrown) {
+                                alert(errorThrown);
+                            }
+                        });
+
+
+                    }
+                    else if (
+                        // Read more about handling dismissals
+                        result.dismiss === Swal.DismissReason.cancel
+                    ) {
+                        swalWithBootstrapButtons.fire(
+                            "Cancelación",
+                            "Se ha cancelado la acción",
+                            "error"
+                        );
+                    }
+                });
+
+
+
+
+        });
+
+        $('#enabledrow').click(function () {
+
+            var row = $('#alldiscounts tr.selected');
+
+            if (row.length === 0) {
+
+                Swal.fire(
+                    {
+                        type: "warning",
+                        title: "Validación",
+                        text: "Seleccione un registro"
+                    });
+
+                return;
+            }
+            var iddiscount = row[0].id;
+            var swalWithBootstrapButtons = Swal.mixin(
+                {
+                    customClass:
+                    {
+                        confirmButton: "btn btn-primary",
+                        cancelButton: "btn btn-danger mr-2"
+                    },
+                    buttonsStyling: false
+                });
+            swalWithBootstrapButtons
+                .fire(
+                    {
+                        title: "Confirmación",
+                        text: "Deseas activar el descuento?",
+                        type: "warning",
+                        showCancelButton: true,
+                        confirmButtonText: "Si",
+                        cancelButtonText: "Cancelar",
+                        reverseButtons: true
+                    })
+                .then(function (result) {
+
+                    if (result.value) {
+
+
+                        $.ajax({
+                            url: '/Configuration/EnabledDiscount',
+                            type: "POST",
+                            data: { id: iddiscount },
+                            success: function (data, textStatus, jqXHR) {
+
+                                Swal.fire(
+                                    {
+                                        position: "top-end",
+                                        type: "success",
+                                        title: "Actualización exitosa",
+                                        showConfirmButton: false,
+                                        timer: 1500
+                                    }).then((result) => {
+
+
+                                        window.location.href = '/Configuration/Descuentos';
+
+                                    });
+
+                            },
+                            error: function (jqXHR, textStatus, errorThrown) {
+                                alert(errorThrown);
+                            }
+                        });
+
+
+                    }
+                    else if (
+                        // Read more about handling dismissals
+                        result.dismiss === Swal.DismissReason.cancel
+                    ) {
+                        swalWithBootstrapButtons.fire(
+                            "Cancelación",
+                            "Se ha cancelado la acción",
+                            "error"
+                        );
+                    }
+                });
+
+
+
+
+        });
+
+        $('#viewMixed').click(function () {
+
+
+            var row = $('#alldiscounts tr.selected');
+
+
+            if (row.length === 0) {
+
+                Swal.fire(
+                    {
+                        type: "warning",
+                        title: "Validación",
+                        text: "Seleccione un registro"
+                    });
+
+                return;
+            }
+            var iddiscount = row[0].id;
+
+
+            $.ajax({
+                url: '/Configuration/ViewDiscounts',
+                type: "POST",
+                data: { id: iddiscount },
+                success: function (data, textStatus, jqXHR) {
+
+                    var output = $("#discountincluded");
+                    output.empty();
+
+                    for (var i = 0; i < data.length; i++) {
+                        var discount = data[i];
+                        output.append("<tr><td>" + discount.descripcion + "</td><td>" +
+                            discount.discount + "</td></tr>");
+                    }
+
+                    $('#default-example-modal-center-edit').modal();
+
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert(errorThrown);
+                }
+            });
+
+
+
+
+
+
+        });
+
+
+        $('#editdiscount').click(function () {
+
+
+                        var row = $('#alldiscounts tr.selected');
+
+            if (row.length === 0) {
+
+                Swal.fire(
+                    {
+                        type: "warning",
+                        title: "Validación",
+                        text: "Seleccione un registro"
+                    });
+
+                return;
+            }
+            var iddiscount = row[0].id;
+            var swalWithBootstrapButtons = Swal.mixin(
+                {
+                    customClass:
+                    {
+                        confirmButton: "btn btn-primary",
+                        cancelButton: "btn btn-danger mr-2"
+                    },
+                    buttonsStyling: false
+                });
+            swalWithBootstrapButtons
+                .fire(
+                    {
+                        title: "Confirmación",
+                        text: "Deseas editar el descuento? Editar configuración podria generar inconsistencias con los descuentos ya aplicados",
+                        type: "warning",
+                        showCancelButton: true,
+                        confirmButtonText: "Si",
+                        cancelButtonText: "Cancelar",
+                        reverseButtons: true
+                    })
+                .then(function (result) {
+
+                    if (result.value) {
+
+
+                        $.ajax({
+                            url: '/Configuration/GetEditDiscount',
+                            type: "POST",
+                            data: { id: iddiscount },
+                            success: function (data, textStatus, jqXHR) {
+
+
+                                if (data.enabled) {
+                                    $('#iddescuentoedit').val(data.id);
+                                    $('#tipodescuento').val(data.discounttype);
+                                    $('#discountnameedit').val(data.descripcion);
+                                    $('#rangeinitialedit').val(data.rangeini);
+                                    $('#rangeendedit').val(data.rangefin);
+                                    $('#diasedit').val(data.dias);
+                                    $('#descuentoedit').val(data.discount);
+                                    $('.default-example-modal-right-edit').modal();
+                                }
+                                else {
 
                                     Swal.fire(
                                         {
-                                            position: "top-end",
-                                            type: "success",
-                                            title: "Actualización exitosa",
-                                            showConfirmButton: false,
-                                            timer: 1500
-                                        }).then((result) => {
-
-
-                                            window.location.href = '/Configuration/Descuentos';
-
+                                            type: "warning",
+                                            title: "Validación",
+                                            text: "El descuento no esta activo."
                                         });
-
-                                },
-                                error: function (jqXHR, textStatus, errorThrown) {
-                                    alert(errorThrown);
                                 }
-                            });
 
 
-                        }
-                        else if (
-                            // Read more about handling dismissals
-                            result.dismiss === Swal.DismissReason.cancel
-                        ) {
-                            swalWithBootstrapButtons.fire(
-                                "Cancelación",
-                                "Se ha cancelado la acción",
-                                "error"
-                            );
-                        }
-                    });
-
-
-
-
-            });
-
-            $('#enabledrow').click(function () {
-
-                var row = $('#alldiscounts tr.selected');
-
-                if (row.length === 0) {
-
-                    Swal.fire(
-                        {
-                            type: "warning",
-                            title: "Validación",
-                            text: "Seleccione un registro"
+                            },
+                            error: function (jqXHR, textStatus, errorThrown) {
+                                alert(errorThrown);
+                            }
                         });
-
-                    return;
-                }
-                var iddiscount = row[0].id;
-                var swalWithBootstrapButtons = Swal.mixin(
-                    {
-                        customClass:
-                        {
-                            confirmButton: "btn btn-primary",
-                            cancelButton: "btn btn-danger mr-2"
-                        },
-                        buttonsStyling: false
-                    });
-                swalWithBootstrapButtons
-                    .fire(
-                        {
-                            title: "Confirmación",
-                            text: "Deseas activar el descuento?",
-                            type: "warning",
-                            showCancelButton: true,
-                            confirmButtonText: "Si",
-                            cancelButtonText: "Cancelar",
-                            reverseButtons: true
-                        })
-                    .then(function (result) {
-
-                        if (result.value) {
-
-
-                            $.ajax({
-                                url: '/Configuration/EnabledDiscount',
-                                type: "POST",
-                                data: { id: iddiscount },
-                                success: function (data, textStatus, jqXHR) {
-
-                                    Swal.fire(
-                                        {
-                                            position: "top-end",
-                                            type: "success",
-                                            title: "Actualización exitosa",
-                                            showConfirmButton: false,
-                                            timer: 1500
-                                        }).then((result) => {
-
-
-                                            window.location.href = '/Configuration/Descuentos';
-
-                                        });
-
-                                },
-                                error: function (jqXHR, textStatus, errorThrown) {
-                                    alert(errorThrown);
-                                }
-                            });
-
-
-                        }
-                        else if (
-                            // Read more about handling dismissals
-                            result.dismiss === Swal.DismissReason.cancel
-                        ) {
-                            swalWithBootstrapButtons.fire(
-                                "Cancelación",
-                                "Se ha cancelado la acción",
-                                "error"
-                            );
-                        }
-                    });
-
-
-
-
-            });
-
-            $('#viewMixed').click(function () {
-
-
-                var row = $('#alldiscounts tr.selected');
-
-
-                if (row.length === 0) {
-
-                    Swal.fire(
-                        {
-                            type: "warning",
-                            title: "Validación",
-                            text: "Seleccione un registro"
-                        });
-
-                    return;
-                }
-                var iddiscount = row[0].id;
-
-
-                $.ajax({
-                    url: '/Configuration/ViewDiscounts',
-                    type: "POST",
-                    data: { id: iddiscount },
-                    success: function (data, textStatus, jqXHR) {
-
-                        var output = $("#discountincluded");
-                        output.empty();
-
-                        for (var i = 0; i < data.length; i++) {
-                            var discount = data[i];
-                            output.append("<tr><td>" + discount.descripcion + "</td><td>" +
-                                discount.discount + "</td></tr>");
-                        }
-
-                        $('#default-example-modal-center-edit').modal();
-
-                    },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        alert(errorThrown);
+                    }
+                    else if (
+                        // Read more about handling dismissals
+                        result.dismiss === Swal.DismissReason.cancel
+                    ) {
+                        swalWithBootstrapButtons.fire(
+                            "Cancelación",
+                            "Se ha cancelado la acción",
+                            "error"
+                        );
                     }
                 });
 
@@ -569,8 +812,55 @@
 
 
 
+
+
+        });
+
+
+        $('#savenewscheduleedit').click(function () {
+
+
+            var model = {
+                Dias: $('#diasedit').val(),
+                Description: $('#discountnameedit').val(),
+                Porcentaje: $('#descuento').val(),
+                Tipo: $('#catalog').val(),
+                RangeInitial: $('#rangeinitialedit').val(),
+                RangeEnd: $('#rangeendedit').val()
+            };
+
+            $.ajax({
+                url: '/Configuration/SaveDiscountEdit',
+                type: "POST",
+                data: { id: $('#iddescuentoedit').val(), model: model },
+                success: function (data, textStatus, jqXHR) {
+
+                    Swal.fire(
+                        {
+                            position: "top-end",
+                            type: "success",
+                            title: "Actualización exitosa",
+                            showConfirmButton: false,
+                            timer: 1500
+                        }).then((result) => {
+
+
+                            window.location.href = '/Configuration/Descuentos';
+
+                        });
+
+
+
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert(errorThrown);
+                }
             });
 
 
-        </script>
-    }
+        });
+
+
+
+    </script>
+}

@@ -215,24 +215,24 @@ namespace SARH.WebUI.Controllers
             var destiny = isosaemployeesOrganigramaRepository.SearhItemsFor(j => j.RowGuid.ToString().Equals(jobGuid));
             var employee = employeAdditionalInfoRepository.SearhItemsFor(f => f.EMP_EmployeeID.Equals(int.Parse(employeeId).ToString("00000")));
 
-            //var modellogin = httpContextAccessor.HttpContext.Session.GetString("loginmodel");
-            //var loginInfo = !string.IsNullOrEmpty(modellogin) ? JsonConvert.DeserializeObject<LoginModel.InputModel>(modellogin) : null;
-            //string userName = loginInfo != null ? loginInfo.Email : null;
+            var modellogin = httpContextAccessor.HttpContext.Session.GetString("loginmodel");
+            var loginInfo = !string.IsNullOrEmpty(modellogin) ? JsonConvert.DeserializeObject<LoginModel.InputModel>(modellogin) : null;
+            string userName = loginInfo != null ? loginInfo.Email : null;
 
-            //var orgEmp = organigramaModelFactory.GetEmployeeData(employeeId);
+            var orgEmp = organigramaModelFactory.GetEmployeeData(employeeId);
 
-            //employeeHistoryRepo.Create(new EmployeeHistory()
-            //{
-            //    EmployeeId = employee.FirstOrDefault().EMP_EmployeeID,
-            //    RegisterDate = DateTime.Now,
-            //    Descripcion = "El empleado fue asignado a nuevo puesto",
-            //    JobActual = destiny.FirstOrDefault().Puesto,
-            //    JobLast = orgEmp.GeneralInfo.JobTitle,
-            //    RowGuidActual = destiny.FirstOrDefault().RowGuid,
-            //    RowGuidLast = employee.FirstOrDefault().HrowGuid.Value,
-            //    DateChange = DateTime.Now,
-            //    UserId = userName
-            //});
+            employeeHistoryRepo.Create(new EmployeeHistory()
+            {
+                EmployeeId = employee.FirstOrDefault().EMP_EmployeeID,
+                RegisterDate = DateTime.Now,
+                Descripcion = "El empleado fue asignado a nuevo puesto",
+                JobActual = destiny.FirstOrDefault().Puesto,
+                JobLast = orgEmp.GeneralInfo.JobTitle,
+                RowGuidActual = destiny.FirstOrDefault().RowGuid,
+                RowGuidLast = employee.FirstOrDefault().HrowGuid.Value,
+                DateChange = DateTime.Now,
+                UserId = userName
+            });
 
             bool success = true;
 
@@ -428,6 +428,26 @@ namespace SARH.WebUI.Controllers
             var result = formatRepository.GetElement(id);
             string type = _permissionTypeRepository.GetElement(result.PermissionType).Description;
 
+            var allPermission = formatRepository.SearhItemsFor(y => y.EmployeeId.Equals(result.EmployeeId));
+            int totpermissions = 0;
+
+            if (allPermission.Any())
+            {
+                var d = formatRepository.SearhItemsFor(y => y.EmployeeId.Equals(result.EmployeeId)).Select(r => new EmployeeFormatItem()
+                {
+                    Id = r.Id,
+                    EmployeeId = r.EmployeeId,
+                    ApprovalDate = r.ApprovalDate.HasValue ? r.ApprovalDate.Value.ToShortDateString() : "",
+                    Comments = r.Comments,
+                    CreateDate = r.CreateDate.ToShortDateString(),
+                    EndDate = r.EndDate.ToShortDateString(),
+                    PermissionType = _permissionTypeRepository.GetElement(r.PermissionType).Description,
+                    StartDate = $"({r.StartDate.ToShortDateString()})-({r.EndDate.ToShortDateString()})"
+                });
+
+                totpermissions = d.Where(t => t.PermissionType.ToLower().Contains("permiso")).Count();
+            }
+
             string name = "";
             if (result.EmployeeSubstitute != "0")
             {
@@ -446,6 +466,10 @@ namespace SARH.WebUI.Controllers
                 else
                 {
                     sb.Append($"Con goze de sueldo : No{Environment.NewLine}");
+                }
+                if (totpermissions > 0) 
+                {
+                    sb.Append($"Permisos registrados : {totpermissions}");
                 }
             }
             else if (type.ToLower().Contains("vacacion")) 
