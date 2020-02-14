@@ -48,22 +48,23 @@ namespace SARH.WebUI.Controllers
                 {
                     Id = i.Id,
                     EmployeeId = int.Parse(i.EmployeeId).ToString("00000"),
-                    ScheduleMeal = !IsValidcheduleAssigedTemp(i.EmployeeId, scheduleAssignedTemp.ToList(), 2) ? $"L-V({GetStartScheduleAssigned(i.IdScheduleMeal, 2)} - {GetEndScheduleAssigned(i.IdScheduleMeal, 2)}) {ScheduleWeekendConfig(i.IdScheduleMealWeekEnd, 4)}" : GetScheduleAssigedTemp(i.EmployeeId, scheduleAssignedTemp.ToList(), 2),
-                    ScheduleWorkday = !IsValidcheduleAssigedTemp(i.EmployeeId, scheduleAssignedTemp.ToList(), 1) ? $"L-V({GetStartScheduleAssigned(i.IdScheduleWorkday, 1)} - {GetEndScheduleAssigned(i.IdScheduleWorkday, 1)}) {ScheduleWeekendConfig(i.IdScheduleWeekEnd, 3)}" : GetScheduleAssigedTemp(i.EmployeeId, scheduleAssignedTemp.ToList(), 1),
+                    ScheduleMeal = !IsValidcheduleAssigedTemp(i.EmployeeId, scheduleAssignedTemp.ToList(), 2) ? $"L-V({GetStartScheduleAssigned(i.IdScheduleMeal, 2)} - {GetEndScheduleAssigned(i.IdScheduleMeal, 2)})" : GetScheduleAssigedTemp(i.EmployeeId, scheduleAssignedTemp.ToList(), 2),
+                    ScheduleWorkday = !IsValidcheduleAssigedTemp(i.EmployeeId, scheduleAssignedTemp.ToList(), 1) ? $"L-V({GetStartScheduleAssigned(i.IdScheduleWorkday, 1)} - {GetEndScheduleAssigned(i.IdScheduleWorkday, 1)})" : GetScheduleAssigedTemp(i.EmployeeId, scheduleAssignedTemp.ToList(), 1),
                     EmployeeName = organigramaModel.Where(k => k.Id.Equals(i.EmployeeId)).Any() ? $"{organigramaModel.Where(k => k.Id.Equals(i.EmployeeId)).FirstOrDefault().Name }" : "",
                     ToleranceWorkday = IsValidcheduleAssigedTemp(i.EmployeeId, scheduleAssignedTemp.ToList(), 1) ? ScheduleTempTolerance(i.EmployeeId, scheduleAssignedTemp.ToList(), 1) : $"{i.ToleranceWorkday} Mins",
                     ToleranceMeal = IsValidcheduleAssigedTemp(i.EmployeeId, scheduleAssignedTemp.ToList(), 2) ? ScheduleTempTolerance(i.EmployeeId, scheduleAssignedTemp.ToList(), 2) : $"{i.ToleranceMeal} Mins",
-                    EsTemporal = (!IsValidcheduleAssigedTemp(i.EmployeeId, scheduleAssignedTemp.ToList(), 2) && !IsValidcheduleAssigedTemp(i.EmployeeId, scheduleAssignedTemp.ToList(), 1)) ? "No" : "Si"
+                    EsTemporal = (!IsValidcheduleAssigedTemp(i.EmployeeId, scheduleAssignedTemp.ToList(), 2) && !IsValidcheduleAssigedTemp(i.EmployeeId, scheduleAssignedTemp.ToList(), 1)) ? "No" : "Si",
+                    ScheduleWeekEnd = $"{ScheduleWeekendConfig(i.IdScheduleWeekEnd, 3)}"
                 }).ToList().Where(u => !u.EmployeeName.Equals(string.Empty)).ToList();
             }
 
 
-            sb.Append("Id Empleado,Nombre, Horario laboral, Tolerancia horario laboral, Horario comida,Tolerancia horario comida,Tiene Horario Temporal");
+            sb.Append("Id Empleado,Nombre, Horario laboral, Tolerancia horario laboral, Horario comida,Tolerancia horario comida,Horario Sabatino,Tiene Horario Temporal");
 
             model.EmployeeScheduleAssignedList.ForEach(d => 
             {
                 sb.AppendLine();
-                sb.Append($"{d.EmployeeId},{d.EmployeeName},{d.ScheduleWorkday},{d.ToleranceWorkday},{d.ScheduleMeal},{d.ToleranceMeal},{d.EsTemporal}");
+                sb.Append($"{d.EmployeeId},{d.EmployeeName},{d.ScheduleWorkday},{d.ToleranceWorkday},{d.ScheduleMeal},{d.ToleranceMeal},{d.ScheduleWeekEnd},{d.EsTemporal}");
             });
 
 
@@ -251,12 +252,13 @@ namespace SARH.WebUI.Controllers
                 {
                     Id = i.Id,
                     EmployeeId = int.Parse(i.EmployeeId).ToString("00000"),
-                    ScheduleMeal = !IsValidcheduleAssigedTemp(i.EmployeeId, scheduleAssignedTemp.ToList(), 2) ? $"L-V({GetStartScheduleAssigned(i.IdScheduleMeal, 2)} - {GetEndScheduleAssigned(i.IdScheduleMeal, 2)}) {ScheduleWeekendConfig(i.IdScheduleMealWeekEnd, 4)}" : GetScheduleAssigedTemp(i.EmployeeId, scheduleAssignedTemp.ToList(), 2),
-                    ScheduleWorkday = !IsValidcheduleAssigedTemp(i.EmployeeId, scheduleAssignedTemp.ToList(), 1) ? $"L-V({GetStartScheduleAssigned(i.IdScheduleWorkday, 1)} - {GetEndScheduleAssigned(i.IdScheduleWorkday, 1)}) {ScheduleWeekendConfig(i.IdScheduleWeekEnd,3)}" : GetScheduleAssigedTemp(i.EmployeeId, scheduleAssignedTemp.ToList(), 1),
+                    ScheduleMeal = !IsValidcheduleAssigedTemp(i.EmployeeId, scheduleAssignedTemp.ToList(), 2) ? $"L-V({GetStartScheduleAssigned(i.IdScheduleMeal, 2)} - {GetEndScheduleAssigned(i.IdScheduleMeal, 2)})" : GetScheduleAssigedTemp(i.EmployeeId, scheduleAssignedTemp.ToList(), 2),
+                    ScheduleWorkday = !IsValidcheduleAssigedTemp(i.EmployeeId, scheduleAssignedTemp.ToList(), 1) ? $"L-V({GetStartScheduleAssigned(i.IdScheduleWorkday, 1)} - {GetEndScheduleAssigned(i.IdScheduleWorkday, 1)})" : GetScheduleAssigedTemp(i.EmployeeId, scheduleAssignedTemp.ToList(), 1),
                     EmployeeName = organigramaModel.Where(k => k.Id.Equals(i.EmployeeId)).Any() ? $"{organigramaModel.Where(k => k.Id.Equals(i.EmployeeId)).FirstOrDefault().Name }" : "",
                     ToleranceWorkday = IsValidcheduleAssigedTemp(i.EmployeeId, scheduleAssignedTemp.ToList(), 1) ? ScheduleTempTolerance(i.EmployeeId, scheduleAssignedTemp.ToList(), 1) : $"{i.ToleranceWorkday} Mins",
                     ToleranceMeal = IsValidcheduleAssigedTemp(i.EmployeeId, scheduleAssignedTemp.ToList(), 2) ? ScheduleTempTolerance(i.EmployeeId, scheduleAssignedTemp.ToList(), 2) : $"{i.ToleranceMeal} Mins",
-                    EsTemporal = (!IsValidcheduleAssigedTemp(i.EmployeeId, scheduleAssignedTemp.ToList(), 2) && !IsValidcheduleAssigedTemp(i.EmployeeId, scheduleAssignedTemp.ToList(), 1)) ? "No" : "Si"
+                    EsTemporal = (!IsValidcheduleAssigedTemp(i.EmployeeId, scheduleAssignedTemp.ToList(), 2) && !IsValidcheduleAssigedTemp(i.EmployeeId, scheduleAssignedTemp.ToList(), 1)) ? "No" : "Si",
+                    ScheduleWeekEnd = $"{ScheduleWeekendConfig(i.IdScheduleWeekEnd, 3)}"
                 }).ToList().Where(u => !u.EmployeeName.Equals(string.Empty)).ToList();
             }
 

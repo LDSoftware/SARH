@@ -25,6 +25,8 @@ namespace SARH.WebUI.Models.Configuration
         public string ScheduleMeal { get; set; }
         public string ToleranceWorkday { get; set; }
         public string ToleranceMeal { get; set; }
+        public string ScheduleWeekEnd { get; set; }
+        public string ToleranceWeekEnd { get; set; }
         public string EsTemporal { get; set; }
     }
 

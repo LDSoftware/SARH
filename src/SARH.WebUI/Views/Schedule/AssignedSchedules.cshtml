@@ -95,21 +95,23 @@
                                                 <th>Tolerancia</th>
                                                 <th>Horario Comida</th>
                                                 <th>Tolerancia</th>
+                                                <th>Horario Sabatino</th>
                                                 <th>Es Temporal</th>
                                             </tr>
                                         </thead>
                                         <tbody id="allschedules">
                                             @foreach (var item in Model.EmployeeScheduleAssignedList)
                                             {
-                                                <tr id="@item.Id" data-id="@item.EmployeeId">
-                                                    <td>@item.EmployeeId</td>
-                                                    <td>@item.EmployeeName</td>
-                                                    <td>@item.ScheduleWorkday</td>
-                                                    <td>@item.ToleranceWorkday</td>
-                                                    <td>@item.ScheduleMeal</td>
-                                                    <td>@item.ToleranceMeal</td>
-                                                    <td>@item.EsTemporal</td>
-                                                </tr>
+                                            <tr id="@item.Id" data-id="@item.EmployeeId">
+                                                <td>@item.EmployeeId</td>
+                                                <td>@item.EmployeeName</td>
+                                                <td>@item.ScheduleWorkday</td>
+                                                <td>@item.ToleranceWorkday</td>
+                                                <td>@item.ScheduleMeal</td>
+                                                <td>@item.ToleranceMeal</td>
+                                                <td>@item.ScheduleWeekEnd</td>
+                                                <td>@item.EsTemporal</td>
+                                            </tr>
                                             }
                                         </tbody>
                                     </table>
