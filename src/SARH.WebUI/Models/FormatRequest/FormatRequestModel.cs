@@ -24,6 +24,7 @@ namespace SARH.WebUI.Models.FormatRequest
         public int TotalPermisos { get; set; }
         public List<EmployeeFormatItem> EmployeeFormats { get; set; }
         public EmployeeVacation EmployeeVacations { get; set; }
+        public int TotalPermissionsApproved { get; set; }
         public string DetallesFormato { get; set; }
 
     }

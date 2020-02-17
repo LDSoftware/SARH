@@ -4,7 +4,7 @@
 <div class="dropdown-header bg-trans-gradient d-flex justify-content-center align-items-center rounded-top mb-2">
     <h4 class="m-0 text-center color-white">
         <span id="totalpendingsapprobed"></span>
-        <small class="mb-0 opacity-80"><span>Aprobaciones pendientes&nbsp;</span>@Model.Notifications</small>
+        <small class="mb-0 opacity-80"><span>Notificaciones pendientes aprobaciones&nbsp;</span>@Model.Notifications</small>
     </h4>
 </div>
 <ul class="nav nav-tabs nav-tabs-clean" role="tablist">
@@ -28,7 +28,7 @@
     </div>
     <div class="tab-pane" id="tab-messages" role="tabpanel">
         <div class="custom-scroll h-100">
-            <ul class="notification">
+            <ul id ="notifyvacaciones" class="notification">
                 @foreach (var item in Model.LastVacationsNotificationsItems)
                 {
                     <li class="unread">
@@ -47,7 +47,7 @@
     </div>
     <div class="tab-pane" id="tab-feeds" role="tabpanel">
         <div class="custom-scroll h-100">
-            <ul class="notification">
+            <ul id ="notifypermisos" class="notification">
                 @foreach (var item in Model.LastPermissionsNotificationsItems)
                 {
                     <li class="unread">
@@ -66,7 +66,7 @@
     </div>
     <div class="tab-pane" id="tab-events" role="tabpanel">
         <div class="d-flex flex-column h-100">
-            <ul class="notification">
+            <ul id ="notifyotros" class="notification">
                 @foreach (var item in Model.LastOthersNotificationsItems)
                 {
                     <li class="unread">
@@ -85,5 +85,5 @@
     </div>
 </div>
 <div class="py-2 px-3 bg-faded d-block rounded-bottom text-right border-faded border-bottom-0 border-right-0 border-left-0">
-    <a href='@Url.Action("Pendientes","FormatApprove")' class="fs-xs fw-500 ml-auto">Ver todas las aprobaciones pendientes</a>
+    <a href='@Url.Action("Pendientes","FormatApprove")' class="fs-xs fw-500 ml-auto">Ver todos los formatos</a>
 </div>

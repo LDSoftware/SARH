@@ -30,6 +30,7 @@ namespace SARH.Core.PdfCreator.FormatData
         public EmployeeInfoData EmployeInfo { get; set; }
         public EmployeProfileData EmployeProfile { get; set; }
         public EmployeeVacation EmployeeVacations { get; set; }
+        public EmployeeFormatInfo EmployeeFormat { get; set; }
     }
 
     public class EmployeeInfoData 
@@ -98,5 +99,18 @@ namespace SARH.Core.PdfCreator.FormatData
         public int DiasDisponibles { get; set; }
     }
 
-
+    public class EmployeeFormatInfo
+    {
+        public string EmployeeId { get; set; }
+        public string Area { get; set; }
+        public string Centro { get; set; }
+        public string JobTitle { get; set; }
+        public string StartDate { get; set; }
+        public string EndDate { get; set; }
+        public string StartTime { get; set; }
+        public string EndTime { get; set; }
+        public string FormatName { get; set; }
+        public int FormatType { get; set; }
+        public string Comments { get; set; }
+    }
 }

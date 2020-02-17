@@ -22,6 +22,7 @@ namespace SARH.WebUI.Hubs
         private readonly IRepository<EmployeeFormat> _formatRepository;
         private readonly IRepository<FormatApprover> _formatApproverRepository;
         private readonly IOrganigramaModelFactory _organigramaModelFactory;
+        private readonly INotificationModelFactory _notificationModelFactory;
         private static readonly ConcurrentDictionary<string, UserHubModels> Users =
             new ConcurrentDictionary<string, UserHubModels>(StringComparer.InvariantCultureIgnoreCase);
         private readonly IHttpContextAccessor _httpContextAccessor;
@@ -31,13 +32,15 @@ namespace SARH.WebUI.Hubs
             IHttpContextAccessor httpContextAccessor,
             SignInManager<IdentityUser> signInManager,
             IRepository<FormatApprover> formatApproverRepository,
-            IOrganigramaModelFactory organigramaModelFactory)
+            IOrganigramaModelFactory organigramaModelFactory,
+            INotificationModelFactory notificationModelFactory)
         {
             this._formatRepository = formatRepository;
             this._httpContextAccessor = httpContextAccessor;
             this._signInManager = signInManager;
             this._formatApproverRepository = formatApproverRepository;
             this._organigramaModelFactory = organigramaModelFactory;
+            this._notificationModelFactory = notificationModelFactory;
         }
 
 
@@ -47,6 +50,7 @@ namespace SARH.WebUI.Hubs
             string sendHub = string.Empty;
             var employees = this._organigramaModelFactory.GetAllData();
             List<string> _hubsId = new List<string>();
+            string row = string.Empty;
 
             if (!approbedItem.Equals(0)) 
             {
@@ -83,9 +87,14 @@ namespace SARH.WebUI.Hubs
                 }
             }
 
+
+
              _hubsId.ForEach(async hubclient => 
             {
-                await Clients.Client(hubclient).SendAsync("ReceiveMessage", user, message);
+                var notify = _notificationModelFactory.Notification;
+                row = $" {notify}";
+
+                await Clients.Client(hubclient).SendAsync("ReceiveMessage", user, message, row);
             });
 
         }

@@ -951,7 +951,23 @@ namespace SARH.Core.PdfCreator
             fileStream.Dispose();
         }
 
+        public void CreateIncidenciasReport(DocumentInfoPdfData pdfData, string pdfFile) 
+        {
+            var pdfDoc = new Document(PageSize.A4);
+            var pdfFilePath = pdfFile;
+            var fileStream = new FileStream(pdfFilePath, FileMode.Create);
+            PdfWriter.GetInstance(pdfDoc, fileStream);
+            pdfDoc.AddAuthor("ISOSA SARH");
+            pdfDoc.Open();
 
+            CreateHeaderSection(pdfDoc, pdfData);
+
+
+
+
+            pdfDoc.Close();
+            fileStream.Dispose();
+        }
 
 
 

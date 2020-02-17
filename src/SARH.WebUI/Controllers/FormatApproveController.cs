@@ -80,6 +80,7 @@ namespace SARH.WebUI.Controllers
                     model.FormatEmployee.PicturePath = employee.GeneralInfo.Picture;
                 }
 
+
                 var formatDetail = formats.Where(u => u.Id.Equals(idFormat));
                 if (formatDetail.Any())
                 {
@@ -229,12 +230,12 @@ namespace SARH.WebUI.Controllers
 
 
         public JsonResult Declined(int idFormat, string comments,
-    [FromServices] IOrganigramaModelFactory organigramModelFactory,
-    [FromServices] IRepository<EmployeeFormat> formatRepository,
-    [FromServices] INotificationModelFactory notificationModelFactory,
-    [FromServices] IRepository<FormatApprover> formatApprover,
-    [FromServices] IHttpContextAccessor _httpContextAccessor)
-        {
+            [FromServices] IOrganigramaModelFactory organigramModelFactory,
+            [FromServices] IRepository<EmployeeFormat> formatRepository,
+            [FromServices] INotificationModelFactory notificationModelFactory,
+            [FromServices] IRepository<FormatApprover> formatApprover,
+            [FromServices] IHttpContextAccessor _httpContextAccessor)
+                {
 
             bool alreadyApprove = false;
             var employees = organigramModelFactory.GetAllData();

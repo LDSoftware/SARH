@@ -39,6 +39,10 @@ namespace SARH.WebUI.Models.Notification
         public string ApproverWorkFlow { get; set; }
         public string EmployeeSustitution { get; set; }
         public string Estatus { get; set; }
+        public string Hours { get; set; }
+        public string AdditionalInfo { get; set; }
+        public string TotalPermissions { get; set; }
+        public string Comments { get; set; }
     }
 
 }

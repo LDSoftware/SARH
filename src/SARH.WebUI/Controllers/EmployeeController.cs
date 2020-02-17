@@ -306,10 +306,9 @@ namespace SARH.WebUI.Controllers
                     StartDate = $"({r.StartDate.ToShortDateString()})-({r.EndDate.ToShortDateString()})",
                     EmployeeSubstitute = employees.Where(k => k.Id.Equals(r.EmployeeSubstitute.TrimStart('0'))).FirstOrDefault().Name
                 }));
-
-
-
             }
+
+            model.TotalPermissionsApproved = model.EmployeeFormats.Where(h => !string.IsNullOrEmpty(h.ApprovalDate)).Count();
 
             return View(model);
         }

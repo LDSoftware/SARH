@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ISOSA.SARH.Data.Domain.Catalog;
 using ISOSA.SARH.Data.Domain.Configuration;
+using ISOSA.SARH.Data.Domain.Employee;
 using ISOSA.SARH.Data.Domain.Formats;
 using ISOSA.SARH.Data.Repository;
 using Microsoft.AspNetCore.Authorization;
@@ -39,12 +40,13 @@ namespace SARH.WebUI.Controllers
         {
             var data = System.Convert.FromBase64String(pinEmployee);
             string base64Decoded = System.Text.ASCIIEncoding.ASCII.GetString(data);
+            var getEmployeeId = base64Decoded.Split('|');
 
             ViewBag.permissionType = _permissionTypeRepository.GetAll().Select(k => new SelectListItem() { Text = k.Description, Value = k.Id.ToString() });
 
             var employees = organigramaModelFactory.GetAllData().Employess;
 
-            var info = organigramaModelFactory.GetEmployeeData("17");
+            var info = organigramaModelFactory.GetEmployeeData(getEmployeeId[1].TrimStart(new Char[] { '0' }));
 
             FormatRequestModel model = new FormatRequestModel()
             {
@@ -54,12 +56,12 @@ namespace SARH.WebUI.Controllers
                 JobTitle = $"Puesto: {info.GeneralInfo.JobTitle}",
                 Area = $"Area: {info.Area}",
                 JobCenter = $"Centro de trabajo: {info.JobCenter}",
-                EmployeeVacations = nomipaqEmployeeVacations.GetEmployeeVacations(int.Parse("17").ToString("00000"))
+                EmployeeVacations = nomipaqEmployeeVacations.GetEmployeeVacations(getEmployeeId[1])
             };
 
-            if (formatRepository.SearhItemsFor(y => y.EmployeeId.Equals("17")).Any()) 
+            if (formatRepository.SearhItemsFor(y => y.EmployeeId.Equals(getEmployeeId[1].TrimStart(new Char[] { '0' }))).Any()) 
             {
-                model.EmployeeFormats.AddRange(formatRepository.SearhItemsFor(y => y.EmployeeId.Equals("17")).Select(r => new EmployeeFormatItem()
+                model.EmployeeFormats.AddRange(formatRepository.SearhItemsFor(y => y.EmployeeId.Equals(getEmployeeId[1].TrimStart(new Char[] { '0' }))).Select(r => new EmployeeFormatItem()
                 {
                     Id = r.Id,
                     EmployeeId = r.EmployeeId,
@@ -71,6 +73,8 @@ namespace SARH.WebUI.Controllers
                     StartDate = $"({r.StartDate.ToShortDateString()})-({r.EndDate.ToShortDateString()})",
                     EmployeeSubstitute = employees.Where(k=>k.Id.Equals(r.EmployeeSubstitute.TrimStart('0'))).FirstOrDefault().Name
                 }));
+
+                //var permissions = formatRepository.SearhItemsFor(y => y.EmployeeId.Equals("17") && )
             }
 
             return View(model);
@@ -108,7 +112,7 @@ namespace SARH.WebUI.Controllers
             [FromServices] INomipaqEmployeeVacationModelFactory nomipaqEmployeeVacations)
         {
 
-            var vacations = nomipaqEmployeeVacations.GetEmployeeVacations(int.Parse(format.EmployeeId).ToString("00000"));
+            var vacations = nomipaqEmployeeVacations.GetEmployeeVacations(format.EmployeeId);
             string vacationsConfig = string.Empty;
             if (vacations != null)
             {
@@ -118,7 +122,7 @@ namespace SARH.WebUI.Controllers
             var element = new EmployeeFormat()
             {
                 Comments = format.Comments,
-                EmployeeId = format.EmployeeId,
+                EmployeeId = format.EmployeeId.TrimStart(new Char[] { '0' }),
                 EmployeeSubstitute = string.IsNullOrEmpty(format.EmployeeSubId) ? "0" : format.EmployeeSubId,
                 EndDate = DateTime.Parse(format.EndDate),
                 PermissionType = format.PermissionType,
@@ -268,5 +272,36 @@ namespace SARH.WebUI.Controllers
 
             return View();
         }
+
+
+        [AllowAnonymous]
+        [HttpPost]
+        public JsonResult ValidatePIN(string pin,[FromServices] IRepository<EmployeeAditionalInfo> employeeRepository) 
+        {
+            bool isvalid = false;
+            string employeeid = string.Empty;
+            var getPIN = employeeRepository.SearhItemsFor(p => p.EMP_PIN.Equals(pin));
+
+            if (getPIN != null) 
+            {
+                isvalid = true;
+                employeeid = getPIN.FirstOrDefault().EMP_EmployeeID;
+            }
+
+
+            return Json(new { isvalid = isvalid, employeeid = employeeid });
+        }
+
+
+
+
+
+
+
+
+
+
+
+
     }
 }

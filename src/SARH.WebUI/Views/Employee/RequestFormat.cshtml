@@ -206,14 +206,19 @@
                                             <input type="text" class="form-control" id="diasdisponiblesintput" disabled="disabled" value="@Model.EmployeeVacations.DiasDisponibles">
                                         </div>
 
-                                        <div class="col-md-6" id="divhouri" style="display:none;">
+                                        <div class="col-md-4" id="divhouri" style="display:none;">
                                             <label class="form-label" for="horainicial">Hora Inicial</label>
                                             <input type="time" class="form-control" id="horainicial">
                                         </div>
 
-                                        <div class="col-md-6" id="divhoure" style="display:none;">
+                                        <div class="col-md-4" id="divhoure" style="display:none;">
                                             <label class="form-label" for="horafinal">Hora Final</label>
                                             <input type="time" class="form-control" id="horafinal">
+                                        </div>
+
+                                        <div class="col-md-4" id="totpermisos" style="display:none;">
+                                            <label class="form-label" for="totalpermisos">Total Permisos</label>
+                                            <input type="text" class="form-control" id="totalpermisos" disabled="disabled" value="@Model.TotalPermissionsApproved">
                                         </div>
 
                                         <div class="col-md-12" style="margin-top:10px;margin-bottom:10px;display:none;" id="divcheckpay">
@@ -803,6 +808,7 @@
                     $('#diasDisponibles').hide();
                     $('#divhouri').show();
                     $('#divhoure').show();
+                    $('#totpermisos').show();
                     $('#divcheckpay').show();
                     isPermission = true;
                 }
@@ -815,6 +821,7 @@
                         $('#diasDisponibles').hide();
                         $('#divhouri').show();
                         $('#divhoure').show();
+                        $('#totpermisos').hide();
                         $('#divcheckpay').show();
                         isPermission = true;
                     }
@@ -824,6 +831,7 @@
                         $('#diasDisponibles').hide();
                         $('#divhouri').hide();
                         $('#divhoure').hide();
+                        $('#totpermisos').hide();
                         $('#divcheckpay').hide();
                         isPermission = false;
                     }

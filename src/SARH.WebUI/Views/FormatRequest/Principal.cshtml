@@ -404,6 +404,7 @@
 <input id='QB' type="hidden" />
 <button id="sendbuttonNS" style="display:none;"></button>
 <input id='IdFormatRequest' type="hidden" />
+<input id='IdEmployee' type="hidden" value='@Model.Employee' />
 
 
 @section Scripts {
@@ -564,7 +565,7 @@
                 }
 
                 var formData = {
-                    EmployeeId: "17",
+                    EmployeeId: $('#IdEmployee').val(),
                     StartDate: dtpinicial,
                     EndDate: dtpfinal,
                     PermissionType: $('#permissionType').val(),

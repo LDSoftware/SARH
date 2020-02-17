@@ -58,15 +58,39 @@
                 <div class="card-body">
 
 
-                    <div role="group" aria-label="Vertical button group">
-                        <div class="btn-group" role="group">
-                            <button type="button" class="btn btn-secondary dropdown-toggle waves-effect waves-themed" data-toggle="dropdown" aria-expanded="false"><i class="fal fa-bolt"></i>&nbsp;Acciones</button>
-                            <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; will-change: top, left; top: 37px; left: 0px;">
-                                <a id="approved" class="dropdown-item" href="javascript:void(0)">Aprobar</a>
-                                <a id="declined" class="dropdown-item" href="javascript:void(0)">Declinar</a>
+                    @if (!Model.FormatDetail.Estatus.Equals("Aprobado") && !Model.FormatDetail.Estatus.Equals("Rechazado"))
+                    {
+                        <div role="group" aria-label="Vertical button group">
+                            <div class="btn-group" role="group">
+                                <button type="button" class="btn btn-secondary dropdown-toggle waves-effect waves-themed" data-toggle="dropdown" aria-expanded="false"><i class="fal fa-bolt"></i>&nbsp;Acciones</button>
+                                <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; will-change: top, left; top: 37px; left: 0px;">
+                                    <a id="approved" class="dropdown-item" href="javascript:void(0)">Aprobar</a>
+                                    <a id="declined" class="dropdown-item" href="javascript:void(0)">Declinar</a>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    }
+                    else
+                    {
+                        @if (Model.FormatDetail.Estatus.Equals("Aprobado"))
+                        {
+                            <div class="col-md-12">
+                                <h1 class="alert-success">@($"Formato {Model.FormatDetail.Estatus}")</h1>
+                            </div>
+                            <div class="col-md-12">
+                                <a class="btn btn-secondary" href='#' target="_blank"><i class="fal fa-print"></i> Imprimir</a>
+                            </div>
+                        }
+                        @if (Model.FormatDetail.Estatus.Equals("Rechazado"))
+                        {
+                            <div>
+                                <h1 class="alert-danger">@($"Formato {Model.FormatDetail.Estatus}")</h1>
+                            </div>
+                        }
+
+
+                    }
+
                     <hr />
 
                     <div class="panel-content">
@@ -91,13 +115,25 @@
                                 <label class="form-label" for="idformato">Periodo</label>
                                 <input class="form-control" id="idformato" disabled="disabled" type="text" value="@Model.FormatDetail.Period">
                             </div>
-                            <div class="col-md-4 mb-3">
-                                <label class="form-label" for="tipoformato">Días disponibles</label>
-                                <input class="form-control" id="tipoformato" disabled="disabled" type="text" value="0">
+                            <div class="col-md-4 mb-6">
+                                <label class="form-label" for="idhorario">Horario</label>
+                                <input class="form-control" id="idhorario" disabled="disabled" type="text" value="@Model.FormatDetail.Hours">
                             </div>
-                            <div class="col-md-4 mb-3">
+                            <div class="col-md-4 mb-6">
                                 <label class="form-label" for="datecreate">Sustito</label>
                                 <input class="form-control" id="datecreate" disabled="disabled" type="text" value="@Model.FormatDetail.EmployeeSustitution">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="col-md-8 mb-6">
+                                <label class="form-label" for="idadicionalinfo">Comentarios</label>
+                                <input class="form-control" id="idadicionalinfo" disabled="disabled" type="text" value="@Model.FormatDetail.Comments">
+                            </div>
+
+                            <div class="col-md-4 mb-6">
+                                <label class="form-label" for="idadicionalinfo">Información Adicional</label>
+                                <input class="form-control" id="idadicionalinfo" disabled="disabled" type="text" value="@Model.FormatDetail.AdditionalInfo">
                             </div>
                         </div>
 

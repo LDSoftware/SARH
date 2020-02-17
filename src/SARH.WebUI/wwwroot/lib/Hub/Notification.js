@@ -5,7 +5,7 @@
 
 connection.serverTimeoutInMilliseconds = 100000;
 
-connection.on('ReceiveMessage', (user, message) => {
+connection.on('ReceiveMessage', (user, message, row) => {
 
     toastr.options = {
         "closeButton": false,
@@ -25,8 +25,8 @@ connection.on('ReceiveMessage', (user, message) => {
         "hideMethod": "fadeOut"
     }
 
-    toastr.success("Ha recibido un formato pendiente para aprobación", "Sistema de notificaciones");
-
+    toastr.success("Ha recibido un formato pendiente para aprobación, Actualize la pantalla para visualizar", "Sistema de notificaciones");
+    $('#totalpendingsapprobedhead').text(row)
 
 
 });

@@ -66,23 +66,36 @@
                     return;
                 }
 
-                if ($('#inputPIN').val() != "Password123") {
-                    Swal.fire(
-                        {
-                            type: "warning",
-                            title: "Validación",
-                            text: "PIN no válido"
-                        });
+                $.ajax({
+                    url: '/FormatRequest/ValidatePIN',
+                    type: "POST",
+                    data: { pin: $('#inputPIN').val() },
+                    success: function (data, textStatus, jqXHR) {
 
-                    return;
-                }
+                        if (data.isvalid) {
 
+                            var string = $('#inputPIN').val() + '|' + data.employeeid;
+                            var encodedString = Base64.encode(string);
 
-                var string = $('#inputPIN').val();
-                var encodedString = Base64.encode(string);
+                            window.location.href = "/FormatRequest/Principal?pinEmployee=" + encodedString;
+                        }
+                        else {
 
-                window.location.href = "/FormatRequest/Principal?pinEmployee=" + encodedString;
+                            Swal.fire(
+                                {
+                                    type: "warning",
+                                    title: "Validación",
+                                    text: "PIN no válido"
+                                });
 
+                            return;
+                        }
+
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+
+                    }
+                });
 
             });
 

@@ -83,7 +83,10 @@ namespace SARH.WebUI.Factories
                                           Estatus = string.IsNullOrEmpty(fmt.ApprovalWorkFlow) ? "Pendiente" : fmt.ApprovalDate.HasValue ? "Aprobado" : fmt.Declined ? "Rechazado" : "En Curso",
                                           CreateDate = fmt.CreateDate.ToShortDateString(),
                                           Period = $"{fmt.StartDate.ToShortDateString()} - {fmt.EndDate.ToShortDateString()}",
-                                          Type = ptype.Description
+                                          Type = ptype.Description,
+                                          AdditionalInfo = fmt.WithPay ? "Con goce de sueldo" : "Sin goce de sueldo",
+                                          Hours = $"{fmt.StartTime} - {fmt.EndTime}",
+                                          Comments = fmt.Comments
                                       }).ToList();
 
                 if (employee != null && approver != null)
@@ -94,7 +97,7 @@ namespace SARH.WebUI.Factories
 
                     if (formatsPendigs.Any())
                     {
-                        _notification = formatsPendigs.Count;
+                        _notification = formatsPendigs.Where(k => string.IsNullOrEmpty(k.ApproverWorkFlow)).Count();
                         AllNotificaticonsItems.AddRange(formatsPendigs);
                         NotificaticonsItems.AddRange(formatsPendigs.Where(k => string.IsNullOrEmpty(k.ApproverWorkFlow)));
                         LastVacationsNotificationItems = NotificaticonsItems.OrderByDescending(f => f.Id).Where(y => y.Type.Contains("Vacaci")).Take(10).ToList();

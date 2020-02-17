@@ -31,6 +31,7 @@ namespace SARH.WebUI.Models.Formats
         public string JobTitle { get; set; }
         public string Departamento { get; set; }
         public string PicturePath { get; set; }
+        public string PendingVacations { get; set; }
     }
 
     public class FormatAppoveDetail
