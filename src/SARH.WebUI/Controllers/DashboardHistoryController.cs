@@ -17,15 +17,19 @@ namespace SARH.WebUI.Controllers
 
         private readonly IDashboardModelFactory _dashboardModelFactory;
         private readonly IOrganigramaModelFactory _organigramaModelFactory;
+        private readonly IEmployeeFormatModelFactory _employeeFormatModelFactory;
 
         #endregion
 
         #region Constructor
 
-        public DashboardHistoryController(IDashboardModelFactory dashboardModelFactory, IOrganigramaModelFactory organigramaModelFactory)
+        public DashboardHistoryController(IDashboardModelFactory dashboardModelFactory, 
+            IOrganigramaModelFactory organigramaModelFactory,
+            IEmployeeFormatModelFactory employeeFormatModelFactory)
         {
             this._dashboardModelFactory = dashboardModelFactory;
             this._organigramaModelFactory = organigramaModelFactory;
+            this._employeeFormatModelFactory = employeeFormatModelFactory;
         }
 
         #endregion
@@ -34,6 +38,8 @@ namespace SARH.WebUI.Controllers
         // GET: /<controller>/
         public IActionResult Index(string date, string filters = "")
         {
+            var formats = this._employeeFormatModelFactory.GetAllApprovedFormats(DateTime.Now);
+
             DashboardFilters filter = new DashboardFilters();
             if (!string.IsNullOrEmpty(filters))
             {
@@ -48,6 +54,10 @@ namespace SARH.WebUI.Controllers
             var model = this._dashboardModelFactory.GetDay(date, filter);
             model.FilterDate = !string.IsNullOrEmpty(date) ? date : DateTime.Now.ToShortDateString();
             model.DashboardFiltersApply = filter;
+
+            model.TotalFormatVacations = formats.Where(t => t.FormatName.ToLower().Contains("vacacion")).Count();
+            model.TotalFormatPermissions = formats.Where(t => t.FormatName.ToLower().Contains("permiso")).Count();
+
 
             return View(model);
         }

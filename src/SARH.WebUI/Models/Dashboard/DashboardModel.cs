@@ -19,8 +19,8 @@ namespace SARH.WebUI.Models.Dashboard
         public int FoodStartDelay { get; set; }
         public int FoodEndDelay { get; set; }
         public int NoFoodEntryCheck { get; set; }
-        public decimal AverageEntryDelay { get; set; }
-        public decimal AverageJobPermission { get; set; }
+        public int TotalFormatVacations { get; set; }
+        public int TotalFormatPermissions { get; set; }
         public IList<DashboardEmployeeDetailModel> EmployeeDetail { get; set; }
         public DashboardFilters DashboardFiltersApply { get; set; }
         public string FilterDate { get; set; }

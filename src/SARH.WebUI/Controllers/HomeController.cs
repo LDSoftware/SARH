@@ -16,14 +16,17 @@ namespace SARH.WebUI.Controllers
         #region Variables
 
         private readonly IDashboardModelFactory _dashboardModelFactory;
+        private readonly IEmployeeFormatModelFactory _employeeFormatModelFactory;
 
         #endregion
 
         #region Constructor
 
-        public HomeController(IDashboardModelFactory dashboardModelFactory)
+        public HomeController(IDashboardModelFactory dashboardModelFactory,
+            IEmployeeFormatModelFactory employeeFormatModelFactory)
         {
             this._dashboardModelFactory = dashboardModelFactory;
+            this._employeeFormatModelFactory = employeeFormatModelFactory;
         }
 
         #endregion
@@ -31,8 +34,7 @@ namespace SARH.WebUI.Controllers
         public IActionResult Index(string filters = "")
         {
 
-
-
+            var formats = this._employeeFormatModelFactory.GetAllApprovedFormats(DateTime.Now);
 
             DashboardFilters filter = new DashboardFilters();
             if (!string.IsNullOrEmpty(filters)) 
@@ -46,7 +48,9 @@ namespace SARH.WebUI.Controllers
                 filter.NoFoodEntryCheckShow = lst[5] == "0" ? false : true;
             }
             var model = this._dashboardModelFactory.GetToday(filter);
-            model.DashboardFiltersApply = filter; 
+            model.DashboardFiltersApply = filter;
+            model.TotalFormatVacations = formats.Where(t => t.FormatName.ToLower().Contains("vacacion")).Count();
+            model.TotalFormatPermissions = formats.Where(t => t.FormatName.ToLower().Contains("permiso")).Count();
             return View(model);
         }
     }

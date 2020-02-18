@@ -12,6 +12,10 @@ namespace SARH.Core.PdfCreator.FormatData
             EmployeInfo = new EmployeeInfoData();
             EmployeProfile = new EmployeProfileData();
             EmployeeVacations = new EmployeeVacation();
+            IncidenciasReport = new List<ReportEmployeeDetail>();
+            EmployeeSustitute = new FormatEmployeeSustitute();
+            FormatPermission = new FormatPermissionData();
+            Approvers = new List<string>();
         }
 
         public string EmployeeNumber { get; set; }
@@ -31,6 +35,12 @@ namespace SARH.Core.PdfCreator.FormatData
         public EmployeProfileData EmployeProfile { get; set; }
         public EmployeeVacation EmployeeVacations { get; set; }
         public EmployeeFormatInfo EmployeeFormat { get; set; }
+        public List<ReportEmployeeDetail> IncidenciasReport { get; set; }
+        public FormatEmployeeSustitute EmployeeSustitute { get; set; }
+        public FormatPermissionData FormatPermission { get; set; }
+        public List<string> Approvers { get; set; }
+
+
     }
 
     public class EmployeeInfoData 
@@ -112,5 +122,34 @@ namespace SARH.Core.PdfCreator.FormatData
         public string FormatName { get; set; }
         public int FormatType { get; set; }
         public string Comments { get; set; }
+    }
+
+    public class ReportEmployeeDetail
+    {
+        public string ID { get; set; }
+        public string Name { get; set; }
+        public string Area { get; set; }
+        public string JobCenter { get; set; }
+        public string JobTitle { get; set; }
+        public string DetailType { get; set; }
+        public string Fecha { get; set; }
+        public int Type { get; set; }
+    }
+
+    public class FormatEmployeeSustitute 
+    {
+        public string Name { get; set; }
+        public string JobTitle { get; set; }
+    }
+
+    public class FormatPermissionData 
+    {
+        public string DateStart { get; set; }
+        public string DateEnd { get; set; }
+        public string TimeStart { get; set; }
+        public string TimeEnd { get; set; }
+        public string Comments { get; set; }
+        public string Cause { get; set; }
+        public int TotalPermissions { get; set; }
     }
 }

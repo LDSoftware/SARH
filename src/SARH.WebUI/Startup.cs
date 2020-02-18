@@ -63,6 +63,7 @@ namespace SmartAdmin.WebUI
             services.AddTransient<IOrganigramaModelFactory, OrganigramaModelFactory>();
             services.AddTransient<INotificationModelFactory, NotificationModelFactory>();
             services.AddTransient<INomipaqEmployeeVacationModelFactory, NomipaqEmployeeVacationModelFactory>();
+            services.AddTransient<IEmployeeFormatModelFactory, EmployeeFormatModelFactory>();
             services.AddTransient<IRepository<DocumentType>, DocumentTypeRepository>(s => new DocumentTypeRepository((Configuration.GetConnectionString("DataConnectionString"))));
             services.AddTransient<IRepository<HardwareAssigned>, HardwareAssignedRepository>(s => new HardwareAssignedRepository((Configuration.GetConnectionString("DataConnectionString"))));
             services.AddTransient<IRepository<PermissionType>, PermissionTypeRepository>(s => new PermissionTypeRepository((Configuration.GetConnectionString("DataConnectionString"))));

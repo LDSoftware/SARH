@@ -14,5 +14,6 @@ namespace SARH.WebUI.Models.Report
         public string JobTitle { get; set; }
         public string DetailType { get; set; }
         public string Fecha { get; set; }
+        public int Type { get; set; }
     }
 }

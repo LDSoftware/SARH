@@ -162,8 +162,6 @@ namespace SARH.WebUI.Factories
 
             DashboardModel model = new DashboardModel()
             {
-                AverageEntryDelay = 0,
-                AverageJobPermission = 0,
                 EntryDelay = t.Where(d => d.RetardoEntrada.Equals(1)).Count(),
                 EndDayDelay = t.Where(d => d.SalidaAnticipada.Equals(1)).Count(),
                 FoodStartDelay = t.Where(d => d.SalidaAnticipadaComida.Equals(1)).Count(),
@@ -306,8 +304,6 @@ namespace SARH.WebUI.Factories
 
             DashboardModel model = new DashboardModel()
             {
-                AverageEntryDelay = 0,
-                AverageJobPermission = 0,
                 EntryDelay = t.Where(d => d.RetardoEntrada.Equals(1)).Count(),
                 EndDayDelay = t.Where(d => d.SalidaAnticipada.Equals(1)).Count(),
                 FoodStartDelay = t.Where(d => d.SalidaAnticipadaComida.Equals(1)).Count(),
@@ -620,7 +616,8 @@ namespace SARH.WebUI.Factories
                 JobCenter = r.Centro,
                 JobTitle = r.Puesto,
                 DetailType = "Falta",
-                Fecha = date
+                Fecha = date,
+                Type = 1
             }).ToList();
             empsDetail.AddRange(a);
 

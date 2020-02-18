@@ -224,7 +224,10 @@ namespace SARH.WebUI.Controllers
             return Json(list);
         }
 
-        public FileResult PrintHardwareAssigned(string EmployeeId, [FromServices] IRepository<EmployeeObjectAsignation> repository, [FromServices] IOrganigramaModelFactory organigramaModelFactory, [FromServices] SARH.Core.Configuration.IConfigurationManager configManager)
+        public FileResult PrintHardwareAssigned(string EmployeeId, 
+            [FromServices] IRepository<EmployeeObjectAsignation> repository, 
+            [FromServices] IOrganigramaModelFactory organigramaModelFactory, 
+            [FromServices] SARH.Core.Configuration.IConfigurationManager configManager)
         {
             List<HardwareAssignedModel> list = new List<HardwareAssignedModel>();
 

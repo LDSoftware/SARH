@@ -100,7 +100,7 @@
                 <div class="card border-top-left-radius-0 border-top-right-radius-0">
                     <div class="card-header">
                         <a class="card-title" style="background-color:orange;color:black;" aria-expanded="true" href="javascript:void(0);" data-toggle="collapse" data-target="#js_list_accordion-a">
-                            <b>INCAPACIDADES</b>&nbsp;&nbsp;<span class="badge badge-dark">0</span>
+                            <b>INCAPACIDADES</b>&nbsp;&nbsp;<span id="totincapacidades"  class="badge badge-dark">0</span>
                             <span class="ml-auto">
                                 <span class="collapsed-reveal">
                                     <i class="fal fa-chevron-up fs-xl"></i>
@@ -121,8 +121,7 @@
                                         <th>AREA</th>
                                         <th>PUESTO</th>
                                         <th>NOMBRE</th>
-                                        <th  style="width:45px;">DURACIÓN INICIO</th>
-                                        <th  style="width:45px;">DURACIÓN FIN</th>
+                                        <th  style="width:45px;">DURACIÓN</th>
                                         <th>OBSERVACIONES</th>
                                     </tr>
                                 </thead>
@@ -180,7 +179,7 @@
                 <div class="card">
                     <div class="card-header">
                         <a class="card-title collapsed" style="background-color:deepskyblue;color:black;" aria-expanded="false" href="javascript:void(0);" data-toggle="collapse" data-target="#js_list_accordion-y">
-                            <b>VACACIONES</b>&nbsp;&nbsp;<span class="badge badge-dark">0</span>
+                            <b>VACACIONES</b>&nbsp;&nbsp;<span id="totvacaciones"  class="badge badge-dark">0</span>
                             <span class="ml-auto">
                                 <span class="collapsed-reveal">
                                     <i class="fal fa-chevron-up fs-xl"></i>
@@ -201,8 +200,7 @@
                                         <th>AREA</th>
                                         <th>PUESTO</th>
                                         <th>NOMBRE</th>
-                                        <th style="width:45px;">DURACIÓN INICIO</th>
-                                        <th style="width:45px;">DURACIÓN FIN</th>
+                                        <th style="width:45px;">DURACIÓN</th>
                                         <th>OBSERVACIONES</th>
                                     </tr>
                                 </thead>
@@ -221,7 +219,7 @@
                 <div class="card">
                     <div class="card-header">
                         <a class="card-title collapsed" style="background-color:green;color:black;" aria-expanded="false" href="javascript:void(0);" data-toggle="collapse" data-target="#js_list_accordion-b">
-                            <b>PERMISOS</b>&nbsp;&nbsp;<span class="badge badge-dark">0</span>
+                            <b>PERMISOS</b>&nbsp;&nbsp;<span id="totpermisos"  class="badge badge-dark">0</span>
                             <span class="ml-auto">
                                 <span class="collapsed-reveal">
                                     <i class="fal fa-chevron-up fs-xl"></i>
@@ -243,8 +241,7 @@
                                         <th>AREA</th>
                                         <th>PUESTO</th>
                                         <th>NOMBRE</th>
-                                        <th style="width:45px;">DURACIÓN INICIO</th>
-                                        <th style="width:45px;">DURACIÓN FIN</th>
+                                        <th style="width:45px;">DURACIÓN</th>
                                         <th>OBSERVACIONES</th>
                                     </tr>
                                 </thead>
@@ -402,15 +399,50 @@
 
                             if (data.faltas.length > 0) {
                                 var htmlLicenseinfo = '';
-                                var numeracion = 1;
                                 for (var i = 0; i < data.faltas.length; i++) {
                                     htmlLicenseinfo = htmlLicenseinfo + '<tr><td>' +  data.faltas[i]['id'] + '</td><td>' + data.faltas[i]['area'] + '</td><td>' + data.faltas[i]['jobTitle'] + '</td><td>' + data.faltas[i]['name'] + '</td><td>' + data.faltas[i]['fecha'] + '</td></tr>';
-                                    numeracion++;
                                 }
                                 $('#allfaltas').html(htmlLicenseinfo);
                             }
                             $('#totfaltas').text(data.faltastotal);
                         }
+
+                        if (data.incapacidadesTotal > 0) {
+
+                            if (data.incapacidades.length > 0) {
+                                var htmlLicenseinfo = '';
+                                for (var i = 0; i < data.incapacidades.length; i++) {
+                                    htmlLicenseinfo = htmlLicenseinfo + '<tr><td>' +  data.incapacidades[i]['id'] + '</td><td>' + data.incapacidades[i]['area'] + '</td><td>' + data.incapacidades[i]['jobTitle'] + '</td><td>' + data.incapacidades[i]['name'] + '</td><td>' + data.incapacidades[i]['fecha'] + '</td><td>' + data.incapacidades[i]['detailType'] + '</td></tr>';
+                                }
+                                $('#allincapacidades').html(htmlLicenseinfo);
+                            }
+                            $('#totincapacidades').text(data.incapacidadesTotal);
+                        }
+
+                        if (data.totalvacaciones > 0) {
+
+                            if (data.vacaciones.length > 0) {
+                                var htmlLicenseinfo = '';
+                                for (var i = 0; i < data.vacaciones.length; i++) {
+                                    htmlLicenseinfo = htmlLicenseinfo + '<tr><td>' +  data.vacaciones[i]['id'] + '</td><td>' + data.vacaciones[i]['area'] + '</td><td>' + data.vacaciones[i]['jobTitle'] + '</td><td>' + data.vacaciones[i]['name'] + '</td><td>' + data.vacaciones[i]['fecha'] + '</td><td>' + data.vacaciones[i]['detailType'] + '</td></tr>';
+                                }
+                                $('#allvacaciones').html(htmlLicenseinfo);
+                            }
+                            $('#totvacaciones').text(data.totalvacaciones);
+                        }
+
+                        if (data.totalpermisos > 0) {
+
+                            if (data.permisos.length > 0) {
+                                var htmlLicenseinfo = '';
+                                for (var i = 0; i < data.permisos.length; i++) {
+                                    htmlLicenseinfo = htmlLicenseinfo + '<tr><td>' +  data.permisos[i]['id'] + '</td><td>' + data.permisos[i]['area'] + '</td><td>' + data.permisos[i]['jobTitle'] + '</td><td>' + data.permisos[i]['name'] + '</td><td>' + data.permisos[i]['fecha'] + '</td><td>' + data.permisos[i]['detailType'] + '</td></tr>';
+                                }
+                                $('#allpermisos').html(htmlLicenseinfo);
+                            }
+                            $('#totpermisos').text(data.totalpermisos);
+                        }
+
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
 
@@ -423,6 +455,99 @@
 
             });
 
+
+            $('#export').click(function () {
+
+
+                var dateIni = $('#datepicker-4-4').val();
+                var dateFin = $('#datepicker-4-5').val();
+
+
+                if (dateIni === '' || dateFin === '') {
+
+
+                    Swal.fire(
+                        {
+                            type: "warning",
+                            title: "Validación",
+                            text: "Rango de fechas no Válidos"
+                        });
+
+
+                    return;
+
+                }
+
+                var i = new Date(dateIni);
+                var f = new Date(dateFin);
+
+                if (f < i) {
+
+                    Swal.fire(
+                        {
+                            type: "warning",
+                            title: "Validación",
+                            text: "Rango de fechas no Válidos"
+                        });
+
+
+                    return;
+
+                }
+
+                var openUrl = '/ReporteIncidencia/ExportIncidenciaReportData?dateIni=' + dateIni + '&dateFin=' + dateFin;
+
+                window.location.href = openUrl;
+
+
+            });
+
+
+            $('#print').click(function () {
+
+
+                var dateIni = $('#datepicker-4-4').val();
+                var dateFin = $('#datepicker-4-5').val();
+
+
+                if (dateIni === '' || dateFin === '') {
+
+
+                    Swal.fire(
+                        {
+                            type: "warning",
+                            title: "Validación",
+                            text: "Rango de fechas no Válidos"
+                        });
+
+
+                    return;
+
+                }
+
+                var i = new Date(dateIni);
+                var f = new Date(dateFin);
+
+                if (f < i) {
+
+                    Swal.fire(
+                        {
+                            type: "warning",
+                            title: "Validación",
+                            text: "Rango de fechas no Válidos"
+                        });
+
+
+                    return;
+
+                }
+
+                var openUrl = '/ReporteIncidencia/PrintIncidenciaReportData?dateIni=' + dateIni + '&dateFin=' + dateFin;
+
+                window.location.href = openUrl;
+
+
+            });
 
 
 

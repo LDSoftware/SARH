@@ -355,7 +355,7 @@ namespace SARH.WebUI.Controllers
             {
                 Comments = format.Comments,
                 EmployeeId = format.EmployeeId.TrimStart(new Char[] { '0' }),
-                EmployeeSubstitute = string.IsNullOrEmpty(format.EmployeeSubId) ? "0" : format.EmployeeSubId,
+                EmployeeSubstitute = string.IsNullOrEmpty(format.EmployeeSubId) ? "0" : format.EmployeeSubId.TrimStart(new Char[] { '0' }),
                 EndDate = DateTime.Parse(format.EndDate),
                 PermissionType = format.PermissionType,
                 StartDate = DateTime.Parse(format.StartDate),

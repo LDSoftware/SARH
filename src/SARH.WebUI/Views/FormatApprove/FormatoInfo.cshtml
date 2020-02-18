@@ -78,7 +78,7 @@
                                 <h1 class="alert-success">@($"Formato {Model.FormatDetail.Estatus}")</h1>
                             </div>
                             <div class="col-md-12">
-                                <a class="btn btn-secondary" href='#' target="_blank"><i class="fal fa-print"></i> Imprimir</a>
+                                <a class="btn btn-secondary" href='@Url.Action("PrintCurrentFormat","FormatApprove", new { idFormat = Model.FormatDetail.Id })' target="_blank"><i class="fal fa-print"></i> Imprimir</a>
                             </div>
                         }
                         @if (Model.FormatDetail.Estatus.Equals("Rechazado"))
@@ -87,8 +87,6 @@
                                 <h1 class="alert-danger">@($"Formato {Model.FormatDetail.Estatus}")</h1>
                             </div>
                         }
-
-
                     }
 
                     <hr />

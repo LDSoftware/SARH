@@ -5,6 +5,7 @@ using SARH.Core.PdfCreator.Interface;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -74,6 +75,16 @@ namespace SARH.Core.PdfCreator
             f.Color = BaseColor.Black;
             return f;
         }
+
+        private Font ReportIncidenciaFont()
+        {
+            BaseFont fontBase = BaseFont.CreateFont(_pdfConfig.FontPathPdf, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+            Font f = new Font(fontBase);
+            f.Size = 14;
+            f.Color = BaseColor.Black;
+            return f;
+        }
+
 
         private void CreateHeaderSection(Document document, DocumentInfoPdfData pdfData) 
         {
@@ -951,6 +962,85 @@ namespace SARH.Core.PdfCreator
             fileStream.Dispose();
         }
 
+
+        private void CreateIncidenciasReportSection(Document document, DocumentInfoPdfData pdfData, string sectionName, BaseColor sectionColor, int type) 
+        {
+
+            var font = DocumentFont();
+            var fontRev = ReportIncidenciaFont();
+
+            var productsHeader = new PdfPTable(1)
+            {
+                RunDirection = PdfWriter.RUN_DIRECTION_LTR,
+                WidthPercentage = 100f
+            };
+            var cellProducts = new PdfPCell(new Phrase(sectionName, fontRev));
+            cellProducts.HorizontalAlignment = Element.ALIGN_LEFT;
+            cellProducts.BackgroundColor = sectionColor;
+            productsHeader.AddCell(cellProducts);
+            document.Add(productsHeader);
+
+            var productsTable = new PdfPTable(6)
+            {
+                RunDirection = PdfWriter.RUN_DIRECTION_LTR,
+                WidthPercentage = 100f
+            };
+
+            //
+
+            productsTable.SetWidths(new[] { 5, 20, 20, 20, 15, 20 });
+
+            var cellProductItem = new PdfPCell(new Phrase("", font));
+            cellProductItem.HorizontalAlignment = Element.ALIGN_LEFT;
+            productsTable.AddCell(cellProductItem);
+
+
+            cellProductItem = new PdfPCell(new Phrase("Area", font));
+            cellProductItem.HorizontalAlignment = Element.ALIGN_LEFT;
+            productsTable.AddCell(cellProductItem);
+
+            cellProductItem = new PdfPCell(new Phrase("Puesto", font));
+            cellProductItem.HorizontalAlignment = Element.ALIGN_LEFT;
+            productsTable.AddCell(cellProductItem);
+
+            cellProductItem = new PdfPCell(new Phrase("Nombre", font));
+            cellProductItem.HorizontalAlignment = Element.ALIGN_LEFT;
+            productsTable.AddCell(cellProductItem);
+
+            cellProductItem = new PdfPCell(new Phrase("Periodo", font));
+            cellProductItem.HorizontalAlignment = Element.ALIGN_LEFT;
+            productsTable.AddCell(cellProductItem);
+
+            cellProductItem = new PdfPCell(new Phrase("Observaciones", font));
+            cellProductItem.HorizontalAlignment = Element.ALIGN_LEFT;
+            productsTable.AddCell(cellProductItem);
+
+            pdfData.IncidenciasReport.Where(i=>i.Type.Equals(type)).ToList().ForEach(row => 
+            {
+                var headerData = new PdfPCell(new Phrase(row.ID, font));
+                headerData.HorizontalAlignment = Element.ALIGN_LEFT;
+                productsTable.AddCell(headerData);
+                headerData = new PdfPCell(new Phrase(row.Area, font));
+                headerData.HorizontalAlignment = Element.ALIGN_LEFT;
+                productsTable.AddCell(headerData);
+                headerData = new PdfPCell(new Phrase(row.JobTitle, font));
+                headerData.HorizontalAlignment = Element.ALIGN_LEFT;
+                productsTable.AddCell(headerData);
+                headerData = new PdfPCell(new Phrase(row.Name, font));
+                headerData.HorizontalAlignment = Element.ALIGN_LEFT;
+                productsTable.AddCell(headerData);
+                headerData = new PdfPCell(new Phrase(row.Fecha, font));
+                headerData.HorizontalAlignment = Element.ALIGN_LEFT;
+                productsTable.AddCell(headerData);
+                headerData = new PdfPCell(new Phrase(row.DetailType, font));
+                headerData.HorizontalAlignment = Element.ALIGN_LEFT;
+                productsTable.AddCell(headerData);
+            });
+
+            document.Add(productsTable);
+            document.Add(new Phrase(Environment.NewLine));
+        }
+
         public void CreateIncidenciasReport(DocumentInfoPdfData pdfData, string pdfFile) 
         {
             var pdfDoc = new Document(PageSize.A4);
@@ -960,15 +1050,246 @@ namespace SARH.Core.PdfCreator
             pdfDoc.AddAuthor("ISOSA SARH");
             pdfDoc.Open();
 
+            int totincapacidades = pdfData.IncidenciasReport.Where(h=>h.Type.Equals(2)).Count();
+            int totfaltas = pdfData.IncidenciasReport.Where(h => h.Type.Equals(1)).Count();
+            int totvacaciones = pdfData.IncidenciasReport.Where(h => h.Type.Equals(3)).Count();
+            int totpermisos = pdfData.IncidenciasReport.Where(h => h.Type.Equals(4)).Count();
+
+
             CreateHeaderSection(pdfDoc, pdfData);
-
-
-
+            CreateIncidenciasReportSection(pdfDoc, pdfData, $"INCAPACIDADES {totincapacidades}", new BaseColor(255, 127, 39), 2);
+            CreateIncidenciasReportSection(pdfDoc, pdfData, $"FALTAS {totfaltas}", new BaseColor(255, 0, 0), 1);
+            CreateIncidenciasReportSection(pdfDoc, pdfData, $"VACACIONES {totvacaciones}", new BaseColor(0, 162, 232), 3);
+            CreateIncidenciasReportSection(pdfDoc, pdfData, $"PERMISOS {totpermisos}", new BaseColor(0, 174, 0), 4);
 
             pdfDoc.Close();
             fileStream.Dispose();
         }
 
+        private void CreatePermissionSectionA(Document document, DocumentInfoPdfData pdfData)
+        {
+            var font = DocumentFont();
+            var fontRev = TitleFont();
+
+            var productsHeader = new PdfPTable(1)
+            {
+                RunDirection = PdfWriter.RUN_DIRECTION_LTR,
+                WidthPercentage = 100f
+            };
+            var cellProducts = new PdfPCell(new Phrase("Datos del Trabajador", fontRev));
+            cellProducts.HorizontalAlignment = Element.ALIGN_CENTER;
+            cellProducts.BackgroundColor = BaseColor.Gray;
+            productsHeader.AddCell(cellProducts);
+            document.Add(productsHeader);
+
+            var productsTable = new PdfPTable(2)
+            {
+                RunDirection = PdfWriter.RUN_DIRECTION_LTR,
+                WidthPercentage = 100f
+            };
+
+            //
+
+            productsTable.SetWidths(new[] { 50, 50 });
+
+
+            var p1 = new Paragraph($"   ID Empleado: {pdfData.EmployeInfo.EmployeeId}" +
+               $"{Environment.NewLine}   Area: {pdfData.Area}", font);
+            p1.SetLeading(4, 18);
+
+
+            var cellProductItem = new PdfPCell(p1);
+            cellProductItem.HorizontalAlignment = Element.ALIGN_LEFT;
+            productsTable.AddCell(cellProductItem);
+
+            var p2 = new Paragraph($"   Nombre: {pdfData.EmployeInfo.EmployeeName}" +
+                $"{Environment.NewLine}   Puesto: {pdfData.EmployeInfo.JobTitle}", font);
+            p2.SetLeading(4, 18);
+
+            cellProductItem = new PdfPCell(p2);
+            cellProductItem.HorizontalAlignment = Element.ALIGN_LEFT;
+            productsTable.AddCell(cellProductItem);
+
+
+            document.Add(productsTable);
+        }
+
+        private void CreatePermissionSectionB(Document document, DocumentInfoPdfData pdfData)
+        {
+            var font = DocumentFont();
+            var fontRev = TitleFont();
+
+            document.Add(new Paragraph($"{Environment.NewLine}"));
+
+            var productsHeader = new PdfPTable(1)
+            {
+                RunDirection = PdfWriter.RUN_DIRECTION_LTR,
+                WidthPercentage = 100f
+            };
+            var cellProducts = new PdfPCell(new Phrase($"Permisos durante el año : {pdfData.FormatPermission.TotalPermissions}", fontRev));
+            cellProducts.HorizontalAlignment = Element.ALIGN_LEFT;
+            cellProducts.BackgroundColor = BaseColor.Gray;
+            productsHeader.AddCell(cellProducts);
+            document.Add(productsHeader);
+        }
+
+        private void CreatePermissionSectionC(Document document, DocumentInfoPdfData pdfData)
+        {
+            var font = DocumentFont();
+            var fontRev = TitleFont();
+
+
+            document.Add(new Paragraph($"{Environment.NewLine}"));
+
+            var productsHeader = new PdfPTable(1)
+            {
+                RunDirection = PdfWriter.RUN_DIRECTION_LTR,
+                WidthPercentage = 100f
+            };
+            var cellProducts = new PdfPCell(new Phrase("Permiso Solicitado", fontRev));
+            cellProducts.HorizontalAlignment = Element.ALIGN_CENTER;
+            cellProducts.BackgroundColor = BaseColor.Black;
+            productsHeader.AddCell(cellProducts);
+            document.Add(productsHeader);
+
+            var productsTable = new PdfPTable(2)
+            {
+                RunDirection = PdfWriter.RUN_DIRECTION_LTR,
+                WidthPercentage = 100f
+            };
+
+
+            productsTable.SetWidths(new[] { 70, 30 });
+
+            var cellProductItem = new PdfPCell(new Phrase($"   Del día: {DateTime.Parse(pdfData.FormatPermission.DateStart).ToLongDateString()} / {pdfData.FormatPermission.TimeStart} Hrs. {Environment.NewLine}   Al día: {DateTime.Parse(pdfData.FormatPermission.DateEnd).ToLongDateString()} / {pdfData.FormatPermission.TimeEnd} Hrs." , font));
+            cellProductItem.HorizontalAlignment = Element.ALIGN_LEFT;
+            cellProductItem.BackgroundColor = BaseColor.LightGray;
+            productsTable.AddCell(cellProductItem);
+
+
+            cellProductItem = new PdfPCell(new Phrase($"  {pdfData.FormatPermission.Comments}", font));
+            cellProductItem.HorizontalAlignment = Element.ALIGN_LEFT;
+            cellProductItem.BackgroundColor = BaseColor.LightGray;
+            productsTable.AddCell(cellProductItem);
+
+
+            document.Add(productsTable);
+
+            var productsTable2 = new PdfPTable(1)
+            {
+                RunDirection = PdfWriter.RUN_DIRECTION_LTR,
+                WidthPercentage = 100f
+            };
+            productsTable2.SetWidths(new[] { 100 });
+
+
+            var cellProductItem2 = new PdfPCell(new Phrase($"   Motivo: {pdfData.FormatPermission.Cause}", font));
+            cellProductItem2.HorizontalAlignment = Element.ALIGN_LEFT;
+            cellProductItem2.BackgroundColor = BaseColor.LightGray;
+            productsTable2.AddCell(cellProductItem2);
+
+            document.Add(productsTable2);
+        }
+
+        private void CreatePermissionSectionD(Document document, DocumentInfoPdfData pdfData)
+        {
+            var font = DocumentFont();
+            var fontRev = TitleFont();
+
+
+            document.Add(new Paragraph($"{Environment.NewLine}"));
+
+            var productsHeader = new PdfPTable(1)
+            {
+                RunDirection = PdfWriter.RUN_DIRECTION_LTR,
+                WidthPercentage = 100f
+            };
+            var cellProducts = new PdfPCell(new Phrase("Observaciones", fontRev));
+            cellProducts.HorizontalAlignment = Element.ALIGN_CENTER;
+            cellProducts.BackgroundColor = BaseColor.Black;
+            productsHeader.AddCell(cellProducts);
+            document.Add(productsHeader);
+
+            var productsTable = new PdfPTable(2)
+            {
+                RunDirection = PdfWriter.RUN_DIRECTION_LTR,
+                WidthPercentage = 100f
+            };
+
+
+            productsTable.SetWidths(new[] { 50, 50 });
+
+            var cellProductItem = new PdfPCell(new Phrase($"   Persona suplente: {pdfData.EmployeeSustitute.Name}", font));
+            cellProductItem.HorizontalAlignment = Element.ALIGN_LEFT;
+            productsTable.AddCell(cellProductItem);
+
+
+            cellProductItem = new PdfPCell(new Phrase($"   Puesto: {pdfData.EmployeeSustitute.JobTitle}", font));
+            cellProductItem.HorizontalAlignment = Element.ALIGN_LEFT;
+            productsTable.AddCell(cellProductItem);
+
+
+            document.Add(productsTable);
+        }
+
+        private void CreatePermissionSectionE(Document document, DocumentInfoPdfData pdfData)
+        {
+            var font = DocumentFont();
+            var fontRev = TitleFont();
+
+
+            document.Add(new Paragraph($"{Environment.NewLine}"));
+
+            var productsHeader = new PdfPTable(1)
+            {
+                RunDirection = PdfWriter.RUN_DIRECTION_LTR,
+                WidthPercentage = 100f
+            };
+            var cellProducts = new PdfPCell(new Phrase("Autorizaciones", fontRev));
+            cellProducts.HorizontalAlignment = Element.ALIGN_CENTER;
+            cellProducts.BackgroundColor = BaseColor.Black;
+            productsHeader.AddCell(cellProducts);
+            document.Add(productsHeader);
+
+            var productsTable = new PdfPTable(1)
+            {
+                RunDirection = PdfWriter.RUN_DIRECTION_LTR,
+                WidthPercentage = 100f
+            };
+
+
+            productsTable.SetWidths(new[] { 100 });
+
+
+            PdfFormField field;
+            RadioCheckField checkBox;
+
+            var cellProductItem = new PdfPCell(new Phrase($"[*]Presidencia [*]Dirección General [*]Gte/Jefe/Supervisor [*]Vobo Admon RH [*]Vobo Suplente", font));
+            cellProductItem.HorizontalAlignment = Element.ALIGN_CENTER;
+            productsTable.AddCell(cellProductItem);
+            document.Add(productsTable);
+        }
+
+        public void CreatePermissionFormat(DocumentInfoPdfData pdfData, string pdfFile) 
+        {
+            var pdfDoc = new Document(PageSize.A4);
+            var pdfFilePath = pdfFile;
+            var fileStream = new FileStream(pdfFilePath, FileMode.Create);
+            PdfWriter.GetInstance(pdfDoc, fileStream);
+            pdfDoc.AddAuthor("ISOSA SARH");
+            pdfDoc.Open();
+
+
+            CreateHeaderSection(pdfDoc, pdfData);
+            CreatePermissionSectionA(pdfDoc, pdfData);
+            CreatePermissionSectionB(pdfDoc, pdfData);
+            CreatePermissionSectionC(pdfDoc, pdfData);
+            CreatePermissionSectionD(pdfDoc, pdfData);
+            CreatePermissionSectionE(pdfDoc, pdfData);
+
+            pdfDoc.Close();
+            fileStream.Dispose();
+        }
 
 
     }

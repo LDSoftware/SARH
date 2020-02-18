@@ -7,6 +7,8 @@ using ISOSA.SARH.Data.Repository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using SARH.Core.PdfCreator;
+using SARH.Core.PdfCreator.Interface;
 using SARH.WebUI.Factories;
 using SARH.WebUI.Models.Formats;
 using SmartAdmin.WebUI.Areas.Identity.Pages.Account;
@@ -306,6 +308,96 @@ namespace SARH.WebUI.Controllers
             return Json(new { alreadyapprove = alreadyApprove });
         }
 
+
+        public FileResult PrintCurrentFormat(int idFormat,
+            [FromServices] IEmployeeFormatModelFactory employeeFormatModelFactory,
+            [FromServices] SARH.Core.Configuration.IConfigurationManager configManager,
+            [FromServices] IOrganigramaModelFactory organigramaModelFactory) 
+        {
+
+            IConfigPdf config = new ConfigPdf()
+            {
+                FontPathPdf = configManager.FontPathPdf,
+                ImgPathPdf = configManager.ImgPathPdf,
+                FontPathBarCode = configManager.FontPathBarCode
+            };
+            PdfManager manager = new PdfManager(config);
+
+            var format = employeeFormatModelFactory.GetformatInfo(idFormat);
+            var formats = employeeFormatModelFactory.GetAllFormatsByEmployee(format.EmployeeId);
+            string path = System.IO.Path.GetTempPath();
+            string empId = int.Parse(format.EmployeeId).ToString("00000");
+
+            var empInfo = organigramaModelFactory.GetEmployeeData(format.EmployeeId);
+
+            var sustitute = organigramaModelFactory.GetEmployeeData(format.Suplente);
+
+            string fileName = $"{path}FormatNumber{idFormat}.pdf";
+
+            if (System.IO.File.Exists(fileName))
+            {
+                System.IO.File.Delete(fileName);
+            }
+
+            try
+            {
+                manager.CreatePermissionFormat(new Core.PdfCreator.FormatData.DocumentInfoPdfData()
+                {
+                    TitleDocumento = "SOLICITUD DE PERMISOS",
+                    FormatId = $"Fecha de Solicitud: {format.FechaSolicitud}",
+                    Area = empInfo.Area,
+                    JobTitle = empInfo.GeneralInfo.JobTitle,
+                    EmployeeName = $"{empInfo.GeneralInfo.FirstName} {empInfo.GeneralInfo.LastName} {empInfo.GeneralInfo.LastName2}",
+                    EmployeInfo = new Core.PdfCreator.FormatData.EmployeeInfoData()
+                    {
+                        EmployeeId = empInfo.GeneralInfo.Id,
+                        EmployeeName = $"{empInfo.GeneralInfo.FirstName} {empInfo.GeneralInfo.LastName} {empInfo.GeneralInfo.LastName2}",
+                        Rfc = empInfo.GeneralInfo.RFC,
+                        Curp = empInfo.GeneralInfo.CURP,
+                        NSS = empInfo.GeneralInfo.NSS,
+                        BrithDate = empInfo.GeneralInfo.FechaNacimiento,
+                        HireDate = empInfo.GeneralInfo.HireDate,
+                        FireDate = "N/A",
+                        PhotoPath = empInfo.GeneralInfo.Picture,
+                        PersonalPhone = empInfo.PersonalInfo.Phone,
+                        CellNumber = empInfo.PersonalInfo.CellPhone,
+                        PersonalEmail = empInfo.PersonalInfo.Email,
+                        Address = empInfo.PersonalInfo.Address,
+                        City = empInfo.PersonalInfo.City,
+                        State = empInfo.PersonalInfo.State,
+                        Cp = empInfo.PersonalInfo.Zip,
+                        ContactName = empInfo.EmergencyData.Name,
+                        ContactRelation = empInfo.EmergencyData.Relacion,
+                        ContactPhone = empInfo.EmergencyData.Phone,
+                        JobTitle = empInfo.GeneralInfo.JobTitle
+                    },
+                    EmployeeSustitute = new Core.PdfCreator.FormatData.FormatEmployeeSustitute()
+                    {
+                        Name = $"{sustitute.GeneralInfo.FirstName} {sustitute.GeneralInfo.LastName} {sustitute.GeneralInfo.LastName2}",
+                        JobTitle = sustitute.GeneralInfo.JobTitle
+                    },
+                    FormatPermission = new Core.PdfCreator.FormatData.FormatPermissionData()
+                    {
+                        Cause = format.Comments,
+                        DateStart = format.StartDate,
+                        DateEnd = format.EndDate,
+                        TimeStart = format.StartTime,
+                        TimeEnd = format.EndTime,
+                        Comments = format.AdditionalInfo,
+                        TotalPermissions = formats.Count()
+                    }
+                }, fileName);
+            }
+            catch (Exception ex)
+            {
+                byte[] FileBytesError = System.Text.Encoding.UTF8.GetBytes(ex.Message);
+                return File(FileBytesError, "text/plain");
+            }
+
+
+            byte[] FileBytes = System.IO.File.ReadAllBytes(fileName);
+            return File(FileBytes, "application/pdf");
+        }
 
 
     }

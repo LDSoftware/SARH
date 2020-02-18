@@ -83,7 +83,12 @@ namespace SARH.WebUI.Factories
                                   StartTime = fmts.StartTime,
                                   EndTime = fmts.EndTime,
                                   EmployeeId = fmts.EmployeeId,
-                                  FormatType = FormatGroup(ftypes.Description)
+                                  FormatType = FormatGroup(ftypes.Description),
+                                  FechaSolicitud = fmts.CreateDate.ToShortDateString(),
+                                  Suplente = fmts.EmployeeSubstitute,
+                                  Aprobadores = fmts.ApprovalWorkFlow,
+                                  AdditionalInfo = fmts.WithPay ? "Con goce de sueldo" : "Sin goce de sueldo",
+                                  Approved = fmts.ApprovalDate.HasValue
                               }
                               ).ToList();
 

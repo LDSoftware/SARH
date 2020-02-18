@@ -20,5 +20,10 @@ namespace SARH.WebUI.Models.Employee
         public string FormatName { get; set; }
         public string FormatType { get; set; }
         public string Comments { get; set; }
+        public string FechaSolicitud { get; set; }
+        public string Suplente { get; set; }
+        public string Aprobadores { get; set; }
+        public string AdditionalInfo { get; set; }
+        public bool Approved { get; set; }
     }
 }
