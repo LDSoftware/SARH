@@ -140,8 +140,27 @@ namespace SARH.WebUI.Controllers
                     if (!string.IsNullOrEmpty(format.ApprovalWorkFlow))
                     {
 
-                        var apprs = formatApprover.SearhItemsFor(i => i.Area.Equals(model.FormatEmployee.Area)
-                        && i.Centro.Equals(model.FormatEmployee.JobCenter) && i.Departamento.Equals(model.FormatEmployee.Departamento)).ToList();
+                        List<FormatApprover> apprs = new List<FormatApprover>();
+
+                        //Approbador Global
+                        apprs.AddRange(formatApprover.SearhItemsFor(i => i.Area.Equals(string.Empty)
+                            && i.Centro.Equals(string.Empty) && i.Departamento.Equals(string.Empty)).Where(p => (apprs).All(p2 => p2.RowGuid != p.RowGuid)).ToList());
+
+
+                        //Aprobador Area                    
+                        apprs.AddRange(formatApprover.SearhItemsFor(i => i.Area.Equals(model.FormatEmployee.Area)).Where(p => (apprs).All(p2 => p2.RowGuid != p.RowGuid)).ToList());
+
+
+                        //Aprobador Centro
+                        apprs.AddRange(formatApprover.SearhItemsFor(i => i.Area.Equals(model.FormatEmployee.Area)
+                            && i.Centro.Equals(model.FormatEmployee.JobCenter)).Where(p => (apprs).All(p2 => p2.RowGuid != p.RowGuid)).ToList());
+
+
+                        //Aprobador Depto
+                        apprs.AddRange(formatApprover.SearhItemsFor(i => i.Area.Equals(model.FormatEmployee.Area)
+                            && i.Centro.Equals(model.FormatEmployee.JobCenter) && i.Departamento.Equals(model.FormatEmployee.Departamento)).Where(p => (apprs).All(p2 => p2.RowGuid != p.RowGuid)).ToList());
+
+
                         var apps = JsonConvert.DeserializeObject<List<ForrmatApproverWorkflow>>(format.ApprovalWorkFlow);
 
                         apprs.ForEach(h => 
@@ -151,12 +170,15 @@ namespace SARH.WebUI.Controllers
                             if (!t.Any()) 
                             {
                                 var approName = employees.Employess.Where(d => d.RowId.ToString().ToLower().Equals(h.RowGuid.ToString().ToLower())).FirstOrDefault();
-                                model.Approvers.Add(new ForrmatApproverWorkflow()
+                                if (approName != null) 
                                 {
-                                    Id = h.Id,
-                                    RowId = h.RowGuid,
-                                    Name = approName.Name
-                                });
+                                    model.Approvers.Add(new ForrmatApproverWorkflow()
+                                    {
+                                        Id = h.Id,
+                                        RowId = h.RowGuid,
+                                        Name = approName.Name
+                                    });
+                                }
                             }
                         });
 
@@ -190,8 +212,26 @@ namespace SARH.WebUI.Controllers
 
             var emp = employees.Employess.Where(j => j.Id.Equals(format.EmployeeId)).FirstOrDefault();
 
-            var apprs = formatApprover.SearhItemsFor(i => i.Area.Equals(emp.Area)
-            && i.Centro.Equals(emp.JobCenter) && i.Departamento.Equals(emp.Category)).ToList();
+            List<FormatApprover> apprs = new List<FormatApprover>();
+
+            //Approbador Global
+            apprs.AddRange(formatApprover.SearhItemsFor(i => i.Area.Equals(string.Empty)
+                && i.Centro.Equals(string.Empty) && i.Departamento.Equals(string.Empty)).Where(p => (apprs).All(p2 => p2.RowGuid != p.RowGuid)).ToList());
+
+
+            //Aprobador Area                    
+            apprs.AddRange(formatApprover.SearhItemsFor(i => i.Area.Equals(emp.Area)).Where(p => (apprs).All(p2 => p2.RowGuid != p.RowGuid)).ToList());
+
+
+            //Aprobador Centro
+            apprs.AddRange(formatApprover.SearhItemsFor(i => i.Area.Equals(emp.Area)
+                && i.Centro.Equals(emp.JobCenter)).Where(p => (apprs).All(p2 => p2.RowGuid != p.RowGuid)).ToList());
+
+
+            //Aprobador Depto
+            apprs.AddRange(formatApprover.SearhItemsFor(i => i.Area.Equals(emp.Area)
+                && i.Centro.Equals(emp.JobCenter) && i.Departamento.Equals(emp.Category)).Where(p => (apprs).All(p2 => p2.RowGuid != p.RowGuid)).ToList());
+
 
             int totApp = apprs.Count;
 
@@ -273,8 +313,25 @@ namespace SARH.WebUI.Controllers
 
             var emp = employees.Employess.Where(j => j.Id.Equals(format.EmployeeId)).FirstOrDefault();
 
-            var apprs = formatApprover.SearhItemsFor(i => i.Area.Equals(emp.Area)
-            && i.Centro.Equals(emp.JobCenter) && i.Departamento.Equals(emp.Category)).ToList();
+            List<FormatApprover> apprs = new List<FormatApprover>();
+
+            //Approbador Global
+            apprs.AddRange(formatApprover.SearhItemsFor(i => i.Area.Equals(string.Empty)
+                && i.Centro.Equals(string.Empty) && i.Departamento.Equals(string.Empty)).Where(p => (apprs).All(p2 => p2.RowGuid != p.RowGuid)).ToList());
+
+
+            //Aprobador Area                    
+            apprs.AddRange(formatApprover.SearhItemsFor(i => i.Area.Equals(emp.Area)).Where(p => (apprs).All(p2 => p2.RowGuid != p.RowGuid)).ToList());
+
+
+            //Aprobador Centro
+            apprs.AddRange(formatApprover.SearhItemsFor(i => i.Area.Equals(emp.Area)
+                && i.Centro.Equals(emp.JobCenter)).Where(p => (apprs).All(p2 => p2.RowGuid != p.RowGuid)).ToList());
+
+
+            //Aprobador Depto
+            apprs.AddRange(formatApprover.SearhItemsFor(i => i.Area.Equals(emp.Area)
+                && i.Centro.Equals(emp.JobCenter) && i.Departamento.Equals(emp.Category)).Where(p => (apprs).All(p2 => p2.RowGuid != p.RowGuid)).ToList());
 
             int totApp = apprs.Count;
 
