@@ -53,6 +53,9 @@
                                 <a id="deletedrow" href="javascript:void(0)" title="Eliminar formato" class="btn btn-danger btn-icon waves-effect waves-themed">
                                     <i class="fal fa-trash-alt"></i>
                                 </a>
+                                <a id="print" href="javascript:void(0)" title="Imprimir formato" class="btn btn-success btn-icon waves-effect waves-themed">
+                                    <i class="fal fa-print"></i>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -75,7 +78,7 @@
                                         <tbody id="allrequest">
                                             @foreach (var item in Model.EmployeeFormats)
                                             {
-                                                <tr id="@item.Id">
+                                                <tr id="@item.Id" data-type="@item.PermissionType">
                                                     <td>
                                                         @item.CreateDate
                                                     </td>
@@ -854,6 +857,37 @@
 
             });
 
+
+            $('#print').click(function () {
+
+
+                var row = $('#allrequest tr.selected');
+                var id = row.attr("id");
+
+                var tp = $(row).data("type");
+
+                if (id === undefined) {
+
+                    Swal.fire(
+                        {
+                            type: "warning",
+                            title: "Validación",
+                            text: "Seleccione un registro"
+                        });
+
+                    return;
+
+                }
+
+                if (tp === "Vacaciones") {
+
+                    window.location.href = "/FormatApprove/PrintVacationFormat?idFormat=" + id;
+                }
+                else {
+                    window.location.href = "/FormatApprove/PrintCurrentFormat?idFormat=" + id;
+                }
+
+            });
 
 
 
