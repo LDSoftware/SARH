@@ -94,7 +94,7 @@ namespace SARH.WebUI.Factories
                             JobTitle = org.Puesto,
                             Name = $"{emp.EMP_FirstName} {emp.EMP_LastName}",
                             RowId = emp.HrowGuid.ToString(),
-                            UserName = string.IsNullOrEmpty(emp.EMP_EMailAddress) ? "" : emp.EMP_EMailAddress
+                            UserName = string.IsNullOrEmpty(emp.SARH_Login) ? "" : emp.SARH_Login
                         }).ToList();
 
 
@@ -477,7 +477,7 @@ namespace SARH.WebUI.Factories
 
             if (string.IsNullOrEmpty(area)) 
             {
-                areas = _isosaemployeesOrganigramaRepository.GetAll().GroupBy(a => a.Area.ToUpper());
+                areas = _isosaemployeesOrganigramaRepository.GetAll().Where(o => !o.Area.Equals("NA")).GroupBy(a => a.Area.ToUpper()); ;
             }
             else
             {

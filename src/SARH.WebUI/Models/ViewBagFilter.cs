@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Newtonsoft.Json;
@@ -11,11 +12,16 @@ namespace SARH.WebUI.Models
         private static readonly string Enabled = "Enabled";
         private static readonly string Disabled = string.Empty;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<IdentityUser> _userManager;
 
-
-        public ViewBagFilter(IHttpContextAccessor httpContextAccessor)
+        public ViewBagFilter(IHttpContextAccessor httpContextAccessor,
+            SignInManager<IdentityUser> signInManager,
+            UserManager<IdentityUser> userManager)
         {
             this._httpContextAccessor = httpContextAccessor;
+            this._signInManager = signInManager;
+            this._userManager = userManager;
         }
 
         public void OnActionExecuting(ActionExecutingContext context)
@@ -43,21 +49,26 @@ namespace SARH.WebUI.Models
                 controller.ViewBag.Logo =  "logo.png";
                 controller.ViewBag.LogoM =  "logo.png";
 
-                var modellogin = _httpContextAccessor.HttpContext.Session.GetString("loginmodel");
-                var loginInfo = !string.IsNullOrEmpty(modellogin) ? JsonConvert.DeserializeObject<LoginModel.InputModel>(modellogin) : null;
-                string userName = loginInfo != null ? loginInfo.Email : null;
 
-                if (!string.IsNullOrEmpty(userName))
+                var claims = this._signInManager.Context.User;
+                if (this._signInManager.IsSignedIn(claims)) 
                 {
-                    controller.ViewBag.User = userName;
-                    controller.ViewBag.Email = userName;
+                    var user = this._userManager.GetUserAsync(claims).Result;
+                    var modellogin = _httpContextAccessor.HttpContext.Session.GetString("loginmodel");
+                    var loginInfo = !string.IsNullOrEmpty(modellogin) ? JsonConvert.DeserializeObject<LoginModel.InputModel>(modellogin) : null;
+                    string userName = loginInfo != null ? loginInfo.Email : user.Email;
+                    if (!string.IsNullOrEmpty(userName))
+                    {
+                        controller.ViewBag.User = userName;
+                        controller.ViewBag.Email = userName;
+                        _httpContextAccessor.HttpContext.Session.SetString("loginmodel", JsonConvert.SerializeObject(new LoginModel.InputModel() 
+                        {
+                            Email = userName,
+                            Password = "",
+                            RememberMe = false
+                        }));
+                    }
                 }
-                else
-                {
-                    
-                }
-
-
             }
         }
 

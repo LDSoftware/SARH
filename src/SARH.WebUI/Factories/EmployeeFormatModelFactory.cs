@@ -68,7 +68,6 @@ namespace SARH.WebUI.Factories
             var formatData = (from fmts in formats
                               join orgn in organigrama.Employess on fmts.EmployeeId equals orgn.Id
                               join ftypes in permissionTypes on fmts.PermissionType equals ftypes.Id
-                              where fmts.ApprovalDate.HasValue
                               select new EmployeeFormatInfo()
                               {
                                   Area = orgn.Area,

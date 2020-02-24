@@ -17,6 +17,7 @@ namespace SARH.WebUI.Factories
     {
 
         private readonly IRepository<DashboardData> _dashboardRepository;
+        private readonly IRepository<PersonalDboardData> _personalDashboardRepository;
         private readonly IRepository<EmployeeFormat> _employeeFormatRepository;
         private readonly IRepository<EmployeeAditionalInfo> _employeeAdditionalInfo;
         private readonly IRepository<NonWorkingDay> _nonworkingDays;
@@ -33,7 +34,8 @@ namespace SARH.WebUI.Factories
         IRepository<NonWorkingDay> nonworkingDays,
         IRepository<NonWorkingDayException> nonworkingDaysExeption,
         IRepository<EmployeeScheduleAssigned> employeeScheduleAssigned,
-        IRepository<Schedule> scheduleRepository)
+        IRepository<Schedule> scheduleRepository,
+        IRepository<PersonalDboardData> personalDashboardRepository)
         {
             this._dashboardRepository = dashboardRepository;
             this._employeeFormatRepository = employeeFormatRepository;
@@ -42,6 +44,7 @@ namespace SARH.WebUI.Factories
             this._nonworkingDaysExeption = nonworkingDaysExeption;
             this._employeeScheduleAssigned = employeeScheduleAssigned;
             this._scheduleRepository = scheduleRepository;
+            this._personalDashboardRepository = personalDashboardRepository;
         }
 
         public DashboardModel GetDay(string date, DashboardFilters filters)
@@ -523,12 +526,15 @@ namespace SARH.WebUI.Factories
         public PersonalDashboardData GetPersonalDashboardData(string employee, DateTime startDate, DateTime endDate)
         {
             PersonalDashboardData result = new PersonalDashboardData();
+            List<PersonalDboardData> t = new List<PersonalDboardData>();
 
             List<KeyValuePair<string, string>> param = new List<KeyValuePair<string, string>>();
             param.Add(new KeyValuePair<string, string>("@Employee", $"{employee}"));
-            var t = this._dashboardRepository.GetStoredProcData("CreatePersonalDashboardInfo", param);
-            decimal days = (decimal)System.Math.Round((startDate - endDate).TotalDays, 0);
+            param.Add(new KeyValuePair<string, string>("@CURRENTDATE", $"{endDate.ToString("dd/MM/yyyy")}"));
+            var r = this._personalDashboardRepository.GetStoredProcData("GeneratePersonalDashboard", param);
+            t.AddRange(r);
 
+            decimal days = (decimal)System.Math.Round((startDate - endDate).TotalDays, 0);
 
             result.Area = t.First().Area;
             result.Centro = t.First().Centro;
@@ -538,7 +544,7 @@ namespace SARH.WebUI.Factories
 
             var detail = t.Select(h => new PersonalDashboardDataItem()
             {
-                RegisterDate = h.RegisterDate.ToShortDateString(),
+
                 StartWorkDate = h.StartWorkDate,
                 StartJobDay = h.StartJobDay,
 

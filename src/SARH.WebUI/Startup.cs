@@ -82,6 +82,7 @@ namespace SmartAdmin.WebUI
             services.AddTransient<IRepository<Nomipaq_nom10014>, NomipaqEmployeeVacationsRepository>(s => new NomipaqEmployeeVacationsRepository((Configuration.GetConnectionString("DataConnectionStringNomipaq"))));
             services.AddTransient<IRepository<EmployeeAditionalInfo>, EmployeeAditionalInfoRepository>(s => new EmployeeAditionalInfoRepository((Configuration.GetConnectionString("DataConnectionString"))));
             services.AddTransient<IRepository<DashboardData>, DashboardRepository>(s => new DashboardRepository((Configuration.GetConnectionString("DataConnectionString"))));
+            services.AddTransient<IRepository<PersonalDboardData>, PersonalDashboardDataRepository>(s => new PersonalDashboardDataRepository((Configuration.GetConnectionString("DataConnectionString"))));
             services.AddTransient<IRepository<FormatApprovedEmployee>, FormatApprobedEmployeeRepository>(s => new FormatApprobedEmployeeRepository((Configuration.GetConnectionString("DataConnectionString"))));
             services.AddTransient<IRepository<FormatApprovedHubId>, FormatApprobedHubIdRepository>(s => new FormatApprobedHubIdRepository((Configuration.GetConnectionString("DataConnectionString"))));
             services.AddTransient<IRepository<FormatApprover>, FormatApproverRepository>(s => new FormatApproverRepository((Configuration.GetConnectionString("DataConnectionString"))));

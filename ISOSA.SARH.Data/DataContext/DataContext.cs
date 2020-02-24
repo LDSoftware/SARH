@@ -44,6 +44,7 @@ namespace ISOSA.SARH.Data
         public virtual DbSet<FormatApprovedHubId> FormatApprobedHubIds { get; set; }
         public virtual DbSet<FormatApprover> FormatApprovers { get; set; }
         public virtual DbSet<DashboardData> DashboardInfo { get; set; }
+        public virtual DbSet<PersonalDboardData> PersonalDashboardData { get; set; }
         public virtual DbSet<EmployeeNotify> EmployeeNotifications { get; set; }
         public virtual DbSet<EmployeeHistory> EmployeeHistory { get; set; }
         public virtual DbSet<Nomipaq_nom10014> NomipaqEmployeeVacations { get; set; }

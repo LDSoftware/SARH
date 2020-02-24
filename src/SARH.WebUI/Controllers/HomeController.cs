@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SARH.WebUI.Factories;
 using SARH.WebUI.Models.Dashboard;
@@ -53,5 +55,13 @@ namespace SARH.WebUI.Controllers
             model.TotalFormatPermissions = formats.Where(t => t.FormatName.ToLower().Contains("permiso")).Count();
             return View(model);
         }
+
+
+        public IActionResult Logout([FromServices] SignInManager<IdentityUser> signInManager) 
+        {
+            signInManager.SignOutAsync();
+            return RedirectToAction("Index", "Home");
+        }
+
     }
 }

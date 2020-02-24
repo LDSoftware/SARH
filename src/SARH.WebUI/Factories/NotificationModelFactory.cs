@@ -2,6 +2,7 @@
 using ISOSA.SARH.Data.Domain.Formats;
 using ISOSA.SARH.Data.Repository;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Newtonsoft.Json;
 using SARH.WebUI.Models.Notification;
 using SARH.WebUI.Models.Organigrama;
@@ -21,12 +22,16 @@ namespace SARH.WebUI.Factories
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IOrganigramaModelFactory _organigramaModelFactory;
         private readonly IRepository<PermissionType> _permissionTypeRepository;
+        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<IdentityUser> _userManager;
 
         public NotificationModelFactory(IRepository<EmployeeFormat> formatRepository,
             IRepository<FormatApprover> formatApproverRepository,
             IHttpContextAccessor httpContextAccessor,
             IOrganigramaModelFactory organigramaModelFactory,
-            IRepository<PermissionType> permissionTypeRepository)
+            IRepository<PermissionType> permissionTypeRepository,
+            SignInManager<IdentityUser> signInManager,
+            UserManager<IdentityUser> userManager)
         {
             _notification = 0;
             this._formatApproverRepository = formatApproverRepository;
@@ -39,6 +44,9 @@ namespace SARH.WebUI.Factories
             NotificaticonsItems = new List<NotificacionModelItem>();
             LastVacationsNotificationItems = new List<NotificacionModelItem>();
             LastPermissionsNotificationItems = new List<NotificacionModelItem>();
+
+            this._signInManager = signInManager;
+            this._userManager = userManager;
 
             CountPendigFormat();
         }
@@ -55,8 +63,23 @@ namespace SARH.WebUI.Factories
         {
             var modellogin = _httpContextAccessor.HttpContext.Session.GetString("loginmodel");
             var loginInfo = !string.IsNullOrEmpty(modellogin) ? JsonConvert.DeserializeObject<LoginModel.InputModel>(modellogin) : null;
-            string userName = loginInfo != null ? loginInfo.Email : null;
+            string userName = loginInfo != null ? loginInfo.Email : string.Empty;
+            var claims = this._signInManager.Context.User;
+            if (this._signInManager.IsSignedIn(claims))
+            {
+                var user = this._userManager.GetUserAsync(claims).Result;
 
+                if (string.IsNullOrEmpty(userName))
+                {
+                    userName = user.Email;
+                    _httpContextAccessor.HttpContext.Session.SetString("loginmodel", JsonConvert.SerializeObject(new LoginModel.InputModel()
+                    {
+                        Email = userName,
+                        Password = "",
+                        RememberMe = false
+                    }));
+                }
+            }
 
             var employees = this._organigramaModelFactory.GetAllData().Employess;
             var formats = this._formatRepository.GetAll();

@@ -90,20 +90,43 @@ namespace SARH.WebUI.Controllers
                     var employeeSust = organigramModelFactory.GetEmployeeData(format.EmployeeSubstitute);
                     model.FormatDetail.EmployeeSustitution = $"{employeeSust.GeneralInfo.FirstName} {employeeSust.GeneralInfo.LastName} {employeeSust.GeneralInfo.LastName2}";
 
-                    var apprs = formatApprover.SearhItemsFor(i => i.Area.Equals(model.FormatEmployee.Area)
-                    && i.Centro.Equals(model.FormatEmployee.JobCenter) && i.Departamento.Equals(model.FormatEmployee.Departamento)).ToList();
+                    List<FormatApprover> apprs = new List<FormatApprover>();
+
+                    //Approbador Global
+                    apprs.AddRange(formatApprover.SearhItemsFor(i => i.Area.Equals(string.Empty)
+                        && i.Centro.Equals(string.Empty) && i.Departamento.Equals(string.Empty)).Where(p => (apprs).All(p2 => p2.RowGuid != p.RowGuid)).ToList());
+
+
+                    //Aprobador Area                    
+                    apprs.AddRange(formatApprover.SearhItemsFor(i => i.Area.Equals(model.FormatEmployee.Area)).Where(p => (apprs).All(p2 => p2.RowGuid != p.RowGuid)).ToList());
+
+
+                    //Aprobador Centro
+                    apprs.AddRange(formatApprover.SearhItemsFor(i => i.Area.Equals(model.FormatEmployee.Area)
+                        && i.Centro.Equals(model.FormatEmployee.JobCenter)).Where(p => (apprs).All(p2 => p2.RowGuid != p.RowGuid)).ToList());
+
+
+                    //Aprobador Depto
+                    apprs.AddRange(formatApprover.SearhItemsFor(i => i.Area.Equals(model.FormatEmployee.Area)
+                        && i.Centro.Equals(model.FormatEmployee.JobCenter) && i.Departamento.Equals(model.FormatEmployee.Departamento)).Where(p => (apprs).All(p2 => p2.RowGuid != p.RowGuid)).ToList());
+
+
+
 
                     if (apprs.Any())
                     {
                         apprs.ForEach((a) =>
                         {
                             var approName = employees.Employess.Where(d => d.RowId.ToString().ToLower().Equals(a.RowGuid.ToString().ToLower())).FirstOrDefault();
-                            model.Approvers.Add(new ForrmatApproverWorkflow()
+                            if (approName != null) 
                             {
-                                Id = a.Id,
-                                RowId = a.RowGuid,
-                                Name = approName.Name
-                            });
+                                model.Approvers.Add(new ForrmatApproverWorkflow()
+                                {
+                                    Id = a.Id,
+                                    RowId = a.RowGuid,
+                                    Name = approName.Name
+                                });
+                            }
                         });
                     }
 
@@ -398,6 +421,112 @@ namespace SARH.WebUI.Controllers
             byte[] FileBytes = System.IO.File.ReadAllBytes(fileName);
             return File(FileBytes, "application/pdf");
         }
+
+
+        public FileResult PrintVacationFormat(int idFormat,
+            [FromServices] IEmployeeFormatModelFactory employeeFormatModelFactory,
+            [FromServices] SARH.Core.Configuration.IConfigurationManager configManager,
+            [FromServices] IOrganigramaModelFactory organigramaModelFactory,
+            [FromServices] INomipaqEmployeeVacationModelFactory nomipaqVacationModelFactory)
+        {
+
+            IConfigPdf config = new ConfigPdf()
+            {
+                FontPathPdf = configManager.FontPathPdf,
+                ImgPathPdf = configManager.ImgPathPdf,
+                FontPathBarCode = configManager.FontPathBarCode
+            };
+            PdfManager manager = new PdfManager(config);
+
+            var format = employeeFormatModelFactory.GetformatInfo(idFormat);
+            var formats = employeeFormatModelFactory.GetAllFormatsByEmployee(format.EmployeeId);
+            string path = System.IO.Path.GetTempPath();
+            string empId = int.Parse(format.EmployeeId).ToString("00000");
+            var vacations = nomipaqVacationModelFactory.GetEmployeeVacations(int.Parse(format.EmployeeId).ToString("00000"));
+            Core.PdfCreator.FormatData.FormatVacationData vacationInfo = new Core.PdfCreator.FormatData.FormatVacationData();
+
+            var empInfo = organigramaModelFactory.GetEmployeeData(format.EmployeeId);
+
+            var sustitute = organigramaModelFactory.GetEmployeeData(format.Suplente);
+
+            if (vacations != null)
+            {
+                var formatDays = (DateTime.Parse(format.EndDate) - DateTime.Parse(format.StartDate)).TotalDays;
+                vacationInfo = new Core.PdfCreator.FormatData.FormatVacationData()
+                {
+                    AñosCumplidos = vacations.Antiguedad.ToString("00"),
+                    DiasGozado = vacations.DiasTomados.ToString(),
+                    DiasPendinteAñoAnteior = vacations.TotalDias.ToString(),
+                    DiasPorAño = vacations.DiasPorAño.ToString(),
+                    DiasPorGozar = vacations.DiasDisponibles.ToString(),
+                    FechaIngreso = empInfo.GeneralInfo.HireDate,
+                    PorGozar = Math.Round((vacations.DiasDisponibles - formatDays), 0).ToString(),
+                    DiasSolicitados = formatDays.ToString("00"),
+                    FechaInicial = format.StartDate,
+                    FechaFinal = format.EndDate
+                };
+            }
+
+            string fileName = $"{path}FormatNumber{idFormat}.pdf";
+
+            if (System.IO.File.Exists(fileName))
+            {
+                System.IO.File.Delete(fileName);
+            }
+
+            try
+            {
+                manager.CreateVacationFormat(new Core.PdfCreator.FormatData.DocumentInfoPdfData()
+                {
+                    TitleDocumento = "SOLICITUD DE VACACIONES",
+                    FormatId = $"Fecha de Solicitud: {format.FechaSolicitud}",
+                    Area = empInfo.Area,
+                    JobTitle = empInfo.GeneralInfo.JobTitle,
+                    EmployeeName = $"{empInfo.GeneralInfo.FirstName} {empInfo.GeneralInfo.LastName} {empInfo.GeneralInfo.LastName2}",
+                    EmployeInfo = new Core.PdfCreator.FormatData.EmployeeInfoData()
+                    {
+                        EmployeeId = empInfo.GeneralInfo.Id,
+                        EmployeeName = $"{empInfo.GeneralInfo.FirstName} {empInfo.GeneralInfo.LastName} {empInfo.GeneralInfo.LastName2}",
+                        Rfc = empInfo.GeneralInfo.RFC,
+                        Curp = empInfo.GeneralInfo.CURP,
+                        NSS = empInfo.GeneralInfo.NSS,
+                        BrithDate = empInfo.GeneralInfo.FechaNacimiento,
+                        HireDate = empInfo.GeneralInfo.HireDate,
+                        FireDate = "N/A",
+                        PhotoPath = empInfo.GeneralInfo.Picture,
+                        PersonalPhone = empInfo.PersonalInfo.Phone,
+                        CellNumber = empInfo.PersonalInfo.CellPhone,
+                        PersonalEmail = empInfo.PersonalInfo.Email,
+                        Address = empInfo.PersonalInfo.Address,
+                        City = empInfo.PersonalInfo.City,
+                        State = empInfo.PersonalInfo.State,
+                        Cp = empInfo.PersonalInfo.Zip,
+                        ContactName = empInfo.EmergencyData.Name,
+                        ContactRelation = empInfo.EmergencyData.Relacion,
+                        ContactPhone = empInfo.EmergencyData.Phone,
+                        JobTitle = empInfo.GeneralInfo.JobTitle
+                    },
+                    EmployeeSustitute = new Core.PdfCreator.FormatData.FormatEmployeeSustitute()
+                    {
+                        Name = $"{sustitute.GeneralInfo.FirstName} {sustitute.GeneralInfo.LastName} {sustitute.GeneralInfo.LastName2}",
+                        JobTitle = sustitute.GeneralInfo.JobTitle
+                    },
+                    FormatVacationData = vacationInfo
+                }, fileName);
+            }
+            catch (Exception ex)
+            {
+                byte[] FileBytesError = System.Text.Encoding.UTF8.GetBytes(ex.Message);
+                return File(FileBytesError, "text/plain");
+            }
+
+
+            byte[] FileBytes = System.IO.File.ReadAllBytes(fileName);
+            return File(FileBytes, "application/pdf");
+        }
+
+
+
 
 
     }

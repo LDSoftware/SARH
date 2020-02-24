@@ -12,5 +12,6 @@ namespace SARH.WebUI.Models.Employee
         public int TotalDias { get; set; }
         public int DiasTomados { get; set; }
         public int DiasDisponibles { get; set; }
+        public int DiasPorAño { get; set; }
     }
 }

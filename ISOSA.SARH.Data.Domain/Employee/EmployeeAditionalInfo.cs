@@ -73,5 +73,6 @@ namespace ISOSA.SARH.Data.Domain.Employee
         public string EMP_CellPhone { get; set; }
         public string EMP_Sexo { get; set; }
         public string EMP_PIN { get; set; }
+        public string SARH_Login { get; set; }
     }
 }

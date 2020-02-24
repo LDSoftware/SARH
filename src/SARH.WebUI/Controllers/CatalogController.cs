@@ -495,28 +495,77 @@ namespace SARH.WebUI.Controllers
         }
 
         [HttpPost]
-        public JsonResult GetEmployeeApprover(string employeeId,
+        public JsonResult GetEmployeeApprover(string employeeId, string area, string centro, string depto,
         [FromServices] IRepository<FormatApprover> formatApproversRepository,
         [FromServices]IOrganigramaModelFactory organigramaModelFactory)
         {
             string name = string.Empty;
             int row = 0;
 
+            if (area.ToLower().Contains("seleccione"))
+            {
+                area = string.Empty;
+            }
+
+
+            if (centro.ToLower().Contains("seleccione"))
+            {
+                centro = string.Empty;
+            }
+
+            if (depto.ToLower().Contains("seleccione"))
+            {
+                depto = string.Empty;
+            }
+
             if (!string.IsNullOrEmpty(employeeId))
             {
                 var employeeInfo = organigramaModelFactory.GetEmployeeData(employeeId);
                 if (employeeInfo != null && employeeInfo.HierarchyGuid != null)
                 {
-                    var empApprover = formatApproversRepository.SearhItemsFor(r => r.RowGuid.ToString().ToLower().Equals(employeeInfo.HierarchyGuid.ToLower()));
-                    if (empApprover != null && empApprover.Any())
-                    {
-                        name = "El empleado ya está asignado para aprobación";
+                    List<FormatApprover> empApprover = new List<FormatApprover>();
 
+                    empApprover = formatApproversRepository.SearhItemsFor(r => r.RowGuid.ToString().ToLower().Equals(employeeInfo.HierarchyGuid.ToLower())).ToList();
+
+                    if (empApprover != null && !empApprover.Any())
+                    {
+                        if (string.IsNullOrEmpty(area))
+                        {
+                            empApprover = formatApproversRepository.SearhItemsFor(r => r.RowGuid.ToString().ToLower().Equals(employeeInfo.HierarchyGuid.ToLower())).ToList();
+                        }
+
+                        if (string.IsNullOrEmpty(centro) && !string.IsNullOrEmpty(area))
+                        {
+                            empApprover = formatApproversRepository.SearhItemsFor(r => r.RowGuid.ToString().ToLower().Equals(employeeInfo.HierarchyGuid.ToLower())
+                            && r.Area.ToLower().Equals(area.ToLower())).ToList();
+                        }
+
+                        if (string.IsNullOrEmpty(depto) && !string.IsNullOrEmpty(centro))
+                        {
+                            empApprover = formatApproversRepository.SearhItemsFor(r => r.RowGuid.ToString().ToLower().Equals(employeeInfo.HierarchyGuid.ToLower())
+                            && r.Area.ToLower().Equals(area.ToLower()) && r.Centro.ToLower().Equals(centro.ToLower())).ToList();
+                        }
+
+                        if (!string.IsNullOrEmpty(centro) && !string.IsNullOrEmpty(depto) && !string.IsNullOrEmpty(area))
+                        {
+                            empApprover = formatApproversRepository.SearhItemsFor(r => r.RowGuid.ToString().ToLower().Equals(employeeInfo.HierarchyGuid.ToLower())
+                            && r.Area.ToLower().Equals(area.ToLower()) && r.Centro.ToLower().Equals(centro.ToLower()) && r.Departamento.ToLower().Equals(depto.ToLower())).ToList();
+                        }
+
+                        if (empApprover != null && empApprover.Any())
+                        {
+                            name = "El empleado ya está asignado para aprobación";
+
+                        }
+                        else
+                        {
+                            name = $"{employeeInfo.GeneralInfo.FirstName} {employeeInfo.GeneralInfo.LastName} {employeeInfo.GeneralInfo.LastName2}";
+                            row = 1;
+                        }
                     }
                     else
                     {
-                        name = $"{employeeInfo.GeneralInfo.FirstName} {employeeInfo.GeneralInfo.LastName} {employeeInfo.GeneralInfo.LastName2}";
-                        row = 1;
+                        name = "El empleado ya está asignado para aprobación";
                     }
                 }
                 else
@@ -538,7 +587,24 @@ namespace SARH.WebUI.Controllers
             [FromServices]IOrganigramaModelFactory organigramaModelFactory) 
         {
             int order = 1;
+
+            if (area.ToLower().Contains("seleccione"))
+            {
+                area = string.Empty;
+            }
+
+            if (centro.ToLower().Contains("seleccione")) 
+            {
+                centro = string.Empty;
+            }
+
+            if (depto.ToLower().Contains("seleccione")) 
+            {
+                depto = string.Empty;
+            }
+
             var aprovOrder = formatApproversRepository.SearhItemsFor(f => f.Area.Equals(area) && f.Centro.Equals(centro) && f.Departamento.Equals(depto));
+
             if (aprovOrder.Any()) 
             {
                 order = aprovOrder.Count() + 1;

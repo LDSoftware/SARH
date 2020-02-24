@@ -76,6 +76,7 @@ namespace ISOSA.SARH.Data.Mapping
             builder.Property(x => x.EMP_Sexo);
             builder.Property(x => x.EMP_Suburb);
             builder.Property(x => x.EMP_PIN);
+            builder.Property(x => x.SARH_Login);
         }
     }
 }

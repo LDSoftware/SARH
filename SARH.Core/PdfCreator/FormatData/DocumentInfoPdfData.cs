@@ -16,6 +16,7 @@ namespace SARH.Core.PdfCreator.FormatData
             EmployeeSustitute = new FormatEmployeeSustitute();
             FormatPermission = new FormatPermissionData();
             Approvers = new List<string>();
+            FormatVacationData = new FormatVacationData();
         }
 
         public string EmployeeNumber { get; set; }
@@ -39,6 +40,7 @@ namespace SARH.Core.PdfCreator.FormatData
         public FormatEmployeeSustitute EmployeeSustitute { get; set; }
         public FormatPermissionData FormatPermission { get; set; }
         public List<string> Approvers { get; set; }
+        public FormatVacationData FormatVacationData { get; set; }
 
 
     }
@@ -152,4 +154,19 @@ namespace SARH.Core.PdfCreator.FormatData
         public string Cause { get; set; }
         public int TotalPermissions { get; set; }
     }
+
+    public class FormatVacationData 
+    {
+        public string FechaIngreso { get; set; }
+        public string AñosCumplidos { get; set; }
+        public string DiasPorAño { get; set; }
+        public string DiasPendinteAñoAnteior { get; set; }
+        public string PorGozar { get; set; }
+        public string DiasGozado { get; set; }
+        public string DiasPorGozar { get; set; }
+        public string DiasSolicitados { get; set; }
+        public string FechaInicial { get; set; }
+        public string FechaFinal { get; set; }
+    }
+
 }

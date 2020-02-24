@@ -221,7 +221,7 @@
                                             <input type="text" class="form-control" id="totalpermisos" disabled="disabled" value="@Model.TotalPermissionsApproved">
                                         </div>
 
-                                        <div class="col-md-12" style="margin-top:10px;margin-bottom:10px;display:none;" id="divcheckpay">
+                                        <div class="col-md-12" style="margin-top:10px;margin-bottom:10px;" id="divcheckpay">
                                             <div class="custom-control custom-checkbox custom-checkbox-circle">
                                                 <input type="checkbox" class="custom-control-input" id="defaultChecked" checked="">
                                                 <label class="custom-control-label" for="defaultChecked">Permiso con goce de sueldo</label>
@@ -489,7 +489,6 @@
                     responsive: true
                 });
 
-
             //Formatos Empleado
             $('#searchbutton').click(function () {
 
@@ -542,24 +541,29 @@
                 var sustituto = $('.elementadded').text();
                 var idsustituto = 0;
 
-                if (sustituto !== "No se encontro resultado") {
+                if (sustituto !== "No se encontro resultado" && sustituto !== '') {
 
                     idsustituto = $('#searchText').val();
                 }
                 else {
 
                     $('#errorsave').show();
+                    return;
                 }
+
+                if ($('#descripcion').val() === '') {
+
+                    $('#errorsave').show();
+                    return;
+
+                }
+
 
 
                 $('.btn').prop('disabled', true);
                 $('#spinwait').show();
 
                 var ischecked = $('#defaultChecked').is(':checked');
-
-                if (!isPermission) {
-                    ischecked = false;
-                }
 
                 var formData = {
                     EmployeeId: $('#employeeid').val(),
@@ -809,7 +813,6 @@
                     $('#divhouri').show();
                     $('#divhoure').show();
                     $('#totpermisos').show();
-                    $('#divcheckpay').show();
                     isPermission = true;
                 }
                 else {
@@ -822,7 +825,6 @@
                         $('#divhouri').show();
                         $('#divhoure').show();
                         $('#totpermisos').hide();
-                        $('#divcheckpay').show();
                         isPermission = true;
                     }
                     else {
@@ -832,7 +834,6 @@
                         $('#divhouri').hide();
                         $('#divhoure').hide();
                         $('#totpermisos').hide();
-                        $('#divcheckpay').hide();
                         isPermission = false;
                     }
 

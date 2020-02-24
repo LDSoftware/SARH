@@ -333,7 +333,7 @@
 
                     </div>
                     <div class="modal-footer">
-                        <button id="closemodal" type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                        <button id="closemodal" type="button" class="btn btn-danger reseterror" data-dismiss="modal">Cerrar</button>
                     </div>
                 </div>
             </div>
@@ -421,14 +421,23 @@
 
             $('#searchbutton').click(function () {
 
+                cansave = false;
+                $('#errorsave').hide();
                 $('#imgsearch').hide();
                 $('#spin').show();
                 $('#searchresult').empty();
 
+                var areaselected = $('#Areas option:selected').text();
+                var jobcenterselected = $('#selectjobcenter option:selected').text();
+                var deptoselected = $('#selectdepto option:selected').text();
+                var approver = $('#searchText').val();
+
+
+
                 $.ajax({
                     url: '/Catalog/GetEmployeeApprover',
                     type: "POST",
-                    data: { employeeId: $('#searchText').val() },
+                    data: { employeeId: approver, area: areaselected, centro: jobcenterselected, depto: deptoselected },
                     success: function (data, textStatus, jqXHR) {
 
                         if (data.rows > 0) {
@@ -458,6 +467,7 @@
                 if (!cansave) {
 
                     $('#errorsave').show();
+                    return;
                 }
                 else {
                     $('#errorsave').hide();

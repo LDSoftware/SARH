@@ -1261,9 +1261,6 @@ namespace SARH.Core.PdfCreator
             productsTable.SetWidths(new[] { 100 });
 
 
-            PdfFormField field;
-            RadioCheckField checkBox;
-
             var cellProductItem = new PdfPCell(new Phrase($"[*]Presidencia [*]Dirección General [*]Gte/Jefe/Supervisor [*]Vobo Admon RH [*]Vobo Suplente", font));
             cellProductItem.HorizontalAlignment = Element.ALIGN_CENTER;
             productsTable.AddCell(cellProductItem);
@@ -1290,6 +1287,124 @@ namespace SARH.Core.PdfCreator
             pdfDoc.Close();
             fileStream.Dispose();
         }
+
+        private void CreateVactionSectionA(Document document, DocumentInfoPdfData pdfData)
+        {
+            var font = DocumentFont();
+            var fontRev = TitleFont();
+
+            document.Add(new Paragraph($"{Environment.NewLine}"));
+
+            var productsHeader = new PdfPTable(1)
+            {
+                RunDirection = PdfWriter.RUN_DIRECTION_LTR,
+                WidthPercentage = 100f
+            };
+            var cellProducts = new PdfPCell(new Phrase("Días Correspondientes de acuerdo a Antigüedad", fontRev));
+            cellProducts.HorizontalAlignment = Element.ALIGN_CENTER;
+            cellProducts.BackgroundColor = BaseColor.Gray;
+            productsHeader.AddCell(cellProducts);
+            document.Add(productsHeader);
+
+            var productsTable = new PdfPTable(2)
+            {
+                RunDirection = PdfWriter.RUN_DIRECTION_LTR,
+                WidthPercentage = 100f
+            };
+
+            //
+
+            productsTable.SetWidths(new[] { 50, 50 });
+
+
+            var p1 = new Paragraph($"Fecha de Ingreso: {pdfData.FormatVacationData.FechaIngreso}" +
+               $"{Environment.NewLine}Años Cumplidos: {pdfData.FormatVacationData.AñosCumplidos}" +
+               $"{Environment.NewLine}Días correspondientes por año: {pdfData.FormatVacationData.DiasPorAño}", font);
+            p1.SetLeading(4, 18);
+
+
+            var cellProductItem = new PdfPCell(p1);
+            cellProductItem.HorizontalAlignment = Element.ALIGN_LEFT;
+            productsTable.AddCell(cellProductItem);
+
+            var p2 = new Paragraph($"Días pendientien año anterior: {pdfData.FormatVacationData.DiasPendinteAñoAnteior}" +
+                $"{Environment.NewLine}Total días por Gozar: {pdfData.FormatVacationData.DiasPorGozar}" +
+                $"{Environment.NewLine}Días Gozados: {pdfData.FormatVacationData.DiasGozado}" +
+                $"{Environment.NewLine}Días por Gozar: {pdfData.FormatVacationData.PorGozar}", font);
+            p2.SetLeading(4, 18);
+
+            cellProductItem = new PdfPCell(p2);
+            cellProductItem.HorizontalAlignment = Element.ALIGN_LEFT;
+            productsTable.AddCell(cellProductItem);
+
+
+            document.Add(productsTable);
+        }
+
+        private void CreateVactionSectionB(Document document, DocumentInfoPdfData pdfData)
+        {
+            var font = DocumentFont();
+            var fontRev = TitleFont();
+
+
+            document.Add(new Paragraph($"{Environment.NewLine}"));
+
+            var productsHeader = new PdfPTable(1)
+            {
+                RunDirection = PdfWriter.RUN_DIRECTION_LTR,
+                WidthPercentage = 100f
+            };
+            var cellProducts = new PdfPCell(new Phrase("Días solicitados para Vacaciones", fontRev));
+            cellProducts.HorizontalAlignment = Element.ALIGN_CENTER;
+            cellProducts.BackgroundColor = BaseColor.Black;
+            productsHeader.AddCell(cellProducts);
+            document.Add(productsHeader);
+
+            var productsTable = new PdfPTable(2)
+            {
+                RunDirection = PdfWriter.RUN_DIRECTION_LTR,
+                WidthPercentage = 100f
+            };
+
+
+            productsTable.SetWidths(new[] { 50, 50 });
+
+            var cellProductItem = new PdfPCell(new Phrase($"Del día: {DateTime.Parse(pdfData.FormatVacationData.FechaInicial).ToLongDateString()}{Environment.NewLine}Al día: {DateTime.Parse(pdfData.FormatVacationData.FechaFinal).ToLongDateString()}", font));
+            cellProductItem.HorizontalAlignment = Element.ALIGN_LEFT;
+            cellProductItem.BackgroundColor = BaseColor.LightGray;
+            productsTable.AddCell(cellProductItem);
+
+
+            cellProductItem = new PdfPCell(new Phrase($"Total días solicitados: {pdfData.FormatVacationData.DiasSolicitados}{Environment.NewLine}Días restantes tomando estas vacaciones: {pdfData.FormatVacationData.PorGozar}", font));
+            cellProductItem.HorizontalAlignment = Element.ALIGN_LEFT;
+            cellProductItem.BackgroundColor = BaseColor.LightGray;
+            productsTable.AddCell(cellProductItem);
+
+
+            document.Add(productsTable);
+        }
+
+        public void CreateVacationFormat(DocumentInfoPdfData pdfData, string pdfFile)
+        {
+            var pdfDoc = new Document(PageSize.A4);
+            var pdfFilePath = pdfFile;
+            var fileStream = new FileStream(pdfFilePath, FileMode.Create);
+            PdfWriter.GetInstance(pdfDoc, fileStream);
+            pdfDoc.AddAuthor("ISOSA SARH");
+            pdfDoc.Open();
+
+
+            CreateHeaderSection(pdfDoc, pdfData);
+            CreatePermissionSectionA(pdfDoc, pdfData);
+            CreateVactionSectionA(pdfDoc, pdfData);
+            CreateVactionSectionB(pdfDoc, pdfData);
+            CreatePermissionSectionD(pdfDoc, pdfData);
+            CreatePermissionSectionE(pdfDoc, pdfData);
+
+            pdfDoc.Close();
+            fileStream.Dispose();
+        }
+
 
 
     }

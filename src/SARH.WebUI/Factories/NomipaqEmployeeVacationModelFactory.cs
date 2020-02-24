@@ -37,6 +37,7 @@ namespace SARH.WebUI.Factories
                     var antiguedad = Math.Abs(Math.Round((emp.fechaalta.Value - DateTime.Today).TotalDays / 365.0, 0));
 
                     var totalantiguedad = this._antiguedad.Where(s => s.Antiguedad.Equals(int.Parse(antiguedad.ToString())) || s.Antiguedad < int.Parse(antiguedad.ToString()));
+                    var diasporantiguedad = this._antiguedad.Where(s => s.Antiguedad.Equals(int.Parse(antiguedad.ToString()))).FirstOrDefault();
                     if (totalantiguedad.Any()) 
                     {
                         var days = totalantiguedad.Sum(v => v.Dias);
@@ -45,6 +46,7 @@ namespace SARH.WebUI.Factories
                         result.DiasTomados = totaltomadas.Value;
                         result.TotalDias = days;
                         result.DiasDisponibles = days - totaltomadas.Value;
+                        result.DiasPorAño = diasporantiguedad != null ? diasporantiguedad.Dias : 0;
                     }
 
                 }
