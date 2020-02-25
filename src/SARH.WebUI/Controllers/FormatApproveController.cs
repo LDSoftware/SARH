@@ -508,7 +508,7 @@ namespace SARH.WebUI.Controllers
 
             if (vacations != null)
             {
-                var formatDays = (DateTime.Parse(format.EndDate) - DateTime.Parse(format.StartDate)).TotalDays;
+                var formatDays = (DateTime.Parse(format.EndDate) - DateTime.Parse(format.StartDate)).TotalDays + 1;
                 vacationInfo = new Core.PdfCreator.FormatData.FormatVacationData()
                 {
                     AñosCumplidos = vacations.Antiguedad.ToString("00"),
