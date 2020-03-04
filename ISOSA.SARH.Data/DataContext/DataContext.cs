@@ -48,6 +48,7 @@ namespace ISOSA.SARH.Data
         public virtual DbSet<EmployeeNotify> EmployeeNotifications { get; set; }
         public virtual DbSet<EmployeeHistory> EmployeeHistory { get; set; }
         public virtual DbSet<Nomipaq_nom10014> NomipaqEmployeeVacations { get; set; }
+        public virtual DbSet<EmployeeScheduleDate> EmployeeScheduleDate { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -76,6 +77,7 @@ namespace ISOSA.SARH.Data
             new EmployeeNotifyMapping(builder.Entity<EmployeeNotify>());
             new EmployeeHistoryMapping(builder.Entity<EmployeeHistory>());
             new NomipaqEmployeeVacationsMapping(builder.Entity<Nomipaq_nom10014>());
+            new EmployeeScheduleDateMapping(builder.Entity<EmployeeScheduleDate>());
         }
 
 

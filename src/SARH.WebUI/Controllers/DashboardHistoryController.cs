@@ -87,21 +87,33 @@ namespace SARH.WebUI.Controllers
 
 
 
-        public IActionResult EmployeePersonalDashboard(string employee, string date) 
+        public IActionResult EmployeePersonalDashboard(string employee, string date, string fdate = "") 
         {
-            if (string.IsNullOrEmpty(date)) 
+
+            DateTime currentDate;
+            DateTime startDate;
+            DateTime endDate;
+
+
+            if (string.IsNullOrEmpty(date))
             {
                 date = DateTime.Now.ToShortDateString();
+                currentDate = DateTime.Parse(date);
+                startDate = new DateTime(currentDate.Year, currentDate.Month, 1);
+                endDate = startDate.AddMonths(1).AddDays(-1);
+
+            }
+            else 
+            {
+                startDate = DateTime.Parse(date);
+                endDate = DateTime.Parse(fdate);
             }
 
-            DateTime currentDate = DateTime.Parse(date);
-            DateTime startDate = new DateTime(currentDate.Year, currentDate.Month, 1);
-            DateTime endDate = startDate.AddMonths(1).AddDays(-1);
 
-            var emp = this._organigramaModelFactory.GetEmployeeData(employee);
             var model = _dashboardModelFactory.GetPersonalDashboardData(int.Parse(employee).ToString("00000"), startDate, endDate);
-            model.Picture = emp.GeneralInfo.Picture;
 
+            model.FechaInicial = startDate.ToShortDateString();
+            model.FechaFinal = endDate.ToShortDateString();
 
             return View(model);
         }

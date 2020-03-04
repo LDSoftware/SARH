@@ -315,5 +315,15 @@ namespace SARH.WebUI.Controllers
             return rtype;
         }
 
+
+        private bool ValidateScheduleHour(string employeeId, string date) 
+        {
+
+
+            return false;
+        }
+
+
+
     }
 }

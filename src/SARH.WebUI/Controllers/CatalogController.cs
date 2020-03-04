@@ -525,7 +525,9 @@ namespace SARH.WebUI.Controllers
                 {
                     List<FormatApprover> empApprover = new List<FormatApprover>();
 
-                    empApprover = formatApproversRepository.SearhItemsFor(r => r.RowGuid.ToString().ToLower().Equals(employeeInfo.HierarchyGuid.ToLower())).ToList();
+                    empApprover = formatApproversRepository.SearhItemsFor(r => r.RowGuid.ToString().ToLower().Equals(employeeInfo.HierarchyGuid.ToLower())
+                    && r.Area.Equals(area) && r.Centro.Equals(centro) 
+                    &&  r.Departamento.Equals(depto)).ToList();
 
                     if (empApprover != null && !empApprover.Any())
                     {

@@ -24,6 +24,8 @@ namespace SARH.WebUI.Factories
         private readonly IRepository<NonWorkingDayException> _nonworkingDaysExeption;
         private readonly IRepository<EmployeeScheduleAssigned> _employeeScheduleAssigned;
         private readonly IRepository<Schedule> _scheduleRepository;
+        private readonly IRepository<EmployeeScheduleDate> _employeeScheduleDate;
+        private readonly IOrganigramaModelFactory _organigramaModelFactory;
         private const string dashboard = "CreateDashboardInfo";
         private const string dashboardweekend = "CreateDashboardInfoWeekEnd";
 
@@ -35,7 +37,9 @@ namespace SARH.WebUI.Factories
         IRepository<NonWorkingDayException> nonworkingDaysExeption,
         IRepository<EmployeeScheduleAssigned> employeeScheduleAssigned,
         IRepository<Schedule> scheduleRepository,
-        IRepository<PersonalDboardData> personalDashboardRepository)
+        IRepository<PersonalDboardData> personalDashboardRepository,
+        IRepository<EmployeeScheduleDate> employeeScheduleDate,
+        IOrganigramaModelFactory organigramaModelFactory)
         {
             this._dashboardRepository = dashboardRepository;
             this._employeeFormatRepository = employeeFormatRepository;
@@ -45,12 +49,14 @@ namespace SARH.WebUI.Factories
             this._employeeScheduleAssigned = employeeScheduleAssigned;
             this._scheduleRepository = scheduleRepository;
             this._personalDashboardRepository = personalDashboardRepository;
+            this._employeeScheduleDate = employeeScheduleDate;
+            this._organigramaModelFactory = organigramaModelFactory;
         }
 
         public DashboardModel GetDay(string date, DashboardFilters filters)
         {
 
-            if (string.IsNullOrEmpty(date)) 
+            if (string.IsNullOrEmpty(date))
             {
                 date = DateTime.Now.ToShortDateString();
             }
@@ -59,7 +65,7 @@ namespace SARH.WebUI.Factories
             param.Add(new KeyValuePair<string, string>("@CurrentDate", string.IsNullOrEmpty(date) ? DateTime.Now.ToShortDateString() : date));
 
             string spName = dashboard;
-            if (DateTime.Parse(date).DayOfWeek == DayOfWeek.Saturday) 
+            if (DateTime.Parse(date).DayOfWeek == DayOfWeek.Saturday)
             {
                 spName = dashboardweekend;
             }
@@ -171,7 +177,7 @@ namespace SARH.WebUI.Factories
                 FoodEndDelay = t.Where(d => d.RetardoEntradaComida.Equals(1)).Count(),
                 NoFoodEntryCheck = t.Where(d => d.RetardoEntradaComida.Equals(2)).Count(),
                 NoEntryCheck = t.Where(d => d.RetardoEntrada.Equals(2)).Count(),
-                EmployeeDetail = empsDetail.GroupBy(o=>o.ID).Select(o=>o.FirstOrDefault()).ToList()
+                EmployeeDetail = empsDetail.GroupBy(o => o.ID).Select(o => o.FirstOrDefault()).ToList()
             };
 
             if (IsHoliday(date))
@@ -226,7 +232,7 @@ namespace SARH.WebUI.Factories
                 t = new List<DashboardData>(wkemployees);
             }
 
-            if (filters.StartJobDelay) 
+            if (filters.StartJobDelay)
             {
                 var a = t.Where(d => d.RetardoEntrada.Equals(1)).Select(r => new DashboardEmployeeDetailModel()
                 {
@@ -316,15 +322,15 @@ namespace SARH.WebUI.Factories
                 EmployeeDetail = empsDetail.GroupBy(o => o.ID).Select(o => o.FirstOrDefault()).ToList()
             };
 
-            if (IsHoliday(DateTime.Now.ToShortDateString())) 
+            if (IsHoliday(DateTime.Now.ToShortDateString()))
             {
                 var exeptions = HaveHolidayExepcions(DateTime.Now.ToShortDateString());
                 if (exeptions.Any())
                 {
-                    exeptions.ToList().ForEach(v => 
+                    exeptions.ToList().ForEach(v =>
                     {
                         var emp = model.EmployeeDetail.Where(f => f.ID.Equals(v)).FirstOrDefault();
-                        if (emp != null) 
+                        if (emp != null)
                         {
                             model.EmployeeDetail.Remove(emp);
                         }
@@ -340,7 +346,7 @@ namespace SARH.WebUI.Factories
             return model;
         }
 
-        private string createEmployeeIncidencia(DashboardData data) 
+        private string createEmployeeIncidencia(DashboardData data)
         {
             StringBuilder sb = new StringBuilder();
 
@@ -417,7 +423,7 @@ namespace SARH.WebUI.Factories
 
             var t = this._dashboardRepository.GetStoredProcData(spName, param).Where(y => y.EmployeeId.Equals(employee));
 
-            List<DashboardDataDetail> detail = new List<DashboardDataDetail>() 
+            List<DashboardDataDetail> detail = new List<DashboardDataDetail>()
             {
                 new DashboardDataDetail()
                 {
@@ -448,13 +454,13 @@ namespace SARH.WebUI.Factories
             return detail;
         }
 
-        public FormatApproved GetFormats(string date) 
+        public FormatApproved GetFormats(string date)
         {
             FormatApproved result = new FormatApproved();
             DateTime dashboardDate = DateTime.Parse(date);
             var formats = this._employeeFormatRepository.SearhItemsFor(u => u.StartDate >= dashboardDate && u.EndDate <= dashboardDate);
             var employees = this._employeeAdditionalInfo.GetAll();
-            if (formats.Any()) 
+            if (formats.Any())
             {
                 var fmts = (from format in formats
                             join emp in employees on format.EmployeeId equals emp.EMP_EmployeeID
@@ -475,27 +481,27 @@ namespace SARH.WebUI.Factories
             return result;
         }
 
-        private bool IsHoliday(string date) 
+        private bool IsHoliday(string date)
         {
             bool isholiday = false;
             var result = _nonworkingDays.SearhItemsFor(t => t.Holiday.Equals(DateTime.Parse(date)));
-            if (result.Any()) 
+            if (result.Any())
             {
                 isholiday = true;
             }
             return isholiday;
         }
 
-        private List<string> HaveHolidayExepcions(string date) 
+        private List<string> HaveHolidayExepcions(string date)
         {
             List<string> exeptionList = new List<string>();
             var result = _nonworkingDays.SearhItemsFor(t => t.Holiday.Equals(DateTime.Parse(date)));
             if (result.Any())
             {
                 var exeptions = this._nonworkingDaysExeption.SearhItemsFor(r => r.Id.Equals(result.FirstOrDefault().Id));
-                if (exeptions.Any()) 
+                if (exeptions.Any())
                 {
-                    exeptions.ToList().ForEach(x => 
+                    exeptions.ToList().ForEach(x =>
                     {
                         exeptionList.Add(x.EmployeeId);
                     });
@@ -526,59 +532,107 @@ namespace SARH.WebUI.Factories
         public PersonalDashboardData GetPersonalDashboardData(string employee, DateTime startDate, DateTime endDate)
         {
             PersonalDashboardData result = new PersonalDashboardData();
-            List<PersonalDboardData> t = new List<PersonalDboardData>();
+            List<DashboardData> t = new List<DashboardData>();
 
-            List<KeyValuePair<string, string>> param = new List<KeyValuePair<string, string>>();
-            param.Add(new KeyValuePair<string, string>("@Employee", $"{employee}"));
-            param.Add(new KeyValuePair<string, string>("@CURRENTDATE", $"{endDate.ToString("dd/MM/yyyy")}"));
-            var r = this._personalDashboardRepository.GetStoredProcData("GeneratePersonalDashboard", param);
-            t.AddRange(r);
+            var rows = this._employeeScheduleDate.SearhItemsFor(f => f.Employee.Equals(employee) && f.RegisterDate >= startDate && f.RegisterDate <= endDate);
+            var empData = this._organigramaModelFactory.GetEmployeeData(employee.TrimStart(new Char[] { '0' }));
+            var empAssignedSchedule = this._employeeScheduleAssigned.SearhItemsFor(g => g.EmployeeId.Equals(employee.TrimStart(new Char[] { '0' })));
+            var scheduleA = this._scheduleRepository.GetElement(empAssignedSchedule.FirstOrDefault().IdScheduleWorkday);
+            var scheduleB = this._scheduleRepository.GetElement(empAssignedSchedule.FirstOrDefault().IdScheduleMeal);
+            var scheduleC = this._scheduleRepository.GetElement(empAssignedSchedule.FirstOrDefault().IdScheduleWeekEnd);
+            var scheduleD = this._scheduleRepository.GetElement(empAssignedSchedule.FirstOrDefault().IdScheduleMealWeekEnd);
 
-            decimal days = (decimal)System.Math.Round((startDate - endDate).TotalDays, 0);
-
-            result.Area = t.First().Area;
-            result.Centro = t.First().Centro;
-            result.Puesto = t.First().Puesto;
-            result.EmployeeId = int.Parse(t.First().EmployeeId).ToString("00000");
-            result.Name = t.First().EmployeeName;
-
-            var detail = t.Select(h => new PersonalDashboardDataItem()
+            var data = new PersonalDashboardData()
             {
+                Area = empData.Area,
+                Centro = empData.JobCenter,
+                EmployeeId = empData.GeneralInfo.Id,
+                Name = $"{empData.GeneralInfo.FirstName} {empData.GeneralInfo.LastName}",
+                Puesto = empData.GeneralInfo.JobTitle,
+                Picture = empData.GeneralInfo.Picture,
+                Days = rows.Where(d => d.RegisterDate.DayOfWeek != DayOfWeek.Sunday && scheduleC == null ? d.RegisterDate.DayOfWeek != DayOfWeek.Saturday : false).Select(u => new PersonalDashboardDataItem()
+                {
+                    StartJobDay = u.StartJobDay,
+                    StartMealDay = u.StartMealDay,
+                    EndMealDay = u.EndMealDay,
+                    EndJobDay = u.EndJobDay,
+                    StartWorkDate = scheduleA.StartHour,
+                    StartMealDate = scheduleB.StartHour,
+                    EndMealDate = scheduleB.EndHour,
+                    EndWorkDate = scheduleA.EndHour,
+                    RegisterDate = u.RegisterDate.ToShortDateString(),
+                    RetardoEntrada = !ScheduleNotCompliment(u.RegisterDate.ToShortDateString(), u.StartJobDay, scheduleA.StartHour) ? 1 : 0,
+                    SalidaAnticipadaComida = !ScheduleNotComplimentRev(u.RegisterDate.ToShortDateString(), u.StartMealDay, scheduleB.StartHour) ? 1 : 0,
+                    RetardoEntradaComida = !ScheduleNotCompliment(u.RegisterDate.ToShortDateString(), u.EndMealDay, scheduleB.EndHour) ? 1 : 0,
+                    SalidaAnticipada = !ScheduleNotComplimentRev(u.RegisterDate.ToShortDateString(), u.EndJobDay, scheduleA.EndHour) ? 1 : 0
+                }).ToList()
+            };
 
-                StartWorkDate = h.StartWorkDate,
-                StartJobDay = h.StartJobDay,
+            result = data;
 
-                StartMealDate = h.StartMealDate,
-                StartMealDay = h.StartMealDay,
-                EndMealDate = h.EndMealDate,
-                EndMealDay = h.EndMealDay,
-                EndWorkDate = h.EndWorkDate,
-                EndJobDay = h.EndJobDay
-            });
+            var TotalDays = data.Days.Count();
+            var retardos = data.Days.Sum(l => l.RetardoEntrada);
+            var salidasanticipadacomida = data.Days.Sum(l => l.SalidaAnticipadaComida);
+            var retardocomida = data.Days.Sum(l => l.RetardoEntradaComida);
+            var salidaanticipada = data.Days.Sum(l => l.SalidaAnticipada);
+            int PorcentajeRetardos = (int)Math.Round((double)(100 * retardos) / TotalDays);
+            int PorcentajeSalidasAnticipadasComida = (int)Math.Round((double)(100 * salidasanticipadacomida) / TotalDays);
+            int PorcentajeRetardosRegresoComida = (int)Math.Round((double)(100 * retardocomida) / TotalDays);
+            int PorcentajeSalidasAnticipadas = (int)Math.Round((double)(100 * salidaanticipada) / TotalDays);
 
-            if (detail.Any()) 
-            {
-                if (detail.Where(s => s.RetardoEntrada.Equals(1)).Count() != 0) 
-                {
-                    result.PorcentajeRetardos = days / decimal.Parse(detail.Where(s => s.RetardoEntrada.Equals(1)).Count().ToString());
-                }
-                if (detail.Where(s => s.SalidaAnticipadaComida.Equals(1)).Count() != 0)
-                {
-                    result.PorcentajeSalidasAnticipadasComida = days / decimal.Parse(detail.Where(s => s.SalidaAnticipadaComida.Equals(1)).Count().ToString());
-                }
-                if (detail.Where(s => s.RetardoEntradaComida.Equals(1)).Count() != 0)
-                {
-                    result.PorcentajeRetardosRegresoComida = days / decimal.Parse(detail.Where(s => s.RetardoEntradaComida.Equals(1)).Count().ToString());
-                }
-                if (detail.Where(s => s.SalidaAnticipada.Equals(1)).Count() != 0) 
-                {
-                    result.PorcentajeSalidasAnticipadas = days / decimal.Parse(detail.Where(s => s.SalidaAnticipada.Equals(1)).Count().ToString());
-                }
-                result.Days.AddRange(detail);
-            }
+            result.TotalDays = TotalDays;
+            result.PorcentajeRetardos = PorcentajeRetardos;
+            result.PorcentajeSalidasAnticipadasComida = PorcentajeSalidasAnticipadasComida;
+            result.PorcentajeRetardosRegresoComida = PorcentajeRetardosRegresoComida;
+            result.PorcentajeSalidasAnticipadas = PorcentajeSalidasAnticipadas;
 
             return result;
         }
+
+        private bool ScheduleNotCompliment(string datereg, string hourreg, string hourschedule) 
+        {
+            if (DateTime.Parse(datereg) > DateTime.Now) 
+            {
+                return true;
+            }
+
+            bool isCompliment = false;
+
+            DateTime dateA = DateTime.Parse($"{datereg} {hourreg}");
+            DateTime dateB = DateTime.Parse($"{datereg} {hourschedule}");
+
+            var diff = (dateB - dateA).TotalMinutes;
+            if (diff > 0) 
+            {
+                isCompliment = true;
+            }
+
+            return isCompliment;
+        }
+
+
+        private bool ScheduleNotComplimentRev(string datereg, string hourreg, string hourschedule)
+        {
+            if (DateTime.Parse(datereg) > DateTime.Now || hourreg.Equals("00:00:00"))
+            {
+                return true;
+            }
+
+            bool isCompliment = false;
+
+            DateTime dateA = DateTime.Parse($"{datereg} {hourreg}");
+            DateTime dateB = DateTime.Parse($"{datereg} {hourschedule}");
+
+            var diff = (dateA - dateB).TotalMinutes;
+            if (diff > 0)
+            {
+                isCompliment = true;
+            }
+
+            return isCompliment;
+        }
+
+
 
         public List<ReportEmployeeDetailModel> GetNoRegistry(string date) 
         {

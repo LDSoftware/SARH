@@ -114,9 +114,24 @@ namespace SARH.WebUI.Factories
 
                 if (employee != null && approver != null)
                 {
-                    var formatsPendigs = currentformats.Where(m => m.Area.Equals(approver.Area)
+
+                    List<NotificacionModelItem> formatsPendigs = new List<NotificacionModelItem>();
+
+
+                    if (approver.Area.Equals(string.Empty) && approver.Centro.Equals(string.Empty) && approver.Departamento.Equals(string.Empty)) 
+                    {
+                        formatsPendigs.AddRange(currentformats.ToList());
+                    }
+
+                    formatsPendigs.AddRange(currentformats.Where(m => m.Area.Equals(approver.Area)).Where(p => (formatsPendigs).All(p2 => p2.Id != p.Id)).ToList());
+
+                    formatsPendigs.AddRange(currentformats.Where(m => m.Area.Equals(approver.Area)
+                    && m.JobCenter.Equals(approver.Centro)).Where(p => (formatsPendigs).All(p2 => p2.Id != p.Id)).ToList());
+
+                    formatsPendigs.AddRange(currentformats.Where(m => m.Area.Equals(approver.Area)
                     && m.JobCenter.Equals(approver.Centro)
-                    && m.Deparment.Equals(approver.Departamento)).ToList();
+                    && m.Deparment.Equals(approver.Departamento)).Where(p => (formatsPendigs).All(p2 => p2.Id != p.Id)).ToList());
+
 
                     if (formatsPendigs.Any())
                     {

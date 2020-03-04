@@ -25,11 +25,14 @@ namespace SARH.WebUI.Models.Dashboard
         public decimal PorcentajeRetardosRegresoComida { get; set; }
         public decimal PorcentajeSalidasAnticipadas { get; set; }
         public List<PersonalDashboardDataItem> Days { get; set; }
+        public string FechaInicial { get; set; }
+        public string FechaFinal { get; set; }
+
     }
 
     public class PersonalDashboardDataItem 
     {
-        public DateTime RegisterDate { get; set; }
+        public string RegisterDate { get; set; }
         public string StartWorkDate { get; set; }
         public string StartJobDay { get; set; }
         public int RetardoEntrada { get; set; }
