@@ -81,7 +81,7 @@
 
                 <div class="row no-gutters pt-5">
                     <div class="col-6 pr-1">
-                        <a href="#" class="btn btn-default btn-block waves-effect waves-themed">Exportar Excel</a>
+                        <a id="btnExportExcel" href="#" class="btn btn-default btn-block waves-effect waves-themed">Exportar Excel</a>
                     </div>
                     <div class="col-6 pl-1">
                         <a id="btnGenerateData" href='#' class="btn btn-default btn-block waves-effect waves-themed">Generar</a>
@@ -297,7 +297,51 @@
             });
 
 
+            $('#btnExportExcel').click(function () {
 
+
+                var dateIni = $('#datepicker-4-4').val();
+                var dateFin = $('#datepicker-4-5').val();
+
+
+                if (dateIni === '' || dateFin === '') {
+
+
+                    Swal.fire(
+                        {
+                            type: "warning",
+                            title: "Validación",
+                            text: "Rango de fechas no Válidos"
+                        });
+
+
+                    return;
+
+                }
+
+                var i = new Date(dateIni);
+                var f = new Date(dateFin);
+
+                if (f < i) {
+
+                    Swal.fire(
+                        {
+                            type: "warning",
+                            title: "Validación",
+                            text: "Rango de fechas no Válidos"
+                        });
+
+
+                    return;
+
+                }
+
+
+                var openUrl = '/DashboardHistory/ExportPersonalDashboard?employee=' + $('#EmployeeId').val() + '&date=' + dateIni + '&fdate=' + dateFin;
+
+                window.location.href = openUrl;
+
+            });
 
         });
     </script>

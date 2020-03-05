@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using SARH.WebUI.Factories;
@@ -117,6 +118,48 @@ namespace SARH.WebUI.Controllers
 
             return View(model);
         }
+
+        public FileResult ExportPersonalDashboard(string employee, string date, string fdate = "")
+        {
+
+            DateTime currentDate;
+            DateTime startDate;
+            DateTime endDate;
+
+
+            if (string.IsNullOrEmpty(date))
+            {
+                date = DateTime.Now.ToShortDateString();
+                currentDate = DateTime.Parse(date);
+                startDate = new DateTime(currentDate.Year, currentDate.Month, 1);
+                endDate = startDate.AddMonths(1).AddDays(-1);
+
+            }
+            else
+            {
+                startDate = DateTime.Parse(date);
+                endDate = DateTime.Parse(fdate);
+            }
+
+
+            var model = _dashboardModelFactory.GetPersonalDashboardData(int.Parse(employee).ToString("00000"), startDate, endDate);
+
+            model.FechaInicial = startDate.ToShortDateString();
+            model.FechaFinal = endDate.ToShortDateString();
+
+            var sb = new StringBuilder();
+
+            sb.Append("Id Empleado,Nombre,Fecha,Entrada,Registro,Salida Comida,Registro,Entrada Comida,Registro,Salida,Registro");
+
+            model.Days.ForEach(d =>
+            {
+                sb.AppendLine();
+                sb.Append($"{model.EmployeeId},{model.Name},{d.RegisterDate},{d.StartWorkDate},{d.StartJobDay},{d.StartMealDate},{d.StartMealDay},{d.EndMealDate},{d.EndMealDay},{d.EndWorkDate},{d.EndJobDay}");
+            });
+
+            return File(new System.Text.UTF8Encoding().GetBytes(sb.ToString()), "text/csv", $"DashboardPersonal-{model.EmployeeId}-{date.Replace("/", string.Empty)}-{fdate.Replace("/", string.Empty)}.csv");
+        }
+
 
     }
 }

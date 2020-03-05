@@ -666,6 +666,7 @@ namespace SARH.WebUI.Factories
                                    where dd.SalidaAnticipada ==2
                                    where dd.SalidaAnticipadaComida ==2
                                    where dd.RetardoEntradaComida == 2
+                                   where DateTime.Parse($"{dd.RegisterDate} {dd.StartWorkDate}") < DateTime.Now
                                    select dd);
 
                 t = null;
