@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ISOSA.SARH.Data.Domain.Configuration;
+using ISOSA.SARH.Data.Domain.Formats;
 using ISOSA.SARH.Data.Repository;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using SARH.WebUI.Factories;
 using SARH.WebUI.Models.Configuration;
+using SARH.WebUI.Models.Dashboard;
 
 namespace SARH.WebUI.Controllers
 {
@@ -282,6 +285,155 @@ namespace SARH.WebUI.Controllers
 
             return $"{response}%";
         }
+
+
+        public IActionResult ReportPeriod() 
+        {
+            return View();
+        }
+
+
+        public JsonResult ReportIncidents(string iDate, string eDate,
+            [FromServices] IRepository<EmployeeDiscount> discountRepo,
+            [FromServices] IOrganigramaModelFactory organimgramaModelFactory,
+            [FromServices] IDashboardModelFactory dashboardModelFactory,
+            [FromServices] IRepository<NOMIPAQIncidence> nomiPAQIncidence,
+            [FromServices] IEmployeeFormatModelFactory employeeFormatModelFactory,
+            [FromServices] IRepository<NOMIPAQVacation> nomiPAQVacation)
+        {
+            var employeess = organimgramaModelFactory.GetAllData();
+            List<PersonalDashboardData> personalData = new List<PersonalDashboardData>();
+            List<EmployeeIncidents> employeeIncidents = new List<EmployeeIncidents>();
+
+            var vacaciones = employeeFormatModelFactory.GetAllFormats(DateTime.Parse(iDate), DateTime.Parse(eDate));
+            if (vacaciones.Any())
+            {
+                vacaciones.Where(f => f.Approved == true && f.FormatName.ToLower().Contains("vacacion")).ToList().ForEach(t =>
+                {
+                    List<KeyValuePair<string, string>> parameters = new List<KeyValuePair<string, string>>();
+                    parameters.Add(new KeyValuePair<string, string>("@fechaInicio", t.StartDate));
+                    parameters.Add(new KeyValuePair<string, string>("@fechaFin", t.EndDate));
+                    parameters.Add(new KeyValuePair<string, string>("@fechaPago", t.FechaSolicitud));
+                    parameters.Add(new KeyValuePair<string, string>("@EMP", t.EmployeeId));
+                    nomiPAQVacation.GetStoredProcData("VacacionesNominPAQ", parameters);
+                });
+            }
+
+            employeess.Employess.ToList().ForEach(emp => 
+            {
+                var dashInfo = dashboardModelFactory.GetPersonalDashboardData(int.Parse(emp.Id).ToString("00000"), DateTime.Parse(iDate), DateTime.Parse(eDate));
+                personalData.Add(dashInfo);
+            });
+
+            personalData.ForEach(emp => 
+            {
+                if (emp.PorcentajeRetardos > 0) 
+                {
+                    int veces = 0;
+                    emp.Days.Where(r =>r.RetardoEntrada.Equals(1)).ToList().ForEach(day => 
+                    {
+                        DateTime dateA = DateTime.Parse($"{day.RegisterDate} {day.StartJobDay}");
+                        DateTime dateB = DateTime.Parse($"{day.RegisterDate} {day.StartWorkDate}");
+
+                        var diff = (dateB - dateA).TotalMinutes;
+
+                        if (diff < 11) 
+                        {
+                            veces++;
+                            if (veces == 3) 
+                            {
+                                employeeIncidents.Add(new EmployeeIncidents()
+                                {
+                                    Employee = emp.EmployeeId,
+                                    Mnemonico = "RET1",
+                                    Period = day.RegisterDate
+                                });
+                            }
+                        }
+
+                        if (diff < 61)
+                        {
+                            employeeIncidents.Add(new EmployeeIncidents()
+                            {
+                                Employee = emp.EmployeeId,
+                                Mnemonico = "RET2",
+                                Period = day.RegisterDate
+                            });
+                        }
+
+                        if (diff < 121)
+                        {
+                            employeeIncidents.Add(new EmployeeIncidents()
+                            {
+                                Employee = emp.EmployeeId,
+                                Mnemonico = "RET3",
+                                Period = day.RegisterDate
+                            });
+                        }
+
+                    });
+                }
+            });
+
+            if (employeeIncidents.Any()) 
+            {
+                employeeIncidents.ForEach(item => 
+                {
+                    List<KeyValuePair<string, string>> parameters = new List<KeyValuePair<string, string>>();
+                    parameters.Add(new KeyValuePair<string, string>("@Empleado", item.Employee));
+                    parameters.Add(new KeyValuePair<string, string>("@TipoIncidencia", item.Mnemonico));
+                    parameters.Add(new KeyValuePair<string, string>("@fecha", item.Period));
+                    nomiPAQIncidence.GetStoredProcData("IncidenciasNominPAQ", parameters);
+                });
+            }
+
+            return Json("ok");
+        }
+
+
+        private bool ScheduleNotCompliment(string datereg, string hourreg, string hourschedule)
+        {
+            if (DateTime.Parse(datereg) > DateTime.Now)
+            {
+                return true;
+            }
+
+            bool isCompliment = false;
+
+            DateTime dateA = DateTime.Parse($"{datereg} {hourreg}");
+            DateTime dateB = DateTime.Parse($"{datereg} {hourschedule}");
+
+            var diff = (dateB - dateA).TotalMinutes;
+            if (diff > 0)
+            {
+                isCompliment = true;
+            }
+
+            return isCompliment;
+        }
+
+
+        private bool ScheduleNotComplimentRev(string datereg, string hourreg, string hourschedule)
+        {
+            if (DateTime.Parse(datereg) > DateTime.Now || hourreg.Equals("00:00:00"))
+            {
+                return true;
+            }
+
+            bool isCompliment = false;
+
+            DateTime dateA = DateTime.Parse($"{datereg} {hourreg}");
+            DateTime dateB = DateTime.Parse($"{datereg} {hourschedule}");
+
+            var diff = (dateA - dateB).TotalMinutes;
+            if (diff > 0)
+            {
+                isCompliment = true;
+            }
+
+            return isCompliment;
+        }
+
 
     }
 }

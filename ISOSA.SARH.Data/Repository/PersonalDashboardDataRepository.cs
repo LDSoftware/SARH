@@ -53,8 +53,7 @@ namespace ISOSA.SARH.Data.Repository
 
             if (paramSp.Any())
             {
-                string execute = $"EXECUTE {spName} 100";
-                this._context.PersonalDashboardData.FromSql(execute);
+
             }
 
             return result;

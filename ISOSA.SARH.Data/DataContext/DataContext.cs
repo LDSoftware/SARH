@@ -49,6 +49,8 @@ namespace ISOSA.SARH.Data
         public virtual DbSet<EmployeeHistory> EmployeeHistory { get; set; }
         public virtual DbSet<Nomipaq_nom10014> NomipaqEmployeeVacations { get; set; }
         public virtual DbSet<EmployeeScheduleDate> EmployeeScheduleDate { get; set; }
+        public virtual DbSet<NOMIPAQIncidence> NOMIPAQIncidence { get; set; }
+        public virtual DbSet<NOMIPAQVacation> NOMIPAQVacation { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

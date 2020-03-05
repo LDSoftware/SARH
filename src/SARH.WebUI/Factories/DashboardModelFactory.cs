@@ -537,54 +537,59 @@ namespace SARH.WebUI.Factories
             var rows = this._employeeScheduleDate.SearhItemsFor(f => f.Employee.Equals(employee) && f.RegisterDate >= startDate && f.RegisterDate <= endDate);
             var empData = this._organigramaModelFactory.GetEmployeeData(employee.TrimStart(new Char[] { '0' }));
             var empAssignedSchedule = this._employeeScheduleAssigned.SearhItemsFor(g => g.EmployeeId.Equals(employee.TrimStart(new Char[] { '0' })));
-            var scheduleA = this._scheduleRepository.GetElement(empAssignedSchedule.FirstOrDefault().IdScheduleWorkday);
-            var scheduleB = this._scheduleRepository.GetElement(empAssignedSchedule.FirstOrDefault().IdScheduleMeal);
-            var scheduleC = this._scheduleRepository.GetElement(empAssignedSchedule.FirstOrDefault().IdScheduleWeekEnd);
-            var scheduleD = this._scheduleRepository.GetElement(empAssignedSchedule.FirstOrDefault().IdScheduleMealWeekEnd);
 
-            var data = new PersonalDashboardData()
+            if (empAssignedSchedule.Any()) 
             {
-                Area = empData.Area,
-                Centro = empData.JobCenter,
-                EmployeeId = empData.GeneralInfo.Id,
-                Name = $"{empData.GeneralInfo.FirstName} {empData.GeneralInfo.LastName}",
-                Puesto = empData.GeneralInfo.JobTitle,
-                Picture = empData.GeneralInfo.Picture,
-                Days = rows.Where(d => d.RegisterDate.DayOfWeek != DayOfWeek.Sunday && scheduleC == null ? d.RegisterDate.DayOfWeek != DayOfWeek.Saturday : false).Select(u => new PersonalDashboardDataItem()
+                var scheduleA = this._scheduleRepository.GetElement(empAssignedSchedule.FirstOrDefault().IdScheduleWorkday);
+                var scheduleB = this._scheduleRepository.GetElement(empAssignedSchedule.FirstOrDefault().IdScheduleMeal);
+                var scheduleC = this._scheduleRepository.GetElement(empAssignedSchedule.FirstOrDefault().IdScheduleWeekEnd);
+                var scheduleD = this._scheduleRepository.GetElement(empAssignedSchedule.FirstOrDefault().IdScheduleMealWeekEnd);
+
+                var data = new PersonalDashboardData()
                 {
-                    StartJobDay = u.StartJobDay,
-                    StartMealDay = u.StartMealDay,
-                    EndMealDay = u.EndMealDay,
-                    EndJobDay = u.EndJobDay,
-                    StartWorkDate = scheduleA.StartHour,
-                    StartMealDate = scheduleB.StartHour,
-                    EndMealDate = scheduleB.EndHour,
-                    EndWorkDate = scheduleA.EndHour,
-                    RegisterDate = u.RegisterDate.ToShortDateString(),
-                    RetardoEntrada = !ScheduleNotCompliment(u.RegisterDate.ToShortDateString(), u.StartJobDay, scheduleA.StartHour) ? 1 : 0,
-                    SalidaAnticipadaComida = !ScheduleNotComplimentRev(u.RegisterDate.ToShortDateString(), u.StartMealDay, scheduleB.StartHour) ? 1 : 0,
-                    RetardoEntradaComida = !ScheduleNotCompliment(u.RegisterDate.ToShortDateString(), u.EndMealDay, scheduleB.EndHour) ? 1 : 0,
-                    SalidaAnticipada = !ScheduleNotComplimentRev(u.RegisterDate.ToShortDateString(), u.EndJobDay, scheduleA.EndHour) ? 1 : 0
-                }).ToList()
-            };
+                    Area = empData.Area,
+                    Centro = empData.JobCenter,
+                    EmployeeId = empData.GeneralInfo.Id,
+                    Name = $"{empData.GeneralInfo.FirstName} {empData.GeneralInfo.LastName}",
+                    Puesto = empData.GeneralInfo.JobTitle,
+                    Picture = empData.GeneralInfo.Picture,
+                    Days = rows.Where(d => d.RegisterDate.DayOfWeek != DayOfWeek.Sunday && scheduleC == null ? d.RegisterDate.DayOfWeek != DayOfWeek.Saturday : false).Select(u => new PersonalDashboardDataItem()
+                    {
+                        StartJobDay = u.StartJobDay,
+                        StartMealDay = u.StartMealDay,
+                        EndMealDay = u.EndMealDay,
+                        EndJobDay = u.EndJobDay,
+                        StartWorkDate = scheduleA.StartHour,
+                        StartMealDate = scheduleB.StartHour,
+                        EndMealDate = scheduleB.EndHour,
+                        EndWorkDate = scheduleA.EndHour,
+                        RegisterDate = u.RegisterDate.ToShortDateString(),
+                        RetardoEntrada = !ScheduleNotCompliment(u.RegisterDate.ToShortDateString(), u.StartJobDay, scheduleA.StartHour) ? 1 : 0,
+                        SalidaAnticipadaComida = !ScheduleNotComplimentRev(u.RegisterDate.ToShortDateString(), u.StartMealDay, scheduleB.StartHour) ? 1 : 0,
+                        RetardoEntradaComida = !ScheduleNotCompliment(u.RegisterDate.ToShortDateString(), u.EndMealDay, scheduleB.EndHour) ? 1 : 0,
+                        SalidaAnticipada = !ScheduleNotComplimentRev(u.RegisterDate.ToShortDateString(), u.EndJobDay, scheduleA.EndHour) ? 1 : 0
+                    }).ToList()
+                };
 
-            result = data;
+                result = data;
 
-            var TotalDays = data.Days.Count();
-            var retardos = data.Days.Sum(l => l.RetardoEntrada);
-            var salidasanticipadacomida = data.Days.Sum(l => l.SalidaAnticipadaComida);
-            var retardocomida = data.Days.Sum(l => l.RetardoEntradaComida);
-            var salidaanticipada = data.Days.Sum(l => l.SalidaAnticipada);
-            int PorcentajeRetardos = (int)Math.Round((double)(100 * retardos) / TotalDays);
-            int PorcentajeSalidasAnticipadasComida = (int)Math.Round((double)(100 * salidasanticipadacomida) / TotalDays);
-            int PorcentajeRetardosRegresoComida = (int)Math.Round((double)(100 * retardocomida) / TotalDays);
-            int PorcentajeSalidasAnticipadas = (int)Math.Round((double)(100 * salidaanticipada) / TotalDays);
+                var TotalDays = data.Days.Count();
+                var retardos = data.Days.Sum(l => l.RetardoEntrada);
+                var salidasanticipadacomida = data.Days.Sum(l => l.SalidaAnticipadaComida);
+                var retardocomida = data.Days.Sum(l => l.RetardoEntradaComida);
+                var salidaanticipada = data.Days.Sum(l => l.SalidaAnticipada);
+                int PorcentajeRetardos = (int)Math.Round((double)(100 * retardos) / TotalDays);
+                int PorcentajeSalidasAnticipadasComida = (int)Math.Round((double)(100 * salidasanticipadacomida) / TotalDays);
+                int PorcentajeRetardosRegresoComida = (int)Math.Round((double)(100 * retardocomida) / TotalDays);
+                int PorcentajeSalidasAnticipadas = (int)Math.Round((double)(100 * salidaanticipada) / TotalDays);
 
-            result.TotalDays = TotalDays;
-            result.PorcentajeRetardos = PorcentajeRetardos;
-            result.PorcentajeSalidasAnticipadasComida = PorcentajeSalidasAnticipadasComida;
-            result.PorcentajeRetardosRegresoComida = PorcentajeRetardosRegresoComida;
-            result.PorcentajeSalidasAnticipadas = PorcentajeSalidasAnticipadas;
+                result.TotalDays = TotalDays;
+                result.PorcentajeRetardos = PorcentajeRetardos;
+                result.PorcentajeSalidasAnticipadasComida = PorcentajeSalidasAnticipadasComida;
+                result.PorcentajeRetardosRegresoComida = PorcentajeRetardosRegresoComida;
+                result.PorcentajeSalidasAnticipadas = PorcentajeSalidasAnticipadas;
+            }
+
 
             return result;
         }

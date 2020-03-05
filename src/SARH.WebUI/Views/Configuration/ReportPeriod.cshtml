@@ -1,0 +1,252 @@
+﻿@{
+    ViewData["Title"] = "Envió de incidencias NOMIPAQ";
+}
+
+@section HeadBlock {
+
+    <link rel="stylesheet" media="screen, print" href="~/css/fa-solid.css">
+    <link rel="stylesheet" media="screen, print" href="~/css/fa-brands.css">
+    <link rel="stylesheet" media="screen, print" href="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/css/datagrid/datatables/datatables.bundle.css">
+    <link rel="stylesheet" media="screen, print" href="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/css/formplugins/bootstrap-datepicker/bootstrap-datepicker.css">
+    <link rel="stylesheet" media="screen, print" href="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/css/notifications/sweetalert2/sweetalert2.bundle.css">
+}
+
+
+<div class="subheader">
+    <h1 class="subheader-title">
+        <i class="subheader-icon fal fa-archive"></i> Envió de incidencias NOMIPAQ
+        <small>
+            Se enviarán las incidencias del periodo seleccionado
+        </small>
+    </h1>
+</div>
+
+
+<div class="row">
+
+    <div class="card mb-g rounded-top">
+        <div class="row no-gutters row-grid">
+
+            <div class="col-lg-7 col-xl-4 pl-lg-3 pr-lg-3 pt-lg-3">
+
+                <div class="d-flex mr-4">
+                    <div>
+
+                        <label class="form-label" for="example-date">Fecha Inicial</label>
+                        <div class="form-group" style="margin-top:22px;">
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="datepicker-4-4" value="">
+                                <div class="input-group-append">
+                                    <span class="input-group-text fs-xl">
+                                        <i class="fal fa-calendar-plus"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+                <div class="d-flex mr-0 pt-3">
+                    <div>
+
+                        <label class="form-label" for="example-date">Fecha Final</label>
+                        <div class="form-group" style="margin-top:22px;">
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="datepicker-4-5" value="">
+                                <div class="input-group-append">
+                                    <span class="input-group-text fs-xl">
+                                        <i class="fal fa-calendar-plus"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+                <div class="row no-gutters pt-5 pb-3">
+                    <div class="col-6 pl-1">
+                        <a id="btnStartProcess" href='#' class="btn btn-default btn-block waves-effect waves-themed">Iniciar proceso</a>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="col-xl-4 pt-xl-5 pl-lg-3 pr-lg-3">
+
+                <div id="panelinfo" style="margin-top:20px;" class="alert alert-info alert-dismissible fade show" role="alert">
+                    <div class="d-flex align-items-center">
+                        <div class="alert-icon width-1">
+                            <i class="fal fa-question-circle fs-xxl"></i>
+                        </div>
+                        <div class="flex-1" style="margin-left:30px;">
+                            <span class="h6 m-0 fw-700">Este proceso envia las incidencias del periodo seleccionado a la base de datos de NOMIPAQ.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="panelwait" style="margin-top:20px;display:none;" class="alert alert-warning alert-dismissible fade show" role="alert">
+                    <div class="d-flex align-items-center">
+                        <div class="alert-icon width-1">
+                            <i class="fal fa-sync fs-xxl fa-spin"></i>
+                        </div>
+                        <div class="flex-1" style="margin-left:30px;">
+                            <span class="h6 m-0 fw-700">Enviando incidencias a NOMIPAQ, ESTE PROCESO NO DEBE SER INTERRUMPIDO</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col-xl-4 pt-xl-5 pl-lg-3 pr-lg-3">
+
+                <div id="panelsuccess" style="margin-top:20px;display:none;" class="alert alert-success alert-dismissible fade show" role="alert">
+                    <div class="d-flex align-items-center">
+                        <div class="alert-icon width-1">
+                            <i class="fal fa-check-square fs-xxl"></i>
+                        </div>
+                        <div class="flex-1" style="margin-left:30px;">
+                            <span class="h6 m-0 fw-700">El proceso ha finalizado correctamente.</span>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+            </div>
+
+        </div>
+    </div>
+
+
+</div>
+
+
+
+@section ScriptsBlock {
+
+    <script src="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/js/datagrid/datatables/datatables.bundle.js"></script>
+    <script src="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/js/formplugins/bootstrap-datepicker/bootstrap-datepicker.js"></script>
+    <script src="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/js/notifications/sweetalert2/sweetalert2.bundle.js"></script>
+
+    <script>
+
+
+        var controls = {
+            leftArrow: '<i class="fal fa-angle-left" style="font-size: 1.25rem"></i>',
+            rightArrow: '<i class="fal fa-angle-right" style="font-size: 1.25rem"></i>'
+        }
+
+        var runDatePicker = function () {
+
+
+            $('#datepicker-4-4').datepicker(
+                {
+                    orientation: "left right",
+                    todayHighlight: true,
+                    templates: controls,
+                    format: 'dd/mm/yyyy'
+                }).on('changeDate', function (e) {
+
+                });
+
+            $('#datepicker-4-5').datepicker(
+                {
+                    orientation: "left right",
+                    todayHighlight: true,
+                    templates: controls,
+                    format: 'dd/mm/yyyy'
+                }).on('changeDate', function (e) {
+
+                });
+
+        }
+
+
+        $(document).ready(function () {
+            /* init datatables */
+
+            runDatePicker();
+
+            $('#dt-basic-example').dataTable(
+                {
+                    responsive: true
+                });
+
+            $('#btnStartProcess').click(function () {
+
+
+                var dateIni = $('#datepicker-4-4').val();
+                var dateFin = $('#datepicker-4-5').val();
+
+
+                if (dateIni === '' || dateFin === '') {
+
+
+                    Swal.fire(
+                        {
+                            type: "warning",
+                            title: "Validación",
+                            text: "Rango de fechas no Válidos"
+                        });
+
+
+                    return;
+
+                }
+
+                var i = new Date(dateIni);
+                var f = new Date(dateFin);
+
+                if (f < i) {
+
+                    Swal.fire(
+                        {
+                            type: "warning",
+                            title: "Validación",
+                            text: "Rango de fechas no Válidos"
+                        });
+
+
+                    return;
+
+                }
+
+                $('#btnStartProcess').hide();
+                $('#panelinfo').hide();
+                $('#panelwait').show();
+                $('#panelsuccess').hide();
+
+                $.ajax({
+                    url: '/Configuration/ReportIncidents',
+                    type: "POST",
+                    data: { iDate: dateIni, eDate: dateFin },
+                    success: function (data, textStatus, jqXHR) {
+
+                        $('#panelsuccess').show();
+                        $('#btnStartProcess').show();
+                        $('#panelinfo').show();
+                        $('#panelwait').hide();
+
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+
+                    }
+                });
+
+
+
+
+
+
+            });
+
+
+
+
+        });
+    </script>
+}
