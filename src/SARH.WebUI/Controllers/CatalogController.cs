@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using ISOSA.SARH.Data.Domain.Catalog;
 using ISOSA.SARH.Data.Domain.Employee;
 using ISOSA.SARH.Data.Domain.Formats;
+using ISOSA.SARH.Data.Domain.Process;
 using ISOSA.SARH.Data.Repository;
 using ISOSADataMigrationTools;
 using Microsoft.AspNetCore.Mvc;
@@ -255,27 +256,118 @@ namespace SARH.WebUI.Controllers
         #region Tipos de Permisos
 
         [ActionName("PermisosIncidencias")]
-        public IActionResult PermissionType([FromServices] IRepository<PermissionType> permissionRepository)
+        public IActionResult PermissionType([FromServices] IRepository<PermissionType> permissionRepository,
+            [FromServices] IRepository<Nomipaq_nom10022> nomipaqMnemonicos)
         {
 
             List<CatalogItemModel> model = new List<CatalogItemModel>();
             model = permissionRepository.GetAll().Select(i => new CatalogItemModel()
-            { Id = i.Id, Descripcion = i.Description }).ToList();
+            { 
+                Id = i.Id, 
+                Descripcion = i.Description,
+                CustomValues = GetMnemonicoInfo(i.CustomValues)
+            }).ToList();
+
+
+            List<SelectListItem> mnemonicos = new List<SelectListItem>();
+
+            mnemonicos.Add(new SelectListItem() 
+            {
+                Text = "Seleccione un Mnemonico",
+                Value = "0"
+            });
+
+            mnemonicos.AddRange(nomipaqMnemonicos.GetAll().Select(o => new SelectListItem()
+            {
+                Text = $"{o.mnemonico}-{o.descripcion}",
+                Value = o.idtipoincidencia.ToString()
+            }).ToList());
+
+
+            var pp = mnemonicos[0];
+
+            var pp2 = JsonConvert.SerializeObject(pp);
+
+            ViewBag.Mnemonicos = mnemonicos;
 
             return View(model);
         }
 
-        [HttpPost]
-        public JsonResult SaveEditPermissionType(int Id, string Description, [FromServices] IRepository<PermissionType> permissionRepository)
+        private string GetMnemonicoInfo(string values) 
         {
-            permissionRepository.Update(new PermissionType() { Id = Id, Description = Description });
+            string result = string.Empty;
+
+            if (!string.IsNullOrEmpty(values)) 
+            {
+                var data = JsonConvert.DeserializeObject<PermissionTypeMneminicoInfoModel>(values);
+                if (data != null) 
+                {
+                    result = data.Text;
+                }
+            }
+
+            return result;
+        }
+
+
+
+        [HttpPost]
+        public JsonResult SaveEditPermissionType(int Id, string Description, string Mnemonico,
+            [FromServices] IRepository<PermissionType> permissionRepository,
+            [FromServices] IRepository<Nomipaq_nom10022> nomipaqMnemonicos)
+        {
+
+            string jsonValues = string.Empty;
+            if (!string.IsNullOrEmpty(Mnemonico)) 
+            {
+                var nomipaqmnemonico = nomipaqMnemonicos.GetElement(int.Parse(Mnemonico));
+                if (nomipaqmnemonico != null) 
+                {
+                    SelectListItem itm = new SelectListItem() 
+                    {
+                        Text = $"{nomipaqmnemonico.mnemonico}-{nomipaqmnemonico.descripcion}",
+                        Value = nomipaqmnemonico.idtipoincidencia.ToString()
+                    };
+                    jsonValues = JsonConvert.SerializeObject(itm);
+                }
+            }
+
+            var selected = permissionRepository.GetElement(Id);
+
+            if (selected != null) 
+            {
+                selected.Description = Description;
+                if (!string.IsNullOrEmpty(jsonValues)) 
+                {
+                    selected.CustomValues = jsonValues;
+                }
+                permissionRepository.Update(selected);
+            }
+
             return Json("Ok");
         }
 
         [HttpPost]
-        public JsonResult SaveNewSafePermissionType(string Description, [FromServices] IRepository<PermissionType> permissionRepository)
+        public JsonResult SaveNewSafePermissionType(string Description, string Mnemonico,
+            [FromServices] IRepository<PermissionType> permissionRepository,
+            [FromServices] IRepository<Nomipaq_nom10022> nomipaqMnemonicos)
         {
-            permissionRepository.Create(new PermissionType() { Description = Description });
+            string jsonValues = string.Empty;
+            if (string.IsNullOrEmpty(Mnemonico))
+            {
+                var nomipaqmnemonico = nomipaqMnemonicos.GetElement(int.Parse(Mnemonico));
+                if (nomipaqmnemonico != null)
+                {
+                    SelectListItem itm = new SelectListItem()
+                    {
+                        Text = $"{nomipaqmnemonico.mnemonico}-{nomipaqmnemonico.descripcion}",
+                        Value = nomipaqmnemonico.idtipoincidencia.ToString()
+                    };
+                    jsonValues = JsonConvert.SerializeObject(itm);
+                }
+            }
+
+            permissionRepository.Create(new PermissionType() { Description = Description, CustomValues = jsonValues });
             return Json("Ok");
         }
 

@@ -4,6 +4,7 @@ using ISOSA.SARH.Data.Domain.Configuration;
 using ISOSA.SARH.Data.Domain.Dashboard;
 using ISOSA.SARH.Data.Domain.Employee;
 using ISOSA.SARH.Data.Domain.Formats;
+using ISOSA.SARH.Data.Domain.Process;
 using ISOSA.SARH.Data.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -64,6 +65,7 @@ namespace SmartAdmin.WebUI
             services.AddTransient<INotificationModelFactory, NotificationModelFactory>();
             services.AddTransient<INomipaqEmployeeVacationModelFactory, NomipaqEmployeeVacationModelFactory>();
             services.AddTransient<IEmployeeFormatModelFactory, EmployeeFormatModelFactory>();
+            services.AddTransient<INomipaqIncidenciasModelFactory, NomipaqIncidenciasModelFactory>();
             services.AddTransient<IRepository<DocumentType>, DocumentTypeRepository>(s => new DocumentTypeRepository((Configuration.GetConnectionString("DataConnectionString"))));
             services.AddTransient<IRepository<HardwareAssigned>, HardwareAssignedRepository>(s => new HardwareAssignedRepository((Configuration.GetConnectionString("DataConnectionString"))));
             services.AddTransient<IRepository<PermissionType>, PermissionTypeRepository>(s => new PermissionTypeRepository((Configuration.GetConnectionString("DataConnectionString"))));
@@ -94,6 +96,8 @@ namespace SmartAdmin.WebUI
             services.AddTransient<IElementUpdateModelFactory, ElementUpdateModelFactory>(s => new ElementUpdateModelFactory(new ElementUpdateRepository(Configuration.GetConnectionString("DataConnectionString"))));
             services.AddTransient<IRepository<NOMIPAQIncidence>, NOMIPAQIncidenceRepository>(s => new NOMIPAQIncidenceRepository((Configuration.GetConnectionString("DataConnectionString"))));
             services.AddTransient<IRepository<NOMIPAQVacation>, NOMIPAQVacationRepository>(s => new NOMIPAQVacationRepository((Configuration.GetConnectionString("DataConnectionString"))));
+            services.AddTransient<IRepository<Nomipaq_nom10010>, NomipaqIncidenciasRepository>(s => new NomipaqIncidenciasRepository((Configuration.GetConnectionString("DataConnectionStringNomipaq"))));
+            services.AddTransient<IRepository<Nomipaq_nom10022>, NomipaqMnemonicosRepository>(s => new NomipaqMnemonicosRepository((Configuration.GetConnectionString("DataConnectionStringNomipaq"))));
 
             services.AddMvc(options =>
                 {

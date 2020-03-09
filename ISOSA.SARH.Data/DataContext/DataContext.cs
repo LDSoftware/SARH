@@ -5,6 +5,7 @@ using ISOSA.SARH.Data.Domain.Configuration;
 using ISOSA.SARH.Data.Domain.Dashboard;
 using ISOSA.SARH.Data.Domain.Employee;
 using ISOSA.SARH.Data.Domain.Formats;
+using ISOSA.SARH.Data.Domain.Process;
 using ISOSA.SARH.Data.Mapping;
 using Microsoft.EntityFrameworkCore;
 
@@ -51,6 +52,10 @@ namespace ISOSA.SARH.Data
         public virtual DbSet<EmployeeScheduleDate> EmployeeScheduleDate { get; set; }
         public virtual DbSet<NOMIPAQIncidence> NOMIPAQIncidence { get; set; }
         public virtual DbSet<NOMIPAQVacation> NOMIPAQVacation { get; set; }
+        public virtual DbSet<Nomipaq_nom10010> NomipaqIncidencias { get; set; }
+        public virtual DbSet<Nomipaq_nom10022> NomipaqMnemonicos { get; set; }
+
+
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -80,6 +85,8 @@ namespace ISOSA.SARH.Data
             new EmployeeHistoryMapping(builder.Entity<EmployeeHistory>());
             new NomipaqEmployeeVacationsMapping(builder.Entity<Nomipaq_nom10014>());
             new EmployeeScheduleDateMapping(builder.Entity<EmployeeScheduleDate>());
+            new NomipaqIncidenciasMapping(builder.Entity<Nomipaq_nom10010>());
+            new NomipaqMnemonicosMapping(builder.Entity<Nomipaq_nom10022>());
         }
 
 

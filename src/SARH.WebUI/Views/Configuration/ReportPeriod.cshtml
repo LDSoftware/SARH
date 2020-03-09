@@ -67,6 +67,7 @@
                 </div>
                 <div class="row no-gutters pt-5 pb-3">
                     <div class="col-6 pl-1">
+                        <a id="btnViewProcess" href='#' class="btn btn-default btn-block waves-effect waves-themed">Visualizar Incidencias</a>
                         <a id="btnStartProcess" href='#' class="btn btn-default btn-block waves-effect waves-themed">Iniciar proceso</a>
                     </div>
                 </div>
@@ -124,6 +125,51 @@
 
 </div>
 
+<div class="row">
+    <div class="col-lg-12">
+        <div id="panel-4" class="panel">
+            <div class="panel-hdr">
+                <h2>
+                    Incidencias <span class="fw-300"><i>Diarias</i></span>
+                </h2>
+                <div class="panel-toolbar demo-h-spacing">
+                    <a id="removemnemonico" href="javascript:void(0);" title="Remover Mnemonico en NOMIPAQ" class="btn btn-success btn-icon waves-effect waves-themed">
+                        <i class="fal fa-arrow-circle-down"></i>
+                    </a>
+                    <a id="updatemnemonico" href="javascript:void(0);" title="Actualizar Mnemonico en NOMIPAQ" class="btn btn-secondary btn-icon waves-effect waves-themed">
+                        <i class="fal fa-arrow-circle-up"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="panel-container show">
+
+                <div class="panel-content">
+
+                    <table id="dt-basic-example" class="table table-bordered table-hover table-striped w-100">
+                        <thead class="bg-warning-200">
+                            <tr>
+                                <th>Empleado</th>
+                                <th>Fecha</th>
+                                <th>Mnemonico</th>
+                                <th>Existe NOMIPAQ</th>
+                                <th>Mnemonico NOMIPAQ</th>
+                            </tr>
+                        </thead>
+                        <tbody id="allincidencias">
+                           </tbody>
+                    </table>
+
+
+
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+
 
 
 @section ScriptsBlock {
@@ -165,6 +211,11 @@
 
         }
 
+        $('#dt-basic-example tr').click(function () {
+
+            $(this).addClass('selected').siblings().removeClass('selected');
+
+        });
 
         $(document).ready(function () {
             /* init datatables */
@@ -221,7 +272,7 @@
                 $('#panelsuccess').hide();
 
                 $.ajax({
-                    url: '/Configuration/ReportIncidents',
+                    url: '/Configuration/ProcesstIncidents',
                     type: "POST",
                     data: { iDate: dateIni, eDate: dateFin },
                     success: function (data, textStatus, jqXHR) {
@@ -245,6 +296,84 @@
             });
 
 
+            $('#btnViewProcess').click(function () {
+
+
+                var dateIni = $('#datepicker-4-4').val();
+                var dateFin = $('#datepicker-4-5').val();
+
+
+                if (dateIni === '' || dateFin === '') {
+
+
+                    Swal.fire(
+                        {
+                            type: "warning",
+                            title: "Validación",
+                            text: "Rango de fechas no Válidos"
+                        });
+
+
+                    return;
+
+                }
+
+                var i = new Date(dateIni);
+                var f = new Date(dateFin);
+
+                if (f < i) {
+
+                    Swal.fire(
+                        {
+                            type: "warning",
+                            title: "Validación",
+                            text: "Rango de fechas no Válidos"
+                        });
+
+
+                    return;
+
+                }
+
+                $('#btnStartProcess').hide();
+                $('#panelinfo').hide();
+                $('#panelwait').show();
+                $('#panelsuccess').hide();
+
+                $.ajax({
+                    url: '/Configuration/ReportIncidents',
+                    type: "POST",
+                    data: { iDate: dateIni, eDate: dateFin },
+                    success: function (data, textStatus, jqXHR) {
+
+                        $('#panelsuccess').show();
+                        $('#btnStartProcess').show();
+                        $('#panelinfo').show();
+                        $('#panelwait').hide();
+
+                        if (data.rows.length > 0) {
+                            var htmlLicenseinfo = '';
+                            for (var i = 0; i < data.rows.length; i++) {
+                                htmlLicenseinfo = htmlLicenseinfo + '<tr><td>' + data.rows[i]['employeeid'] + '</td><td>' + data.rows[i]['fecha'] + '</td><td>' + data.rows[i]['mnemonico'] + '</td><td>' + data.rows[i]['existeenperiodo'] + '</td><td>' + data.rows[i]['nomipaqmnemonico'] + '</td></tr>';
+                            }
+                            $('#allincidencias').html(htmlLicenseinfo);
+                        }
+
+
+
+
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+
+                    }
+                });
+
+
+
+
+
+
+            });
 
 
         });

@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using SARH.WebUI.Factories;
 using SARH.WebUI.Models.Configuration;
 using SARH.WebUI.Models.Dashboard;
+using SARH.WebUI.Models.Process;
 
 namespace SARH.WebUI.Controllers
 {
@@ -299,7 +300,149 @@ namespace SARH.WebUI.Controllers
             [FromServices] IDashboardModelFactory dashboardModelFactory,
             [FromServices] IRepository<NOMIPAQIncidence> nomiPAQIncidence,
             [FromServices] IEmployeeFormatModelFactory employeeFormatModelFactory,
-            [FromServices] IRepository<NOMIPAQVacation> nomiPAQVacation)
+            [FromServices] IRepository<NOMIPAQVacation> nomiPAQVacation,
+            [FromServices] INomipaqIncidenciasModelFactory nomipaqincidenciasModelFactory)
+        {
+            var employeess = organimgramaModelFactory.GetAllData();
+            List<PersonalDashboardData> personalData = new List<PersonalDashboardData>();
+            List<EmployeeIncidents> employeeIncidents = new List<EmployeeIncidents>();
+
+            var formatos = employeeFormatModelFactory.GetAllFormats(DateTime.Parse(iDate), DateTime.Parse(eDate));
+            if (formatos.Any())
+            {
+                formatos.Where(f => f.Approved == true && f.FormatName.ToLower().Contains("vacacion")).ToList().ForEach(t =>
+                {
+                    List<KeyValuePair<string, string>> parameters = new List<KeyValuePair<string, string>>();
+                    parameters.Add(new KeyValuePair<string, string>("@fechaInicio", t.StartDate));
+                    parameters.Add(new KeyValuePair<string, string>("@fechaFin", t.EndDate));
+                    parameters.Add(new KeyValuePair<string, string>("@fechaPago", t.FechaSolicitud));
+                    parameters.Add(new KeyValuePair<string, string>("@EMP", t.EmployeeId));
+                    nomiPAQVacation.GetStoredProcData("VacacionesNominPAQ", parameters);
+                });
+            }
+
+            employeess.Employess.ToList().ForEach(emp =>
+            {
+                var dashInfo = dashboardModelFactory.GetPersonalDashboardData(int.Parse(emp.Id).ToString("00000"), DateTime.Parse(iDate), DateTime.Parse(eDate));
+                personalData.Add(dashInfo);
+            });
+
+            personalData.ForEach(emp => 
+            {
+                if (emp.PorcentajeRetardos > 0) 
+                {
+                    int veces = 0;
+                    bool process = false;
+                    emp.Days.Where(r =>r.RetardoEntrada.Equals(1)).ToList().ForEach(day => 
+                    {
+                        DateTime dateA = DateTime.Parse($"{day.RegisterDate} {day.StartJobDay}");
+                        DateTime dateB = DateTime.Parse($"{day.RegisterDate} {day.StartWorkDate}");
+
+                        var diff = (dateA - dateB).TotalMinutes;
+
+                        if (diff < 11 && !process) 
+                        {
+                            veces++;
+                            if (veces == 3) 
+                            {
+                                employeeIncidents.Add(new EmployeeIncidents()
+                                {
+                                    Employee = emp.EmployeeId,
+                                    Mnemonico = "RET1",
+                                    Period = day.RegisterDate
+                                });
+                                process = true;
+                            }
+                        }
+
+                        if (diff < 61 && !process)
+                        {
+                            employeeIncidents.Add(new EmployeeIncidents()
+                            {
+                                Employee = emp.EmployeeId,
+                                Mnemonico = "RET2",
+                                Period = day.RegisterDate
+                            });
+                            process = true;
+                        }
+
+                        if (diff < 121 && !process)
+                        {
+                            employeeIncidents.Add(new EmployeeIncidents()
+                            {
+                                Employee = emp.EmployeeId,
+                                Mnemonico = "RET3",
+                                Period = day.RegisterDate
+                            });
+                            process = true;
+                        }
+
+                    });
+                }
+            });
+
+            if (formatos.Any())
+            {
+                formatos.Where(f => f.Approved == true && f.FormatName.ToLower().Contains("permiso")).ToList().ForEach(t =>
+                {
+                    string mnemonico = string.Empty;
+                    if (t.AdditionalInfo.Equals("Con goce de sueldo"))
+                    {
+                        mnemonico = "PCS";
+                    }
+                    else
+                    {
+                        mnemonico = "PSS";
+                    }
+                    employeeIncidents.Add(new EmployeeIncidents()
+                    {
+                        Employee = t.EmployeeId,
+                        Period = t.StartDate,
+                        Mnemonico = mnemonico
+                    });
+                });
+            }
+
+            var incidencias = nomipaqincidenciasModelFactory.GetAllIncidencias();
+
+            var incidenciasNomipaq = incidencias.Where(g => g.Fecha >= DateTime.Parse(iDate) && g.Fecha <= (DateTime.Parse(eDate)));
+
+            List<NomiPaqPreNominaModel> model = new List<NomiPaqPreNominaModel>();
+
+            employeeIncidents.ForEach(h => 
+            {
+                NomiPaqPreNominaModel item = new NomiPaqPreNominaModel();
+                item.employeeid = h.Employee;
+                item.fecha = h.Period;
+                item.mnemonico = h.Mnemonico;
+                var existeNomipaq = incidenciasNomipaq.Where(y => y.EmployeeId.Equals(h.Employee) && y.Fecha.ToShortDateString().Equals(h.Period));
+                if (existeNomipaq.Any())
+                {
+                    item.existeenperiodo = "Si";
+                    item.nomipaqmnemonico = existeNomipaq.FirstOrDefault().Nemonico;
+                }
+                else
+                {
+                    item.existeenperiodo = string.Empty;
+                    item.nomipaqmnemonico = string.Empty;
+                }
+                model.Add(item);
+            });
+
+
+            return Json(new { rows = model.ToArray() });
+        }
+
+
+
+        public JsonResult ProcesstIncidents(string iDate, string eDate,
+            [FromServices] IRepository<EmployeeDiscount> discountRepo,
+            [FromServices] IOrganigramaModelFactory organimgramaModelFactory,
+            [FromServices] IDashboardModelFactory dashboardModelFactory,
+            [FromServices] IRepository<NOMIPAQIncidence> nomiPAQIncidence,
+            [FromServices] IEmployeeFormatModelFactory employeeFormatModelFactory,
+            [FromServices] IRepository<NOMIPAQVacation> nomiPAQVacation,
+            [FromServices] INomipaqIncidenciasModelFactory nomipaqincidenciasModelFactory)
         {
             var employeess = organimgramaModelFactory.GetAllData();
             List<PersonalDashboardData> personalData = new List<PersonalDashboardData>();
@@ -319,28 +462,29 @@ namespace SARH.WebUI.Controllers
                 });
             }
 
-            employeess.Employess.ToList().ForEach(emp => 
+            employeess.Employess.ToList().ForEach(emp =>
             {
                 var dashInfo = dashboardModelFactory.GetPersonalDashboardData(int.Parse(emp.Id).ToString("00000"), DateTime.Parse(iDate), DateTime.Parse(eDate));
                 personalData.Add(dashInfo);
             });
 
-            personalData.ForEach(emp => 
+            personalData.ForEach(emp =>
             {
-                if (emp.PorcentajeRetardos > 0) 
+                if (emp.PorcentajeRetardos > 0)
                 {
                     int veces = 0;
-                    emp.Days.Where(r =>r.RetardoEntrada.Equals(1)).ToList().ForEach(day => 
+                    bool process = false;
+                    emp.Days.Where(r => r.RetardoEntrada.Equals(1)).ToList().ForEach(day =>
                     {
                         DateTime dateA = DateTime.Parse($"{day.RegisterDate} {day.StartJobDay}");
                         DateTime dateB = DateTime.Parse($"{day.RegisterDate} {day.StartWorkDate}");
 
                         var diff = (dateB - dateA).TotalMinutes;
 
-                        if (diff < 11) 
+                        if (diff < 11 && !process)
                         {
                             veces++;
-                            if (veces == 3) 
+                            if (veces == 3)
                             {
                                 employeeIncidents.Add(new EmployeeIncidents()
                                 {
@@ -348,10 +492,11 @@ namespace SARH.WebUI.Controllers
                                     Mnemonico = "RET1",
                                     Period = day.RegisterDate
                                 });
+                                process = true;
                             }
                         }
 
-                        if (diff < 61)
+                        if (diff < 61 && !process)
                         {
                             employeeIncidents.Add(new EmployeeIncidents()
                             {
@@ -359,9 +504,10 @@ namespace SARH.WebUI.Controllers
                                 Mnemonico = "RET2",
                                 Period = day.RegisterDate
                             });
+                            process = true;
                         }
 
-                        if (diff < 121)
+                        if (diff < 121 && !process)
                         {
                             employeeIncidents.Add(new EmployeeIncidents()
                             {
@@ -369,15 +515,17 @@ namespace SARH.WebUI.Controllers
                                 Mnemonico = "RET3",
                                 Period = day.RegisterDate
                             });
+                            process = true;
                         }
 
                     });
                 }
             });
 
-            if (employeeIncidents.Any()) 
+
+            if (employeeIncidents.Any())
             {
-                employeeIncidents.ForEach(item => 
+                employeeIncidents.ForEach(item =>
                 {
                     List<KeyValuePair<string, string>> parameters = new List<KeyValuePair<string, string>>();
                     parameters.Add(new KeyValuePair<string, string>("@Empleado", item.Employee));
@@ -387,8 +535,17 @@ namespace SARH.WebUI.Controllers
                 });
             }
 
-            return Json("ok");
+            return Json("Ok");
         }
+
+
+
+
+
+
+
+
+
 
 
         private bool ScheduleNotCompliment(string datereg, string hourreg, string hourschedule)

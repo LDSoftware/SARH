@@ -11,6 +11,7 @@ namespace ISOSA.SARH.Data.Mapping
             builder.ToTable("PermissionType");
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Description);
+            builder.Property(x => x.CustomValues);
         }
     }
 }

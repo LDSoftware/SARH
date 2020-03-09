@@ -43,6 +43,8 @@
         </button>
         <div class="dropdown-menu" aria-labelledby="btnGroupVerticalDrop1" x-placement="bottom-start" style="position: absolute; will-change: top, left; top: 37px; left: 0px;">
             <a class="newrow dropdown-item" href="#">Agregar</a>
+            <a class="editrow dropdown-item" href="#">Editar</a>
+            <a class="deleterow dropdown-item" href="#">Eliminar</a>
         </div>
     </div>
 </div>
@@ -65,10 +67,10 @@
                             <tr>
                                 <th>ID</th>
                                 <th>Descripción</th>
-                                <th></th>
+                                <th>Mnemonico</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="allitems">
                             @foreach (var item in Model)
                             {
                                 <tr id="@item.Id" data-value="@item.Descripcion">
@@ -79,6 +81,7 @@
                                         @item.Descripcion
                                     </td>
                                     <td>
+                                        @item.CustomValues
                                     </td>
                                 </tr>
                             }
@@ -111,6 +114,10 @@
                             <label class="form-label" for="editinput">Descripción</label>
                             <input type="text" id="editinput" class="form-control">
                         </div>
+                        <div class="form-group">
+                            <label class="form-label" for="descripcion">NOMIPAQ Mnemonico Asignado</label>
+                            @Html.DropDownList("dropdownMnemonicosedit", (IEnumerable<SelectListItem>)ViewBag.Mnemonicos, new { id = "dropdownMnemonicosedit", @class = "form-control" })
+                        </div>
                     </form>
 
                 </div>
@@ -141,6 +148,11 @@
                             <label class="form-label" for="newinput">Descripción</label>
                             <input type="text" id="newinput" class="form-control">
                         </div>
+                        <div class="form-group">
+                            <label class="form-label" for="descripcion">NOMIPAQ Mnemonico Asignado</label>
+                            @Html.DropDownList("dropdownMnemonicos", (IEnumerable<SelectListItem>)ViewBag.Mnemonicos, new { id = "dropdownMnemonicos", @class = "form-control" })
+                        </div>
+
                     </form>
 
                 </div>
@@ -161,49 +173,22 @@
 
 @section ScriptsBlock {
 
-    <script src="~/js/statistics/peity/peity.bundle.js"></script>
-    <script src="~/js/statistics/flot/flot.bundle.js"></script>
-    <script src="~/js/statistics/easypiechart/easypiechart.bundle.js"></script>
     <script src="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/js/datagrid/datatables/datatables.bundle.js"></script>
     <script src="https://www.gotbootstrap.com/themes/smartadmin/4.0.2/js/notifications/sweetalert2/sweetalert2.bundle.js"></script>
     <script>
 
-        
+        $('#dt-basic-example tr').click(function () {
+
+            $(this).addClass('selected').siblings().removeClass('selected');
+
+        });
 
         $(document).ready(function () {
             /* init datatables */
 
             $('#dt-basic-example').dataTable(
                 {
-                    responsive: true,
-                    columnDefs: [
-                        {
-                            targets: -1,
-                            title: '',
-                            orderable: false,
-                            render: function (data, type, full, meta) {
-                                /*
-                                -- ES6
-                                -- convert using https://babeljs.io online transpiler
-                                return `
-                                <a href='javascript:void(0);' class='btn btn-sm btn-icon btn-outline-danger rounded-circle mr-1' title='Delete Record'>
-                                    <i class="fal fa-times"></i>
-                                </a>
-                                <div class='dropdown d-inline-block dropleft '>
-                                    <a href='#'' class='btn btn-sm btn-icon btn-outline-primary rounded-circle shadow-0' data-toggle='dropdown' aria-expanded='true' title='More options'>
-                                        <i class="fal fa-ellipsis-v"></i>
-                                    </a>
-                                    <div class='dropdown-menu'>
-                                        <a class='dropdown-item' href='javascript:void(0);'>Change Status</a>
-                                        <a class='dropdown-item' href='javascript:void(0);'>Generate Report</a>
-                                    </div>
-                                </div>`;
-                                ES5 example below:
-                                */
-                                return "\n\t\t\t\t\t\t<a href='javascript:void(0);' class='editrow btn btn-sm btn-icon btn-outline-primary rounded-circle mr-1' title='Ver información'>\n\t\t\t\t\t\t\t<i class=\"fal fa-edit\"></i>\n\t\t\t\t\t\t<a href='javascript:void(0);' class='deleterow btn btn-sm btn-icon btn-outline-primary rounded-circle mr-1' title='Deshabilitar registro'>\n\t\t\t\t\t\t\t<i class=\"fal fa-window-close\"></i>";
-                            },
-                        },
-                    ]
+                    responsive: true
                 });
 
 
@@ -211,11 +196,32 @@
 
             $('.editrow').click(function () {
 
-                idEdit = $(this).closest('tr').attr('id');
-                var value = $(this).closest('tr').data('value');
+
+
+                var row = $('#allitems tr.selected');
+                if (row.length === 0) {
+
+                    Swal.fire(
+                        {
+                            type: "warning",
+                            title: "Validación",
+                            text: "Seleccione un registro"
+                        });
+
+                    return;
+
+                }
+
+                var col1_value = row.find("td:eq(0)").text();
+                var col2_value = row.find("td:eq(1)").text();
+                var col3_value = row.find("td:eq(2)").text();
+
+                var id = row[0].id;
+
+                idEdit = id;
 
                 $('#editdata').show();
-                $('#editinput').val(value);
+                $('#editinput').val(col2_value.trim());
             });
 
             $('.deleterow').click(function () {
@@ -276,7 +282,8 @@
             $('#saveedit').click(function () {
 
 
-                var formData = { id: idEdit, Description: $('#editinput').val() };
+                var mnemonico = $("#dropdownMnemonicosedit").val();
+                var formData = { id: idEdit, Description: $('#editinput').val(), Mnemonico: mnemonico };
 
                 $.ajax({
                     url: '/Catalog/SaveEditPermissionType',
@@ -324,7 +331,8 @@
             $('#savenew').click(function () {
 
 
-                var formData = { Description: $('#newinput').val() };
+                var mnemonico = $("#dropdownMnemonicosedit").val();
+                var formData = { Description: $('#newinput').val(), Mnemonico: mnemonico };
 
                 $.ajax({
                     url: '/Catalog/SaveNewSafePermissionType',

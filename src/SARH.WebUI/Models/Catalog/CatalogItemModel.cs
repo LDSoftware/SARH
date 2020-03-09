@@ -10,6 +10,6 @@ namespace SARH.WebUI.Models.Catalog
     {
         public int Id { get; set; }
         public string Descripcion { get; set; }
-
+        public string CustomValues { get; set; }
     }
 }
