@@ -26,7 +26,7 @@
         <li>
             <a href='@Url.Action("Index","Catalog")'>
                 <i class="fal fal fa-tags"></i>
-                <span class="hidden-lg-down">Horarios</span>
+                <span class="hidden-lg-down">Catálogos</span>
             </a>
         </li>
         <li>
@@ -49,10 +49,13 @@
 
                 <div class="panel-toolbar">
                     <div class="demo-h-spacing">
+                        <a href="javascript:void(0);" data-backdrop="static" title="Agregar Aprobador Por Puesto" data-keyboard="false" data-toggle="modal" data-target=".default-example-modal-right-2" class="btn btn-secondary btn-icon waves-effect waves-themed">
+                            <i class="fal fa-user"></i>
+                        </a>
                         <a href="javascript:void(0);" data-backdrop="static" title="Agregar Aprobador" data-keyboard="false" data-toggle="modal" data-target=".default-example-modal-right" class="btn btn-primary btn-icon waves-effect waves-themed">
                             <i class="fal fa-user"></i>
                         </a>
-                        <a href="javascript:void(0);" id="viewapprovers" title="Ver Aprobadores" data-keyboard="false" class="btn btn-primary btn-icon waves-effect waves-themed">
+                        <a href="javascript:void(0);" id="viewapprovers" title="Ver Aprobadores" data-keyboard="false" class="btn btn-info btn-icon waves-effect waves-themed">
                             <i class="fal fa-tasks"></i>
                         </a>
                     </div>
@@ -260,7 +263,7 @@
                                 <div class="form-row">
                                     <div class="col-md-12">
                                         <label class="form-label" for="viewarea">Area</label>
-                                        <input type="text" id="viewarea" disabled="disabled" class="form-control"/>
+                                        <input type="text" id="viewarea" disabled="disabled" class="form-control" />
                                     </div>
                                 </div>
                                 <div class="form-row">
@@ -272,7 +275,7 @@
                                 <div class="form-row">
                                     <div class="col-md-12">
                                         <label class="form-label" for="viewdepto">Departamento</label>
-                                        <input type="text" id="viewdepto" disabled="disabled" class="form-control"/>
+                                        <input type="text" id="viewdepto" disabled="disabled" class="form-control" />
                                     </div>
                                 </div>
 
@@ -342,7 +345,148 @@
 </div>
 
 
+</ Modal Agregar Approver Por Puesto -->
 
+<div class="panel-container show">
+    <div class="panel-content">
+
+        <div class="modal fade default-example-modal-right-2" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-right">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title h4">Agregar Aprobador Por Puesto</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true"><i class="fal fa-times"></i></span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="card mb-5">
+
+                            <div class="card-body p-3">
+                                <h5>
+                                    <small class="mt-0 mb-3 text-muted">
+                                        Agrege el aprobador
+                                    </small>
+                                    <span class="badge badge-primary fw-n position-absolute pos-top pos-right mt-3 mr-3">A</span>
+                                </h5>
+
+                                <div class="form-row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text text-success">
+                                                        <i class="ni ni-user fs-xl"></i>
+                                                    </span>
+                                                </div>
+                                                <input type="text" aria-label="searchtext" class="form-control" placeholder="Empleado" id="searchTextPP" maxlength="5">
+                                                <div class="input-group-append">
+                                                    <button id="searchbuttonPP" type="button" class="btn btn-success shadow-0 waves-effect waves-themed">
+
+                                                        <span id="imgsearchPP" class="fal fa-search mr-1"></span>
+
+                                                        <span id="spinPP" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="display:none"></span>
+
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div id="searchresultPP" class="col-md-12 panel-tag">
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="card mb-g">
+
+                            <div class="card-body p-3">
+                                <h5>
+                                    Asignar un empleado
+                                    <small class="mt-0 mb-3 text-muted">
+                                        Buscar a el empleado que sera asignado el aprobador
+                                    </small>
+                                    <span class="badge badge-dark fw-n position-absolute pos-top pos-right mt-3 mr-3">B</span>
+                                </h5>
+
+                                <div class="form-row">
+
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text text-success">
+                                                        <i class="ni ni-user fs-xl"></i>
+                                                    </span>
+                                                </div>
+                                                <input type="text" aria-label="searchtext" class="form-control" placeholder="Empleado" id="searchTextPPA" maxlength="5">
+                                                <div class="input-group-append">
+                                                    <button id="searchbuttonPPA" type="button" class="btn btn-success shadow-0 waves-effect waves-themed">
+
+                                                        <span id="imgsearchPPA" class="fal fa-search mr-1"></span>
+
+                                                        <span id="spinPPA" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="display:none"></span>
+
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="d-flex flex-wrap align-items-center pl-3 pr-1 py-2 px-sm-4 px-lg-5 border-faded border-top-0 border-left-0 border-right-0">
+                                                <div class="flex-1 d-flex align-items-center">
+                                                    <a href="javascript:void(0);" id="js-delete-selectedPA" class="btn btn-icon rounded-circle mr-1 waves-effect waves-themed">
+                                                        <i class="fas fa-trash fs-md"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            <br />
+                                            <div class="col-md-12">
+                                                <ul id="elementsadded">
+                                                </ul>
+                                            </div>
+
+                                        </div>
+
+
+                                    </div>
+                            </div>
+
+                        </div>
+
+                        <div id="errorsavePPA" class="alert border-danger bg-transparent text-secondary fade show" role="alert" style="display:none">
+                            <div class="d-flex align-items-center">
+                                <div class="alert-icon">
+                                    <span class="icon-stack icon-stack-md">
+                                        <i class="base-7 icon-stack-3x color-danger-900"></i>
+                                        <i class="fal fa-times icon-stack-1x text-white"></i>
+                                    </span>
+                                </div>
+                                <div class="flex-1">
+                                    <span class="h5 color-danger-900">No se puede guardar, verifique que se han ingresando todos los datos </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <center>
+                            <div id="spinwaitPPA" class="spinner-border" style="width: 3rem; height: 3rem; display:none;" role="status">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                        </center>
+
+
+                    </div>
+                    <div class="modal-footer">
+                        <button id="closemodalPPA" type="button" class="btn btn-danger reseterror" data-dismiss="modal">Cerrar</button>
+                        <button id="savenewapproverPPA" type="button" class="btn btn-primary">Guardar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 @section ScriptsBlock {
@@ -463,7 +607,7 @@
             });
 
             $('#savenewapprover').click(function () {
-
+                9
                 if (!cansave) {
 
                     $('#errorsave').show();
@@ -577,6 +721,120 @@
 
 
             });
+
+
+
+            $('#searchbuttonPP').click(function () {
+
+                $('#imgsearchPP').hide();
+                $('#spinPP').show();
+                $('#searchresultPP').empty();
+
+                var approver = $('#searchTextPP').val();
+
+                $.ajax({
+                    url: '/Catalog/GetEmployeeApproverPP',
+                    type: "POST",
+                    data: { employeeId: approver },
+                    success: function (data, textStatus, jqXHR) {
+
+                        if (data.rows > 0) {
+                            $('#searchresultPP').append('<span id="' + data.id + '" class="elementadded">' + data.value + '</span>');
+                        }
+                        else {
+                            $('#searchresultPP').append('<span id="' + data.id + '" class="elementadded">' + data.value + '</span>');
+                        }
+
+                        $('#imgsearchPP').show();
+                        $('#spinPP').hide();
+
+
+
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        alert(errorThrown);
+                    }
+                });
+
+            });
+
+
+            $('#searchbuttonPPA').click(function () {
+
+                $('#imgsearchPPA').hide();
+                $('#spinPPA').show();
+
+                var approver = $('#searchTextPPA').val();
+
+                $.ajax({
+                    url: '/Catalog/GetEmployeeForApprover',
+                    type: "POST",
+                    data: { employeeId: approver },
+                    success: function (data, textStatus, jqXHR) {
+
+                        if (data.rows > 0) {
+                            $('#elementsadded').append('<li data-ident=' + data.id + '><div class="custom-control custom-checkbox"><input type="checkbox" class="custom-control-input" id="' + data.id + '"><label class="custom-control-label" for="' + data.id + '">' + data.value + '</label></div></li>');
+                        }
+
+                        $('#imgsearchPPA').show();
+                        $('#spinPPA').hide();
+                        $('#searchTextPPA').val('');
+
+
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        alert(errorThrown);
+                    }
+                });
+
+            });
+
+
+            $('#js-delete-selectedPA').click(function () {
+
+
+                $("#elementsadded input[type=checkbox]:checked").each(function () {
+
+                    $(this).closest('li').remove();
+
+                });
+
+
+
+
+            });
+
+
+            $('#savenewapproverPPA').click(function () {
+
+                var elements = [];
+
+                $('#elementsadded').find('li').each(function () {
+                    elements.push($(this).data('ident'));
+                });
+
+                if (elements.length > 0) {
+
+
+                    $.ajax({
+                        url: '/Catalog/SaveApproverPPA',
+                        type: "POST",
+                        data: { approver: $('#searchTextPP').val(), employees: elements },
+                        success: function (data, textStatus, jqXHR) {
+
+                            window.location.href = '/Catalog/Aprobadores';
+
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            alert(errorThrown);
+                        }
+                    });
+
+                }
+
+            });
+
+
 
         });
 

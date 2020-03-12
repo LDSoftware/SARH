@@ -353,7 +353,7 @@ namespace SARH.WebUI.Controllers
             [FromServices] IRepository<Nomipaq_nom10022> nomipaqMnemonicos)
         {
             string jsonValues = string.Empty;
-            if (string.IsNullOrEmpty(Mnemonico))
+            if (!string.IsNullOrEmpty(Mnemonico))
             {
                 var nomipaqmnemonico = nomipaqMnemonicos.GetElement(int.Parse(Mnemonico));
                 if (nomipaqmnemonico != null)
@@ -674,6 +674,97 @@ namespace SARH.WebUI.Controllers
 
             return Json(new { id = employeeId, value = name, rows = row });
         }
+
+
+        [HttpPost]
+        public JsonResult GetEmployeeApproverPP(string employeeId,
+        [FromServices] IRepository<FormatApprover> formatApproversRepository,
+        [FromServices]IOrganigramaModelFactory organigramaModelFactory)
+        {
+            string name = string.Empty;
+            int row = 0;
+
+            if (!string.IsNullOrEmpty(employeeId))
+            {
+                var employeeInfo = organigramaModelFactory.GetEmployeeData(employeeId);
+                if (employeeInfo != null && employeeInfo.HierarchyGuid != null)
+                {
+                    List<FormatApprover> empApprover = new List<FormatApprover>();
+
+                    empApprover = formatApproversRepository.SearhItemsFor(r => r.RowGuid.ToString().ToLower().Equals(employeeInfo.HierarchyGuid.ToLower())).ToList();
+
+                    if (empApprover != null && !empApprover.Any())
+                    {
+                        name = $"{employeeInfo.GeneralInfo.FirstName} {employeeInfo.GeneralInfo.LastName} {employeeInfo.GeneralInfo.LastName2}";
+                        row = 1;
+                    }
+                    else
+                    {
+                        name = "El empleado ya está asignado para aprobación";
+                    }
+                }
+                else
+                {
+                    name = "No se encontrarón resultados";
+                }
+            }
+            else
+            {
+                name = "No se encontrarón resultados";
+            }
+
+            return Json(new { id = employeeId, value = name, rows = row });
+        }
+
+
+        [HttpPost]
+        public JsonResult GetEmployeeForApprover(string employeeId,
+        [FromServices] IRepository<FormatApprover> formatApproversRepository,
+        [FromServices]IOrganigramaModelFactory organigramaModelFactory)
+        {
+            string name = string.Empty;
+            int row = 0;
+
+            if (!string.IsNullOrEmpty(employeeId))
+            {
+                var employeeInfo = organigramaModelFactory.GetEmployeeData(employeeId);
+                name = $"{employeeInfo.GeneralInfo.FirstName} {employeeInfo.GeneralInfo.LastName} {employeeInfo.GeneralInfo.LastName2}";
+                row = 1;
+            }
+            else
+            {
+                name = "No se encontrarón resultados";
+            }
+
+            return Json(new { id = employeeId, value = name, rows = row });
+        }
+
+        [HttpPost]
+        public JsonResult SaveApproverPPA(string approver, string[] employees,
+            [FromServices] IRepository<FormatApprover> formatApproversRepository,
+            [FromServices]IOrganigramaModelFactory organigramaModelFactory)
+        {
+
+            var emp = organigramaModelFactory.GetEmployeeData(approver);
+
+            string values = JsonConvert.SerializeObject(employees.ToList());
+
+            var formatapprover = new FormatApprover()
+            {
+                Area = string.Empty,
+                Centro = string.Empty,
+                Departamento = string.Empty,
+                Orden = 1,
+                Puesto = emp.GeneralInfo.JobTitle,
+                RowGuid = Guid.Parse(emp.HierarchyGuid),
+                ApproverListEmployees = values
+            };
+
+            formatApproversRepository.Create(formatapprover);
+
+            return Json("ok");
+        }
+
 
         [HttpPost]
         public JsonResult SaveApprover(string area, string centro, string depto, string approver,

@@ -1,5 +1,8 @@
 ﻿@using SARH.WebUI.Models.FormatRequest;
+@using ISOSA.SARH.Data.Repository;
+@using ISOSA.SARH.Data.Domain.Configuration;
 @model FormatRequestModel;
+@inject IRepository<SARHSettings> settings
 @{
     ViewData["Title"] = "Generación de formatos";
     ViewData["PageName"] = "Generación de formatos";
@@ -117,7 +120,7 @@
 
 </div>
 
-<input type="hidden" id="employeeid" value="@Model.Employee"/>
+<input type="hidden" id="employeeid" value="@Model.Employee" />
 
 
 
@@ -335,7 +338,7 @@
                                     <div class="form-row">
                                         <div class="col-md-12">
                                             <label class="form-label" for="selectharware">Seleccione el tipo de formato a crear</label>
-                                            <input class="form-control" id="typeformatview" type="text" disabled="disabled"> 
+                                            <input class="form-control" id="typeformatview" type="text" disabled="disabled">
                                         </div>
 
                                     </div>
@@ -353,19 +356,19 @@
                                     <div class="form-row">
                                         <div class="col-md-12">
                                             <label class="form-label" for="descripcion">Comentarios</label>
-                                            <input class="form-control reseterror" id="descripcionview" required="" type="text"  disabled="disabled">
+                                            <input class="form-control reseterror" id="descripcionview" required="" type="text" disabled="disabled">
                                         </div>
 
                                         <div class="col-md-12">
                                             <label class="form-label" for="datepicker-4-4">Vigencia inicial</label>
                                             <div class="input-group">
-                                                <input type="text" class="form-control reseterror" id="datepicker-4-4-view"  disabled="disabled">
+                                                <input type="text" class="form-control reseterror" id="datepicker-4-4-view" disabled="disabled">
                                             </div>
                                         </div>
                                         <div class="col-md-12">
                                             <label class="form-label" for="datepicker-4-5">Vigencia final</label>
                                             <div class="input-group">
-                                                <input type="text" class="form-control reseterror" id="datepicker-4-5-view"  disabled="disabled">
+                                                <input type="text" class="form-control reseterror" id="datepicker-4-5-view" disabled="disabled">
                                             </div>
                                         </div>
 
@@ -410,6 +413,7 @@
 <button id="sendbuttonNS" style="display:none;"></button>
 <input id='IdFormatRequest' type="hidden" />
 <input id='EmployeeId' type="hidden" value="@Model.Employee" />
+<input id='MaxVacations' type="hidden" value='@settings.GetElement(1).Value' />
 
 
 @section ScriptsBlock {
@@ -468,6 +472,7 @@
 
         $(document).ready(function () {
             /* init datatables */
+
 
             runDatePicker();
 
@@ -530,6 +535,7 @@
 
 
             $('#saveformat').click(function () {
+
 
                 var dtpinicial = $('#datepicker-4-4').val();
                 var dtpfinal = $('#datepicker-4-5').val();

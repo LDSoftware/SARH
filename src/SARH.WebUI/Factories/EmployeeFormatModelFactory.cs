@@ -49,7 +49,9 @@ namespace SARH.WebUI.Factories
                                   StartTime = fmts.StartTime,
                                   EndTime = fmts.EndTime,
                                   EmployeeId = fmts.EmployeeId,
-                                  FormatType = FormatGroup(ftypes.Description)
+                                  FormatType = FormatGroup(ftypes.Description),
+                                  Approved = fmts.ApprovalDate.HasValue,
+                                  AdditionalInfo = fmts.WithPay ? "Con goce de sueldo" : "Sin goce de sueldo"
                               }
                               ).ToList();
 

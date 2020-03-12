@@ -1,5 +1,8 @@
 ﻿@using SARH.WebUI.Models.FormatRequest;
+@using ISOSA.SARH.Data.Repository;
+@using ISOSA.SARH.Data.Domain.Configuration;
 @model FormatRequestModel;
+@inject IRepository<SARHSettings> settings
 @{
     ViewData["Title"] = "Captura de solicitudes";
     Layout = "~/Views/Shared/_LayoutSimple.cshtml";
@@ -405,6 +408,7 @@
 <button id="sendbuttonNS" style="display:none;"></button>
 <input id='IdFormatRequest' type="hidden" />
 <input id='IdEmployee' type="hidden" value='@Model.Employee' />
+<input id='MaxVacations' type="hidden" value='@settings.GetElement(1).Value' />
 
 
 @section Scripts {

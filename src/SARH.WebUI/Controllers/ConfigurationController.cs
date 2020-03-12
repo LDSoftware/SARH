@@ -383,7 +383,10 @@ namespace SARH.WebUI.Controllers
 
             if (formatos.Any())
             {
-                formatos.Where(f => f.Approved == true && f.FormatName.ToLower().Contains("permiso")).ToList().ForEach(t =>
+
+                var formatApproved = formatos.Where(f => f.Approved == true && f.FormatName.ToLower().Contains("permiso")).ToList();
+
+                formatApproved.ToList().ForEach(t =>
                 {
                     string mnemonico = string.Empty;
                     if (t.AdditionalInfo.Equals("Con goce de sueldo"))
@@ -396,9 +399,30 @@ namespace SARH.WebUI.Controllers
                     }
                     employeeIncidents.Add(new EmployeeIncidents()
                     {
-                        Employee = t.EmployeeId,
+                        Employee = int.Parse(t.EmployeeId).ToString("00000"),
                         Period = t.StartDate,
                         Mnemonico = mnemonico
+                    });
+                });
+            }
+
+            var dias = Math.Abs(Math.Round((DateTime.Parse(iDate) - DateTime.Parse(eDate)).TotalDays, 0));
+            if (dias == 0)
+            {
+                dias = 1;
+            }
+
+            for (int i = 0; i < dias; i++)
+            {
+                var t = DateTime.Parse(iDate).AddDays(i);
+                var results = dashboardModelFactory.GetNoRegistry(t.ToShortDateString());
+                results.ForEach(f =>
+                {
+                    employeeIncidents.Add(new EmployeeIncidents()
+                    {
+                        Employee = int.Parse(f.ID).ToString("00000"),
+                        Period = f.Fecha,
+                        Mnemonico = "FINJ"
                     });
                 });
             }
@@ -448,10 +472,10 @@ namespace SARH.WebUI.Controllers
             List<PersonalDashboardData> personalData = new List<PersonalDashboardData>();
             List<EmployeeIncidents> employeeIncidents = new List<EmployeeIncidents>();
 
-            var vacaciones = employeeFormatModelFactory.GetAllFormats(DateTime.Parse(iDate), DateTime.Parse(eDate));
-            if (vacaciones.Any())
+            var formatos = employeeFormatModelFactory.GetAllFormats(DateTime.Parse(iDate), DateTime.Parse(eDate));
+            if (formatos.Any())
             {
-                vacaciones.Where(f => f.Approved == true && f.FormatName.ToLower().Contains("vacacion")).ToList().ForEach(t =>
+                formatos.Where(f => f.Approved == true && f.FormatName.ToLower().Contains("vacacion")).ToList().ForEach(t =>
                 {
                     List<KeyValuePair<string, string>> parameters = new List<KeyValuePair<string, string>>();
                     parameters.Add(new KeyValuePair<string, string>("@fechaInicio", t.StartDate));
@@ -479,7 +503,7 @@ namespace SARH.WebUI.Controllers
                         DateTime dateA = DateTime.Parse($"{day.RegisterDate} {day.StartJobDay}");
                         DateTime dateB = DateTime.Parse($"{day.RegisterDate} {day.StartWorkDate}");
 
-                        var diff = (dateB - dateA).TotalMinutes;
+                        var diff = (dateA - dateB).TotalMinutes;
 
                         if (diff < 11 && !process)
                         {
@@ -522,6 +546,56 @@ namespace SARH.WebUI.Controllers
                 }
             });
 
+            if (formatos.Any())
+            {
+
+                var formatApproved = formatos.Where(f => f.Approved == true && f.FormatName.ToLower().Contains("permiso")).ToList();
+
+                formatApproved.ToList().ForEach(t =>
+                {
+                    string mnemonico = string.Empty;
+                    if (t.AdditionalInfo.Equals("Con goce de sueldo"))
+                    {
+                        mnemonico = "PCS";
+                    }
+                    else
+                    {
+                        mnemonico = "PSS";
+                    }
+                    employeeIncidents.Add(new EmployeeIncidents()
+                    {
+                        Employee = int.Parse(t.EmployeeId).ToString("00000"),
+                        Period = t.StartDate,
+                        Mnemonico = mnemonico
+                    });
+                });
+            }
+
+            var dias = Math.Abs(Math.Round((DateTime.Parse(iDate) - DateTime.Parse(eDate)).TotalDays, 0));
+            if (dias == 0)
+            {
+                dias = 1;
+            }
+
+            for (int i = 0; i < dias; i++)
+            {
+                var t = DateTime.Parse(iDate).AddDays(i);
+                var results = dashboardModelFactory.GetNoRegistry(t.ToShortDateString());
+                results.ForEach(f =>
+                {
+                    employeeIncidents.Add(new EmployeeIncidents()
+                    {
+                        Employee = int.Parse(f.ID).ToString("00000"),
+                        Period = f.Fecha,
+                        Mnemonico = "FINJ"
+                    });
+                });
+            }
+
+            var incidencias = nomipaqincidenciasModelFactory.GetAllIncidencias();
+
+            var incidenciasNomipaq = incidencias.Where(g => g.Fecha >= DateTime.Parse(iDate) && g.Fecha <= (DateTime.Parse(eDate)));
+
 
             if (employeeIncidents.Any())
             {
@@ -537,16 +611,6 @@ namespace SARH.WebUI.Controllers
 
             return Json("Ok");
         }
-
-
-
-
-
-
-
-
-
-
 
         private bool ScheduleNotCompliment(string datereg, string hourreg, string hourschedule)
         {

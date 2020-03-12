@@ -92,6 +92,7 @@ namespace SmartAdmin.WebUI
             services.AddTransient<IRepository<EmployeeHistory>, EmployeeHistoryRepository>(s => new EmployeeHistoryRepository((Configuration.GetConnectionString("DataConnectionString"))));
             services.AddTransient<IRepository<EmployeeOrganigrama>, EmployeeOrganigramaRepository>(s => new EmployeeOrganigramaRepository((Configuration.GetConnectionString("DataConnectionStringISOSA"))));
             services.AddTransient<IRepository<EmployeeScheduleDate>, EmployeeScheduleDateRepository>(s => new EmployeeScheduleDateRepository((Configuration.GetConnectionString("DataConnectionStringISOSA"))));
+            services.AddTransient<IRepository<SARHSettings>, SARHSettingsRepository>(s => new SARHSettingsRepository((Configuration.GetConnectionString("DataConnectionStringISOSA"))));
             services.AddTransient<SARH.Core.Configuration.IConfigurationManager, SARH.WebUI.Configuration.ConfigurationManager>(s => new SARH.WebUI.Configuration.ConfigurationManager("appsettings.json", "ApplicationFormatPath"));
             services.AddTransient<IElementUpdateModelFactory, ElementUpdateModelFactory>(s => new ElementUpdateModelFactory(new ElementUpdateRepository(Configuration.GetConnectionString("DataConnectionString"))));
             services.AddTransient<IRepository<NOMIPAQIncidence>, NOMIPAQIncidenceRepository>(s => new NOMIPAQIncidenceRepository((Configuration.GetConnectionString("DataConnectionString"))));

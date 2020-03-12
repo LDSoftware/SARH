@@ -12,5 +12,6 @@ namespace ISOSA.SARH.Data.Domain.Formats
         public string Puesto { get; set; }
         public Guid RowGuid { get; set; }
         public int Orden { get; set; }
+        public string ApproverListEmployees { get; set; }
     }
 }

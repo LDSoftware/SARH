@@ -17,6 +17,7 @@ namespace ISOSA.SARH.Data.Mapping
             builder.Property(x => x.Puesto);
             builder.Property(x => x.RowGuid);
             builder.Property(x => x.Orden);
+            builder.Property(x => x.ApproverListEmployees);
         }
     }
 }
