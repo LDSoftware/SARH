@@ -130,7 +130,7 @@ namespace SARH.WebUI.Factories
                     }
                     else 
                     {
-                        if (approver.Area.Equals(string.Empty) && approver.Centro.Equals(string.Empty) && approver.Departamento.Equals(string.Empty))
+                        if (approver.Area.Equals(string.Empty) && approver.Centro.Equals(string.Empty) && approver.Departamento.Equals(string.Empty) && string.IsNullOrEmpty(approver.ApproverListEmployees))
                         {
                             formatsPendigs.AddRange(currentformats.ToList());
                         }

@@ -93,8 +93,29 @@ namespace SARH.WebUI.Controllers
                     List<FormatApprover> apprs = new List<FormatApprover>();
 
                     //Approbador Global
-                    apprs.AddRange(formatApprover.SearhItemsFor(i => i.Area.Equals(string.Empty)
-                        && i.Centro.Equals(string.Empty) && i.Departamento.Equals(string.Empty)).Where(p => (apprs).All(p2 => p2.RowGuid != p.RowGuid)).ToList());
+                    formatApprover.SearhItemsFor(i => i.Area.Equals(string.Empty)
+                        && i.Centro.Equals(string.Empty) && i.Departamento.Equals(string.Empty)).ToList().ForEach(f =>
+                        {
+                            if (string.IsNullOrEmpty(f.ApproverListEmployees))
+                            {
+                                apprs.Add(f);
+                            }
+                            else
+                            {
+                                var listEmp = JsonConvert.DeserializeObject<List<string>>(f.ApproverListEmployees);
+                                if (listEmp != null && listEmp.Any()) 
+                                {
+                                    listEmp.ForEach(emp =>
+                                    {
+                                        if (emp.Equals(format.EmployeeId)) 
+                                        {
+                                            apprs.Add(f);
+                                        }
+                                    });
+                                }
+
+                            }
+                        });
 
 
                     //Aprobador Area                    
@@ -143,9 +164,29 @@ namespace SARH.WebUI.Controllers
                         List<FormatApprover> apprs = new List<FormatApprover>();
 
                         //Approbador Global
-                        apprs.AddRange(formatApprover.SearhItemsFor(i => i.Area.Equals(string.Empty)
-                            && i.Centro.Equals(string.Empty) && i.Departamento.Equals(string.Empty)).Where(p => (apprs).All(p2 => p2.RowGuid != p.RowGuid)).ToList());
+                        formatApprover.SearhItemsFor(i => i.Area.Equals(string.Empty)
+                            && i.Centro.Equals(string.Empty) && i.Departamento.Equals(string.Empty)).ToList().ForEach(f =>
+                            {
+                                if (string.IsNullOrEmpty(f.ApproverListEmployees))
+                                {
+                                    apprs.Add(f);
+                                }
+                                else
+                                {
+                                    var listEmp = JsonConvert.DeserializeObject<List<string>>(f.ApproverListEmployees);
+                                    if (listEmp != null && listEmp.Any())
+                                    {
+                                        listEmp.ForEach(emp =>
+                                        {
+                                            if (emp.Equals(format.EmployeeId))
+                                            {
+                                                apprs.Add(f);
+                                            }
+                                        });
+                                    }
 
+                                }
+                            });
 
                         //Aprobador Area                    
                         apprs.AddRange(formatApprover.SearhItemsFor(i => i.Area.Equals(model.FormatEmployee.Area)).Where(p => (apprs).All(p2 => p2.RowGuid != p.RowGuid)).ToList());
@@ -215,8 +256,29 @@ namespace SARH.WebUI.Controllers
             List<FormatApprover> apprs = new List<FormatApprover>();
 
             //Approbador Global
-            apprs.AddRange(formatApprover.SearhItemsFor(i => i.Area.Equals(string.Empty)
-                && i.Centro.Equals(string.Empty) && i.Departamento.Equals(string.Empty)).Where(p => (apprs).All(p2 => p2.RowGuid != p.RowGuid)).ToList());
+            formatApprover.SearhItemsFor(i => i.Area.Equals(string.Empty)
+                && i.Centro.Equals(string.Empty) && i.Departamento.Equals(string.Empty)).ToList().ForEach(f =>
+                {
+                    if (string.IsNullOrEmpty(f.ApproverListEmployees))
+                    {
+                        apprs.Add(f);
+                    }
+                    else
+                    {
+                        var listEmp = JsonConvert.DeserializeObject<List<string>>(f.ApproverListEmployees);
+                        if (listEmp != null && listEmp.Any())
+                        {
+                            listEmp.ForEach(e =>
+                            {
+                                if (e.Equals(format.EmployeeId))
+                                {
+                                    apprs.Add(f);
+                                }
+                            });
+                        }
+
+                    }
+                });
 
 
             //Aprobador Area                    
@@ -316,8 +378,29 @@ namespace SARH.WebUI.Controllers
             List<FormatApprover> apprs = new List<FormatApprover>();
 
             //Approbador Global
-            apprs.AddRange(formatApprover.SearhItemsFor(i => i.Area.Equals(string.Empty)
-                && i.Centro.Equals(string.Empty) && i.Departamento.Equals(string.Empty)).Where(p => (apprs).All(p2 => p2.RowGuid != p.RowGuid)).ToList());
+            formatApprover.SearhItemsFor(i => i.Area.Equals(string.Empty)
+                && i.Centro.Equals(string.Empty) && i.Departamento.Equals(string.Empty)).ToList().ForEach(f =>
+                {
+                    if (string.IsNullOrEmpty(f.ApproverListEmployees))
+                    {
+                        apprs.Add(f);
+                    }
+                    else
+                    {
+                        var listEmp = JsonConvert.DeserializeObject<List<string>>(f.ApproverListEmployees);
+                        if (listEmp != null && listEmp.Any())
+                        {
+                            listEmp.ForEach(e =>
+                            {
+                                if (e.Equals(format.EmployeeId))
+                                {
+                                    apprs.Add(f);
+                                }
+                            });
+                        }
+
+                    }
+                });
 
 
             //Aprobador Area                    
