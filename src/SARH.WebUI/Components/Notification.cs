@@ -31,6 +31,7 @@ namespace SARH.WebUI.Components
                 Notifications = _notificationModelFactory.Notification,
                 LastVacationsNotificationsItems = _notificationModelFactory.LastVacationsNotificationItems,
                 LastPermissionsNotificationsItems = _notificationModelFactory.LastPermissionsNotificationItems,
+                LastOthersNotificationsItems = _notificationModelFactory.LastOthersNotificationItems,
                 NotificactionsItems = _notificationModelFactory.NotificaticonsItems
             };
 

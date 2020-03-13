@@ -125,7 +125,7 @@
 
 </div>
 
-<div class="row">
+<div class="row" id="divRow" style="display:none;">
     <div class="col-lg-12">
         <div id="panel-4" class="panel">
             <div class="panel-hdr">
@@ -144,22 +144,26 @@
             <div class="panel-container show">
 
                 <div class="panel-content">
-
-                    <table id="dt-basic-example" class="table table-bordered table-hover table-striped w-100">
-                        <thead class="bg-warning-200">
-                            <tr>
-                                <th>Empleado</th>
-                                <th>Fecha</th>
-                                <th>Mnemonico</th>
-                                <th>Existe NOMIPAQ</th>
-                                <th>Mnemonico NOMIPAQ</th>
-                            </tr>
-                        </thead>
-                        <tbody id="allincidencias">
-                           </tbody>
-                    </table>
-
-
+                    <div class="form-group row">
+                        <div class="col-lg-12">
+                            <form>
+                                <div class="form-group">
+                                    <table id="dt-basic-example" class="table table-bordered table-hover table-striped w-100">
+                                        <thead class="bg-warning-200">
+                                            <tr>
+                                                <th>Empleado</th>
+                                                <th>Fecha</th>
+                                                <th>Mnemonico</th>
+                                                <th>Existe NOMIPAQ</th>
+                                                <th>Mnemonico NOMIPAQ</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="allincidencias"></tbody>
+                                    </table>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
 
                 </div>
             </div>
@@ -211,21 +215,10 @@
 
         }
 
-        $('#dt-basic-example tr').click(function () {
-
-            $(this).addClass('selected').siblings().removeClass('selected');
-
-        });
-
         $(document).ready(function () {
             /* init datatables */
 
             runDatePicker();
-
-            $('#dt-basic-example').dataTable(
-                {
-                    responsive: true
-                });
 
             $('#btnStartProcess').click(function () {
 
@@ -352,11 +345,23 @@
                         $('#panelwait').hide();
 
                         if (data.rows.length > 0) {
+                            $('#divRow').css("display", "block");
                             var htmlLicenseinfo = '';
                             for (var i = 0; i < data.rows.length; i++) {
                                 htmlLicenseinfo = htmlLicenseinfo + '<tr><td>' + data.rows[i]['employeeid'] + '</td><td>' + data.rows[i]['fecha'] + '</td><td>' + data.rows[i]['mnemonico'] + '</td><td>' + data.rows[i]['existeenperiodo'] + '</td><td>' + data.rows[i]['nomipaqmnemonico'] + '</td></tr>';
                             }
                             $('#allincidencias').html(htmlLicenseinfo);
+
+                            $('#dt-basic-example tr').click(function () {
+
+                                $(this).addClass('selected').siblings().removeClass('selected');
+
+                            });
+
+                            $('#dt-basic-example').dataTable(
+                                {
+                                    responsive: true
+                                });
                         }
 
 
